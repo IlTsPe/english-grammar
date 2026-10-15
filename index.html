@@ -337,9 +337,9 @@ button { font: inherit; transition: linear 0.15s; }
 :is(.chap--open, .chap--current) .topic-btn:not([aria-current]):hover { background: color-mix(in srgb, var(--accent) 20%, transparent); }
 /* the card's heading has no hover box of its own: hovering it deepens the whole card, so there are only two tones */
 :is(.chap--open, .chap--current) .chap__btn:hover { background: transparent; }
-/* …except on the open chapter of the open page, where the heading hover adds nothing */
-:is(.chap--open, .chap--current):not(.chap--open.chap--current):has(> .chap__btn:hover)::before { background: color-mix(in srgb, var(--accent) 27%, transparent); }
-:root[data-theme="light"] :is(.chap--open, .chap--current):not(.chap--open.chap--current):has(> .chap__btn:hover)::before { background: #B9C7F8; }
+/* …only while the card is collapsed (the chapter of the open page); on an open card the heading hover adds nothing */
+.chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: color-mix(in srgb, var(--accent) 27%, transparent); }
+:root[data-theme="light"] .chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: #B9C7F8; }
 /* inside the card the hovers are inset by another 4px on every side (8px from the dividers);
    the inner paddings shrink by the same 4px so the text stays in line with plain chapters */
 :is(.chap--open, .chap--current) { padding: 8px 4px; }
