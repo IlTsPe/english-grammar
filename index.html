@@ -174,11 +174,19 @@ button { font: inherit; transition: linear 0.15s; }
 .side__fold { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .15s linear, opacity .15s linear; }
 .side__fold--open { grid-template-rows: 1fr; opacity: 1; }
 .side__fold-clip { min-height: 0; overflow: hidden; }
-.side__fold .overall, .side__fold .bookmarks { margin: 6px 0 0; }
+.side__fold .overall, .side__fold .bookmarks { margin: 0; }
+/* an open button and its block are one frame: the button loses its bottom corners, the block its top edge and corners;
+   the block keeps the button's border colour (accent for «Прогресс», gold for «Избранное») and a thin line under the button */
+.side__stat { transition: border-radius .15s linear, border-color .15s linear, background-color .15s linear; }
+.side__stat[aria-expanded="true"] { border-bottom-color: transparent; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.side__fold :is(.overall, .bookmarks) { border: 1.5px solid var(--accent); border-top-width: 0; border-radius: 0 0 10px 10px; box-shadow: inset 0 1px var(--border); }
+.side__fold .bookmarks { border-color: var(--gold-ink); background: var(--sheet); }
+/* while open, the block shows the progress bar, the percentage and the mistakes, so the button keeps only its title */
+.side__stat[aria-expanded="true"] :is(.side__stat-bar, .side__stat-pct, .side__badge) { display: none; }
 .side__fold .bookmarks__head { display: none; } /* the button above already says «Избранное» and the count */
 .side__fold .bookmarks__empty { padding-top: 8px; }
 .overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; gap: 8px; }
-:root[data-theme="light"] .overall { background: none; } /* sits on the tinted sidebar like the other frames there */
+:root[data-theme="light"] :is(.overall, .side__fold .bookmarks) { background: none; } /* sits on the tinted sidebar like the other frames there */
 /* the same for the controls in the sidebar: no grey sheet fill on the tinted paper (hover fills stay) */
 :root[data-theme="light"] .side :is(.action-btn, .icon-btn, .search__input):not(:hover) { background: none; }
 /* accent-soft is almost the paper colour, so on the sidebar the hover uses the stronger --hover of the contents list */
