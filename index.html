@@ -1,0 +1,1785 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Грамматика онлайн</title>
+<script>
+/* theme: saved choice, dark by default; set before first paint */
+(function () {
+  var t; try { t = JSON.parse(localStorage.getItem('gk2-theme')); } catch (e) {}
+  if (t !== 'light') t = 'dark';
+  document.documentElement.dataset.theme = t;
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Unbounded:wght@600;700&display=swap">
+<style>
+/* Layout: school workbook — book contents on the left, a graph-paper sheet with the rule and exercises on the right.
+   Answers are written in the accent colour, corrections in red. Two themes: data-theme="dark" (default) and "light".
+   Class names follow BEM: block, block__element, block--modifier. States that have an ARIA or HTML attribute use it
+   (aria-pressed, aria-current, hidden). Rule text comes from the data files with plain tags (p, h3, i, b),
+   so .rule, .formula and .examples__en style their content through tag selectors. */
+:root {
+  /* light theme: pale grey paper, light grey sheet, electric-blue accent */
+  --paper: #E1E5F0; /* a cool tint, so the sidebar reads apart from the neutral sheet */
+  --sheet: #EBEBEB; /* a soft neutral grey; darker would push green and red text below 4.5:1 */
+  --ink: #141B3A;
+  --muted: #10193c; /* secondary text */
+  --line: #C9D1E2;
+  --border: #a7bae2; /* borders only; --line still draws dividers, bar tracks and fills */
+  --well: #E6E7EA; /* inset blocks inside the sheet: progress, table heads, answer options */
+  --grid: rgba(37, 71, 208, .07);
+  --accent: #2547D0; /* a calm blue; text in it stays at 4.7:1 or more on every light background */
+  --accent-soft: #DFE4F8;
+  --hover: #CBD3F3; /* hover in the contents list: must stand out on the paper background */
+  --on-accent: #FFFFFF;
+  --hl: rgb(37 71 208 / 45%); /* highlight under key words in rules */
+  --ok: #0a7a24; /* dark enough to read on the light sheet (4.9:1) */
+  --ok-soft: #DDF2E1;
+  --bad: #BE3A2F;
+  --bad-soft: #F3DFDA;
+  --mid: #E0A800; /* yellow of a half-done progress pill */
+  --gold: #F0C048; /* bookmarks: the ribbon, the same in both themes */
+  --gold-soft: #fdedbb; /* fill of gold states: pressed «В избранном», the active topic in «Избранное» */
+  --gold-ink: #b38b27; /* gold for text and frames, darker in the light theme to stay readable */
+  --f-display: 'Unbounded', 'Arial Black', system-ui, sans-serif;
+  --f-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-en: 'Literata', Georgia, 'Times New Roman', serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+}
+:root[data-theme="dark"] {
+  --paper: #11131D; --border: #373e63; --well: #11131D; --hover: #352C6E; --sheet: #191C29; --hl: rgb(170 98 255 / 71%); --ink: #E7E9F2; --muted: #9AA1B8; --line: #2D3145;
+  --grid: rgba(169, 156, 255, .07); --accent: #ADA2FF; --accent-soft: #29254A; --on-accent: #16132E;
+  --ok: #5CD192; --ok-soft: #16301F; --bad: #FF7F73; --bad-soft: #3A1E1D; --mid: #F0C048;
+  --gold-soft: #352B12; --gold-ink: #F0C048;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+/* applied only while the theme switches, so it does not interfere with other transitions */
+:root.theme-anim, :root.theme-anim *, :root.theme-anim *::before, :root.theme-anim *::after {
+  transition: background-color .1s linear, color .1s linear, border-color .1s linear, fill .1s linear, stroke .1s linear, box-shadow .1s linear !important;
+}
+body { background: var(--paper); color: var(--ink); font: 16px/1.6 var(--f-body); }
+button { font: inherit; transition: linear 0.15s; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.app { display: grid; grid-template-columns: 310px minmax(0, 1fr); gap: 15px; padding-inline: 16px 0; }
+
+/* ---------- Buttons ---------- */
+.btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--sheet); color: var(--ink); font-size: 14.5px; font-weight: 600; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn--primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); opacity: .7; }
+.btn--primary:hover { opacity: 1; }
+.btn--primary:disabled, .btn--primary:disabled:hover { opacity: .35; cursor: default; }
+.icon-btn { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: 8px; background: var(--sheet); color: var(--muted); cursor: pointer; }
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+.icon-btn__icon { width: 16px; height: 16px; }
+/* a labelled button for sidebar actions: theme, hide / show the menu, open the sections on mobile */
+.action-btn { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 6px 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
+  background: var(--sheet); color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.2; white-space: nowrap; cursor: pointer; }
+.action-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+.action-btn__icon { flex: none; width: 18px; height: 18px; }
+/* the theme button shows the theme it switches to: a sun in the dark theme, a moon in the light one */
+.theme-toggle__moon { display: none; }
+:root[data-theme="light"] .theme-toggle__moon { display: block; }
+:root[data-theme="light"] .theme-toggle__sun { display: none; }
+/* on hover the sun spins with its rays (below); the moon swings with a little overshoot
+   and three stars come out from behind it one after another */
+/* the sun turns together with its rays, one turn in 12s like ray-turn; the script runs it so it can ease to a stop when the pointer leaves */
+.theme-toggle__moon-body { transform-box: fill-box; transform-origin: center; transition: transform .7s cubic-bezier(.34, 1.8, .64, 1); }
+.theme-toggle:is(:hover, :focus-visible) .theme-toggle__moon-body { transform: rotate(-25deg); }
+/* «Тёмная тема»: on hover small stars light up across the button, under the label, one after another */
+.theme-toggle { position: relative; overflow: hidden; }
+.theme-toggle > :not(.theme-toggle__stars, .theme-toggle__rays) { position: relative; }
+.theme-toggle__stars, .theme-toggle__rays { position: absolute; inset: 0; pointer-events: none; }
+/* «Светлая тема»: a fan of pale rays centred on the sun (--cx/--cy, set by the script) spreads out to the edges of the button
+   and turns slowly while it is hovered */
+@property --ray-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --ray-a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.theme-toggle__rays { --ray-r: 0px; opacity: 0;
+  background: repeating-conic-gradient(from var(--ray-a) at var(--cx, 30px) var(--cy, 50%), color-mix(in srgb, currentColor 30%, transparent) 0deg 4deg, transparent 4deg 24deg);
+  mask: radial-gradient(circle at var(--cx, 30px) var(--cy, 50%), transparent 11px, #000 16px, #000 calc(var(--ray-r) * .55), transparent var(--ray-r));
+  transition: --ray-r .6s ease-out, opacity .3s ease; }
+@keyframes ray-turn { to { --ray-a: 360deg; } }
+:root:not([data-theme="light"]) .theme-toggle:is(:hover, :focus-visible) .theme-toggle__rays { --ray-r: 220px; opacity: 1; animation: ray-turn 12s linear infinite; }
+.theme-toggle__stars i { position: absolute; width: var(--s); height: var(--s); background: currentColor; opacity: 0; transform: scale(.2) rotate(-45deg);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); transition: opacity .2s ease, transform .35s cubic-bezier(.3, 1.5, .6, 1); }
+/* an uneven scatter; the order they light up in is re-rolled on every hover by the script */
+.theme-toggle__stars i:nth-child(1) { --s: 7px; left: 5%; top: 24%; }
+.theme-toggle__stars i:nth-child(2) { --s: 5px; left: 15%; top: 72%; }
+.theme-toggle__stars i:nth-child(3) { --s: 5px; left: 24%; top: 6%; }
+.theme-toggle__stars i:nth-child(4) { --s: 6px; left: 38%; top: 82%; }
+.theme-toggle__stars i:nth-child(5) { --s: 4px; left: 51%; top: 4%; }
+.theme-toggle__stars i:nth-child(6) { --s: 7px; left: 62%; top: 68%; }
+.theme-toggle__stars i:nth-child(7) { --s: 5px; left: 75%; top: 14%; }
+.theme-toggle__stars i:nth-child(8) { --s: 6px; left: 94%; top: 28%; }
+:root[data-theme="light"] .theme-toggle:is(:hover, :focus-visible) .theme-toggle__stars i { opacity: .7; transform: none; }
+
+/* ---------- Sidebar ---------- */
+.side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: 100vh; overflow-y: auto; scrollbar-gutter: stable; padding-block: 28px 24px; padding-inline: 5px 12px; } /* the wider right side keeps the scrollbar off the frames */
+/* the gutter is always reserved: otherwise the scrollbar narrows the panel, titles rewrap and the panel keeps a scrollbar it no longer needs */
+.side__head { display: flex; align-items: flex-start; gap: 8px; }
+.side__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+/* «Скрыть меню»: two chevrons slide left on hover, the leading one faster, the second catching up */
+.side__hide-chev { transition: transform .32s ease; }
+.side__hide-chev--lead { transition-duration: .16s; }
+.side__hide:is(:hover, :focus-visible) .side__hide-chev { transform: translateX(-3px); }
+/* shown while the sidebar is collapsed: the menu button with the theme toggle under it, both the same width */
+.float-tools { position: fixed; z-index: 5; top: calc(env(safe-area-inset-top, 0px) + 16px); left: 35px; display: grid; gap: 6px; }
+.float-tools[hidden] { display: none; }
+.float-tools__btn { justify-content: flex-start; padding-inline: 12px 14px; box-shadow: 0 2px 8px rgba(0, 0, 0, .12); }
+@media (min-width: 881px) {
+  /* collapse animates the sidebar track to zero while the panel fades and slides out */
+  .app { transition: grid-template-columns .15s linear, gap .15s linear; }
+  .app__side { transition: opacity .15s linear, transform .15s linear, visibility .15s linear; }
+  .app__sheet { transition: padding-top .15s linear; }
+  .app--side-collapsed { grid-template-columns: 0px minmax(0, 1fr); gap: 0; }
+  .app--side-collapsed .app__side { min-width: 300px; opacity: 0; visibility: hidden; transform: translateX(-24px); pointer-events: none; }
+  .app--side-collapsed .app__sheet { border-left-color: transparent; padding-top: 112px; }
+}
+@media (max-width: 880px) {
+  .side__hide, .float-tools { display: none; }
+}
+.brand { flex: 1; min-width: 0; }
+.brand__title { display: block; font-family: var(--f-display); font-weight: 700; font-size: 21px; line-height: 1.15; letter-spacing: -.01em; }
+.brand__mark {
+  padding: 0 4px; border-radius: 4px; color: var(--accent);
+  background-color: var(--sheet);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 7px 7px; box-shadow: inset 0 0 0 1px var(--line);
+}
+.brand__sub { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); }
+/* «Прогресс» and «Избранное»: full-width buttons one under the other, each expands its block under it like an accordion;
+   the title on the left, the figures and the arrow on the right */
+.side__summary { display: grid; gap: 8px; margin-top: 8px; }
+.side__stat { width: 100%; justify-content: flex-start; gap: 10px; padding-inline: 12px; }
+.side__count { margin-left: auto; }
+.side__fold-arrow { flex: none; width: 12px; height: 12px; margin-left: auto; color: var(--muted); transition: transform .15s linear; }
+.side__count + .side__fold-arrow { margin-left: 0; }
+.side__stat:hover .side__fold-arrow { color: inherit; }
+.side__stat[aria-expanded="true"] .side__fold-arrow { transform: rotate(90deg); }
+/* the book progress bar fills the row between the title and the percentage, centred vertically */
+.side__stat-bar { flex: 1; min-width: 40px; }
+.side__stat-pct { font-family: var(--f-mono); font-size: 12px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+.side__badge { min-width: 20px; padding: 1px 6px; border-radius: 99px; background: color-mix(in srgb, var(--bad) 18%, transparent); color: var(--bad); font-family: var(--f-mono); font-size: 11px; text-align: center; }
+.side__count { font-family: var(--f-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+.side__count:empty { display: none; }
+.side__bm .bm-icon { margin: 0; color: currentColor; }
+/* «Избранное» turns gold on hover, while open and while the open topic came from its list */
+.side__bm:is(:hover, :focus-visible, [aria-expanded="true"]), .side__bm--active { border-color: var(--gold-ink); color: var(--gold-ink); }
+.side__stat[aria-expanded="true"]:not(.side__bm) { border-color: var(--accent); }
+/* the block under its button; the grid rows animate it open and closed */
+.side__fold { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .15s linear, opacity .15s linear; }
+.side__fold--open { grid-template-rows: 1fr; opacity: 1; }
+.side__fold-clip { min-height: 0; overflow: hidden; }
+.side__fold .overall, .side__fold .bookmarks { margin: 6px 0 0; }
+.side__fold .bookmarks__head { display: none; } /* the button above already says «Избранное» and the count */
+.side__fold .bookmarks__empty { padding-top: 8px; }
+.overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; gap: 8px; }
+:root[data-theme="light"] .overall { background: none; } /* sits on the tinted sidebar like the other frames there */
+/* the same for the controls in the sidebar: no grey sheet fill on the tinted paper (hover fills stay) */
+:root[data-theme="light"] .side :is(.action-btn, .icon-btn, .search__input):not(:hover) { background: none; }
+/* accent-soft is almost the paper colour, so on the sidebar the hover uses the stronger --hover of the contents list */
+:root[data-theme="light"] .side :is(.action-btn, .icon-btn):hover { background: var(--hover); }
+:root[data-theme="light"] .side .level-chip:not([aria-pressed="true"]) { --face: var(--paper); }
+.overall__row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--muted); }
+.overall__value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
+/* the book progress at the bottom of the block: a title, the bar with the percentage and how it is counted */
+.overall__book { display: grid; gap: 6px; margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--border); }
+.overall__note { margin: 0; font-size: 11px; line-height: 1.4; color: var(--muted); }
+/* «С ошибками»: a row that opens the «Работа над ошибками» page */
+/* a muted red over a tint that rises from the bottom and fades into the block; it reaches past the row so the text stays in line.
+   On hover the solid bottom part of the same gradient grows (--solid 0% → 100%), pushing the soft fade up and out past the top edge. */
+@property --solid { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
+.overall__mistakes { --tint: 12%; --solid: 0%; align-items: center; width: calc(100% + 16px); margin-inline: -8px; margin-top: -3px; padding: 7px;
+  border: 1px solid transparent; border-radius: 6px;
+  /* eased fade: the red thins out along a curve and is gone before the top edge, so there is no visible line */
+  background: linear-gradient(to top,
+    color-mix(in srgb, var(--bad) var(--tint), transparent) 0%,
+    color-mix(in srgb, var(--bad) var(--tint), transparent) var(--solid),
+    color-mix(in srgb, var(--bad) calc(var(--tint) * .6), transparent) calc(var(--solid) + 30%),
+    color-mix(in srgb, var(--bad) calc(var(--tint) * .25), transparent) calc(var(--solid) + 55%),
+    color-mix(in srgb, var(--bad) calc(var(--tint) * .07), transparent) calc(var(--solid) + 75%),
+    transparent calc(var(--solid) + 92%));
+  /* the gradient spans the border box too: sized to the padding box it would repeat under the transparent border,
+     and its strongest bottom edge would show as a red line along the top */
+  background-origin: border-box;
+  color: color-mix(in srgb, var(--bad) 70%, var(--muted)); font: inherit; font-size: 13px; text-align: left; cursor: pointer;
+  transition: --solid .3s ease-out, border-color .3s ease-out; }
+/* the outline shows only on hover (and keyboard focus) and while «Работа над ошибками» is open */
+.overall__mistakes:is(:hover, :focus-visible, [aria-current="page"]) { border-color: color-mix(in srgb, var(--bad) 35%, transparent); }
+.overall__mistakes .overall__value { color: inherit; }
+/* the pale light theme needs a little more red to be noticed */
+:root[data-theme="light"] .overall__mistakes { --tint: 16%; color: color-mix(in srgb, var(--bad) 88%, var(--muted)); }
+.overall__mistakes:hover, .overall__mistakes:focus-visible, .overall__mistakes[aria-current="page"] { --solid: 100%; }
+.overall__mistakes-end { display: flex; align-items: center; gap: 6px; }.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.bar--thin { height: 4px; border-radius: 2px; }
+.bar__fill { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s ease, background-color .4s ease; }
+.bar__fill--full { background: var(--ok); } /* a bar filled to 100% turns green */
+/* a taller bar with its percentage inside: dark over the track, light over the fill; the light copy is clipped to the fill (--p) */
+.bar--labeled { position: relative; height: 16px; border-radius: 8px; }
+.bar__label { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--f-mono); font-size: 10.5px; font-weight: 400; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.bar__label--on-fill { color: var(--on-accent); clip-path: inset(0 calc(100% - var(--p, 0%)) 0 0); transition: clip-path .4s ease; }
+
+/* on desktop the drawer is just part of the sidebar; on mobile it slides in over the page */
+.drawer { display: contents; }
+.drawer__head, .side__menu, .side__theme, .drawer-backdrop { display: none; }
+
+
+.level-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+/* Level chips: the level's progress rises from the bottom as green «liquid» (--lvl, set from the script), and the outline turns green
+   up to the same line. The outline is drawn by a border-box gradient behind a padding-box fill, since border-image ignores rounded corners.
+   --lvl is registered so it animates; «Все» has no liquid. */
+@property --lvl { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
+.level-chip {
+  --bc: color-mix(in srgb, var(--accent) 55%, transparent); /* outline above the liquid */
+  --face: var(--sheet); /* chip background */
+  position: relative; isolation: isolate; overflow: hidden; padding: 2px 7px; border: 1px solid transparent; border-radius: 99px;
+  background: linear-gradient(var(--face), var(--face)) padding-box, linear-gradient(to top, var(--ok) var(--lvl), var(--bc) var(--lvl)) border-box;
+  color: var(--muted); font-family: var(--f-mono); font-size: 12px; cursor: pointer; transition: --lvl .6s ease, color .15s linear;
+}
+.level-chip::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; bottom: 0; height: var(--lvl);
+  background: color-mix(in srgb, var(--ok) 32%, transparent); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ok) 70%, transparent); }
+.level-chip[data-level=""]::before { display: none; }
+.level-chip[aria-pressed="true"]::before { background: color-mix(in srgb, var(--ok) 70%, transparent); }
+.level-chip:hover { --bc: var(--accent); color: var(--ink); }
+.level-chip[aria-pressed="true"] { --bc: var(--accent); --face: var(--accent); color: var(--on-accent); }
+/* a level whose every topic is done at 100% (for «Все» — the whole book) turns green */
+.level-chip--done, .level-chip--done:hover { --bc: var(--ok); color: var(--ok); }
+.level-chip--done::before { box-shadow: none; } /* a full chip has no liquid surface line */
+.level-chip--done[aria-pressed="true"] { --bc: var(--ok); --face: var(--ok); color: var(--on-accent); }
+
+/* contents list: progress of the selected level on top, then the chapters as an accordion */
+.toc { margin-top: 12px; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
+.toc__empty { margin: 16px 10px; font-size: 14px; color: var(--muted); }
+/* one frame: «Содержание учебника» with the level filter, the level progress and the chapters, split by thin lines */
+.toc__section { display: grid; gap: 6px; padding: 0 10px 10px; border-bottom: 1px solid var(--border); }
+.toc__label { font-size: 13px; font-weight: 600; color: var(--muted); }
+.toc__note { display: block; margin-top: 2px; font-size: 10.5px; font-weight: 400; line-height: 1.35; opacity: .8; }
+
+/* the search sits in its own frame above the contents */
+.search { display: grid; gap: 6px; margin-top: 12px; padding: 10px 13px 13px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
+.search__label { font-size: 13px; font-weight: 600; color: var(--muted); }
+.search__input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--sheet); color: var(--ink); font: inherit; font-size: 14.5px; transition: background-color .15s linear, border-color .15s linear; }
+.search__input::placeholder { color: var(--muted); opacity: .4; }
+.lvl-prog { display: grid; gap: 5px; margin-bottom: 4px; padding: 8px 10px 10px; border-bottom: 1px solid var(--border); }
+.lvl-prog[hidden] { display: none; }
+.lvl-prog__row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.lvl-prog__value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.chap { transition: background-color .15s linear; }
+.chap + .chap { border-top: 1px solid var(--border); }
+/* the open chapter and the chapter of the open page are tinted cards, so their topics do not run into the next chapter heading */
+:is(.chap--open, .chap--current) { margin-block: 4px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 19%, transparent); }
+:root[data-theme="light"] :is(.chap--open, .chap--current) { background: color-mix(in srgb, var(--accent) 13%, transparent); }
+/* --hover is about as dark as the tinted card, so inside it the hover is an extra accent layer */
+:is(.chap--open, .chap--current) :is(.chap__btn, .topic-btn:not([aria-current])):hover { background: color-mix(in srgb, var(--accent) 20%, transparent); }
+:is(.chap--open, .chap--current), :is(.chap--open, .chap--current) + .chap { border-top-color: transparent; }
+/* the chapter has no padding of its own, so the heading hover fills the row (or the card) edge to edge */
+.chap--open { padding-bottom: 4px; }
+:is(.chap--open, .chap--current):first-child { margin-top: 0; }
+:is(.chap--open, .chap--current):last-child { margin-bottom: 0; }
+.chap__btn { display: grid; grid-template-columns: 1.8em minmax(0, 1fr) auto; align-items: center; gap: 6px; width: 100%; padding: 11px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 14.5px; font-weight: 600; line-height: 1.3; text-align: left; cursor: pointer; }
+.chap__btn:hover { background: var(--hover); }
+.chap__num { font-family: var(--f-mono); font-size: 12px; font-weight: 500; color: var(--muted); }
+/* the chapter of the open page: its number as a filled badge (the card tint is set above), visible while the chapter is collapsed */
+.chap--current .chap__num { padding-block: 2px; border-radius: 6px; background: var(--accent); color: var(--on-accent); font-weight: 600; text-align: center; }
+.chap__meta { display: block; margin-top: 1px; font-size: 12px; font-weight: 400; color: var(--muted); }
+.chap__levels { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; font-weight: 500; }
+.chap__end { display: flex; align-items: center; gap: 6px; }
+/* the arrow only shows the accordion state; the whole .chap__btn is the control */
+.chap__arrow { display: grid; place-items: center; width: 16px; height: 16px; color: var(--muted); }
+.chap__btn:hover .chap__arrow { color: var(--accent); }
+.chap__arrow-icon { transition: transform .15s linear; }
+.chap--open .chap__arrow-icon { transform: rotate(90deg); }
+.chap__body { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .15s linear, opacity .15s linear; }
+.chap--open .chap__body { grid-template-rows: 1fr; opacity: 1; }
+.chap__clip { min-height: 0; overflow: hidden; }
+.chap__topics { display: grid; gap: 6px; margin: 2px 0 6px 22px; padding-left: 8px; border-left: 1px solid var(--border); }
+/* a thin accent-tinted line in the middle of the gap between topics, in a chapter and in «Избранное» */
+.chap__topic, .bookmarks__topic { position: relative; }
+.chap__topic + .chap__topic::before, .bookmarks__topic + .bookmarks__topic::before { content: ""; position: absolute; left: 10px; right: 10px; top: -3.5px; height: 1px; background: color-mix(in srgb, var(--accent) 30%, transparent); }
+
+.topic-btn { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; width: 100%; padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 14px; line-height: 1.3; text-align: left; cursor: pointer; }
+.topic-btn:hover { background: var(--hover); }
+/* an overview link: «Содержание учебника →» at the top of the contents box, «Обзор всего раздела →» first in an expanded chapter */
+.topic-btn--overview { font-size: 13px; font-weight: 600; color: var(--accent); }
+.topic-btn__arrow { font-size: 17.5px; font-weight: 700; line-height: 1; }
+/* an arrow in a link-like button nudges the way it points while the button is hovered or focused */
+.arrow { display: inline-block; transition: transform .15s ease; }
+:is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start):is(:hover, :focus-visible) .arrow--next { transform: translateX(3px); }
+:is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):is(:hover, :focus-visible) .arrow--prev { transform: translateX(-3px); }
+/* «Содержание учебника» spans its section edge to edge, the text lines up with the labels; declared after .topic-btn so it wins */
+.toc__contents { width: auto; margin: 0 -10px -2px; } /* -2px with the 6px grid gap leaves the same space under the text as above it */
+/* a full-width line under «Содержание учебника» so the menu link does not merge with the level filter */
+.toc__contents + .toc__label { margin-inline: -10px; padding: 8px 10px 0; border-top: 1px solid var(--border); }
+.topic-btn__meta { display: block; margin-top: 1px; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .04em; color: var(--muted); }
+.topic-btn[aria-current="page"] { background: var(--accent); color: var(--on-accent); }
+.topic-btn[aria-current="page"] .topic-btn__meta { color: inherit; opacity: .8; }
+.topic-btn__studied { color: var(--ok); }
+.topic-btn[aria-current="page"] .topic-btn__studied { color: inherit; }
+
+.pill { font-family: var(--f-mono); font-size: 11px; padding: 1px 7px; border-radius: 99px; border: 1px solid var(--border); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* below 100% the pill is filled up to its value: red up to 30%, yellow up to 60%, green up to 99%; the fill fades a little towards its edge */
+.pill--low { --pc: var(--bad); }
+.pill--mid { --pc: var(--mid); }
+.pill--high { --pc: var(--ok); }
+.pill--low, .pill--mid, .pill--high { color: color-mix(in srgb, var(--pc) 65%, var(--muted)); border-color: color-mix(in srgb, var(--pc) 35%, transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--pc) 20%, transparent), color-mix(in srgb, var(--pc) 9%, transparent) var(--p), transparent var(--p)); }
+/* the colours are muted towards the grey text so the pills do not pull focus; a little less colour still on the pale light theme */
+:root[data-theme="light"] :is(.pill--low, .pill--mid, .pill--high) { color: color-mix(in srgb, var(--pc) 60%, var(--muted)); }
+/* the red pill on the dark theme: a stronger fill so it reads as red, and a lighter text to keep 4.5:1 on it */
+:root:not([data-theme="light"]) .pill--low { color: color-mix(in srgb, var(--bad) 80%, var(--ink));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--bad) 26%, transparent), color-mix(in srgb, var(--bad) 12%, transparent) var(--p), transparent var(--p)); }
+.pill--good { color: var(--ok); border-color: var(--ok); background: color-mix(in srgb, var(--ok) 18%, transparent); }
+:root[data-theme="light"] .pill--good { background: var(--ok-soft); }
+.topic-btn[aria-current="page"] .topic-btn__pill { color: inherit; border-color: currentColor; background: none; }
+
+/* bookmarks: a gold ribbon next to the topic title, and the «Избранное» list at the bottom of the sidebar */
+.bm-icon { display: inline-block; width: 11px; height: 14px; margin-left: 6px; vertical-align: -1px; color: var(--gold); }
+/* in the sidebar the ribbon is accent-coloured and turns gold on hover and on the active topic */
+.topic-btn__bm { color: var(--accent); transition: color .2s linear; }
+/* hover uses the same gold as the heading and the active bookmark; on the accent fill of the active topic the brighter gold reads better */
+.topic-btn:hover .topic-btn__bm, .topic-btn:focus-visible .topic-btn__bm { color: var(--gold-ink); }
+.topic-btn[aria-current="page"] .topic-btn__bm { color: var(--gold); }
+.bookmarks { margin-top: 12px; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; transition: border-color .2s linear; }
+.bookmarks__head { display: flex; align-items: center; gap: 6px; padding: 8px 10px 6px; font-size: 12px; font-weight: 600; color: var(--muted); transition: color .2s linear; }
+.bookmarks__icon { margin: 0; color: var(--accent); transition: color .2s linear; }
+.bookmarks__count { margin-left: auto; font-family: var(--f-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+.bookmarks__list { display: grid; gap: 6px; }
+.bookmarks__empty { margin: 0; padding: 2px 10px 8px; font-size: 13px; color: var(--muted); }
+/* the frame and the heading (ribbon, «Избранное», count) light up while a bookmark is hovered or the open topic came from this list */
+.bookmarks--active, .bookmarks:has(.topic-btn:hover, .topic-btn:focus-visible) { border-color: var(--gold-ink); }
+.bookmarks--active .bookmarks__head, .bookmarks:has(.topic-btn:hover, .topic-btn:focus-visible) .bookmarks__head,
+.bookmarks--active .bookmarks__icon, .bookmarks:has(.topic-btn:hover, .topic-btn:focus-visible) .bookmarks__icon { color: var(--gold-ink); }
+/* the active topic in «Избранное» is gold like the pressed «В избранном» button; the title keeps the ink colour so it stays readable */
+.bookmarks__topic[aria-current="page"] { background: var(--gold-soft); color: var(--ink); }
+.bookmarks__topic[aria-current="page"] .topic-btn__meta, .bookmarks__topic[aria-current="page"] .topic-btn__bm { color: var(--gold-ink); opacity: 1; }
+.bookmarks__topic[aria-current="page"] .topic-btn__pill { color: var(--gold-ink); border-color: var(--gold-ink); background: none; }
+
+/* ---------- Sheet ---------- */
+.sheet {
+  min-width: 0; min-height: 100vh; padding-block: 36px 18px; padding-inline: clamp(18px, 5vw, 64px);
+  background-color: var(--sheet);
+  border-left: 1px solid var(--border);
+  border-radius: 10px;
+}
+.sheet__inner { max-width: 880px; margin-inline: auto; }
+.sheet__title { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 4.4vw, 40px); line-height: 1.12; letter-spacing: -.02em; margin: 12px 0 6px; text-wrap: balance; }
+.sheet__lead { margin: 0; font-family: var(--f-en); font-style: italic; font-size: 19px; color: var(--muted); }
+.sheet__intro { margin: 16px 0 0; }
+.sheet__section { display: flex; align-items: center; gap: 12px; margin: 40px 0 16px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.sheet__section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.sheet__fine { margin-top: 24px; font-size: 13.5px; font-style: italic; text-align: center; color: var(--muted); }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.crumbs__link { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.crumbs__link:hover { text-decoration: underline; }
+.crumbs__sep { opacity: .6; }
+.lvl-tag { display: inline-block; padding: 0 6px; border: 1px solid currentColor; border-radius: 4px; font-family: var(--f-mono); font-size: 11px; letter-spacing: .04em; color: var(--accent); }
+.lvl-tag--sm { font-size: 10px; line-height: 1.5; }
+.lvl-tag--filled { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+.page-prog { display: grid; gap: 5px; margin-top: 16px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; }
+.page-prog__row { display: flex; justify-content: space-between; gap: 12px; font-size: 12.5px; color: var(--muted); }
+.page-prog__value { text-align: right; color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.page-prog__levels { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px 16px; margin-top: 3px; padding-top: 7px; border-top: 1px dashed var(--border); }
+.page-prog__level { display: grid; grid-template-columns: auto minmax(0, 1fr) 2.8em; align-items: center; gap: 6px; font-size: 11.5px; }
+.page-prog__tag { font-size: 10px; }
+
+/* Contents */
+/* framed like the contents list in the sidebar */
+.contents { list-style: none; margin: 24px 0 0; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
+.contents__item { padding-block: 4px; }
+.contents__item + .contents__item { border-top: 1px solid var(--border); }
+.contents__row { display: grid; grid-template-columns: 2.2em minmax(0, 1fr) auto; gap: 4px 10px; align-items: baseline; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink); text-align: left; cursor: pointer; }
+.contents__row:hover { background: var(--hover); }
+.contents__row:hover .contents__title { color: var(--accent); }
+.contents__num { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.contents__title { display: flex; align-items: baseline; gap: 8px; min-width: 0; font-size: 17px; font-weight: 600; }
+.contents__title::after { content: ""; flex: 1; min-width: 20px; border-bottom: 2px dotted var(--border); }
+.contents__page { font-family: var(--f-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.contents__meta { grid-column: 2 / 4; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; color: var(--muted); }
+.contents__levels { display: inline-flex; gap: 3px; }
+.contents__bar { width: 120px; align-self: center; }
+
+/* «Работа над ошибками»: the same frame as the contents, one row per topic with a button per exercise */
+.mistakes { list-style: none; margin: 24px 0 0; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
+.mistakes__item { display: grid; gap: 8px; padding: 12px; }
+.mistakes__item + .mistakes__item { border-top: 1px solid var(--border); }
+.mistakes__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.mistakes__num { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.mistakes__title { padding: 0; border: 0; background: none; color: var(--ink); font-size: 17px; font-weight: 600; text-align: left; cursor: pointer; }
+.mistakes__title:hover { color: var(--accent); }
+.mistakes__chapter { flex-basis: 100%; font-size: 12.5px; color: var(--muted); } /* the chapter on its own line under the title */
+.mistakes__exs { display: flex; flex-wrap: wrap; gap: 6px; }
+.mistakes__ex { padding: 3px 12px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 99px; background: var(--sheet); color: var(--accent); font-family: var(--f-mono); font-size: 12px; cursor: pointer; }
+.mistakes__ex:hover { border-color: var(--accent); background: var(--accent-soft); }
+.mistakes__score { color: var(--bad); }
+.mistakes__note { color: var(--muted); }
+.mistakes__hint { margin: 8px 0 0; font-size: 13.5px; color: var(--muted); }
+.mistakes__tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 20px; }
+.mistakes__tools + .mistakes { margin-top: 12px; }
+.mistakes__levels { display: flex; flex-wrap: wrap; gap: 6px; }
+.mistakes__start { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; padding: 8px 16px; border: 1.5px solid var(--accent); border-radius: 10px;
+  background: var(--accent); color: var(--on-accent); font-size: 14px; font-weight: 600; cursor: pointer; transition: filter .15s; }
+.mistakes__start:hover { filter: brightness(1.12); }
+.mistakes__level { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 99px;
+  background: var(--sheet); color: var(--accent); font-family: var(--f-mono); font-size: 13px; font-weight: 600; cursor: pointer; }
+.mistakes__level:hover { border-color: var(--accent); background: var(--accent-soft); }
+.mistakes__level[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.mistakes__level-count { font-weight: 400; opacity: .75; }
+.mistakes__empty { margin: 24px 0 0; padding: 16px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--muted); }
+
+.topic-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 24px; }
+.topic-card { display: grid; gap: 6px; align-content: start; padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); color: var(--ink); text-align: left; cursor: pointer; }
+.topic-card:hover { border-color: var(--accent); }
+.topic-card__num { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.topic-card__title { font-weight: 600; line-height: 1.3; }
+.topic-card__sub { font-family: var(--f-en); font-style: italic; font-size: 14px; color: var(--muted); }
+.topic-card__foot { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 12.5px; color: var(--muted); }
+.topic-card__bar { flex: 1; }
+.topic-card__studied { color: var(--ok); font-size: 13px; font-weight: 600; }
+/* a 100% figure next to a progress bar is green like the bar; declared after every value colour so it wins */
+.pct--full { color: var(--ok); }
+
+/* Rule */
+.rule p { margin: 0 0 14px; }
+.rule h3 { margin: 28px 0 10px; font-size: 17px; font-weight: 700; text-wrap: balance; }
+.rule i { font-family: var(--f-en); font-style: normal; }
+.rule i b, .examples__en b { font-weight: 600; background: linear-gradient(transparent -10%, var(--hl) 160%); }
+.formula { margin: 0 0 14px; padding: 10px 14px; border-radius: 8px; background: var(--accent-soft); font-family: var(--f-en); font-size: 17px; }
+.formula b { color: var(--accent); font-weight: 600; }
+.formula + .formula { margin-top: -6px; }
+.rule-table { overflow-x: auto; margin: 0 0 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); }
+.rule-table__table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.rule-table__th { padding: 9px 12px; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--well); border-bottom: 1px solid var(--border); white-space: nowrap; }
+.rule-table__cell { padding: 8px 12px; vertical-align: top; border-bottom: 1px solid var(--border); }
+.rule-table__row:last-child .rule-table__cell { border-bottom: 0; }
+.rule-table__th + .rule-table__th, .rule-table__cell + .rule-table__cell { border-left: 1px solid var(--border); }
+.examples { list-style: none; margin: 0 0 16px; padding: 0; }
+.examples__item { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; padding: 7px 0; border-bottom: 1px dashed var(--border); }
+.examples__en { font-family: var(--f-en); font-size: 17px; }
+.examples__ru { font-size: 14.5px; color: var(--muted); padding-top: 2px; }
+.note { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; margin: 0 0 16px; padding: 12px 14px; border: 1px dashed var(--bad); border-radius: 6px; background: color-mix(in srgb, var(--bad-soft) 45%, var(--sheet)); font-size: 15px; }
+:root[data-theme="dark"] .note { background: color-mix(in srgb, var(--bad-soft) 25%, var(--sheet)); }
+.note::before { content: "Важно"; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--bad); align-self: center; }
+.markers { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 16px; }
+.markers__label { margin-right: 4px; font-size: 13.5px; color: var(--muted); }
+.markers__word { padding: 1px 10px; border: 1px solid var(--border); border-radius: 99px; background: var(--sheet); font-family: var(--f-en); font-size: 14.5px; }
+
+/* «Правило изучено» and «Добавить в избранное» under the rule */
+.study { margin-top: 20px; }
+.study__btn { position: relative; display: block; width: 100%; padding-inline: 40px; }
+.study__btn[aria-pressed="false"] { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); color: var(--accent); }
+.study__btn[aria-pressed="false"]:hover { border-color: var(--accent); background: var(--accent-soft); }
+.study__btn[aria-pressed="true"] { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+.study__btn + .study__btn { margin-top: 8px; }
+.study__btn--bookmark[aria-pressed="true"] { border-color: var(--gold-ink); background: var(--gold-soft); color: var(--gold-ink); }
+.study__icon { margin: 0 6px 0 0; color: inherit; }
+.tip { position: absolute; top: 6px; right: 6px; display: grid; place-items: center; width: 18px; height: 18px;
+  border: 1px solid currentColor; border-radius: 50%; font-size: 11px; font-weight: 700; line-height: 1; opacity: .55; cursor: help; transition: opacity linear .15s; }
+.tip:hover { opacity: 1; }
+.tip__text { position: absolute; z-index: 3; right: -6px; bottom: calc(100% + 8px); width: max-content; max-width: 240px; padding: 6px 10px;
+  border-radius: 6px; background: var(--ink); color: var(--sheet); font-size: 12px; font-weight: 400; line-height: 1.4; text-align: left;
+  opacity: 0; visibility: hidden; pointer-events: none; transition: opacity linear .15s, visibility linear .15s; }
+.tip:hover .tip__text { opacity: 1; visibility: visible; }
+
+/* ---------- Exercises ---------- */
+.ex { margin: 0 0 28px; padding: 20px clamp(14px, 3vw, 26px); border: 1px solid var(--border); border-radius: 12px; background: var(--sheet); scroll-margin-top: 16px; }
+/* an exercise opened from «С ошибками» flashes its outline once */
+.ex--flash { animation: ex-flash 1.6s ease-out; }
+@keyframes ex-flash { 0%, 35% { box-shadow: 0 0 0 3px var(--accent); } 100% { box-shadow: 0 0 0 3px transparent; } }
+.ex:last-of-type { margin-bottom: 0; } /* the gap to the pager is set by .pager-current */
+.ex__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 8px; }
+.ex__num { font-family: var(--f-display); font-weight: 700; font-size: 14px; color: var(--accent); }
+.ex__task { margin: 0; font-weight: 600; }
+.ex__items { list-style: none; margin: 0; padding: 0; counter-reset: it; }
+.ex__item { counter-increment: it; display: grid; grid-template-columns: 2em minmax(0, 1fr); gap: 4px 6px; padding: 10px 0; border-bottom: 1px dashed var(--border); }
+.ex__item:last-child { border-bottom: 0; }
+.ex__item::before { content: counter(it) "."; grid-row: 1; padding-top: 6px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.ex__q { grid-column: 2; font-family: var(--f-en); font-size: 18px; line-height: 1.9; overflow-wrap: anywhere; }
+.ex__q--ru { font-family: var(--f-body); font-size: 16.5px; line-height: 1.6; padding-top: 3px; }
+.ex__text { font-family: var(--f-en); font-size: 18px; line-height: 2.15; overflow-wrap: anywhere; }
+.ex__hint { font-family: var(--f-body); font-size: 14px; color: var(--muted); }
+/* answer fields: .ex__gap inside a sentence, .ex__tr for a whole translation, .ex__blank shows the chosen option */
+.ex__gap { max-width: 100%; margin: 0 3px; padding: 0 4px; border: 0; border-bottom: 2px solid var(--muted); border-radius: 0; background: transparent; color: var(--accent); font: inherit; font-family: var(--f-en); text-align: center; }
+.ex__tr { grid-column: 2; width: 100%; padding: 4px 4px; border: 0; border-bottom: 2px solid var(--muted); border-radius: 0; background: transparent; color: var(--accent); font-family: var(--f-en); font-size: 17px; }
+.ex__blank { display: inline-block; min-width: 3.5em; margin: 0 3px; padding: 0 4px; border-bottom: 2px solid var(--muted); color: var(--accent); text-align: center; line-height: 1.5; }
+.ex__field:focus { outline: none; border-bottom-color: var(--accent); background: var(--accent-soft); }
+.ex__field--ok, .ex__field--ok:focus { color: var(--ok); border-bottom-color: var(--ok); }
+.ex__field--bad, .ex__field--bad:focus { color: var(--bad); border-bottom-color: var(--bad); }
+.ex__field--miss, .ex__field--miss:focus, .ex__blank--miss { border-bottom-color: var(--bad); border-bottom-style: dashed; }
+.ex__inline-key { margin-right: 4px; font-family: var(--f-en); font-style: italic; font-size: 15px; color: var(--bad); }
+.ex__verdict { margin-left: 8px; font-family: var(--f-body); font-weight: 700; font-size: 16px; }
+.ex__verdict--ok { color: var(--ok); }
+.ex__verdict--bad { color: var(--bad); }
+.ex__opts { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; }
+.ex__opt { padding: 3px 13px; border: 1px solid var(--border); border-radius: 99px; background: var(--well); color: var(--ink); font-family: var(--f-en); font-size: 15.5px; cursor: pointer; }
+.ex__opt:hover { border-color: var(--accent); }
+.ex__opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.ex__opt--ok, .ex__opt--ok:is(:hover, [aria-pressed="true"]) { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+.ex__opt--bad, .ex__opt--bad:is(:hover, [aria-pressed="true"]) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+.ex__opt--key:not(.ex__opt--ok) { border-color: var(--ok); border-style: dashed; }
+.ex__key { grid-column: 2; font-family: var(--f-en); font-style: italic; font-size: 15.5px; color: var(--ok); }
+.ex__key--wrong { color: var(--bad); }
+.ex__self-ok { grid-column: 2; justify-self: start; padding: 2px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--well); color: var(--muted); font-size: 13px; cursor: pointer; }
+.ex__self-ok:hover { border-color: var(--ok); color: var(--ok); }
+.ex__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.ex__btn:not(.btn--primary):hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.ex__score { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ex__score--good { color: var(--ok); }
+.ex__score--low { color: var(--bad); }
+.ex__redo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 4%, transparent); transition: border-color .3s, background-color .3s; }
+.ex__redo--done { border-style: solid; border-color: color-mix(in srgb, var(--ok) 55%, transparent); background: color-mix(in srgb, var(--ok) 8%, transparent); }
+.ex__redo-status { flex-basis: 100%; margin: 0; color: var(--ok); font-size: 14px; font-weight: 600; }
+.ex__redo-link { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
+  background: var(--sheet); color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; }
+.ex__redo-link:hover { border-color: var(--accent); background: var(--accent-soft); }
+.ex__redo-link--next { margin-left: auto; }
+
+/* ---------- Pager ---------- */
+.pager-current { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 8px; margin-top: 20px;
+  font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: center; }
+/* the title of the open page in the body font, so it reads as a name rather than a caption */
+.pager-current__title { font-family: var(--f-body); font-size: 14px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+.pager__btn { display: grid; gap: 2px; padding: 12px 16px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; background: var(--sheet); color: var(--accent); font-weight: 600; text-align: left; cursor: pointer; }
+.pager__btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+.pager__btn--next { text-align: right; grid-column: 2; }
+.pager__label { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-family: var(--f-mono); font-size: 11.5px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.pager__btn--next .pager__label { justify-content: flex-end; }
+.pager__levels { display: inline-flex; gap: 4px; }
+/* «Перейти к теме того же уровня»: a quiet row of two links under the pager */
+/* set apart from the main pager by a wider gap and a faint accent tint */
+.pager-level { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; margin-top: 24px; padding: 10px 12px 12px; border: 1px dashed var(--border); border-radius: 10px; background: color-mix(in srgb, var(--accent) 4%, transparent); }
+.pager-level__label { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+/* small cards in the style of the main pager buttons: a direction caption over the topic title */
+.pager-level__link { display: grid; gap: 1px; padding: 8px 12px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
+  background: var(--sheet); color: var(--accent); font-size: 14px; font-weight: 600; line-height: 1.35; text-align: left; cursor: pointer; }
+.pager-level__link:hover { border-color: var(--accent); background: var(--accent-soft); }
+.pager-level__dir { font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.pager-level__link--prev { grid-column: 1; }
+.pager-level__link--next { grid-column: 2; text-align: right; }
+
+/* scroll-to-top: appears once 30% of the page has been scrolled */
+.to-top { position: fixed; z-index: 6; right: 24px; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); display: grid; place-items: center; width: 54px; height: 54px; padding: 0;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 12px; background: var(--sheet); color: var(--accent); cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .14); opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .15s linear, transform .15s linear, visibility .15s linear, background-color .15s linear, border-color .15s linear; }
+.to-top--visible { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+@media (max-width: 880px) {
+  .to-top { right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); }
+  .app { grid-template-columns: minmax(0, 1fr); gap: 0; padding-inline: 0; }
+
+  /* top bar: brand, theme and menu buttons; stays on screen while scrolling */
+  .side { position: sticky; top: 0; z-index: 20; max-height: none; overflow: visible; scrollbar-gutter: auto;
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px; background: var(--paper); border-bottom: 1px solid var(--border); }
+  .side__head { align-items: center; }
+  .brand__title { font-size: 18px; }
+  .brand__sub { display: none; }
+  .icon-btn { width: 38px; height: 38px; }
+  .side__menu { display: flex; flex: none; }
+  /* on mobile the theme is an icon in the top bar, so the drawer has no action row */
+  .side__theme { display: grid; flex: none; width: 40px; height: 40px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--accent); }
+  .side__theme:hover { background: var(--accent-soft); }
+  .side__actions { display: none; }
+
+  /* drawer: progress, levels, search and contents */
+  .drawer { display: block; position: fixed; z-index: 30; top: 0; bottom: 0; left: 0; width: min(360px, 88vw); overflow-y: auto; overscroll-behavior: contain;
+    padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px calc(env(safe-area-inset-bottom, 0px) + 24px); background: var(--paper); border-right: 1px solid var(--border);
+    box-shadow: 8px 0 24px rgba(0, 0, 0, .18); transform: translateX(-105%); visibility: hidden; transition: transform .2s ease, visibility .2s linear; }
+  .drawer--open { transform: none; visibility: visible; }
+  .drawer__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: var(--f-display); font-weight: 700; font-size: 17px; }
+  .side__summary { margin-top: 12px; }
+  .drawer-backdrop { display: block; position: fixed; z-index: 25; inset: 0; background: rgba(8, 10, 20, .45); opacity: 0; visibility: hidden; transition: opacity .2s linear, visibility .2s linear; }
+  .drawer-backdrop--open { opacity: 1; visibility: visible; }
+  .search__input { font-size: 16px; } /* 16px+ keeps iOS from zooming in on focus */
+
+  .ex { scroll-margin-top: 76px; } /* clears the sticky top bar */
+  .sheet { padding-inline: 16px; padding-block: 24px 14px; border-inline: 0; border-radius: 0; min-height: 0; }
+}
+@media (max-width: 560px) {
+  .sheet__title { font-size: 26px; }
+  .sheet__lead { font-size: 17px; }
+  .examples__item { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .note { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .note::before { align-self: start; }
+  .ex { padding: 16px 14px; }
+  .ex__q:not(.ex__q--ru), .ex__text { font-size: 17px; }
+  /* exercise footer: score on its own line above, the three buttons share one row */
+  .ex__foot { gap: 6px; }
+  .ex__btn { flex: 1 1 auto; padding: 9px 8px; font-size: 13.5px; white-space: nowrap; }
+  .ex__score { order: -1; width: 100%; margin-left: 0; text-align: right; }
+  .ex__score:empty { display: none; }
+  .ex__redo-link, .mistakes__start { flex: 1 1 100%; justify-content: center; margin-left: 0; }
+  .pager { grid-template-columns: minmax(0, 1fr); }
+  .pager__btn--next { grid-column: 1; }
+  .pager-level { grid-template-columns: minmax(0, 1fr); }
+  .pager-level__link--prev, .pager-level__link--next { grid-column: 1; }
+  .contents__bar { width: 80px; }
+  /* rule tables become stacked cards: one row per card, column names as labels */
+  .rule-table { overflow: visible; border: 0; background: none; }
+  .rule-table__table, .rule-table__body, .rule-table__row, .rule-table__cell { display: block; }
+  .rule-table__head { display: none; }
+  .rule-table__row { margin-bottom: 8px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); overflow: hidden; }
+  .rule-table__cell { padding: 6px 12px; border: 0; }
+  .rule-table__cell + .rule-table__cell { border-left: 0; border-top: 1px dashed var(--border); }
+  .rule-table__cell[data-label]::before { content: attr(data-label); display: block; margin-bottom: 1px; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+
+<div class="app" id="app">
+  <div class="float-tools" id="floatTools" hidden>
+    <button class="action-btn float-tools__btn" id="sideShow" type="button" aria-controls="side" aria-expanded="false"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Показать меню</span></button>
+    <button class="action-btn theme-toggle float-tools__btn" type="button"><span class="theme-toggle__stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="theme-toggle__rays" aria-hidden="true"></span><svg class="action-btn__icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path class="theme-toggle__moon-body" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg><svg class="action-btn__icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></svg><span class="theme-toggle__label">Светлая тема</span></button>
+  </div>
+  <aside class="side app__side" id="side">
+    <div class="side__head">
+      <div class="brand">
+        <span class="brand__title">Грамматика <span class="brand__mark">онлайн</span></span>
+        <span class="brand__sub">Английский язык A1–C2 по разделам сборника Ю.&nbsp;Голицынского</span>
+      </div>
+      <button class="icon-btn theme-toggle side__theme" type="button"><span class="theme-toggle__stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="theme-toggle__rays" aria-hidden="true"></span><svg class="icon-btn__icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path class="theme-toggle__moon-body" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg><svg class="icon-btn__icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></svg></button>
+      <button class="action-btn side__menu" id="menuBtn" type="button" aria-controls="drawer" aria-expanded="false"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Разделы</span></button>
+    </div>
+    <div class="drawer" id="drawer">
+    <div class="drawer__head"><span>Разделы</span><button class="icon-btn" id="drawerClose" type="button" title="Закрыть" aria-label="Закрыть разделы"><svg class="icon-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="side__actions">
+      <button class="action-btn theme-toggle" type="button"><span class="theme-toggle__stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="theme-toggle__rays" aria-hidden="true"></span><svg class="action-btn__icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path class="theme-toggle__moon-body" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg><svg class="action-btn__icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></svg><span class="theme-toggle__label">Светлая тема</span></button>
+      <button class="action-btn side__hide" id="sideHide" type="button" aria-controls="side" aria-expanded="true"><svg class="action-btn__icon" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="side__hide-chev side__hide-chev--lead" d="M8.5 4.5 4 9l4.5 4.5"/><path class="side__hide-chev" d="M14 4.5 9.5 9l4.5 4.5"/></svg><span>Скрыть меню</span></button>
+    </div>
+    <div class="side__summary">
+      <div>
+        <button class="action-btn side__stat" id="progBtn" type="button" aria-controls="progFold" aria-expanded="false"></button>
+        <div class="side__fold" id="progFold"><div class="side__fold-clip" id="progBody"></div></div>
+      </div>
+      <div>
+        <button class="action-btn side__stat side__bm" id="bmBtn" type="button" aria-controls="bmFold" aria-expanded="false"></button>
+        <div class="side__fold" id="bmFold"><div class="side__fold-clip" id="bmBody"></div></div>
+      </div>
+    </div>
+    <nav aria-label="Разделы учебника">
+      <label class="search" for="search"><span class="search__label">Поиск темы</span>
+        <input class="search__input" id="search" type="search" placeholder="Например, «perfect»" autocomplete="off"></label>
+      <div class="toc">
+        <div class="toc__section">
+          <button class="topic-btn topic-btn--overview toc__contents" id="tocContents" type="button"><span>Содержание учебника</span><span class="arrow arrow--next topic-btn__arrow" aria-hidden="true">→</span></button>
+          <span class="toc__label" id="levelsLabel">Уровни сложности <span class="toc__note">Выберите любой — от лёгкого A1 до тяжёлого C2</span></span>
+          <div class="level-chips" id="levelChips" role="group" aria-labelledby="levelsLabel"></div></div>
+        <div class="lvl-prog" id="lvlProg" aria-live="polite"></div>
+        <div id="tocList"></div>
+      </div>
+    </nav>
+    </div>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  </aside>
+  <main class="sheet app__sheet" id="main"></main>
+  <button class="to-top" id="toTop" type="button" title="Наверх" aria-label="Прокрутить наверх" tabindex="-1">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<script>
+/* Helpers used by the data files to write rules. */
+window.BOOK = [];
+const T = (head, rows) => {
+  const labels = head.map(h => h.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;'));
+  return `<div class="rule-table"><table class="rule-table__table"><thead class="rule-table__head"><tr>${head.map(h => `<th class="rule-table__th">${h}</th>`).join('')}</tr></thead>` +
+    `<tbody class="rule-table__body">${rows.map(r => `<tr class="rule-table__row">${r.map((c, i) => `<td class="rule-table__cell" data-label="${labels[i] || ''}">${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+};
+const E = list => `<ul class="examples">${list.map(([en, ru]) => `<li class="examples__item"><span class="examples__en">${en}</span><span class="examples__ru">${ru}</span></li>`).join('')}</ul>`;
+const N = t => `<div class="note"><div>${t}</div></div>`;
+const M = (label, words) => `<div class="markers"><span class="markers__label">${label}</span>${words.map(w => `<span class="markers__word">${w}</span>`).join('')}</div>`;
+const F = t => `<div class="formula">${t}</div>`;
+</script>
+<script charset="utf-8" src="data/01-articles.js"></script>
+<script charset="utf-8" src="data/02-nouns.js"></script>
+<script charset="utf-8" src="data/03-pronouns.js"></script>
+<script charset="utf-8" src="data/04-quantifiers.js"></script>
+<script charset="utf-8" src="data/05-adjectives.js"></script>
+<script charset="utf-8" src="data/06-prepositions.js"></script>
+<script charset="utf-8" src="data/07-tenses.js"></script>
+<script charset="utf-8" src="data/08-passive.js"></script>
+<script charset="utf-8" src="data/09-reported.js"></script>
+<script charset="utf-8" src="data/10-infinitive.js"></script>
+<script charset="utf-8" src="data/11-participle.js"></script>
+<script charset="utf-8" src="data/12-gerund.js"></script>
+<script charset="utf-8" src="data/13-ing-forms.js"></script>
+<script charset="utf-8" src="data/14-complex-object.js"></script>
+<script charset="utf-8" src="data/15-complex-subject.js"></script>
+<script charset="utf-8" src="data/16-conditionals.js"></script>
+<script charset="utf-8" src="data/17-modals.js"></script>
+<script charset="utf-8" src="data/18-tests.js"></script>
+<script charset="utf-8" src="data/19-extra.js"></script>
+<script>
+/* ================= App ================= */
+const LEVELS = { A1: 'Начальный', A2: 'Элементарный', B1: 'Средний', B2: 'Выше среднего', C1: 'Продвинутый', C2: 'Свободное владение' };
+const CHAPTERS = window.BOOK.slice().sort((a, b) => a.n - b.n);
+const TOPICS = [];
+CHAPTERS.forEach(ch => ch.topics.forEach((t, i) => { t.ch = ch; t.num = `${ch.n}.${i + 1}`; TOPICS.push(t); }));
+const topicById = Object.fromEntries(TOPICS.map(t => [t.id, t]));
+const chapById = Object.fromEntries(CHAPTERS.map(c => ['ch-' + c.id, c]));
+
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = s => { const sp = el('span'); sp.innerHTML = esc(s).replace(/\(([^)]+)\)/g, '<span class="ex__hint">($1)</span>'); return sp; };
+const pagesLabel = ch => ch.pages ? `Голицынский, с. ${ch.pages[0]}–${ch.pages[1]}` : 'Нет в учебнике';
+
+function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function shuffled(arr, seed) { return arr.map((v, i) => ({ v, k: hash(seed + '|' + i + '|' + v) })).sort((a, b) => a.k - b.k).map(o => o.v); }
+
+/* Compare answers ignoring case, punctuation, curly quotes and contractions. */
+function norm(s) {
+  s = s.toLowerCase().replace(/[’‘`´]/g, "'").replace(/[—–]/g, '-').replace(/[.!?,;:"“”«»]/g, ' ').replace(/\s+-\s+/g, ' ').replace(/\s+/g, ' ').trim();
+  s = s.replace(/\bwon't\b/g, 'will not').replace(/\bcan't\b/g, 'cannot').replace(/\bshan't\b/g, 'shall not')
+       .replace(/n't\b/g, ' not').replace(/'m\b/g, ' am').replace(/'re\b/g, ' are').replace(/'ll\b/g, ' will').replace(/'ve\b/g, ' have')
+       .replace(/\bcan not\b/g, 'cannot');
+  return s.replace(/\s+/g, ' ').trim();
+}
+/* 's and 'd have two meanings each (he's = he is / he has, I'd = I would / I had), so they cannot be folded into one form
+   like n't or 'll: both sides are expanded into every reading and match if any reading is shared.
+   Only after pronouns and question words — Tom's / my brother's stay possessive. */
+const AMBIGUOUS = /\b(i|you|he|she|it|we|they|that|there|here|what|who|where|when|how|let)'(s|d)\b/;
+const READINGS = { s: ['is', 'has'], d: ['would', 'had'] };
+function readings(s) {
+  const m = s.match(AMBIGUOUS);
+  if (!m) return [s];
+  const [whole, word, c] = m, at = m.index;
+  const subs = word === 'let' ? (c === 's' ? ['let us'] : [whole]) : READINGS[c].map(r => `${word} ${r}`);
+  return subs.flatMap(sub => readings(s.slice(0, at) + sub + s.slice(at + whole.length)));
+}
+const accepts = (answers, value) => {
+  const mine = readings(norm(value));
+  return answers.split('|').some(a => readings(norm(a)).some(r => mine.includes(r)));
+};
+const firstAnswer = answers => { const a = answers.split('|')[0]; return a === '-' ? '—' : a; };
+
+/* Scoring units: one per gap, one per choice/translation item. */
+const gapAnswers = it => Array.isArray(it[1]) ? it[1] : [it[1]];
+function units(ex) {
+  if (ex.type === 'text') return ex.answers.length;
+  if (ex.type === 'gap') return ex.items.reduce((n, it) => n + gapAnswers(it).length, 0);
+  return ex.items.length;
+}
+
+let progress = store.get('gk2-progress', {});
+let studied = store.get('gk2-studied', {});
+let bookmarks = store.get('gk2-bookmarks', {}); /* topic id → time it was bookmarked */
+let answers = store.get('gk2-answers', {});
+let levelFilter = store.get('gk2-level', '');
+let route = null;
+let viaBookmarks = false; /* the open topic was reached from the «Избранное» list */
+
+function topicStats(t) {
+  const p = progress[t.id] || {};
+  let s = 0, tot = 0, tried = false;
+  /* min(): a score saved before an exercise lost a gap must not push the topic past 100% */
+  t.ex.forEach((ex, i) => { tot += units(ex); if (p[i]) { s += Math.min(p[i][0], units(ex)); tried = true; } });
+  return { s, tot, tried, pct: tot ? Math.round(100 * s / tot) : 0 };
+}
+function chapterStats(ch, level) {
+  let s = 0, tot = 0, tried = false;
+  ch.topics.filter(t => !level || t.level === level).forEach(t => { const r = topicStats(t); s += r.s; tot += r.tot; tried = tried || r.tried; });
+  return { s, tot, tried, pct: tot ? Math.round(100 * s / tot) : 0 };
+}
+
+/* Book progress: every rule is one point (when marked as studied), every exercise up to one point by the share of right answers
+   in its latest check. 100% only with every rule studied and every exercise solved without mistakes. */
+function bookProgress() {
+  let got = 0, rules = 0, exs = 0;
+  TOPICS.forEach(t => {
+    rules++; if (studied[t.id]) got++;
+    t.ex.forEach((ex, i) => { exs++; const r = progress[t.id] && progress[t.id][i]; if (r) got += r[0] / r[1]; });
+  });
+  const total = rules + exs;
+  return { share: 100 * got / total, pct: Math.floor(100 * got / total), full: got === total, rules, exs, total };
+}
+
+/* the progress block, shown in the «Прогресс» drop-down */
+function overallBox() {
+  let total = 0, perfect = 0;
+  TOPICS.forEach(t => t.ex.forEach((ex, i) => {
+    total++;
+    const r = progress[t.id] && progress[t.id][i];
+    if (r && r[0] === r[1]) perfect++;
+  }));
+  /* «Выполнено» = «Без ошибок» + «С ошибками»: every checked exercise is one or the other */
+  const wrong = mistakeCount();
+  const book = bookProgress();
+  const box = el('div', 'overall');
+  box.innerHTML = `<div class="overall__row"><span>Правил изучено</span><b class="overall__value">${TOPICS.filter(t => studied[t.id]).length} из ${TOPICS.length}</b></div>
+    <div class="overall__row"><span>Выполнено упражнений</span><b class="overall__value">${perfect + wrong} из ${total}</b></div>
+    <div class="overall__row"><span>Без ошибок</span><b class="overall__value">${perfect}</b></div>
+    <button class="overall__row overall__mistakes" type="button" data-go="mistakes"${route === 'mistakes' ? ' aria-current="page"' : ''}>
+      <span>С ошибками</span><span class="overall__mistakes-end"><b class="overall__value">${wrong}</b>${arrowHtml('next')}</span></button>
+    <div class="overall__book">
+      <div class="overall__row"><span>Прохождение учебника</span></div>
+      <div class="bar bar--labeled" style="--p:${book.share}%"><i class="bar__fill${book.full ? ' bar__fill--full' : ''}" style="width:${book.share}%"></i><span class="bar__label">${book.pct}%</span><span class="bar__label bar__label--on-fill" aria-hidden="true">${book.pct}%</span></div>
+      <p class="overall__note">Учитываются изученные правила и верные ответы в упражнениях. 100% — всё изучено и решено без ошибок.</p>
+    </div>`;
+  return box;
+}
+
+/* the «Прогресс» button: the book progress bar and percentage, the number of exercises with mistakes */
+function renderOverall() {
+  const book = bookProgress(), wrong = mistakeCount();
+  const b = $('#progBtn');
+  b.innerHTML = `<span>Прогресс</span><span class="bar bar--thin side__stat-bar" aria-hidden="true">${barFill(book.full ? 100 : Math.min(book.share, 99))}</span>` +
+    `<b class="side__stat-pct">${book.pct}%</b>` + (wrong ? `<span class="side__badge" title="С ошибками: ${wrong}">${wrong}</span>` : '') + FOLD_ARROW;
+  b.setAttribute('aria-label', `Прогресс: учебник пройден на ${book.pct}%` + (wrong ? `, с ошибками ${wrong}` : ''));
+  renderFold('prog');
+}
+
+/* order of «Работа над ошибками»: by level A1 → C2, within a level by topic number, then by exercise */
+const mistakeOrder = (t, i = 0) => Object.keys(LEVELS).indexOf(t.level) * 1e6 + TOPICS.indexOf(t) * 1000 + i;
+
+/* exercises whose latest check is below the full score (errors or blank answers), in mistakeOrder;
+   «Заново» drops the check, so the exercise leaves the list until it is checked again */
+function mistakes() {
+  const out = [];
+  TOPICS.forEach(t => {
+    const exs = t.ex.map((ex, i) => [i, progress[t.id] && progress[t.id][i]]).filter(([, r]) => r && r[0] < r[1]);
+    if (exs.length) out.push({ t, exs });
+  });
+  return out.sort((a, b) => mistakeOrder(a.t) - mistakeOrder(b.t));
+}
+const mistakeCount = () => mistakes().reduce((n, m) => n + m.exs.length, 0);
+
+/* the level filter of «Работа над ошибками»: its own, not the sidebar one (that one follows every opened topic);
+   a saved level with no mistakes left falls back to «Все» */
+let mistakesLevel = store.get('gk2-mistakes-level', '');
+function mistakesFilter() {
+  return mistakesLevel && mistakes().some(m => m.t.level === mistakesLevel) ? mistakesLevel : '';
+}
+
+/* the exercise after (topic, ei) in «С ошибками» within the page's level filter, wrapping round to the start; null when it is the only one */
+function nextMistake(topic, ei) {
+  const cur = mistakeOrder(topic, ei);
+  const level = mistakesFilter();
+  const all = mistakes().filter(m => !level || m.t.level === level).flatMap(({ t, exs }) => exs.map(([i]) => ({ t, i, at: mistakeOrder(t, i) }))).filter(m => m.at !== cur);
+  return all.find(m => m.at > cur) || all[0] || null;
+}
+
+/* the exercise opened from «Работа над ошибками» gets a bar back to the list and on to the next one */
+let mistakeFocus = null, pendingFocus = null;
+
+/* open a topic and bring one of its exercises into view */
+function openExercise(topicId, ei) {
+  pendingFocus = { t: topicId, ei };
+  go(topicId);
+  const box = document.querySelectorAll('#main .ex')[ei];
+  if (!box) return;
+  /* a jump, not a smooth scroll: a new page opens anyway, and the flash shows where to look */
+  box.scrollIntoView({ block: 'start' });
+  box.classList.remove('ex--flash'); void box.offsetWidth; box.classList.add('ex--flash');
+}
+
+/* ---------- Sidebar ---------- */
+/* progress for the selected level filter: points scored / all points; hidden for «Все» (the .overall block covers it) */
+function renderLevelProgress() {
+  const box = $('#lvlProg');
+  box.hidden = !levelFilter;
+  if (!levelFilter) return;
+  const topics = TOPICS.filter(t => t.level === levelFilter);
+  let s = 0, tot = 0;
+  topics.forEach(t => { const r = topicStats(t); s += r.s; tot += r.tot; });
+  const pct = tot ? Math.round(100 * s / tot) : 0;
+  box.innerHTML = `<div class="lvl-prog__row"><span>Уровень <span class="lvl-tag lvl-tag--sm" title="${LEVELS[levelFilter]}">${levelFilter}</span> пройден на</span>${pctLabel(pct, 'lvl-prog__value')}</div>
+    <div class="bar bar--thin">${barFill(pct)}</div>`;
+}
+
+function renderLevels() {
+  const box = $('#levelChips'); box.innerHTML = '';
+  [['', 'Все'], ...Object.keys(LEVELS).map(l => [l, l])].forEach(([v, label]) => {
+    const b = el('button', 'level-chip', label); b.type = 'button';
+    b.setAttribute('aria-pressed', String(levelFilter === v));
+    b.dataset.level = v;
+    b.addEventListener('click', () => { levelFilter = v; store.set('gk2-level', v); renderLevels(); renderToc(); });
+    box.append(b);
+  });
+  fillLevelChips();
+}
+
+/* each chip fills with green from the bottom up to the share of its level's points scored (for «Все» — the whole book);
+   at 100% (every exercise of every topic scored in full) it also gets --done */
+function fillLevelChips() {
+  document.querySelectorAll('#levelChips .level-chip').forEach(b => {
+    const level = b.dataset.level;
+    let s = 0, tot = 0;
+    TOPICS.filter(t => !level || t.level === level).forEach(t => { const r = topicStats(t); s += r.s; tot += r.tot; });
+    const pct = tot ? 100 * s / tot : 0;
+    if (level) b.style.setProperty('--lvl', pct + '%'); /* «Все» shows no liquid */
+    b.classList.toggle('level-chip--done', tot > 0 && s === tot);
+    b.title = `${level ? LEVELS[level] : 'Весь учебник'} · пройдено ${Math.round(pct)}%`;
+  });
+}
+
+/* Accordion: one chapter open at a time (saved in gk2-open-chap); a search opens every match. */
+let openChap = store.get('gk2-open-chap', null);
+let justToggled = null;
+function setOpenChap(id) { openChap = id; store.set('gk2-open-chap', id); }
+
+/* an arrow that nudges the way it points while its button is hovered (see .arrow) */
+const arrowHtml = (dir, cls = '') => `<span class="arrow arrow--${dir}${cls ? ' ' + cls : ''}" aria-hidden="true">${dir === 'prev' ? '←' : '→'}</span>`;
+/* a progress pill: at 100% a green outline, below that a fill coloured by range; cls mixes in an element class of the parent */
+const pill = (pct, cls = '') => `<span class="pill pill--${pct >= 100 ? 'good' : pct > 60 ? 'high' : pct > 30 ? 'mid' : 'low'}${cls ? ' ' + cls : ''}" style="--p:${pct}%">${pct}%</span>`;
+/* the fill of a progress bar; at 100% it turns green */
+const barFill = pct => `<i class="bar__fill${pct >= 100 ? ' bar__fill--full' : ''}" style="width:${pct}%"></i>`;
+/* the percentage next to a bar; at 100% it turns green */
+const pctLabel = (pct, cls = '', tag = 'b') => `<${tag} class="pct${pct >= 100 ? ' pct--full' : ''}${cls ? ' ' + cls : ''}">${pct}%</${tag}>`;
+
+function setChapOpen(box, open) {
+  box.classList.toggle('chap--open', open);
+  box.querySelector('.chap__btn').setAttribute('aria-expanded', String(open));
+  box.querySelector('.chap__body').inert = !open;
+}
+
+function renderToc() {
+  const q = $('#search').value.trim().toLowerCase();
+  const filtering = !!(q || levelFilter);
+  if (route === 'contents') $('#tocContents').setAttribute('aria-current', 'page'); else $('#tocContents').removeAttribute('aria-current');
+  renderLevelProgress();
+  fillLevelChips();
+  const list = $('#tocList'); list.innerHTML = '';
+  let shown = 0;
+  CHAPTERS.forEach(ch => {
+    const match = ch.topics.filter(t => (!levelFilter || t.level === levelFilter) &&
+      (!q || (t.title + ' ' + t.sub + ' ' + ch.title).toLowerCase().includes(q)));
+    if (filtering && !match.length) return;
+    const open = q ? true : ch.id === openChap;
+    /* a chapter opened by navigation renders closed first, then expands on the next frame */
+    const animateIn = open && justToggled === ch.id;
+    /* the chapter of the open page (the chapter itself or one of its topics); a topic opened from «Избранное» marks only that list */
+    const current = !viaBookmarks && (route === 'ch-' + ch.id || (topicById[route] && topicById[route].ch === ch));
+    const box = el('div', current ? 'chap chap--current' : 'chap');
+    const cb = el('button', 'chap__btn'); cb.type = 'button';
+    if (current) cb.setAttribute('aria-current', 'location');
+    /* the pill counts only the selected level; it appears once the chapter has been started at any level */
+    const cs = chapterStats(ch, levelFilter);
+    cs.tried = chapterStats(ch).tried;
+    const lv = [...new Set(ch.topics.map(t => t.level))].sort();
+    cb.innerHTML = `<span class="chap__num">${ch.n}</span><span>${esc(ch.title)}<small class="chap__meta">${esc(ch.pages ? 'с. ' + ch.pages[0] + '–' + ch.pages[1] : 'сверх учебника')} · ${ch.topics.length} ${plural(ch.topics.length, 'тема', 'темы', 'тем')}</small>` +
+      `<span class="chap__levels" aria-label="Уровни">${lv.map(l => `<span class="lvl-tag lvl-tag--sm" title="${LEVELS[l]}">${l}</span>`).join('')}</span></span>` +
+      `<span class="chap__end">${cs.tried ? pill(cs.pct) : ''}` +
+      '<span class="chap__arrow" aria-hidden="true"><svg class="chap__arrow-icon" viewBox="0 0 12 12" width="12" height="12"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>';
+    /* the chapter title only expands and collapses it; the chapter page opens from «Обзор всего раздела» inside */
+    cb.addEventListener('click', () => {
+      if (box.classList.contains('chap--open')) { setChapOpen(box, false); if (!q) setOpenChap(null); }
+      else if (q) setChapOpen(box, true);
+      else { justToggled = ch.id; setOpenChap(ch.id); renderToc(); }
+    });
+    box.append(cb);
+    if (levelFilter && !q && match.length < ch.topics.length) {
+      const note = el('small', 'chap__meta', `${match.length} из ${ch.topics.length} ${plural(ch.topics.length, 'темы', 'тем', 'тем')} уровня ${levelFilter}`);
+      cb.querySelector('.chap__meta').after(note);
+    }
+    /* body is always rendered so it can animate open and closed */
+    const body = el('div', 'chap__body');
+    const clip = el('div', 'chap__clip');
+    const sub = el('div', 'chap__topics');
+    const ov = el('button', 'topic-btn topic-btn--overview chap__topic'); ov.type = 'button';
+    ov.innerHTML = `<span>Обзор всего раздела</span>${arrowHtml('next', 'topic-btn__arrow')}`;
+    if (route === 'ch-' + ch.id) ov.setAttribute('aria-current', 'page');
+    ov.addEventListener('click', () => go('ch-' + ch.id));
+    sub.append(ov);
+    (filtering ? match : ch.topics).forEach(t => { const b = topicButton(t); b.classList.add('chap__topic'); sub.append(b); });
+    clip.append(sub); body.append(clip); box.append(body);
+    setChapOpen(box, open && !animateIn);
+    if (animateIn) requestAnimationFrame(() => requestAnimationFrame(() => setChapOpen(box, true)));
+    shown++;
+    list.append(box);
+  });
+  justToggled = null;
+  if (!shown) list.innerHTML = '<p class="toc__empty">Ничего не нашлось. Попробуйте «past», «артикль» или снимите фильтр уровня.</p>';
+  renderBookmarks();
+}
+
+/* the bookmark ribbon; cls mixes in the element class of the place it sits in */
+const bmIcon = (cls = '') => `<svg class="bm-icon${cls ? ' ' + cls : ''}" viewBox="0 0 11 14" aria-hidden="true"><path d="M1 1.5A1 1 0 0 1 2 .5h7a1 1 0 0 1 1 1V13L5.5 10 1 13z" fill="currentColor"/></svg>`;
+
+function topicButton(t, fromBookmarks = false) {
+  const b = el('button', fromBookmarks ? 'topic-btn bookmarks__topic' : 'topic-btn'); b.type = 'button';
+  /* the open topic is highlighted only in the list it was opened from: «Избранное» or the contents list */
+  if (t.id === route && fromBookmarks === viaBookmarks) b.setAttribute('aria-current', 'page');
+  const st = topicStats(t);
+  b.innerHTML = `<span>${esc(t.title)}${bookmarks[t.id] ? bmIcon('topic-btn__bm') : ''}<small class="topic-btn__meta">${t.num} · ${t.level}${studied[t.id] ? ' · <span class="topic-btn__studied">правило ✓</span>' : ''}</small></span>` +
+    (st.tried ? pill(st.pct, 'topic-btn__pill') : '');
+  if (bookmarks[t.id]) b.title = 'В избранном';
+  b.addEventListener('click', () => go(t.id, true, true, fromBookmarks));
+  return b;
+}
+
+/* «Избранное»: every bookmarked topic, newest first, regardless of the level filter and search.
+   It turns gold while the open topic was reached from this list. */
+function bookmarksBox() {
+  const marked = TOPICS.filter(t => bookmarks[t.id]).sort((a, b) => bookmarks[b.id] - bookmarks[a.id]);
+  const box = el('section', 'bookmarks' + (viaBookmarks && bookmarks[route] ? ' bookmarks--active' : ''));
+  box.setAttribute('aria-label', 'Избранное');
+  box.innerHTML = `<div class="bookmarks__head">${bmIcon('bookmarks__icon')}<span>Избранное</span><b class="bookmarks__count">${marked.length || ''}</b></div>`;
+  const list = el('div', 'bookmarks__list');
+  marked.forEach(t => list.append(topicButton(t, true)));
+  if (!marked.length) list.innerHTML = '<p class="bookmarks__empty">Пока пусто. Отметьте тему кнопкой «Добавить в избранное» на её странице.</p>';
+  box.append(list);
+  return box;
+}
+/* the «Избранное» button: the ribbon and the count; gold while the open topic came from the list */
+function renderBookmarks() {
+  const n = TOPICS.filter(t => bookmarks[t.id]).length;
+  const b = $('#bmBtn');
+  b.innerHTML = `${bmIcon()}<span>Избранное</span><b class="side__count">${n || ''}</b>` + FOLD_ARROW;
+  b.setAttribute('aria-label', `Избранное: ${n}`);
+  b.classList.toggle('side__bm--active', viaBookmarks && !!bookmarks[route]);
+  renderFold('bm');
+}
+
+/* ---------- Accordions: «Прогресс» and «Избранное» ---------- */
+/* each opens on its own; which ones are open is remembered (gk2-folds) */
+const FOLD_ARROW = '<svg class="side__fold-arrow" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+let folds = store.get('gk2-folds', {});
+const FOLD = { prog: ['#progBtn', '#progFold', '#progBody'], bm: ['#bmBtn', '#bmFold', '#bmBody'] };
+/* the content is rendered while open and refreshed whenever progress or bookmarks change */
+function renderFold(kind) {
+  if (folds[kind]) $(FOLD[kind][2]).replaceChildren(kind === 'prog' ? overallBox() : bookmarksBox());
+}
+function setFold(kind, open) {
+  folds[kind] = open; store.set('gk2-folds', folds);
+  const [btn, box] = FOLD[kind];
+  renderFold(kind);
+  $(box).classList.toggle('side__fold--open', open);
+  $(box).inert = !open;
+  $(btn).setAttribute('aria-expanded', String(open));
+}
+/* links built as markup (the progress block) carry data-go */
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) go(g.dataset.go); });
+
+function plural(n, one, few, many) {
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return one;
+  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+  return many;
+}
+
+/* ---------- Page progress: the whole book on Contents, the current chapter elsewhere ---------- */
+function progressBlock(ch, curLevel) {
+  const box = el('div', 'page-prog'); box.id = 'pageProg';
+  box.dataset.scope = ch ? ch.id : '';
+  box.dataset.level = curLevel || '';
+  fillProgress(box);
+  return box;
+}
+function fillProgress(box) {
+  const ch = box.dataset.scope ? CHAPTERS.find(c => c.id === box.dataset.scope) : null;
+  const topics = ch ? ch.topics : TOPICS;
+  let s = 0, tot = 0, done = 0, exn = 0;
+  topics.forEach(t => {
+    const st = topicStats(t); s += st.s; tot += st.tot;
+    t.ex.forEach((e, i) => { exn++; if (progress[t.id] && progress[t.id][i]) done++; });
+  });
+  /* the whole book counts rules too, the same figure as in the sidebar; a chapter counts its exercises */
+  const pct = ch ? (tot ? Math.round(100 * s / tot) : 0) : bookProgress().pct;
+  /* breakdown by level, shown when the scope covers more than one level; the level of the open topic is filled */
+  const levels = Object.keys(LEVELS).filter(l => topics.some(t => t.level === l));
+  const rows = levels.length > 1 ? levels.map(l => {
+    let ls = 0, lt = 0;
+    topics.filter(t => t.level === l).forEach(t => { const st = topicStats(t); ls += st.s; lt += st.tot; });
+    const p = lt ? Math.round(100 * ls / lt) : 0;
+    return `<div class="page-prog__level" title="${LEVELS[l]}"><span class="lvl-tag page-prog__tag${l === box.dataset.level ? ' lvl-tag--filled' : ''}">${l}</span><span class="bar bar--thin">${barFill(p)}</span>${pctLabel(p, 'page-prog__value')}</div>`;
+  }).join('') : '';
+  box.innerHTML = `<div class="page-prog__row"><span>${ch ? `Раздел ${ch.n} пройден на` : 'Учебник пройден на'}</span>${pctLabel(pct, 'page-prog__value')}</div>
+    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">${barFill(pct)}</div>
+    <div class="page-prog__row"><span>Упражнений выполнено</span><b class="page-prog__value">${done} из ${exn}</b></div>` +
+    (rows ? `<div class="page-prog__levels" aria-label="Прогресс по уровням">${rows}</div>` : '');
+}
+
+/* ---------- Pages ---------- */
+function crumbs(parts) {
+  const c = el('div', 'crumbs');
+  parts.forEach((p, i) => {
+    if (i) { const s = el('span', 'crumbs__sep', '→'); s.setAttribute('aria-hidden', 'true'); c.append(s); }
+    if (typeof p === 'string') c.append(el('span', null, p));
+    else { const b = el('button', 'crumbs__link', p.label); b.type = 'button'; b.addEventListener('click', () => go(p.to)); c.append(b); }
+  });
+  return c;
+}
+
+/* what is wrong with an exercise: errors and blanks from its last check */
+function mistakeSummary(t, i, r) {
+  const score = `<span class="mistakes__score">${r[0]} из ${r[1]}</span>`;
+  const m = answers[t.id] && answers[t.id][i] && answers[t.id][i].m;
+  if (!m) return score; /* checked before the item numbers were kept */
+  /* «ошибки в № 3, 5, 7», «не заполнены № 8–10»; in a text exercise the items are gaps */
+  const gaps = t.ex[i].type === 'text';
+  const [w, b] = m, parts = [];
+  if (w.length) parts.push(`<span class="mistakes__score">${w.length > 1 ? 'ошибки' : 'ошибка'} в ${gaps ? (w.length > 1 ? 'пропусках ' : 'пропуске ') : '№ '}${numList(w)}</span>`);
+  if (b.length) parts.push(`<span class="mistakes__note">${b.length > 1 ? 'не заполнены' : 'не заполнен'} ${gaps ? (b.length > 1 ? 'пропуски ' : 'пропуск ') : '№ '}${numList(b)}</span>`);
+  return parts.join(' · ') || score;
+}
+/* 1, 2, 3, 5, 8, 9 → «1–3, 5, 8, 9»; runs of three or more become a range */
+function numList(nums) {
+  const out = [];
+  for (let k = 0; k < nums.length;) {
+    let e = k; while (e + 1 < nums.length && nums[e + 1] === nums[e] + 1) e++;
+    if (e - k >= 2) out.push(`${nums[k]}–${nums[e]}`); else for (let j = k; j <= e; j++) out.push(nums[j]);
+    k = e + 1;
+  }
+  return out.join(', ');
+}
+
+function renderMistakesPage(wrap) {
+  wrap.append(crumbs([{ label: 'Содержание', to: 'contents' }, 'Работа над ошибками']));
+  wrap.append(el('h1', 'sheet__title', 'Работа над ошибками'));
+  const all = mistakes();
+  const level = mistakesFilter();
+  const list = level ? all.filter(m => m.t.level === level) : all;
+  const exCount = ms => ms.reduce((n, m) => n + m.exs.length, 0);
+  const count = exCount(list);
+  const p = el('p', 'sheet__intro');
+  p.textContent = count
+    ? `Давайте вернёмся к тому, что пока не получилось: при последней проверке в ${count} ${plural(count, 'упражнении', 'упражнениях', 'упражнениях')} из ${list.length} ${plural(list.length, 'темы', 'тем', 'тем')}${level ? ' уровня ' + level : ''} нашлись ошибки или незаполненные строки. ${count > 1 ? 'Выберите любое' : 'Нажмите на него'}, чтобы продолжить.`
+    : 'Здесь появятся упражнения, в которых при проверке были ошибки или незаполненные строки.';
+  wrap.append(p);
+  if (!count) { wrap.append(el('p', 'mistakes__empty', 'Сейчас таких упражнений нет — все проверенные упражнения решены без ошибок.')); return; }
+  wrap.append(el('p', 'mistakes__hint', 'Задание пропадёт из списка, когда вы решите его без ошибок или нажмёте «Заново», и вернётся, если новая проверка снова найдёт недочёты.'));
+  const tools = el('div', 'mistakes__tools');
+  /* level filter: only levels that have mistakes, each with its number of exercises; not needed for a single level */
+  const levels = Object.keys(LEVELS).filter(l => all.some(m => m.t.level === l));
+  if (levels.length > 1) {
+    const bar = el('div', 'mistakes__levels'); bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'Уровень сложности');
+    [['', 'Все', exCount(all)], ...levels.map(l => [l, l, exCount(all.filter(m => m.t.level === l))])].forEach(([v, label, n]) => {
+      const b = el('button', 'mistakes__level'); b.type = 'button';
+      b.innerHTML = `${label}<span class="mistakes__level-count">${n}</span>`;
+      if (v) b.title = LEVELS[v];
+      b.setAttribute('aria-pressed', String(v === level));
+      b.addEventListener('click', () => { mistakesLevel = v; store.set('gk2-mistakes-level', v); go('mistakes', false); });
+      bar.append(b);
+    });
+    tools.append(bar);
+  }
+  /* the first exercise of the (filtered) list; «Следующее» under each exercise then leads through the rest */
+  const start = el('button', 'mistakes__start'); start.type = 'button';
+  start.innerHTML = `Начать по порядку ${arrowHtml('next')}`;
+  start.addEventListener('click', () => openExercise(list[0].t.id, list[0].exs[0][0]));
+  tools.append(start);
+  wrap.append(tools);
+  const ol = el('ol', 'mistakes');
+  list.forEach(({ t, exs }) => {
+    const li = el('li', 'mistakes__item');
+    const head = el('div', 'mistakes__head');
+    const title = el('button', 'mistakes__title', t.title); title.type = 'button';
+    title.addEventListener('click', () => go(t.id));
+    head.append(el('span', 'mistakes__num', t.num), title);
+    head.insertAdjacentHTML('beforeend', `<span class="lvl-tag" title="${LEVELS[t.level]}">${t.level}</span><span class="mistakes__chapter">Раздел ${t.ch.n} · ${esc(t.ch.title)}</span>`);
+    const chips = el('div', 'mistakes__exs');
+    exs.forEach(([i, r]) => {
+      const b = el('button', 'mistakes__ex'); b.type = 'button';
+      b.innerHTML = `Упр. ${i + 1} · ${mistakeSummary(t, i, r)}`;
+      b.addEventListener('click', () => openExercise(t.id, i));
+      chips.append(b);
+    });
+    li.append(head, chips); ol.append(li);
+  });
+  wrap.append(ol);
+}
+
+function renderContents(wrap) {
+  wrap.append(crumbs(['Сборник упражнений · 7-е издание']));
+  wrap.append(el('h1', 'sheet__title', 'Содержание'));
+  const p = el('p', 'sheet__intro');
+  p.textContent = 'Разделы и их порядок повторяют сборник Ю. Голицынского «Грамматика. Сборник упражнений». Внутри каждого раздела — правила и упражнения с проверкой. Выберите раздел или тему слева, а фильтром уровня можно оставить только темы нужной сложности.';
+  wrap.append(p, progressBlock(null));
+  const ol = el('ol', 'contents');
+  CHAPTERS.forEach(ch => {
+    const li = el('li', 'contents__item'); const b = el('button', 'contents__row'); b.type = 'button';
+    const cs = chapterStats(ch);
+    b.innerHTML = `<span class="contents__num">${ch.n}</span><span class="contents__title">${esc(ch.title)}</span><span class="contents__page">${ch.pages ? ch.pages[0] : '—'}</span>
+      <span class="contents__meta"><span>${ch.topics.length} ${plural(ch.topics.length, 'тема', 'темы', 'тем')} · ${ch.topics.reduce((n, t) => n + t.ex.length, 0)} упр.</span>
+      <span class="contents__levels" aria-label="Уровни">${[...new Set(ch.topics.map(t => t.level))].map(l => `<span class="lvl-tag lvl-tag--sm" title="${LEVELS[l]}">${l}</span>`).join('')}</span>
+      ${cs.tried ? `<span class="bar contents__bar">${barFill(cs.pct)}</span>${pctLabel(cs.pct, '', 'span')}` : ''}</span>`;
+    b.addEventListener('click', () => go('ch-' + ch.id));
+    li.append(b); ol.append(li);
+  });
+  wrap.append(ol);
+  const f = el('p', 'sheet__fine');
+  f.textContent = 'Тренажёр составлен по структуре сборника Ю. Б. Голицынского «Грамматика. Сборник упражнений» и не является его копией: правила и упражнения написаны заново и не повторяют текст книги. Номера страниц указаны по печатной нумерации 7-го издания («Каро», 2011).';
+  wrap.append(f);
+}
+
+function renderChapter(ch, wrap) {
+  wrap.append(crumbs([{ label: 'Содержание', to: 'contents' }, `Раздел ${ch.n}`, pagesLabel(ch)]));
+  wrap.append(el('h1', 'sheet__title', ch.title));
+  if (ch.intro) { const p = el('p', 'sheet__intro'); p.innerHTML = ch.intro; wrap.append(p); }
+  wrap.append(progressBlock(ch));
+  const grid = el('div', 'topic-cards');
+  ch.topics.forEach(t => {
+    const b = el('button', 'topic-card'); b.type = 'button';
+    const st = topicStats(t);
+    b.innerHTML = `<span class="topic-card__num">${t.num} · <span class="lvl-tag">${t.level}</span>${bookmarks[t.id] ? bmIcon() : ''}</span><span class="topic-card__title">${esc(t.title)}</span><span class="topic-card__sub">${esc(t.sub)}</span>
+      <span class="topic-card__foot"><span>${t.ex.length} упр.</span><span class="bar topic-card__bar">${barFill(st.tried ? st.pct : 0)}</span>${st.tried ? pctLabel(st.pct, '', 'span') : '<span>—</span>'}</span>
+      ${studied[t.id] ? '<span class="topic-card__studied">Правило изучено</span>' : ''}`;
+    b.addEventListener('click', () => go(t.id));
+    grid.append(b);
+  });
+  wrap.append(grid);
+  wrap.append(pager(CHAPTERS.indexOf(ch), CHAPTERS, c => 'ch-' + c.id, c => c.title, 'раздел'));
+}
+
+function renderTopic(t, wrap) {
+  wrap.append(crumbs([{ label: 'Содержание', to: 'contents' }, { label: `${t.ch.n}. ${t.ch.title}`, to: 'ch-' + t.ch.id }, pagesLabel(t.ch)]));
+  const h = el('h1', 'sheet__title', t.title); wrap.append(h);
+  const lead = el('p', 'sheet__lead'); lead.innerHTML = `${esc(t.sub)} &nbsp;<span class="lvl-tag" title="${LEVELS[t.level]}">${t.level}</span>`; wrap.append(lead);
+  wrap.append(progressBlock(t.ch, t.level));
+  wrap.append(el('div', 'sheet__section', 'Правило'));
+  const rule = el('div', 'rule'); rule.innerHTML = t.rule; wrap.append(rule);
+  const study = el('div', 'study');
+  const sb = el('button', 'btn study__btn'); sb.type = 'button';
+  const sbLabel = el('span');
+  const tip = el('span', 'tip', '?'); tip.setAttribute('aria-hidden', 'true');
+  tip.append(el('span', 'tip__text', 'Отметка хранится в этом браузере.'));
+  sb.setAttribute('aria-description', 'Отметка хранится в этом браузере.');
+  tip.addEventListener('click', e => e.stopPropagation());
+  sb.append(sbLabel, tip);
+  const sync = () => { const on = !!studied[t.id]; sb.setAttribute('aria-pressed', String(on)); sbLabel.textContent = on ? 'Правило изучено ✓' : 'Отметить правило как изученное'; };
+  sb.addEventListener('click', () => { studied[t.id] = !studied[t.id]; if (!studied[t.id]) delete studied[t.id]; store.set('gk2-studied', studied); sync(); renderToc(); renderOverall(); });
+  sync(); study.append(sb);
+  /* bookmark: a topic the reader wants to come back to and repeat */
+  const bb = el('button', 'btn study__btn study__btn--bookmark'); bb.type = 'button';
+  const bbTip = tip.cloneNode(true); bbTip.addEventListener('click', e => e.stopPropagation());
+  bb.setAttribute('aria-description', 'Отметка хранится в этом браузере.');
+  const bmSync = () => {
+    const on = !!bookmarks[t.id];
+    bb.setAttribute('aria-pressed', String(on));
+    bb.innerHTML = on ? `${bmIcon('study__icon')}<span>В избранном</span>` : '<span>Добавить в избранное</span>';
+    bb.append(bbTip);
+  };
+  bb.addEventListener('click', () => {
+    if (bookmarks[t.id]) delete bookmarks[t.id]; else bookmarks[t.id] = Date.now();
+    store.set('gk2-bookmarks', bookmarks); bmSync(); renderToc();
+  });
+  bmSync(); study.append(bb);
+  wrap.append(study);
+  wrap.append(el('div', 'sheet__section', `Упражнения · ${t.ex.length}`));
+  t.ex.forEach((ex, ei) => wrap.append(renderEx(t, ex, ei)));
+  wrap.append(pager(TOPICS.indexOf(t), TOPICS, x => x.id, x => `${x.num} ${x.title}`, 'тема'));
+}
+
+function pager(idx, arr, idOf, titleOf, noun) {
+  const nav = el('nav', 'pager'); nav.setAttribute('aria-label', 'Соседние страницы');
+  const levelsOf = item => item.level ? [item.level] : [...new Set(item.topics.map(x => x.level))].sort();
+  const curLv = levelsOf(arr[idx]);
+  /* a level the neighbour has and the current page does not is filled */
+  const mk = (item, dir, label) => {
+    const b = el('button', 'pager__btn pager__btn--' + dir); b.type = 'button';
+    const tags = levelsOf(item).map(l => `<span class="lvl-tag lvl-tag--sm${curLv.includes(l) ? '' : ' lvl-tag--filled'}" title="${LEVELS[l]}">${l}</span>`).join('');
+    b.innerHTML = `<small class="pager__label"><span>${label}</span><span class="pager__levels">${tags}</span></small><span>${esc(titleOf(item))}</span>`;
+    b.addEventListener('click', () => go(idOf(item)));
+    nav.append(b);
+  };
+  const prevLabel = `${arrowHtml('prev')} ${noun === 'тема' ? 'Предыдущая тема' : 'Предыдущий раздел'}`;
+  const nextLabel = `${noun === 'тема' ? 'Следующая тема' : 'Следующий раздел'} ${arrowHtml('next')}`;
+  if (idx > 0) mk(arr[idx - 1], 'prev', prevLabel);
+  if (idx < arr.length - 1) mk(arr[idx + 1], 'next', nextLabel);
+  const here = el('div', 'pager-current');
+  const cur = arr[idx];
+  here.innerHTML = `<span>${noun === 'тема' ? 'Текущая тема' : 'Текущий раздел'}</span>` +
+    `<span class="pager-current__title">${esc(noun === 'тема' ? titleOf(cur) : `${cur.n}. ${cur.title}`)}</span>` +
+    `<span>· ${noun === 'тема' ? 'уровень' : 'уровни'}</span>` +
+    curLv.map(l => `<span class="lvl-tag" title="${LEVELS[l]}">${l}</span>`).join('');
+  const frag = document.createDocumentFragment(); frag.append(here, nav);
+  if (noun === 'тема') { const lv = levelPager(idx, arr, idOf, titleOf); if (lv) frag.append(lv); }
+  return frag;
+}
+
+/* A compact row under the pager: the nearest topics of the open topic's level back and forward, shown only when
+   a neighbour in book order is of another level (so the plain pager would lead the reader off their level). */
+function levelPager(idx, arr, idOf, titleOf) {
+  const level = arr[idx].level;
+  const before = arr.slice(0, idx).reverse().find(x => x.level === level);
+  const after = arr.slice(idx + 1).find(x => x.level === level);
+  const prev = before && before !== arr[idx - 1] ? before : null;
+  const next = after && after !== arr[idx + 1] ? after : null;
+  if (!prev && !next) return null;
+  const box = el('nav', 'pager-level'); box.setAttribute('aria-label', `Темы уровня ${level}`);
+  box.innerHTML = `<span class="pager-level__label">Идти только по темам уровня <span class="lvl-tag lvl-tag--sm" title="${LEVELS[level]}">${level}</span></span>`;
+  const link = (item, dir) => {
+    const b = el('button', 'pager-level__link pager-level__link--' + dir); b.type = 'button';
+    b.innerHTML = `<small class="pager-level__dir">${dir === 'prev' ? arrowHtml('prev') + ' Предыдущая' : 'Следующая ' + arrowHtml('next')}</small><span>${esc(titleOf(item))}</span>`;
+    b.addEventListener('click', () => go(idOf(item)));
+    box.append(b);
+  };
+  if (prev) link(prev, 'prev');
+  if (next) link(next, 'next');
+  return box;
+}
+
+/* ---------- Exercises ---------- */
+const FIELD_MARKS = ['ex__field--ok', 'ex__field--bad', 'ex__field--miss'];
+const OPT_MARKS = ['ex__opt--ok', 'ex__opt--bad'];
+
+function makeGap(answers, id, label) {
+  const inp = el('input', 'ex__field ex__gap');
+  inp.type = 'text'; inp.id = id; inp.autocomplete = 'off'; inp.spellcheck = false;
+  inp.setAttribute('autocapitalize', 'off'); inp.setAttribute('aria-label', label);
+  const longest = Math.max(...answers.split('|').map(s => s.length));
+  inp.style.width = Math.max(4, Math.min(longest + 2, 24)) + 'ch';
+  return inp;
+}
+
+function fillGaps(container, text, answers, idBase, label) {
+  const parts = text.split('___');
+  const inputs = [];
+  parts.forEach((part, k) => {
+    container.append(fmt(part));
+    if (k < parts.length - 1) {
+      const inp = makeGap(answers[k] || '', `${idBase}-${k}`, `${label}, пропуск ${k + 1}`);
+      container.append(inp); inputs.push(inp);
+    }
+  });
+  return inputs;
+}
+
+function renderEx(t, ex, ei) {
+  const box = el('section', 'ex');
+  box.innerHTML = `<div class="ex__head"><span class="ex__num">Упражнение ${ei + 1}</span><p class="ex__task">${ex.task}</p></div>`;
+  const rows = [];
+  const idBase = `x-${t.id}-${ei}`;
+
+  /* shown answers stay until «Скрыть ответы» (or a page reload): typing, checking and resetting keep them */
+  let keysShown = false;
+  const clearRow = row => {
+    row.li.querySelectorAll('.ex__verdict').forEach(v => v.remove());
+    if (row.selfBtn) row.selfBtn.hidden = true;
+  };
+
+  if (ex.type === 'text') {
+    const div = el('div', 'ex__text');
+    const row = { li: div, q: div, inputs: fillGaps(div, ex.text, ex.answers, idBase, 'Текст') };
+    rows.push(row); box.append(div);
+  } else {
+    const ol = el('ol', 'ex__items');
+    ex.items.forEach((it, ii) => {
+      const li = el('li', 'ex__item'); const row = { it, li };
+      if (ex.type === 'gap') {
+        const q = el('div', 'ex__q');
+        row.q = q; row.inputs = fillGaps(q, it[0], gapAnswers(it), `${idBase}-${ii}`, `Предложение ${ii + 1}`);
+        li.append(q);
+      } else if (ex.type === 'choice') {
+        const q = el('div', 'ex__q');
+        const [before, after = ''] = it[0].split('___');
+        const blank = el('span', 'ex__blank', ' ');
+        q.append(fmt(before), blank, fmt(after));
+        const opts = el('div', 'ex__opts'); opts.setAttribute('role', 'group');
+        shuffled(it[1], it[0]).forEach(o => {
+          const b = el('button', 'ex__opt', o); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+          b.addEventListener('click', () => {
+            opts.querySelectorAll('.ex__opt').forEach(x => { x.setAttribute('aria-pressed', String(x === b)); x.classList.remove(...OPT_MARKS); });
+            row.sel = o; blank.textContent = o; blank.classList.remove('ex__blank--miss'); clearRow(row); if (keysShown) showKey(row); unlock(); save();
+          });
+          opts.append(b);
+        });
+        Object.assign(row, { q, blank, opts });
+        li.append(q, opts);
+      } else if (ex.type === 'translate') {
+        const q = el('div', 'ex__q ex__q--ru', it[0]);
+        const inp = el('input', 'ex__field ex__tr');
+        inp.type = 'text'; inp.id = `${idBase}-${ii}`; inp.autocomplete = 'off'; inp.spellcheck = false;
+        inp.setAttribute('autocapitalize', 'off'); inp.setAttribute('aria-label', `Перевод предложения ${ii + 1}`);
+        inp.placeholder = 'Ваш перевод';
+        const selfBtn = el('button', 'ex__self-ok', 'Мой вариант тоже верен'); selfBtn.type = 'button'; selfBtn.hidden = true;
+        Object.assign(row, { q, inputs: [inp], selfBtn });
+        li.append(q, inp);
+      }
+      row.key = el('div', 'ex__key'); row.key.hidden = true;
+      li.append(row.key);
+      if (row.selfBtn) li.append(row.selfBtn);
+      ol.append(li); rows.push(row);
+    });
+    box.append(ol);
+  }
+
+  /* typing clears marks; Enter jumps to the next field */
+  rows.forEach(row => (row.inputs || []).forEach(inp => {
+    inp.addEventListener('input', () => { inp.classList.remove(...FIELD_MARKS); row.credited = false; clearRow(row); unlock(); save(); });
+    inp.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      const all = [...box.querySelectorAll('input')];
+      const next = all[all.indexOf(inp) + 1];
+      if (next) next.focus(); else if (!bCheck.disabled) check();
+    });
+  }));
+
+  const foot = el('div', 'ex__foot');
+  const bCheck = el('button', 'btn btn--primary ex__btn', 'Проверить'); bCheck.type = 'button';
+  const bShow = el('button', 'btn ex__btn', 'Показать ответы'); bShow.type = 'button'; bShow.setAttribute('aria-pressed', 'false');
+  /* nothing to check until at least one answer is given */
+  const blank = () => rows.every(r => ex.type === 'choice' ? !r.sel : r.inputs.every(i => !i.value.trim()));
+  const syncBlank = () => { const b = blank(); bCheck.disabled = b; bCheck.title = b ? 'Сначала введите хотя бы один ответ' : ''; };
+  /* any change of an answer makes «Проверить» and «Показать ответы» available again */
+  const unlock = () => { syncBlank(); bShow.hidden = false; };
+  const bReset = el('button', 'btn ex__btn', 'Заново'); bReset.type = 'button';
+  const score = el('span', 'ex__score'); score.setAttribute('aria-live', 'polite');
+  foot.append(bCheck, bShow, bReset, score);
+  box.append(foot);
+
+  const answerOf = (row, k) => ex.type === 'text' ? ex.answers[k] : ex.type === 'gap' ? gapAnswers(row.it)[k] : row.it[1];
+  const total = units(ex);
+  let checked = false;
+  /* with every answer right, «Показать ответы» has something to show only in translations: other accepted variants,
+     or the reference wording of a row credited by «Мой вариант тоже верен» */
+  const hasAlternatives = ex.type === 'translate' && ex.items.some(it => it[1].includes('|'));
+  /* the last check for «Работа над ошибками»: [numbers of wrong items, numbers of blank items];
+     an item is a sentence (a gap in a «text» exercise), wrong if any of its gaps is wrong, blank if the rest are empty */
+  let marks = null;
+  function countMarks() {
+    const wrong = [], blank = [];
+    const mark = (n, state) => { if (state === 'wrong') wrong.push(n); else if (state === 'blank') blank.push(n); };
+    const stateOf = (ok, value) => ok ? 'ok' : value.trim() ? 'wrong' : 'blank';
+    rows.forEach((row, ri) => {
+      if (ex.type === 'choice') { mark(ri + 1, !row.sel ? 'blank' : row.sel === row.it[1][0] ? 'ok' : 'wrong'); return; }
+      if (ex.type === 'translate') { const v = row.inputs[0].value; mark(ri + 1, stateOf(row.credited || accepts(row.it[1], v), v)); return; }
+      const res = row.inputs.map((inp, k) => stateOf(accepts(answerOf(row, k), inp.value), inp.value));
+      if (ex.type === 'text') res.forEach((r, k) => mark(k + 1, r));
+      else mark(ri + 1, res.includes('wrong') ? 'wrong' : res.includes('blank') ? 'blank' : 'ok');
+    });
+    return [wrong, blank];
+  }
+
+  /* answers persist in localStorage: gk2-answers[topic][exercise] = { v: per-row values, c: credited rows, k: checked, m: marks } */
+  function save() {
+    const v = rows.map(r => ex.type === 'choice' ? (r.sel ?? null) : r.inputs.map(i => i.value));
+    const empty = v.every(x => x == null || (Array.isArray(x) && x.every(s => !s)));
+    answers[t.id] = answers[t.id] || {};
+    if (empty) { delete answers[t.id][ei]; if (!Object.keys(answers[t.id]).length) delete answers[t.id]; }
+    else answers[t.id][ei] = { v, c: rows.map((r, i) => r.credited ? i : -1).filter(i => i >= 0), k: checked, ...(checked && marks ? { m: marks } : {}) };
+    store.set('gk2-answers', answers);
+  }
+
+  function rowScore(row) {
+    if (ex.type === 'choice') return row.sel === row.it[1][0] ? 1 : 0;
+    if (ex.type === 'translate') return row.credited || accepts(row.it[1], row.inputs[0].value) ? 1 : 0;
+    return row.inputs.reduce((n, inp, k) => n + (accepts(answerOf(row, k), inp.value) ? 1 : 0), 0);
+  }
+
+  function showScore() {
+    const ok = rows.reduce((n, r) => n + rowScore(r), 0);
+    bCheck.disabled = ok === total;
+    bShow.hidden = ok === total && !hasAlternatives && !rows.some(r => r.credited);
+    if (bShow.hidden && keysShown) hideKeys();
+    score.textContent = `${ok} из ${total}` + (ok === total ? ' · без ошибок' : '');
+    score.className = 'ex__score' + (ok === total ? ' ex__score--good' : ok / total < .5 ? ' ex__score--low' : '');
+    return ok;
+  }
+
+  function updateScore() {
+    const ok = showScore();
+    /* the latest check counts, not the best one: the score under the exercise, the progress and «С ошибками» always agree */
+    progress[t.id] = progress[t.id] || {};
+    progress[t.id][ei] = [ok, total]; store.set('gk2-progress', progress);
+    renderToc(); renderOverall(); renderRedoBar();
+    const pp = $('#pageProg'); if (pp) fillProgress(pp);
+  }
+
+  function check(silent) {
+    rows.forEach(row => {
+      clearRow(row);
+      let good;
+      if (ex.type === 'choice') {
+        good = row.sel === row.it[1][0];
+        row.opts.querySelectorAll('.ex__opt').forEach(b => { b.classList.remove(...OPT_MARKS); if (b.textContent === row.sel) b.classList.add(good ? 'ex__opt--ok' : 'ex__opt--bad'); });
+        if (!row.sel) row.blank.classList.add('ex__blank--miss');
+      } else {
+        good = true;
+        row.inputs.forEach((inp, k) => {
+          const g = ex.type === 'translate' ? (row.credited || accepts(row.it[1], inp.value)) : accepts(answerOf(row, k), inp.value);
+          inp.classList.remove(...FIELD_MARKS);
+          inp.classList.add(g ? 'ex__field--ok' : inp.value.trim() ? 'ex__field--bad' : 'ex__field--miss');
+          if (!g) good = false;
+        });
+        if (ex.type === 'translate' && !good && row.inputs[0].value.trim()) row.selfBtn.hidden = false;
+      }
+      if (ex.type !== 'text') {
+        const v = el('span', 'ex__verdict ex__verdict--' + (good ? 'ok' : 'bad'), good ? '✓' : '✗');
+        v.setAttribute('aria-label', good ? 'верно' : 'ошибка');
+        row.q.append(v);
+      }
+    });
+    checked = true; marks = countMarks();
+    if (keysShown) rows.forEach(showKey);
+    if (!silent) { updateScore(); save(); }
+  }
+
+  rows.forEach(row => {
+    if (!row.selfBtn) return;
+    row.selfBtn.addEventListener('click', () => {
+      row.credited = true;
+      row.inputs[0].classList.remove(...FIELD_MARKS); row.inputs[0].classList.add('ex__field--ok');
+      row.selfBtn.hidden = true;
+      const v = row.q.querySelector('.ex__verdict'); if (v) { v.className = 'ex__verdict ex__verdict--ok'; v.textContent = '✓'; }
+      marks = countMarks();
+      updateScore(); save();
+    });
+  });
+
+  bCheck.addEventListener('click', () => check());
+  /* «Показать ответы» toggles; while on, typing keeps the hints in place and choosing an option updates its key line */
+  function setKeysShown(on) {
+    keysShown = on;
+    bShow.textContent = on ? 'Скрыть ответы' : 'Показать ответы';
+    bShow.setAttribute('aria-pressed', String(on));
+  }
+  function showKey(row) {
+    if (ex.type === 'choice') {
+      const good = row.sel === row.it[1][0];
+      row.key.textContent = good ? 'Верно' : 'Ответ: ' + row.it[1][0];
+      row.key.classList.toggle('ex__key--wrong', !good); row.key.hidden = false;
+      row.opts.querySelectorAll('.ex__opt').forEach(b => b.classList.toggle('ex__opt--key', b.textContent === row.it[1][0]));
+    } else if (ex.type === 'translate') {
+      const alts = row.it[1].split('|');
+      row.key.textContent = 'Ответ: ' + alts[0] + (alts.length > 1 ? '  (или: ' + alts.slice(1, 3).join('; ') + ')' : '');
+      row.key.hidden = false;
+    } else {
+      row.li.querySelectorAll('.ex__inline-key').forEach(k => k.remove());
+      row.inputs.forEach((inp, k) => {
+        const a = answerOf(row, k);
+        if (accepts(a, inp.value)) return;
+        inp.after(el('span', 'ex__inline-key', '(' + firstAnswer(a) + ')'));
+      });
+    }
+  }
+  function hideKeys() {
+    rows.forEach(row => {
+      row.li.querySelectorAll('.ex__inline-key').forEach(k => k.remove());
+      if (row.opts) row.opts.querySelectorAll('.ex__opt').forEach(b => b.classList.remove('ex__opt--key'));
+      if (row.key) { row.key.hidden = true; row.key.classList.remove('ex__key--wrong'); }
+    });
+    setKeysShown(false);
+  }
+  bShow.addEventListener('click', () => {
+    if (keysShown) { hideKeys(); return; }
+    rows.forEach(showKey);
+    setKeysShown(true);
+  });
+  bReset.addEventListener('click', () => {
+    rows.forEach(row => {
+      clearRow(row); row.credited = false;
+      (row.inputs || []).forEach(inp => { inp.value = ''; inp.classList.remove(...FIELD_MARKS); });
+      if (row.opts) {
+        row.sel = undefined; row.blank.textContent = ' '; row.blank.classList.remove('ex__blank--miss');
+        row.opts.querySelectorAll('.ex__opt').forEach(b => { b.setAttribute('aria-pressed', 'false'); b.classList.remove(...OPT_MARKS); });
+      }
+      if (keysShown) showKey(row);
+    });
+    score.textContent = ''; score.className = 'ex__score';
+    unlock();
+    checked = false; marks = null; save();
+    /* the reset exercise no longer counts towards progress (nor «С ошибками») until it is checked again */
+    if (progress[t.id] && progress[t.id][ei]) {
+      delete progress[t.id][ei];
+      if (!Object.keys(progress[t.id]).length) delete progress[t.id];
+      store.set('gk2-progress', progress);
+      renderToc(); renderOverall();
+      const pp = $('#pageProg'); if (pp) fillProgress(pp);
+    }
+  });
+
+  /* opened from «Работа над ошибками»: back to the list, on to the next exercise; turns green once solved fully */
+  const redoBar = mistakeFocus && mistakeFocus.t === t.id && mistakeFocus.ei === ei ? el('nav', 'ex__redo') : null;
+  if (redoBar) { redoBar.setAttribute('aria-label', 'Работа над ошибками'); box.append(redoBar); }
+  function renderRedoBar() {
+    if (!redoBar) return;
+    const r = progress[t.id] && progress[t.id][ei];
+    const fixed = !!r && r[0] === r[1];
+    const next = nextMistake(t, ei);
+    redoBar.classList.toggle('ex__redo--done', fixed);
+    redoBar.innerHTML = '';
+    if (fixed) redoBar.append(el('p', 'ex__redo-status', next ? '✓ Исправлено — упражнение убрано из «Работы над ошибками»' : '✓ Исправлено — это было последнее упражнение с ошибками'));
+    const back = el('button', 'ex__redo-link'); back.type = 'button';
+    back.innerHTML = `${arrowHtml('prev')} К работе над ошибками`;
+    back.addEventListener('click', () => go('mistakes'));
+    redoBar.append(back);
+    if (next) {
+      const b = el('button', 'ex__redo-link ex__redo-link--next'); b.type = 'button';
+      b.innerHTML = `<span>Следующее: ${esc(next.t.num)} · Упр. ${next.i + 1}</span>${arrowHtml('next')}`;
+      b.title = next.t.title;
+      b.addEventListener('click', () => openExercise(next.t.id, next.i));
+      redoBar.append(b);
+    }
+  }
+  renderRedoBar();
+
+  /* restore saved answers */
+  const saved = answers[t.id] && answers[t.id][ei];
+  if (saved && saved.v.length === rows.length) {
+    rows.forEach((row, i) => {
+      const val = saved.v[i];
+      if (ex.type === 'choice') {
+        const b = val != null && [...row.opts.querySelectorAll('.ex__opt')].find(x => x.textContent === val);
+        if (b) { row.sel = val; row.blank.textContent = val; b.setAttribute('aria-pressed', 'true'); }
+      } else if (Array.isArray(val)) row.inputs.forEach((inp, k) => { inp.value = val[k] || ''; });
+    });
+    (saved.c || []).forEach(i => { if (rows[i]) rows[i].credited = true; });
+    if (saved.k) {
+      check(true);
+      showScore();
+    }
+  }
+  if (!checked) syncBlank();
+  return box;
+}
+
+/* ---------- Router ---------- */
+/* syncToc = false on page load: the accordion keeps its saved open/closed state instead of following the route */
+function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
+  if (!(id === 'contents' || id === 'mistakes' || topicById[id] || chapById[id])) id = 'contents';
+  route = id;
+  viaBookmarks = fromBookmarks;
+  mistakeFocus = pendingFocus; pendingFocus = null;
+  const curCh = topicById[id] ? topicById[id].ch : chapById[id];
+  /* «Избранное» and the contents list are independent: a topic opened from the bookmarks leaves the contents list (open chapter, level filter) untouched */
+  if (syncToc && !fromBookmarks && curCh && curCh.id !== openChap) { justToggled = curCh.id; setOpenChap(curCh.id); }
+  const main = $('#main'); main.innerHTML = '';
+  const wrap = el('div', 'sheet__inner');
+  if (topicById[id]) {
+    const t = topicById[id];
+    /* the level chips follow the open lesson, except one opened from «Избранное» */
+    if (!fromBookmarks && levelFilter !== t.level) { levelFilter = t.level; store.set('gk2-level', levelFilter); renderLevels(); }
+    renderTopic(t, wrap);
+  }
+  else if (chapById[id]) renderChapter(chapById[id], wrap);
+  else if (id === 'mistakes') renderMistakesPage(wrap);
+  else renderContents(wrap);
+  main.append(wrap);
+  try { history.replaceState(null, '', '#' + id); } catch (e) {}
+  store.set('gk2-last', id);
+  renderToc();
+  renderOverall();
+  setDrawer(false);
+  if (scroll) window.scrollTo(0, 0);
+  syncToTop();
+}
+
+$('#tocContents').addEventListener('click', () => go('contents'));
+
+/* Hide / show the sidebar on desktop; the choice is remembered. */
+function setSide(collapsed, focus) {
+  $('#app').classList.toggle('app--side-collapsed', collapsed);
+  $('#floatTools').hidden = !collapsed;
+  $('#sideShow').setAttribute('aria-expanded', String(!collapsed));
+  $('#sideHide').setAttribute('aria-expanded', String(!collapsed));
+  store.set('gk2-side-collapsed', collapsed);
+  if (focus) (collapsed ? $('#sideShow') : $('#sideHide')).focus();
+}
+$('#sideHide').addEventListener('click', () => setSide(true, true));
+
+/* ---------- Scroll to top ---------- */
+function syncToTop() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const show = max > 0 && scrollY / max >= .3;
+  const b = $('#toTop');
+  b.classList.toggle('to-top--visible', show);
+  b.tabIndex = show ? 0 : -1;
+}
+addEventListener('scroll', syncToTop, { passive: true });
+addEventListener('resize', syncToTop);
+$('#toTop').addEventListener('click', () => {
+  const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+});
+
+/* ---------- Theme ---------- */
+function syncThemeBtn() {
+  const dark = document.documentElement.dataset.theme !== 'light';
+  /* the label names the theme the button switches to; the icon-only button in the mobile top bar gets it as aria-label */
+  const action = dark ? 'Включить светлую тему' : 'Включить тёмную тему';
+  document.querySelectorAll('.theme-toggle').forEach(b => {
+    b.title = action;
+    const label = b.querySelector('.theme-toggle__label');
+    if (label) label.textContent = dark ? 'Светлая тема' : 'Тёмная тема';
+    else b.setAttribute('aria-label', action);
+  });
+}
+let themeTimer;
+/* on every hover the stars of the theme button get a new random order, and the rays are centred on the icon */
+document.querySelectorAll('.theme-toggle').forEach(b => {
+  const shuffle = () => {
+    b.querySelectorAll('.theme-toggle__stars i').forEach(s => { s.style.transitionDelay = (Math.random() * .3).toFixed(2) + 's'; });
+    /* the rays start from the centre of the visible icon */
+    const icon = [...b.querySelectorAll('svg')].find(s => s.getClientRects().length), r = b.getBoundingClientRect();
+    if (icon) { const i = icon.getBoundingClientRect(); b.style.setProperty('--cx', i.left - r.left + i.width / 2 + 'px'); b.style.setProperty('--cy', i.top - r.top + i.height / 2 + 'px'); }
+  };
+  /* the sun: one turn in 12s while hovered; on leave it eases forward to the next 45° step, where its eight rays look the same as at rest */
+  const sun = b.querySelector('.theme-toggle__sun');
+  let spin = null;
+  const spinStart = () => {
+    /* hover and focus both start it (a click focuses the hovered button): a second animation would lose the first one, left spinning */
+    if (spin || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    sun.style.transition = 'none'; sun.style.transform = '';
+    spin = sun.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }], { duration: 12000, iterations: Infinity });
+  };
+  const spinStop = () => {
+    if (!spin) return;
+    const angle = (spin.currentTime % 12000) / 12000 * 360;
+    spin.cancel(); spin = null;
+    sun.style.transform = `rotate(${angle}deg)`;
+    void sun.getBoundingClientRect();
+    sun.style.transition = 'transform .5s ease-out';
+    sun.style.transform = `rotate(${Math.ceil(angle / 45) * 45}deg)`;
+  };
+  b.addEventListener('pointerenter', () => { shuffle(); spinStart(); });
+  b.addEventListener('focus', () => { shuffle(); spinStart(); });
+  b.addEventListener('pointerleave', spinStop);
+  b.addEventListener('blur', spinStop);
+});
+document.querySelectorAll('.theme-toggle').forEach(b => b.addEventListener('click', () => {
+  const root = document.documentElement;
+  const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+  root.classList.add('theme-anim');
+  root.dataset.theme = next;
+  store.set('gk2-theme', next);
+  syncThemeBtn();
+  clearTimeout(themeTimer);
+  themeTimer = setTimeout(() => root.classList.remove('theme-anim'), 150);
+}));
+syncThemeBtn();
+$('#sideShow').addEventListener('click', () => setSide(false, true));
+setSide(!!store.get('gk2-side-collapsed', false), false);
+$('#search').addEventListener('input', renderToc);
+/* ---------- Mobile drawer ---------- */
+function setDrawer(open, focus) {
+  $('#drawer').classList.toggle('drawer--open', open);
+  $('#drawerBackdrop').classList.toggle('drawer-backdrop--open', open);
+  document.documentElement.style.overflow = open ? 'hidden' : '';
+  $('#menuBtn').setAttribute('aria-expanded', String(open));
+  if (focus) (open ? $('#drawerClose') : $('#menuBtn')).focus();
+}
+$('#menuBtn').addEventListener('click', () => setDrawer(true, true));
+$('#drawerClose').addEventListener('click', () => setDrawer(false, true));
+$('#drawerBackdrop').addEventListener('click', () => setDrawer(false));
+addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if ($('#drawer').classList.contains('drawer--open')) setDrawer(false, true);
+});
+matchMedia('(max-width: 880px)').addEventListener('change', () => setDrawer(false));
+window.addEventListener('hashchange', () => {
+  const id = location.hash.slice(1);
+  if (id && id !== route) go(id);
+});
+renderLevels();
+const startId = location.hash.slice(1);
+go(startId && (startId === 'contents' || startId === 'mistakes' || topicById[startId] || chapById[startId]) ? startId : store.get('gk2-last', 'contents'), false, false);
+renderOverall();
+['prog', 'bm'].forEach(k => { $(FOLD[k][0]).addEventListener('click', () => setFold(k, !folds[k])); setFold(k, !!folds[k]); });
+</script>
