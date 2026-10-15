@@ -19,7 +19,7 @@ ${E([
 ])}
 ${N("В утвердительных предложениях <i>much</i> звучит книжно. Вместо <i>I have much time</i> естественнее <i>I have <b>a lot of</b> time</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте much или many.', items: [
+    { type: 'gap', task: 'Впишите much или many.', items: [
       ["How ___ money have you got?", "much"], ["How ___ people live in this city?", "many"],
       ["There isn't ___ milk in the bottle.", "much"], ["I don't have ___ friends here.", "many"],
       ["Did you buy ___ apples?", "many"], ["We haven't got ___ time.", "much"],
@@ -37,7 +37,7 @@ ${N("В утвердительных предложениях <i>much</i> зву
       ["Сколько у тебя книг?", "How many books have you got?|How many books do you have?"],
       ["Сколько стоит этот телефон?", "How much is this phone?|How much does this phone cost?"],
       ["У нас мало времени (не много).", "We don't have much time.|We haven't got much time.|We do not have much time."],
-      ["У неё много друзей.", "She has a lot of friends.|She has many friends.|She has got a lot of friends.|She has lots of friends."],
+      ["У нее много друзей.", "She has a lot of friends.|She has many friends.|She has got a lot of friends.|She has lots of friends."],
       ["Ты ешь слишком много сахара.", "You eat too much sugar."]
     ]}
   ]},
@@ -58,7 +58,7 @@ ${E([
 ${M("Удобно запомнить:", ["very few", "very little", "quite a few (довольно много)", "only a few", "only a little"])}
 ${N("<i>little</i> как прилагательное значит «маленький»: <i>a little girl</i>. Отличайте его от <i>a little</i> «немного»: <i>a little sugar</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте a few, few, a little или little.', items: [
+    { type: 'gap', task: 'Впишите a few, few, a little или little.', items: [
       ["I've got ___ apples. Would you like one?", "a few"], ["Hurry up! We have very ___ time.", "little"],
       ["Add ___ salt to the soup, it's not enough.", "a little"], ["He is not popular, he has ___ friends.", "few"],
       ["Can you lend me ___ money?", "a little"], ["There were ___ people at the concert; the hall was almost empty.", "few"],

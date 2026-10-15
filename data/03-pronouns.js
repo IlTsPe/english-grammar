@@ -1,5 +1,5 @@
 BOOK.push({ n: 3, id: 'pronouns', title: 'Местоимения some, any, no, every и их производные', pages: [79, 94],
-intro: 'В сборнике раздел посвящён неопределённым местоимениям. Сюда же добавлена опорная тема о личных, притяжательных и возвратных местоимениях — без неё упражнения раздела даются тяжелее.',
+intro: 'В сборнике раздел посвящен неопределенным местоимениям. Сюда же добавлена опорная тема о личных, притяжательных и возвратных местоимениях — без нее упражнения раздела даются тяжелее.',
 topics: [
 
 { id: 'pron-personal', level: 'A1', title: 'Личные, притяжательные и возвратные', sub: 'I – me – my – mine – myself',
@@ -37,7 +37,7 @@ ${N("Русское «свой» переводится по лицу: «Я вз
       ["Our car is old, but ___ is new.", ["theirs", "their", "them"]], ["Please help ___ to some cake!", ["yourself", "you", "yours"]]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
-      ["Это её сумка, а не моя.", "This is her bag, not mine.|It is her bag, not mine.|It's her bag, not mine."],
+      ["Это ее сумка, а не моя.", "This is her bag, not mine.|It is her bag, not mine.|It's her bag, not mine."],
       ["Позвони мне завтра.", "Call me tomorrow.|Phone me tomorrow.|Ring me tomorrow."],
       ["Я сделал это сам.", "I did it myself."],
       ["Они взяли свои книги.", "They took their books."],
@@ -47,7 +47,7 @@ ${N("Русское «свой» переводится по лицу: «Я вз
 
 { id: 'pron-some-any', level: 'A2', title: 'Some, any, no', sub: 'some milk, any questions, no time',
   rule: `
-<p><i>some</i>, <i>any</i> и <i>no</i> указывают на неопределённое количество. Употребляются с неисчисляемыми и с исчисляемыми во множественном числе.</p>
+<p><i>some</i>, <i>any</i> и <i>no</i> указывают на неопределенное количество. Употребляются с неисчисляемыми и с исчисляемыми во множественном числе.</p>
 ${T(["Слово", "Где", "Пример"], [
   ["<i>some</i>", "утвердительные предложения", "<i>There is <b>some</b> milk. I have <b>some</b> friends.</i>"],
   ["<i>some</i>", "вопросы-просьбы и предложения", "<i>Would you like <b>some</b> tea? Can I have <b>some</b> water?</i>"],
@@ -58,7 +58,7 @@ ${T(["Слово", "Где", "Пример"], [
 ])}
 ${N("В английском предложении только одно отрицание. Если есть <i>no</i>, частица <i>not</i> не нужна: <i>I have <b>no</b> time</i>, а не <i>I don't have no time</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте some, any или no.', items: [
+    { type: 'gap', task: 'Впишите some, any или no.', items: [
       ["There is ___ bread on the table.", "some"], ["Are there ___ apples in the fridge?", "any"],
       ["I haven't got ___ money.", "any"], ["Would you like ___ coffee?", "some"],
       ["There are ___ chairs in the room, so we have to stand.", "no"], ["Have you got ___ questions?", "any"],
@@ -87,7 +87,7 @@ ${T(["", "+ body / one (люди)", "+ thing (вещи)", "+ where (место)"
   ["<i>some</i>", "<i>somebody / someone</i> — кто-то", "<i>something</i> — что-то", "<i>somewhere</i> — где-то"],
   ["<i>any</i>", "<i>anybody / anyone</i> — кто-нибудь; любой", "<i>anything</i> — что-нибудь; что угодно", "<i>anywhere</i> — где-нибудь; где угодно"],
   ["<i>no</i>", "<i>nobody / no one</i> — никто", "<i>nothing</i> — ничего", "<i>nowhere</i> — нигде, никуда"],
-  ["<i>every</i>", "<i>everybody / everyone</i> — все", "<i>everything</i> — всё", "<i>everywhere</i> — везде"]
+  ["<i>every</i>", "<i>everybody / everyone</i> — все", "<i>everything</i> — все", "<i>everywhere</i> — везде"]
 ])}
 ${E([
   ["<b>Somebody</b> is knocking at the door.", "Кто-то стучит."],
@@ -97,7 +97,7 @@ ${E([
 ])}
 ${N("Производные от <i>every-</i> и <i>no-</i> согласуются с глаголом в единственном числе: <i>Everyone <b>knows</b>. Nobody <b>was</b> there.</i>")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте somebody, anybody, nobody, everybody, something, anything, nothing, everything, somewhere, anywhere, nowhere или everywhere.', items: [
+    { type: 'gap', task: 'Впишите somebody, anybody, nobody, everybody, something, anything, nothing, everything, somewhere, anywhere, nowhere или everywhere.', items: [
       ["There is ___ in the box. Open it!", "something"], ["Is there ___ in the classroom?", "anybody|anyone"],
       ["I'm hungry. I haven't eaten ___ today.", "anything"], ["___ knows the answer, it's too difficult.", "nobody|no one"],
       ["I've lost my keys. I've looked ___ but can't find them.", "everywhere"], ["Let's go ___ warm this summer.", "somewhere"],
@@ -122,7 +122,7 @@ ${N("Производные от <i>every-</i> и <i>no-</i> согласуют�
 
 { id: 'pron-every-each', level: 'B1', title: 'Every, each, all, both, either, neither', sub: 'each of them, both of us',
   rule: `
-<p>Эти слова говорят о целой группе или о каждом её члене.</p>
+<p>Эти слова говорят о целой группе или о каждом ее члене.</p>
 ${T(["Слово", "Значение", "Пример"], [
   ["<i>every</i>", "каждый (все вместе, 3 и больше), + ед. ч.", "<i><b>Every</b> student has a book.</i>"],
   ["<i>each</i>", "каждый в отдельности, в том числе из двух", "<i><b>Each</b> of my hands. <b>Each</b> student got a mark.</i>"],
@@ -146,7 +146,7 @@ ${N("<i>every</i> не употребляется с <i>of</i>: <i><b>each</b> o
       ["___ the money was spent.", ["All", "Every", "Each"]], ["Neither of them ___ English.", ["speaks", "speak", "don't speak"]],
       ["She works hard ___ day.", ["every", "each of", "all of"]], ["___ Kate and her husband are teachers.", ["Both", "Either", "Neither"]]
     ]},
-    { type: 'gap', task: 'Вставьте every, each, all, both, either или neither.', items: [
+    { type: 'gap', task: 'Впишите every, each, all, both, either или neither.', items: [
       ["I have two brothers. ___ of them live in Moscow.", "both"], ["___ child in the class got a present.", "every|each"],
       ["She gave ___ of the four children an apple.", "each"], ["___ the shops are closed on Sunday.", "all"],
       ["___ of my parents smokes. They both hate cigarettes.", "neither"], ["There are trees on ___ side of the street.", "either|each"],

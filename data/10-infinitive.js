@@ -1,10 +1,10 @@
 BOOK.push({ n: 10, id: 'infinitive', title: 'Инфинитив', pages: [294, 304],
-intro: 'Когда инфинитив употребляется с частицей <i>to</i>, а когда без неё; инфинитив цели и конструкции с <i>too / enough</i>; формы инфинитива.',
+intro: 'Когда инфинитив употребляется с частицей <i>to</i>, а когда без нее; инфинитив цели и конструкции с <i>too / enough</i>; формы инфинитива.',
 topics: [
 
 { id: 'inf-to', level: 'B1', title: 'Инфинитив с to и без to', sub: 'want to go · can go · make him go',
   rule: `
-<p>Обычно инфинитив употребляется с частицей <i>to</i>. Без неё он стоит в нескольких строго определённых случаях.</p>
+<p>Обычно инфинитив употребляется с частицей <i>to</i>. Без нее он стоит в нескольких строго определенных случаях.</p>
 ${T(["Без to", "Пример"], [
   ["после модальных глаголов (кроме ought to, have to, be to)", "<i>I can <b>swim</b>. You must <b>go</b>.</i>"],
   ["после <i>make</i> и <i>let</i> (заставить, позволить)", "<i>She made me <b>cry</b>. Let him <b>go</b>.</i>"],
@@ -27,7 +27,7 @@ ${N("В пассиве после <i>make</i> частица <i>to</i> возв�
       ["I don't know what ___.", ["to say", "say"]], ["It's difficult ___ this text.", ["to translate", "translate"]],
       ["He was made ___ the room.", ["to leave", "leave"]], ["I'd rather ___ at home.", ["stay", "to stay"]]
     ]},
-    { type: 'gap', task: 'Вставьте to там, где нужно. Если не нужно, поставьте «-».', items: [
+    { type: 'gap', task: 'Впишите to там, где нужно. Если не нужно, поставьте «-».', items: [
       ["I'd like ___ visit London.", "to"], ["You should ___ see a doctor.", "-|0"],
       ["She promised ___ help me.", "to"], ["Let's ___ go to the park.", "-|0"],
       ["I'm glad ___ meet you.", "to"], ["He can't ___ swim.", "-|0"],
@@ -46,7 +46,7 @@ ${N("В пассиве после <i>make</i> частица <i>to</i> возв�
   rule: `
 <p>Инфинитив часто выражает <b>цель</b> — «чтобы». И он же стоит после <i>too</i> и <i>enough</i>.</p>
 ${E([
-  ["I went to the shop <b>to buy</b> bread.", "Я пошёл в магазин, чтобы купить хлеб."],
+  ["I went to the shop <b>to buy</b> bread.", "Я пошел в магазин, чтобы купить хлеб."],
   ["She works hard <b>in order to</b> pass the exam.", "in order to — книжнее, «для того чтобы»."],
   ["He left early <b>so as not to</b> be late.", "Отрицательная цель: so as not to / in order not to."]
 ])}
@@ -69,7 +69,7 @@ ${N("<i>enough</i> стоит <b>после</b> прилагательного, 
       ["The box is too heavy ___ to carry.", ["for me", "to me", "me"]], ["I came here ___ you.", ["to see", "for see", "for seeing"]]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
-      ["Я пришёл, чтобы помочь тебе.", "I came to help you.|I have come to help you.|I've come to help you."],
+      ["Я пришел, чтобы помочь тебе.", "I came to help you.|I have come to help you.|I've come to help you."],
       ["Он слишком устал, чтобы работать.", "He is too tired to work.|He's too tired to work.|He was too tired to work."],
       ["Она достаточно взрослая, чтобы понять это.", "She is old enough to understand it.|She's old enough to understand it.|She is old enough to understand this.|She's old enough to understand this."],
       ["У нас достаточно денег, чтобы купить машину.", "We have enough money to buy a car.|We've got enough money to buy a car."]
@@ -92,7 +92,7 @@ ${E([
   ["She seems <b>to be sleeping</b>.", "Кажется, она спит (сейчас, процесс)."],
   ["He seems <b>to have forgotten</b> about it.", "Кажется, он забыл (раньше)."]
 ])}
-${N("Перфектный инфинитив после модальных глаголов выражает предположение о прошлом или упрёк: <i>He must <b>have left</b></i> — «он, должно быть, ушёл»; <i>You should <b>have told</b> me</i> — «тебе следовало сказать».")}`,
+${N("Перфектный инфинитив после модальных глаголов выражает предположение о прошлом или упрек: <i>He must <b>have left</b></i> — «он, должно быть, ушел»; <i>You should <b>have told</b> me</i> — «тебе следовало сказать».")}`,
   ex: [
     { type: 'choice', task: 'Выберите нужную форму инфинитива.', items: [
       ["I'm glad ___ you now.", ["to see", "to have seen", "to be seen"]], ["I'm sorry ___ you yesterday.", ["to have disturbed", "to disturb", "to be disturbed"]],

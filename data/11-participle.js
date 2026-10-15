@@ -6,7 +6,7 @@ topics: [
   rule: `
 <p>У английского глагола две основные формы причастия.</p>
 ${T(["Форма", "Значение", "Пример", "Перевод"], [
-  ["Participle I: <i>V-ing</i>", "активное, процесс", "<i>a <b>sleeping</b> child, the man <b>standing</b> at the door</i>", "спящий ребёнок, стоящий у двери"],
+  ["Participle I: <i>V-ing</i>", "активное, процесс", "<i>a <b>sleeping</b> child, the man <b>standing</b> at the door</i>", "спящий ребенок, стоящий у двери"],
   ["Participle II: <i>V3</i>", "пассивное, результат", "<i>a <b>broken</b> cup, a letter <b>written</b> in pencil</i>", "разбитая чашка, написанное письмо"],
   ["Perfect Participle: <i>having V3</i>", "действие раньше другого", "<i><b>Having finished</b> the work, he left.</i>", "закончив работу"]
 ])}
@@ -56,7 +56,7 @@ ${E([
   ["The children <b>playing</b> in the garden are my nephews.", "= who are playing"],
   ["Most goods <b>made</b> in this factory are exported.", "= which are made"]
 ])}
-${N("У оборота и главного предложения должно быть <b>одно подлежащее</b>. <i>Walking home, the rain started</i> — ошибка: получается, что домой шёл дождь. Правильно: <i>Walking home, <b>I</b> got caught in the rain.</i>")}`,
+${N("У оборота и главного предложения должно быть <b>одно подлежащее</b>. <i>Walking home, the rain started</i> — ошибка: получается, что домой шел дождь. Правильно: <i>Walking home, <b>I</b> got caught in the rain.</i>")}`,
   ex: [
     { type: 'choice', task: 'Выберите правильную форму причастия.', items: [
       ["___ the letter, she burst into tears.", ["Having read", "Read", "Being read"]], ["___ in 1890, the building is now a museum.", ["Built", "Building", "Having built"]],

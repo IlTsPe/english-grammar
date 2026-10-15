@@ -17,7 +17,7 @@ ${E([
   ["The letter <b>was written</b> with a pencil.", "Инструмент — with."],
   ["<b>Was</b> the window <b>broken</b> by the children? — It <b>wasn't broken</b>.", "Вопрос и отрицание — с помощью be."]
 ])}
-${N("Русские неопределённо-личные предложения часто переводятся пассивом: «Здесь говорят по-английски» — <i>English <b>is spoken</b> here</i>; «Мне подарили книгу» — <i>I <b>was given</b> a book</i>.")}`,
+${N("Русские неопределенно-личные предложения часто переводятся пассивом: «Здесь говорят по-английски» — <i>English <b>is spoken</b> here</i>; «Мне подарили книгу» — <i>I <b>was given</b> a book</i>.")}`,
   ex: [
     { type: 'gap', task: 'Поставьте глагол в Present, Past или Future Simple Passive.', items: [
       ["English ___ (speak) all over the world.", "is spoken"], ["This house ___ (build) in 1905.", "was built"],
@@ -43,7 +43,7 @@ ${N("Русские неопределённо-личные предложени
 
 { id: 'pas-all', level: 'B1', title: 'Пассив во всех временах и с модальными', sub: 'is being repaired, has been done, must be done',
   rule: `
-<p>В пассиве меняется только форма глагола <i>be</i>; третья форма смыслового глагола остаётся неизменной.</p>
+<p>В пассиве меняется только форма глагола <i>be</i>; третья форма смыслового глагола остается неизменной.</p>
 ${T(["Время", "Пассив", "Пример"], [
   ["Present Simple", "<i>am / is / are + V3</i>", "<i>The room <b>is cleaned</b>.</i>"],
   ["Present Continuous", "<i>am / is / are being + V3</i>", "<i>The room <b>is being cleaned</b>.</i>"],
@@ -86,7 +86,7 @@ ${E([
   ["I <b>had my hair cut</b> yesterday.", "Я подстриглась (меня подстригли в салоне)."],
   ["We're <b>having our flat painted</b>.", "Нам красят квартиру."],
   ["She <b>got her car repaired</b>.", "Ей починили машину (get — разговорнее)."],
-  ["He <b>had his wallet stolen</b>.", "У него украли кошелёк (неприятное событие)."]
+  ["He <b>had his wallet stolen</b>.", "У него украли кошелек (неприятное событие)."]
 ])}
 ${T(["Конструкция", "Значение", "Пример"], [
   ["<i>have + кто-то + V</i>", "поручить", "<i>I'll <b>have</b> the porter <b>bring</b> your bags.</i>"],

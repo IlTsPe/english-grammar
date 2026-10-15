@@ -27,7 +27,7 @@ ${N("Быстрая проверка: если перед словом на <i>-
       ["The man ___ to Ann is her father. (talking)", ["причастие", "герундий", "отглагольное существительное"]],
       ["He has three ___ a week. (meetings)", ["отглагольное существительное", "герундий", "причастие"]]
     ]},
-    { type: 'gap', task: 'Вставьте the или of, если они нужны (иначе «-»), чтобы получилось правильное предложение.', items: [
+    { type: 'gap', task: 'Впишите the или of, если они нужны (иначе «-»), чтобы получилось правильное предложение.', items: [
       ["___ reading of this poem was beautiful.", "the"], ["The singing ___ birds woke me up.", "of"],
       ["___ smoking is bad for your health.", "-|0"], ["I enjoy ___ cooking.", "-|0"],
       ["The opening ___ the new school was on Monday.", "of"], ["___ swimming in cold water is healthy.", "-|0"]

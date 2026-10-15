@@ -43,7 +43,7 @@ ${N("В части с <i>if</i> будущее время не ставится:
 ${F("If + <b>Past Simple</b>, would + <b>V</b>")}
 ${E([
   ["If I <b>had</b> money, I <b>would buy</b> a house.", "Если бы у меня были деньги, я бы купил дом (но их нет)."],
-  ["If I <b>were</b> you, I <b>wouldn't do</b> that.", "На твоём месте я бы этого не делал."],
+  ["If I <b>were</b> you, I <b>wouldn't do</b> that.", "На твоем месте я бы этого не делал."],
   ["What <b>would</b> you <b>do</b> if you <b>won</b> the lottery?", "Что бы ты сделал, если бы выиграл?"],
   ["If he <b>knew</b> her number, he <b>could call</b> her.", "could / might вместо would."]
 ])}
@@ -67,9 +67,9 @@ ${N("Для всех лиц можно использовать <i>were</i>: <i>
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Если бы у меня было время, я бы тебе помог.", "If I had time, I would help you.|If I had time, I'd help you."],
-      ["На твоём месте я бы не стал этого делать.", "If I were you, I wouldn't do that.|If I were you, I would not do that.|If I were you, I wouldn't do it.|If I was you, I wouldn't do that."],
+      ["На твоем месте я бы не стал этого делать.", "If I were you, I wouldn't do that.|If I were you, I would not do that.|If I were you, I wouldn't do it.|If I was you, I wouldn't do that."],
       ["Что бы ты сделал, если бы был президентом?", "What would you do if you were president?|What would you do if you were the president?"],
-      ["Если бы он знал английский, он бы нашёл работу.", "If he knew English, he would find a job.|If he knew English, he'd find a job.|If he spoke English, he would find a job."]
+      ["Если бы он знал английский, он бы нашел работу.", "If he knew English, he would find a job.|If he knew English, he'd find a job.|If he spoke English, he would find a job."]
     ]}
   ]},
 
@@ -101,7 +101,7 @@ ${N("В русском все три нереальных типа перево�
       ["If he had saved money, he ___ a car now.", ["would have", "would have had", "has"]], ["I ___ you if I had seen you.", ["would have called", "would call", "called"]]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
-      ["Если бы ты пришёл вчера, ты бы увидел его.", "If you had come yesterday, you would have seen him.|If you'd come yesterday, you'd have seen him."],
+      ["Если бы ты пришел вчера, ты бы увидел его.", "If you had come yesterday, you would have seen him.|If you'd come yesterday, you'd have seen him."],
       ["Если бы я знал, я бы тебе сказал (тогда).", "If I had known, I would have told you.|If I'd known, I'd have told you."],
       ["Если бы мы не опоздали на поезд, мы бы уже были дома.", "If we hadn't missed the train, we would be at home now.|If we had not missed the train, we would be home now.|If we hadn't missed the train, we'd be home now.|If we hadn't missed the train, we would already be at home."]
     ]}
@@ -129,7 +129,7 @@ ${N("Утвердительное английское предложение п
     { type: 'translate', task: 'Переведите на английский, используя I wish.', items: [
       ["Жаль, что у меня нет собаки.", "I wish I had a dog."],
       ["Жаль, что я не знаю английский.", "I wish I knew English.|I wish I spoke English.|I wish I could speak English."],
-      ["Жаль, что я не пошёл с тобой.", "I wish I had gone with you.|I wish I'd gone with you."],
+      ["Жаль, что я не пошел с тобой.", "I wish I had gone with you.|I wish I'd gone with you."],
       ["Жаль, что сейчас не лето.", "I wish it were summer now.|I wish it was summer now.|I wish it were summer.|I wish it was summer."],
       ["Хоть бы он перестал кричать!", "I wish he would stop shouting!|If only he would stop shouting!|I wish he would stop screaming!"]
     ]}

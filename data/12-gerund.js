@@ -12,7 +12,7 @@ ${T(["Где", "Слова", "Пример"], [
   ["после выражений", "<i>it's no use, it's worth, there's no point in, look forward to, be used to</i>", "<i>It's worth <b>seeing</b>. I look forward to <b>hearing</b> from you.</i>"],
   ["как подлежащее", "—", "<i><b>Smoking</b> is bad for you.</i>"]
 ])}
-${N("В <i>look forward to</i>, <i>be used to</i>, <i>object to</i> слово <i>to</i> — предлог, поэтому дальше идёт <i>-ing</i>: <i>I look forward to <b>seeing</b> you</i>, а не <i>to see</i>.")}`,
+${N("В <i>look forward to</i>, <i>be used to</i>, <i>object to</i> слово <i>to</i> — предлог, поэтому дальше идет <i>-ing</i>: <i>I look forward to <b>seeing</b> you</i>, а не <i>to see</i>.")}`,
   ex: [
     { type: 'gap', task: 'Поставьте глагол в форму герундия.', items: [
       ["I enjoy ___ (read) detective stories.", "reading"], ["Would you mind ___ (close) the door?", "closing"],
@@ -30,7 +30,7 @@ ${N("В <i>look forward to</i>, <i>be used to</i>, <i>object to</i> слово <
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Я люблю (наслаждаюсь) читать.", "I enjoy reading."],
       ["Спасибо, что пришли.", "Thank you for coming.|Thanks for coming."],
-      ["Он ушёл, не сказав ни слова.", "He left without saying a word.|He went away without saying a word."],
+      ["Он ушел, не сказав ни слова.", "He left without saying a word.|He went away without saying a word."],
       ["Этот музей стоит посетить.", "This museum is worth visiting.|The museum is worth visiting."],
       ["Я с нетерпением жду встречи с тобой.", "I am looking forward to seeing you.|I'm looking forward to seeing you.|I look forward to seeing you."]
     ]}

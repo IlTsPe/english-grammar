@@ -1,8 +1,8 @@
-BOOK.push({ n: 9, id: 'reported', title: 'Согласование времён. Косвенная речь', pages: [256, 293],
+BOOK.push({ n: 9, id: 'reported', title: 'Согласование времен. Косвенная речь', pages: [256, 293],
 intro: 'Если главное предложение стоит в прошедшем времени, время придаточного сдвигается «на шаг назад». На этом правиле строится вся косвенная речь: утверждения, вопросы, просьбы и приказы.',
 topics: [
 
-{ id: 'rep-sequence', level: 'B1', title: 'Согласование времён', sub: 'I knew that he was ill',
+{ id: 'rep-sequence', level: 'B1', title: 'Согласование времен', sub: 'I knew that he was ill',
   rule: `
 <p>В русском языке время в придаточном предложении не зависит от главного: «Я знал, что он болен». В английском, если глагол главного предложения в прошедшем времени, глагол придаточного тоже уходит в прошлое.</p>
 ${T(["Действие придаточного", "Форма", "Пример"], [
@@ -16,7 +16,7 @@ ${E([
 ])}
 ${N("Согласование не нужно, если в придаточном общеизвестный факт: <i>The teacher said that the Earth <b>goes</b> round the Sun.</i>")}`,
   ex: [
-    { type: 'gap', task: 'Поставьте глагол в скобках в нужную форму по правилу согласования времён.', items: [
+    { type: 'gap', task: 'Поставьте глагол в скобках в нужную форму по правилу согласования времен.', items: [
       ["I knew that he ___ (be) ill.", "was"], ["She said that she ___ (live) in Kazan.", "lived"],
       ["We didn't know that they ___ (already / leave).", "had already left"], ["He hoped that he ___ (win) the race.", "would win"],
       ["I thought you ___ (sleep). Why are you up?", "were sleeping"], ["She told me that she ___ (lose) her key the day before.", "had lost"],
@@ -69,7 +69,7 @@ ${N("<i>tell</i> требует дополнения (кому?): <i>He <b>told 
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Она сказала, что устала.", "She said that she was tired.|She said she was tired."],
-      ["Он сказал мне, что живёт в Москве.", "He told me that he lived in Moscow.|He told me he lived in Moscow."],
+      ["Он сказал мне, что живет в Москве.", "He told me that he lived in Moscow.|He told me he lived in Moscow."],
       ["Они сказали, что придут завтра. (Пересказываете через несколько дней.)", "They said that they would come the next day.|They said they would come the next day.|They said they would come the following day."],
       ["Я знал, что она потеряла ключи.", "I knew that she had lost her keys.|I knew she had lost her keys."]
     ]}
@@ -107,7 +107,7 @@ ${N("Типичная ошибка: <i>She asked me where <s>did I live</s></i>.
 
 { id: 'rep-commands', level: 'B1', title: 'Просьбы и приказы', sub: 'She told us not to be late',
   rule: `
-<p>Повелительное предложение передаётся инфинитивом. Глагол-вводящее слово выбирается по смыслу.</p>
+<p>Повелительное предложение передается инфинитивом. Глагол-вводящее слово выбирается по смыслу.</p>
 ${F("told / asked / ordered / advised + <b>кого-то</b> + <b>(not) to V</b>")}
 ${T(["Прямая речь", "Косвенная речь"], [
   ["<i>“Close the window, please.”</i>", "<i>She <b>asked</b> me <b>to close</b> the window.</i>"],
@@ -145,11 +145,11 @@ ${N("Отрицание ставится перед <i>to</i>: <i>told us <b>not
 <p>Когда о будущем говорят с точки зрения прошлого момента, используются особые формы.</p>
 ${T(["Форма", "Значение", "Пример"], [
   ["<i>would + V</i>", "будущее относительно прошлого", "<i>I knew you <b>would</b> like it.</i>"],
-  ["<i>was / were going to + V</i>", "намерение, часто не осуществлённое", "<i>I <b>was going to</b> call you, but I forgot.</i>"],
+  ["<i>was / were going to + V</i>", "намерение, часто не осуществленное", "<i>I <b>was going to</b> call you, but I forgot.</i>"],
   ["<i>was / were about to + V</i>", "вот-вот, собирался в ту минуту", "<i>We <b>were about to</b> leave when the phone rang.</i>"],
   ["<i>was on the point of + -ing</i>", "был на грани того, чтобы", "<i>He <b>was on the point of giving</b> up.</i>"],
   ["<i>was / were to + V</i>", "судьба, то, что произошло потом", "<i>They <b>were</b> never <b>to</b> meet again.</i>"],
-  ["<i>Past Continuous</i>", "договорённость в прошлом", "<i>They <b>were leaving</b> the next morning.</i>"]
+  ["<i>Past Continuous</i>", "договоренность в прошлом", "<i>They <b>were leaving</b> the next morning.</i>"]
 ])}
 ${N("В косвенной речи будущее после прошедшего глагола переходит в <i>would</i>: <i>She said she <b>would</b> come later</i>, а не <i>will come</i>.")}`,
   ex: [

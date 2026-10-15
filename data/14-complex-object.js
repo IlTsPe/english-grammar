@@ -1,5 +1,5 @@
 BOOK.push({ n: 14, id: 'complex-object', title: 'Сложное дополнение (Complex Object)', pages: [352, 373],
-intro: 'Конструкция «дополнение + инфинитив»: <i>I want <b>you to come</b></i>. В русском её обычно переводят придаточным со словами «чтобы», «как», «что».',
+intro: 'Конструкция «дополнение + инфинитив»: <i>I want <b>you to come</b></i>. В русском ее обычно переводят придаточным со словами «чтобы», «как», «что».',
 topics: [
 
 { id: 'co-want', level: 'B1', title: 'Want / expect + кто-то + to V', sub: 'I want you to help me',
@@ -9,7 +9,7 @@ ${F("want / would like / expect / ask / tell + <b>me / him / Tom</b> + <b>to V</
 ${T(["Русский", "Английский"], [
   ["Я хочу, <b>чтобы ты помог</b> мне.", "<i>I want <b>you to help</b> me.</i>"],
   ["Мама хочет, <b>чтобы я стал</b> врачом.", "<i>Mum wants <b>me to become</b> a doctor.</i>"],
-  ["Я не ожидал, <b>что он придёт</b>.", "<i>I didn't expect <b>him to come</b>.</i>"],
+  ["Я не ожидал, <b>что он придет</b>.", "<i>I didn't expect <b>him to come</b>.</i>"],
   ["Учитель попросил нас <b>не шуметь</b>.", "<i>The teacher asked <b>us not to make</b> noise.</i>"],
   ["Хотелось бы, <b>чтобы вы пришли</b>.", "<i>I'd like <b>you to come</b>.</i>"]
 ])}
@@ -29,7 +29,7 @@ ${N("После <i>want</i> нельзя ставить <i>that</i>: <i>I want <
       ["He asked ___ the window.", ["her not to open", "her don't open", "her to not opening"]], ["Do you want ___ with you?", ["me to go", "that I go", "I go"]]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
-      ["Я хочу, чтобы ты пришёл.", "I want you to come."],
+      ["Я хочу, чтобы ты пришел.", "I want you to come."],
       ["Мама хочет, чтобы я стал врачом.", "Mum wants me to become a doctor.|My mother wants me to become a doctor.|My mum wants me to become a doctor.|Mother wants me to become a doctor.|My mother wants me to be a doctor."],
       ["Я не ожидал, что он позвонит.", "I didn't expect him to call.|I did not expect him to call.|I didn't expect him to phone.|I didn't expect him to ring."],
       ["Учитель попросил нас закрыть окна.", "The teacher asked us to close the windows."],
@@ -42,13 +42,13 @@ ${N("После <i>want</i> нельзя ставить <i>that</i>: <i>I want <
 <p>После глаголов восприятия инфинитив стоит <b>без to</b>. Можно также использовать причастие <i>-ing</i> — смысл немного меняется.</p>
 ${F("see / hear / watch / feel / notice + <b>кто-то</b> + <b>V</b> или <b>V-ing</b>")}
 ${T(["Форма", "Значение", "Пример"], [
-  ["<i>+ V</i>", "видел действие целиком, от начала до конца", "<i>I saw him <b>cross</b> the street.</i> — Я видел, как он перешёл улицу."],
+  ["<i>+ V</i>", "видел действие целиком, от начала до конца", "<i>I saw him <b>cross</b> the street.</i> — Я видел, как он перешел улицу."],
   ["<i>+ V-ing</i>", "видел часть процесса", "<i>I saw him <b>crossing</b> the street.</i> — Я видел, как он переходил улицу."]
 ])}
 ${E([
   ["We heard her <b>sing</b>.", "Мы слышали, как она спела (песню целиком)."],
   ["I felt something <b>touching</b> my leg.", "Я почувствовал, как что-то касается моей ноги."],
-  ["Nobody noticed him <b>leave</b>.", "Никто не заметил, как он ушёл."]
+  ["Nobody noticed him <b>leave</b>.", "Никто не заметил, как он ушел."]
 ])}
 ${N("В пассиве частица <i>to</i> появляется: <i>He was seen <b>to enter</b> the house.</i> Глаголы <i>see, hear</i> в значении «понимать, узнавать» с этой конструкцией не употребляются.")}`,
   ex: [
@@ -66,8 +66,8 @@ ${N("В пассиве частица <i>to</i> появляется: <i>He was 
       ["The car stopped. Did you see it? → Did you see the car ___?", "stop"]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
-      ["Я видел, как он вошёл в дом.", "I saw him enter the house.|I saw him come into the house.|I saw him go into the house."],
-      ["Мы слышали, как она поёт.", "We heard her singing.|We heard her sing."],
+      ["Я видел, как он вошел в дом.", "I saw him enter the house.|I saw him come into the house.|I saw him go into the house."],
+      ["Мы слышали, как она поет.", "We heard her singing.|We heard her sing."],
       ["Я почувствовал, как кто-то коснулся моей руки.", "I felt somebody touch my hand.|I felt someone touch my hand.|I felt somebody touch my arm.|I felt someone touch my arm."]
     ]}
   ]},
@@ -84,7 +84,7 @@ ${T(["Глагол", "Значение", "Пример"], [
 ])}
 ${N("<i>let</i> в пассиве не употребляется — вместо него <i>be allowed to</i>: <i>I <b>was allowed to</b> go</i>. После пассивного <i>make</i> появляется <i>to</i>: <i>I <b>was made to</b> wait</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте глагол в нужной форме (с to или без to).', items: [
+    { type: 'gap', task: 'Впишите глагол в нужной форме (с to или без to).', items: [
       ["The film made me ___ (cry).", "cry"], ["My parents let me ___ (stay) up late.", "stay"],
       ["They allowed us ___ (use) the pool.", "to use"], ["I got my brother ___ (help) me.", "to help"],
       ["Don't make me ___ (laugh)!", "laugh"], ["Let me ___ (introduce) myself.", "introduce"],

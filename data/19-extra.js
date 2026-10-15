@@ -1,11 +1,11 @@
-BOOK.push({ n: 19, id: 'extra', title: 'Дополнительно: темы сверх учебника', pages: null,
+BOOK.push({ n: 19, id: 'extra', title: 'Дополнительно: темы сверх сборника', pages: null,
 intro: 'Этих тем нет в сборнике Голицынского: он рассчитан на школьников. Здесь собраны конструкции уровней B2–C2, которые встречаются в экзаменах и книжной речи.',
 topics: [
 
 { id: 'x-relative', level: 'B2', title: 'Относительные придаточные', sub: 'who, which, that, whose, where',
   rule: `
-<p>Относительное придаточное уточняет существительное. Местоимение выбирается по тому, о чём идёт речь.</p>
-${T(["Слово", "О чём", "Пример"], [
+<p>Относительное придаточное уточняет существительное. Местоимение выбирается по тому, о чем идет речь.</p>
+${T(["Слово", "О чем", "Пример"], [
   ["<i>who</i>", "люди", "<i>The woman <b>who</b> lives next door…</i>"],
   ["<i>which</i>", "предметы, животные", "<i>The book <b>which</b> I bought…</i>"],
   ["<i>that</i>", "люди и предметы (только в определительных)", "<i>The car <b>that</b> he drives…</i>"],
@@ -20,7 +20,7 @@ ${E([
 ])}
 ${N("В описательных придаточных (с запятыми) <i>that</i> не используется: <i>Moscow, <b>which</b> is the capital…</i>")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте who, which, that, whose, where или when. Если слово можно опустить, допустимо поставить «-».', items: [
+    { type: 'gap', task: 'Впишите who, which, that, whose, where или when. Если слово можно опустить, допустимо поставить «-».', items: [
       ["The woman ___ lives next door is a doctor.", "who|that"], ["This is the house ___ I was born.", "where"],
       ["The book ___ you gave me was great.", "which|that|-|0"], ["That's the man ___ car was stolen.", "whose"],
       ["Moscow, ___ is the capital of Russia, is huge.", "which"], ["I remember the day ___ we first met.", "when|that|-|0"],
@@ -44,7 +44,7 @@ ${T(["Начало", "Пример", "Перевод"], [
 ])}
 ${N("Если глагол в Present или Past Simple, появляется <i>do / does / did</i>: <i>Rarely <b>do</b> we go out.</i> В конструкциях <i>Only when…, Not until…</i> инверсия ставится в <b>главной</b> части.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте пропущенное слово.', items: [
+    { type: 'gap', task: 'Впишите пропущенное слово.', items: [
       ["Never ___ I seen such a beautiful sunset.", "have"], ["No sooner had we arrived ___ it started to rain.", "than"],
       ["Hardly had she sat down ___ the phone rang.", "when"], ["Not only ___ he late, but he also forgot the tickets.", "was"],
       ["Only when I got home ___ I realise I had lost my keys.", "did"], ["Little ___ they know what was waiting for them.", "did"],
@@ -81,7 +81,7 @@ ${E([
     ]}
   ]},
 
-{ id: 'x-cleft', level: 'C1', title: 'Расщеплённые предложения', sub: 'It was Tom who… · What I need is…',
+{ id: 'x-cleft', level: 'C1', title: 'Расщепленные предложения', sub: 'It was Tom who… · What I need is…',
   rule: `
 <p>Чтобы выделить часть предложения, его «расщепляют» на две части. В русском для этого хватает интонации или слова «именно».</p>
 ${T(["Конструкция", "Пример", "Что выделяем"], [
@@ -93,7 +93,7 @@ ${T(["Конструкция", "Пример", "Что выделяем"], [
 ])}
 ${N("Глагол после <i>What…</i> обычно в единственном числе: <i>What we need <b>is</b> more people.</i>")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте пропущенное слово.', items: [
+    { type: 'gap', task: 'Впишите пропущенное слово.', items: [
       ["It was Tom ___ broke the window, not me.", "who|that"], ["___ I need is a long holiday.", "what"],
       ["It was in 2010 ___ we first met.", "that"], ["All I want ___ a cup of tea.", "is"],
       ["What he did ___ to call the police.", "was"], ["The reason ___ I called is to apologise.", "why|that"],
@@ -118,7 +118,7 @@ ${E([
 ])}
 ${N("При инверсии отрицание не сокращается: <i>Had it <b>not</b> been for…</i>, а не <i>Hadn't it been for…</i>")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте пропущенное слово.', items: [
+    { type: 'gap', task: 'Впишите пропущенное слово.', items: [
       ["___ I known about the problem, I would have helped.", "had"], ["___ you need any help, call me.", "should"],
       ["___ it not been for your support, I would have given up.", "had"], ["___ it not for the rain, we could play outside.", "were"],
       ["___ the government to raise taxes, there would be protests.", "were"], ["But ___ his help, we would have failed.", "for"],
@@ -142,7 +142,7 @@ ${T(["Заместитель", "Пример", "Значение"], [
 ])}
 ${N("После <i>hope, think, expect, suppose</i> отрицательный ответ строится по-разному: <i>I hope <b>not</b></i>, но <i>I <b>don't think so</b></i>.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте одно слово.', items: [
+    { type: 'gap', task: 'Впишите одно слово.', items: [
       ["— Will it rain tomorrow? — I hope ___.", "not"], ["— Is she coming? — I think ___.", "so"],
       ["I don't like this dress. Can I see the red ___?", "one"], ["He can play the piano, and so ___ his sister.", "can"],
       ["— I'm not hungry. — Neither ___ I.", "am"], ["You don't have to come if you don't want ___.", "to"],

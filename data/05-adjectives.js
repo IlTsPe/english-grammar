@@ -44,7 +44,7 @@ ${N("Нельзя сочетать оба способа: <i>more bigger</i>, <i
       ["Это самый лучший день в моей жизни.", "This is the best day of my life.|This is the best day in my life.|It's the best day of my life.|It is the best day of my life."],
       ["Сегодня холоднее, чем вчера.", "It is colder today than yesterday.|Today is colder than yesterday.|It's colder today than yesterday.|It's colder today than it was yesterday.|It is colder today than it was yesterday."],
       ["Эта задача труднее.", "This task is more difficult.|This task is harder.|This problem is more difficult.|This problem is harder."],
-      ["Это самое дешёвое кафе в городе.", "This is the cheapest cafe in town.|This is the cheapest café in town.|This is the cheapest cafe in the city.|It's the cheapest cafe in town."]
+      ["Это самое дешевое кафе в городе.", "This is the cheapest cafe in town.|This is the cheapest café in town.|This is the cheapest cafe in the city.|It's the cheapest cafe in town."]
     ]}
   ]},
 
@@ -55,7 +55,7 @@ ${T(["Конструкция", "Значение", "Пример"], [
   ["<i>as + прил. + as</i>", "такой же, как", "<i>She is <b>as tall as</b> her mother.</i>"],
   ["<i>not as / not so + прил. + as</i>", "не такой, как", "<i>It is<b>n't as cold as</b> yesterday.</i>"],
   ["<i>the + сравн., the + сравн.</i>", "чем…, тем…", "<i><b>The more</b> you read, <b>the more</b> you know.</i>"],
-  ["<i>сравн. + and + сравн.</i>", "всё более и более", "<i>It's getting <b>colder and colder</b>.</i>"],
+  ["<i>сравн. + and + сравн.</i>", "все более и более", "<i>It's getting <b>colder and colder</b>.</i>"],
   ["<i>much / far / a lot + сравн.</i>", "гораздо, намного", "<i>This car is <b>much faster</b>.</i>"],
   ["<i>a bit / a little / slightly + сравн.</i>", "чуть-чуть", "<i>I feel <b>a bit better</b>.</i>"],
   ["<i>twice / three times as … as</i>", "в два / три раза", "<i>It's <b>twice as big as</b> mine.</i>"],
@@ -95,7 +95,7 @@ ${T(["Прилагательное", "Наречие", "Пример"], [
 <h3>Ловушки</h3>
 ${E([
   ["He works <b>hard</b>. — He <b>hardly</b> works.", "Работает усердно. — Почти не работает."],
-  ["I came <b>late</b>. — I haven't seen him <b>lately</b>.", "Пришёл поздно. — Не видел его в последнее время."],
+  ["I came <b>late</b>. — I haven't seen him <b>lately</b>.", "Пришел поздно. — Не видел его в последнее время."],
   ["She looks <b>happy</b>. The soup smells <b>good</b>.", "После look, feel, smell, taste, sound, seem, be — прилагательное."]
 ])}
 ${N("<i>friendly, lovely, lonely, silly</i> — прилагательные, хотя и на <i>-ly</i>. Наречие от них: <i>in a friendly way</i>.")}`,

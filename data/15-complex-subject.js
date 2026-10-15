@@ -6,12 +6,12 @@ topics: [
   rule: `
 <p>Русские вводные слова «кажется», «оказывается», «случайно», «вероятно» в английском передаются глаголом-сказуемым и инфинитивом.</p>
 ${T(["Конструкция", "Значение", "Пример"], [
-  ["<i>seem to V</i>", "кажется", "<i>He <b>seems to know</b> everything.</i> — Он, кажется, всё знает."],
+  ["<i>seem to V</i>", "кажется", "<i>He <b>seems to know</b> everything.</i> — Он, кажется, все знает."],
   ["<i>appear to V</i>", "по-видимому, оказывается", "<i>She <b>appears to be</b> ill.</i>"],
   ["<i>happen to V</i>", "случайно", "<i>I <b>happened to meet</b> him.</i> — Я случайно встретил его."],
   ["<i>turn out to V</i>", "оказаться", "<i>The film <b>turned out to be</b> boring.</i>"],
-  ["<i>be likely to V</i>", "вероятно", "<i>It <b>is likely to rain</b>.</i> — Вероятно, пойдёт дождь."],
-  ["<i>be sure / certain to V</i>", "обязательно, наверняка", "<i>He <b>is sure to come</b>.</i> — Он обязательно придёт."],
+  ["<i>be likely to V</i>", "вероятно", "<i>It <b>is likely to rain</b>.</i> — Вероятно, пойдет дождь."],
+  ["<i>be sure / certain to V</i>", "обязательно, наверняка", "<i>He <b>is sure to come</b>.</i> — Он обязательно придет."],
   ["<i>be unlikely to V</i>", "вряд ли", "<i>She <b>is unlikely to win</b>.</i>"]
 ])}
 ${E([
@@ -34,8 +34,8 @@ ${N("Форма инфинитива показывает время: Simple —
       ["Он, кажется, болен.", "He seems to be ill.|He seems to be sick."],
       ["Она, кажется, забыла о встрече.", "She seems to have forgotten about the meeting."],
       ["Я случайно увидел его вчера.", "I happened to see him yesterday."],
-      ["Он обязательно придёт.", "He is sure to come.|He's sure to come.|He is certain to come."],
-      ["Вероятно, пойдёт снег.", "It is likely to snow.|It's likely to snow."]
+      ["Он обязательно придет.", "He is sure to come.|He's sure to come.|He is certain to come."],
+      ["Вероятно, пойдет снег.", "It is likely to snow.|It's likely to snow."]
     ]}
   ]},
 
@@ -53,7 +53,7 @@ ${E([
   ["<b>It is expected that</b> prices will rise.", "Ожидается, что цены вырастут."]
 ])}
 ${M("Глаголы:", ["say", "believe", "think", "know", "report", "expect", "consider", "suppose"])}
-${N("Если сообщение о прошлом, а говорят о нём сейчас, нужен перфектный инфинитив: <i>is said <b>to have done</b></i>.")}`,
+${N("Если сообщение о прошлом, а говорят о нем сейчас, нужен перфектный инфинитив: <i>is said <b>to have done</b></i>.")}`,
   ex: [
     { type: 'gap', task: 'Закончите предложение, используя безличный пассив.', items: [
       ["People say he is a genius. → He is said ___ a genius.", "to be"],

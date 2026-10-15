@@ -16,7 +16,7 @@ ${T(["Форма", "Значение", "Пример"], [
 ])}
 ${N("<i>can</i> не бывает в будущем и перфекте: не <i>will can</i>, а <i>will be able to</i>. Отрицание пишется слитно: <i>cannot</i> или <i>can't</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте can, can\'t, could, couldn\'t или нужную форму be able to.', items: [
+    { type: 'gap', task: 'Впишите can, can\'t, could, couldn\'t или нужную форму be able to.', items: [
       ["I ___ swim when I was five.", "could"], ["___ you help me with this box, please?", "could|can"],
       ["She ___ speak three languages.", "can"], ["I'm sorry, I ___ come to your party tomorrow.", "cannot|will not be able to"],
       ["Next year I ___ drive a car. (смогу)", "will be able to"], ["The test was difficult, but I ___ answer all the questions. (сумел)", "was able to"],
@@ -59,7 +59,7 @@ ${N("В вопросах с <i>might</i> о предположении обыч�
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Можно мне взять твою ручку?", "May I take your pen?|Can I take your pen?|Could I take your pen?|May I borrow your pen?|Can I borrow your pen?"],
-      ["Может быть, вечером пойдёт снег.", "It may snow in the evening.|It might snow in the evening.|It may snow tonight.|It might snow tonight."],
+      ["Может быть, вечером пойдет снег.", "It may snow in the evening.|It might snow in the evening.|It may snow tonight.|It might snow tonight."],
       ["Вы можете идти.", "You may go.|You can go.|You may go now.|You can go now."],
       ["Нам разрешили остаться.", "We were allowed to stay."]
     ]}
@@ -74,7 +74,7 @@ ${T(["Форма", "Значение", "Пример"], [
   ["<i>had to / will have to</i>", "прошедшее и будущее (у must их нет)", "<i>I <b>had to</b> wait an hour.</i>"],
   ["<i>mustn't</i>", "<b>нельзя</b>, запрет", "<i>You <b>mustn't</b> smoke here.</i>"],
   ["<i>don't have to</i>", "<b>не обязательно</b>, нет необходимости", "<i>You <b>don't have to</b> come if you're busy.</i>"],
-  ["<i>be to</i>", "необходимость по плану, договорённости", "<i>We <b>are to</b> meet at six.</i>"]
+  ["<i>be to</i>", "необходимость по плану, договоренности", "<i>We <b>are to</b> meet at six.</i>"]
 ])}
 ${N("<i>mustn't</i> ≠ <i>don't have to</i>. «Тебе нельзя идти» — <i>You mustn't go</i>. «Тебе не обязательно идти» — <i>You don't have to go</i>.")}`,
   ex: [
@@ -84,7 +84,7 @@ ${N("<i>mustn't</i> ≠ <i>don't have to</i>. «Тебе нельзя идти»
       ["Yesterday I ___ stay at work till nine.", ["had to", "must", "have to"]], ["You ___ tell anybody. It's a secret!", ["mustn't", "don't have to", "needn't to"]],
       ["Does she ___ wear glasses?", ["have to", "must", "has to"]], ["We ___ meet at the station at 5 — that was the plan.", ["were to", "must", "should"]]
     ]},
-    { type: 'gap', task: 'Вставьте must, mustn\'t, have to, has to, had to или don\'t / doesn\'t have to.', items: [
+    { type: 'gap', task: 'Впишите must, mustn\'t, have to, has to, had to или don\'t / doesn\'t have to.', items: [
       ["Pupils ___ wear a uniform at our school. It's the rule.", "have to|must"], ["You ___ eat in the library.", "must not"],
       ["It's a holiday tomorrow. We ___ go to school.", "do not have to"], ["I missed the bus, so I ___ walk home.", "had to"],
       ["She ___ get up at six every day because she starts work at seven.", "has to"], ["He's rich. He ___ work.", "does not have to"],
@@ -116,7 +116,7 @@ ${N("После <i>ought</i> всегда <i>to</i>: <i>You ought <b>to</b> go</
       ["You ___ worry. Everything is fine.", ["needn't", "mustn't", "shouldn't to"]], ["You ought ___ be more careful.", ["to", "—", "for"]],
       ["I ___ to buy some milk.", ["need", "needn't", "must"]], ["You'd ___ take an umbrella.", ["better", "rather", "should"]]
     ]},
-    { type: 'gap', task: 'Вставьте should, shouldn\'t, ought, needn\'t или need.', items: [
+    { type: 'gap', task: 'Впишите should, shouldn\'t, ought, needn\'t или need.', items: [
       ["You ___ see a dentist about that tooth.", "should|ought to"], ["You ___ come if you don't want to.", "need not|do not need to|do not have to"],
       ["Children ___ watch too much TV.", "should not|ought not to"], ["We ___ to leave now, it's getting late.", "need|ought"],
       ["You ___ hurry. We have plenty of time.", "need not"], ["___ I take a coat? — Yes, it's cold.", "should"]
@@ -131,13 +131,13 @@ ${N("После <i>ought</i> всегда <i>to</i>: <i>You ought <b>to</b> go</
 
 { id: 'mod-deduction', level: 'B2', title: 'Модальные с перфектным инфинитивом', sub: 'must have done · can\'t have done · should have done',
   rule: `
-<p>Модальные глаголы показывают, насколько говорящий уверен в своём выводе. С перфектным инфинитивом — вывод о прошлом.</p>
+<p>Модальные глаголы показывают, насколько говорящий уверен в своем выводе. С перфектным инфинитивом — вывод о прошлом.</p>
 ${T(["Уверенность", "О настоящем", "О прошлом"], [
   ["точно да (≈ 95%)", "<i>He <b>must be</b> tired.</i>", "<i>He <b>must have been</b> tired.</i>"],
   ["возможно (≈ 50%)", "<i>She <b>might / may / could be</b> at home.</i>", "<i>She <b>might have forgotten</b>.</i>"],
   ["точно нет (≈ 95%)", "<i>That <b>can't be</b> Anna.</i>", "<i>He <b>can't / couldn't have stolen</b> it.</i>"]
 ])}
-<h3>Упрёк и сожаление</h3>
+<h3>Упрек и сожаление</h3>
 ${E([
   ["You <b>should have told</b> me earlier!", "Тебе следовало сказать раньше (но ты не сказал)."],
   ["You <b>shouldn't have shouted</b> at him.", "Не стоило на него кричать (но ты кричал)."],
@@ -160,7 +160,7 @@ ${N("Противоположность <i>must</i> в значении выво
       ["You ___ (not / eat) so much cake — now you feel sick.", "should not have eaten"]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
-      ["Должно быть, он уже ушёл.", "He must have left already.|He must have already left.|He must have gone already."],
+      ["Должно быть, он уже ушел.", "He must have left already.|He must have already left.|He must have gone already."],
       ["Не может быть, чтобы она это сказала.", "She can't have said that.|She cannot have said that.|She couldn't have said that.|She can't have said it."],
       ["Тебе следовало позвонить мне.", "You should have called me.|You should have phoned me.|You ought to have called me."],
       ["Возможно, он забыл о встрече.", "He may have forgotten about the meeting.|He might have forgotten about the meeting."]

@@ -1,12 +1,12 @@
 BOOK.push({ n: 6, id: 'prepositions', title: 'Предлоги', pages: [111, 127],
-intro: 'Предлоги места, времени и направления, а также глаголы и прилагательные, после которых требуется определённый предлог.',
+intro: 'Предлоги места, времени и направления, а также глаголы и прилагательные, после которых требуется определенный предлог.',
 topics: [
 
 { id: 'prep-place', level: 'A1', title: 'Предлоги места', sub: 'in, on, at, under, between',
   rule: `
 <p>Основные предлоги места отвечают на вопрос <i>где?</i></p>
 ${T(["Предлог", "Значение", "Пример"], [
-  ["<i>in</i>", "в, внутри (объём, пространство)", "<i><b>in</b> the box, <b>in</b> the room, <b>in</b> Moscow</i>"],
+  ["<i>in</i>", "в, внутри (объем, пространство)", "<i><b>in</b> the box, <b>in</b> the room, <b>in</b> Moscow</i>"],
   ["<i>on</i>", "на (поверхности)", "<i><b>on</b> the table, <b>on</b> the wall, <b>on</b> the floor</i>"],
   ["<i>at</i>", "у, в (точка, место события)", "<i><b>at</b> the door, <b>at</b> the bus stop, <b>at</b> school</i>"],
   ["<i>under</i>", "под", "<i><b>under</b> the bed</i>"],
@@ -24,7 +24,7 @@ ${E([
 ])}
 ${N("Русское «на» не всегда <i>on</i>: «на картине» — <i>in the picture</i>, «на улице» — <i>in the street</i>, «на концерте» — <i>at the concert</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте in, on или at.', items: [
+    { type: 'gap', task: 'Впишите in, on или at.', items: [
       ["The cat is ___ the box.", "in"], ["There is a picture ___ the wall.", "on"],
       ["Somebody is ___ the door.", "at"], ["My parents are ___ work now.", "at"],
       ["We live ___ the third floor.", "on"], ["Look at the birds ___ the sky!", "in"],
@@ -41,8 +41,8 @@ ${N("Русское «на» не всегда <i>on</i>: «на картине�
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Книга на столе.", "The book is on the table."],
       ["Кошка под кроватью.", "The cat is under the bed."],
-      ["Мы живём на втором этаже.", "We live on the second floor."],
-      ["Он ждёт тебя на остановке.", "He is waiting for you at the bus stop.|He's waiting for you at the bus stop."],
+      ["Мы живем на втором этаже.", "We live on the second floor."],
+      ["Он ждет тебя на остановке.", "He is waiting for you at the bus stop.|He's waiting for you at the bus stop."],
       ["Магазин находится напротив школы.", "The shop is opposite the school.|The shop is across from the school."]
     ]}
   ]},
@@ -63,7 +63,7 @@ ${T(["Предлог", "С чем", "Пример"], [
 ])}
 ${N("Перед <i>this, next, last, every</i> предлог не ставится: <i>next week, last Monday, every day</i>, а не <i>on next Monday</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте at, on или in. Если предлог не нужен, поставьте «-».', items: [
+    { type: 'gap', task: 'Впишите at, on или in. Если предлог не нужен, поставьте «-».', items: [
       ["The film starts ___ 7 o'clock.", "at"], ["I was born ___ 2005.", "in"],
       ["We have English ___ Monday.", "on"], ["It's very cold here ___ winter.", "in"],
       ["What do you do ___ the weekend?", "at|on"], ["My birthday is ___ 15 March.", "on"],
@@ -103,7 +103,7 @@ ${T(["Предлог", "Значение", "Пример"], [
 ])}
 ${N("С <i>home</i> предлог <i>to</i> не ставится: <i>go <b>home</b>, come home</i>. С <i>arrive</i> — <i>in</i> или <i>at</i>, а не <i>to</i>: <i>arrive <b>in</b> Moscow, arrive <b>at</b> the station</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте предлог: to, into, out of, across, through, along, past, off или from.', items: [
+    { type: 'gap', task: 'Впишите предлог: to, into, out of, across, through, along, past, off или from.', items: [
       ["She took a pen ___ her bag.", "out of"], ["We walked ___ the forest.", "through"],
       ["He fell ___ his bike and hurt his knee.", "off"], ["They swam ___ the river.", "across"],
       ["Let's go ___ the cinema tonight.", "to"], ["The cat jumped ___ the box.", "into"],
@@ -119,7 +119,7 @@ ${N("С <i>home</i> предлог <i>to</i> не ставится: <i>go <b>hom
 
 { id: 'prep-dependent', level: 'B1', title: 'Глаголы и прилагательные с предлогами', sub: 'depend on, afraid of, good at',
   rule: `
-<p>После многих глаголов и прилагательных нужен определённый предлог. Часто он не совпадает с русским — такие сочетания учат вместе.</p>
+<p>После многих глаголов и прилагательных нужен определенный предлог. Часто он не совпадает с русским — такие сочетания учат вместе.</p>
 ${T(["Глагол + предлог", "Прилагательное + предлог"], [
   ["<i>depend <b>on</b></i> — зависеть от", "<i>afraid <b>of</b></i> — бояться"],
   ["<i>listen <b>to</b></i> — слушать", "<i>good / bad <b>at</b></i> — хорош / плох в"],
@@ -134,7 +134,7 @@ ${T(["Глагол + предлог", "Прилагательное + предл
 ])}
 ${N("Некоторые глаголы в английском не требуют предлога, хотя в русском он есть: <i>enter the room</i> (войти <b>в</b> комнату), <i>answer the question</i> (ответить <b>на</b> вопрос), <i>discuss the plan</i> (обсудить план, без about!).")}`,
   ex: [
-    { type: 'gap', task: 'Вставьте предлог.', items: [
+    { type: 'gap', task: 'Впишите предлог.', items: [
       ["It depends ___ the weather.", "on"], ["Listen ___ me carefully.", "to"],
       ["I'm looking ___ my keys. Have you seen them?", "for"], ["She is afraid ___ dogs.", "of"],
       ["He is very good ___ maths.", "at"], ["Are you interested ___ history?", "in"],
@@ -151,7 +151,7 @@ ${N("Некоторые глаголы в английском не требую
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Я ищу свой телефон.", "I am looking for my phone.|I'm looking for my phone."],
       ["Она боится темноты.", "She is afraid of the dark.|She's afraid of the dark.|She is afraid of darkness."],
-      ["Всё зависит от тебя.", "Everything depends on you.|It all depends on you."],
+      ["Все зависит от тебя.", "Everything depends on you.|It all depends on you."],
       ["Он хорошо играет в шахматы (хорош в шахматах).", "He is good at chess.|He's good at chess."],
       ["Ответь на вопрос.", "Answer the question."]
     ]}

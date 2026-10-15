@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Грамматика онлайн</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script>
 /* theme: saved choice, dark by default; set before first paint */
 (function () {
@@ -88,9 +89,10 @@ button { font: inherit; transition: linear 0.15s; }
 /* on hover the sun spins with its rays (below); the moon swings with a little overshoot
    and three stars come out from behind it one after another */
 /* the sun turns together with its rays, one turn in 12s like ray-turn; the script runs it so it can ease to a stop when the pointer leaves */
-.theme-toggle__moon-body { transform-box: fill-box; transform-origin: center; transition: transform .7s cubic-bezier(.34, 1.8, .64, 1); }
-.theme-toggle:is(:hover, :focus-visible) .theme-toggle__moon-body { transform: rotate(-25deg); }
-/* «Тёмная тема»: on hover small stars light up across the button, under the label, one after another */
+/* the moon rests turned 15° clockwise and swings 25° back on hover, so it ends slightly tilted instead of lying with the cut on top */
+.theme-toggle__moon-body { transform-box: fill-box; transform-origin: center; transform: rotate(15deg); transition: transform .7s cubic-bezier(.34, 1.8, .64, 1); }
+.theme-toggle:is(:hover, :focus-visible) .theme-toggle__moon-body { transform: rotate(-10deg); }
+/* «Темная тема»: on hover small stars light up across the button, under the label, one after another */
 .theme-toggle { position: relative; overflow: hidden; }
 .theme-toggle > :not(.theme-toggle__stars, .theme-toggle__rays) { position: relative; }
 .theme-toggle__stars, .theme-toggle__rays { position: absolute; inset: 0; pointer-events: none; }
@@ -118,7 +120,7 @@ button { font: inherit; transition: linear 0.15s; }
 :root[data-theme="light"] .theme-toggle:is(:hover, :focus-visible) .theme-toggle__stars i { opacity: .7; transform: none; }
 
 /* ---------- Sidebar ---------- */
-.side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: 100vh; overflow-y: auto; scrollbar-gutter: stable; padding-block: 28px 24px; padding-inline: 5px 12px; } /* the wider right side keeps the scrollbar off the frames */
+.side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: calc(100vh - 16px); overflow-y: auto; scrollbar-gutter: stable; padding-block: 28px 24px; padding-inline: 5px 12px; } /* the wider right side keeps the scrollbar off the frames */
 /* the gutter is always reserved: otherwise the scrollbar narrows the panel, titles rewrap and the panel keeps a scrollbar it no longer needs */
 .side__head { display: flex; align-items: flex-start; gap: 8px; }
 .side__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
@@ -139,11 +141,25 @@ button { font: inherit; transition: linear 0.15s; }
   .app--side-collapsed .app__side { min-width: 300px; opacity: 0; visibility: hidden; transform: translateX(-24px); pointer-events: none; }
   .app--side-collapsed .app__sheet { border-left-color: transparent; padding-top: 112px; }
 }
+/* from 1300px the centred text column starts right of the floating buttons, so the sheet keeps its usual top padding */
+@media (min-width: 1300px) {
+  .app--side-collapsed .app__sheet { padding-top: 36px; }
+}
 @media (max-width: 880px) {
   .side__hide, .float-tools { display: none; }
 }
 .brand { flex: 1; min-width: 0; }
-.brand__title { display: block; font-family: var(--f-display); font-weight: 700; font-size: 21px; line-height: 1.15; letter-spacing: -.01em; }
+/* the favicon sits left of the title, centred on its lines */
+.brand__title { display: flex; align-items: center; gap: 7px; font-family: var(--f-display); font-weight: 700; font-size: 21px; line-height: 1.15; letter-spacing: -.01em; }
+/* the favicon drawing, inline so it follows the theme (2px lower than the line-box centre — the visible text sits lower): a blue plate with a pale cap in the light theme, a violet plate with a dark cap in the dark one */
+/* the tassel: gold in both themes (#F0C048 dark, #E0A800 light) */
+.brand__logo { flex: none; position: relative; top: 2px; width: 42px; height: 42px; --logo-plate: #ADA2FF; --logo-ink: #16132E; --logo-tassel: #F0C048; }
+:root[data-theme="light"] .brand__logo { --logo-plate: #2547D0; --logo-ink: #E2DDFF; --logo-tassel: #E0A800; }
+.brand__logo-plate { fill: var(--logo-plate); }
+.brand__logo-ink { fill: var(--logo-ink); }
+.brand__logo-tassel { stroke: var(--logo-tassel); }
+.brand__logo-pad { fill: var(--logo-tassel); }
+.brand__logo-marks { stroke: var(--logo-ink); stroke-width: 1.6; }
 .brand__mark {
   padding: 0 4px; border-radius: 4px; color: var(--accent);
   background-color: var(--sheet);
@@ -154,8 +170,7 @@ button { font: inherit; transition: linear 0.15s; }
 /* «Прогресс» and «Избранное»: full-width buttons one under the other, each expands its block under it like an accordion;
    the title on the left, the figures and the arrow on the right */
 .side__summary { display: grid; gap: 8px; margin-top: 8px; }
-.side__stat { width: 100%; justify-content: flex-start; gap: 10px; padding-inline: 12px; }
-.side__count { margin-left: auto; }
+.side__stat { width: 100%; justify-content: flex-start; gap: 10px; padding-inline: 12px; transition: border-radius .15s linear, border-color .15s linear, background-color .15s linear; }
 .side__fold-arrow { flex: none; width: 12px; height: 12px; margin-left: auto; color: var(--muted); transition: transform .15s linear; }
 .side__count + .side__fold-arrow { margin-left: 0; }
 .side__stat:hover .side__fold-arrow { color: inherit; }
@@ -164,12 +179,17 @@ button { font: inherit; transition: linear 0.15s; }
 .side__stat-bar { flex: 1; min-width: 40px; }
 .side__stat-pct { font-family: var(--f-mono); font-size: 12px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
 .side__badge { min-width: 20px; padding: 1px 6px; border-radius: 99px; background: color-mix(in srgb, var(--bad) 18%, transparent); color: var(--bad); font-family: var(--f-mono); font-size: 11px; text-align: center; }
-.side__count { font-family: var(--f-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+/* on the light sidebar the plain red badge read weakly (3.4:1): a denser tint and a deeper, bolder red (~4.6:1) */
+:root[data-theme="light"] .side__badge { background: color-mix(in srgb, var(--bad) 24%, transparent); color: #A3001A; font-weight: 600; }
+.side__count { margin-left: auto; font-family: var(--f-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
 .side__count:empty { display: none; }
 .side__bm .bm-icon { margin: 0; color: currentColor; }
 /* «Избранное» turns gold on hover, while open and while the open topic came from its list */
 .side__bm:is(:hover, :focus-visible, [aria-expanded="true"]), .side__bm--active { border-color: var(--gold-ink); color: var(--gold-ink); }
-.side__stat[aria-expanded="true"]:not(.side__bm) { border-color: var(--accent); }
+/* the frame of an open «Прогресс»: full accent in the light theme; in the dark one the accent is near-white, so it is muted like the other frames */
+.side__summary { --fold-bc: var(--accent); }
+:root:not([data-theme="light"]) .side__summary { --fold-bc: color-mix(in srgb, var(--accent) 55%, transparent); }
+.side__stat[aria-expanded="true"]:not(.side__bm), .side__stat[aria-expanded="true"]:not(.side__bm):hover { border-color: var(--fold-bc); border-bottom-color: transparent; }
 /* the block under its button; the grid rows animate it open and closed */
 .side__fold { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .15s linear, opacity .15s linear; }
 .side__fold--open { grid-template-rows: 1fr; opacity: 1; }
@@ -177,20 +197,31 @@ button { font: inherit; transition: linear 0.15s; }
 .side__fold .overall, .side__fold .bookmarks { margin: 0; }
 /* an open button and its block are one frame: the button loses its bottom corners, the block its top edge and corners;
    the block keeps the button's border colour (accent for «Прогресс», gold for «Избранное») and a thin line under the button */
-.side__stat { transition: border-radius .15s linear, border-color .15s linear, background-color .15s linear; }
 .side__stat[aria-expanded="true"] { border-bottom-color: transparent; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-.side__fold :is(.overall, .bookmarks) { border: 1.5px solid var(--accent); border-top-width: 0; border-radius: 0 0 10px 10px; box-shadow: inset 0 1px var(--border); }
-.side__fold .bookmarks { border-color: var(--gold-ink); background: var(--sheet); }
+.side__fold :is(.overall, .bookmarks) { border: 1.5px solid var(--fold-bc); border-top-width: 0; border-radius: 0 0 10px 10px; box-shadow: inset 0 1px var(--border); }
+.side__fold .bookmarks { border-color: var(--gold-ink); }
+/* «Избранное» has its own gold: softer than the shared one in the dark theme, deeper and more saturated in the light one
+   (the shared #b38b27 is only 2.5:1 on the light sidebar); while open, the button and its list share a faint tint of the pure
+   ribbon gold (the dark ink over the blue light sidebar turned grey) */
+.side__bm-group { --gold-ink: #D9AC45; --bm-tint: color-mix(in srgb, var(--gold) 5%, var(--sheet)); --bm-tint-hover: color-mix(in srgb, var(--gold) 10%, var(--sheet)); }
+:root[data-theme="light"] .side__bm-group { --gold-ink: #855E00; --bm-tint: color-mix(in srgb, var(--gold) 16%, transparent); --bm-tint-hover: color-mix(in srgb, var(--gold) 28%, transparent); }
+/* :root .side … wins over the light-theme «no fill on sidebar controls» rules below */
+:root .side .side__bm-group .side__bm.side__stat[aria-expanded="true"], .side__bm-group .side__fold .bookmarks { background: var(--bm-tint); }
+:root .side .side__bm-group .side__bm.side__stat[aria-expanded="true"]:hover { background: var(--bm-tint-hover); }
 /* while open, the block shows the progress bar, the percentage and the mistakes, so the button keeps only its title */
 .side__stat[aria-expanded="true"] :is(.side__stat-bar, .side__stat-pct, .side__badge) { display: none; }
 .side__fold .bookmarks__head { display: none; } /* the button above already says «Избранное» and the count */
 .side__fold .bookmarks__empty { padding-top: 8px; }
 .overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; gap: 8px; }
-:root[data-theme="light"] :is(.overall, .side__fold .bookmarks) { background: none; } /* sits on the tinted sidebar like the other frames there */
+:root[data-theme="light"] .overall { background: none; } /* sits on the tinted sidebar like the other frames there */
 /* the same for the controls in the sidebar: no grey sheet fill on the tinted paper (hover fills stay) */
 :root[data-theme="light"] .side :is(.action-btn, .icon-btn, .search__input):not(:hover) { background: none; }
 /* accent-soft is almost the paper colour, so on the sidebar the hover uses the stronger --hover of the contents list */
 :root[data-theme="light"] .side :is(.action-btn, .icon-btn):hover { background: var(--hover); }
+/* the theme toggles preview the palette they switch to: in the light theme a dark button with a violet moon and stars,
+   in the dark theme a white button with a blue sun and rays (the doubled class and the order win over the sidebar hover rules) */
+:root[data-theme="light"] .theme-toggle.theme-toggle:is(:hover, :focus-visible) { border-color: color-mix(in srgb, #ADA2FF 55%, transparent); background: #191C29; color: #ADA2FF; }
+:root:not([data-theme="light"]) .theme-toggle.theme-toggle:is(:hover, :focus-visible) { border-color: color-mix(in srgb, #2547D0 55%, transparent); background: #FFFFFF; color: #2547D0; }
 :root[data-theme="light"] .side .level-chip:not([aria-pressed="true"]) { --face: var(--paper); }
 .overall__row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--muted); }
 .overall__value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
@@ -252,8 +283,16 @@ button { font: inherit; transition: linear 0.15s; }
   background: color-mix(in srgb, var(--ok) 32%, transparent); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ok) 70%, transparent); }
 .level-chip[data-level=""]::before { display: none; }
 .level-chip[aria-pressed="true"]::before { background: color-mix(in srgb, var(--ok) 70%, transparent); }
+/* light theme: the dark --ok at 32% turned sage-grey on the blue paper, so the liquid is a brighter green */
+:root[data-theme="light"] .level-chip::before { background: color-mix(in srgb, #2ECC55 40%, transparent); }
+/* under the pressed chip's blue the dark --ok has the same lightness and the liquid disappears:
+   a lighter green, and bold white text */
+:root[data-theme="light"] .level-chip[aria-pressed="true"]:not(.level-chip--done)::before { background: #25A84A; box-shadow: none; }
+:root[data-theme="light"] .level-chip[aria-pressed="true"]:not(.level-chip--done) {
+  /* the outline follows the fill: the same green up to the liquid line, the chip's blue above it */
+  background: linear-gradient(var(--face), var(--face)) padding-box, linear-gradient(to top, #25A84A var(--lvl), var(--bc) var(--lvl)) border-box; }
 .level-chip:hover { --bc: var(--accent); color: var(--ink); }
-.level-chip[aria-pressed="true"] { --bc: var(--accent); --face: var(--accent); color: var(--on-accent); }
+.level-chip[aria-pressed="true"] { --bc: var(--accent); --face: var(--accent); color: var(--on-accent); font-weight: 700; }
 /* a level whose every topic is done at 100% (for «Все» — the whole book) turns green */
 .level-chip--done, .level-chip--done:hover { --bc: var(--ok); color: var(--ok); }
 .level-chip--done::before { box-shadow: none; } /* a full chip has no liquid surface line */
@@ -262,7 +301,7 @@ button { font: inherit; transition: linear 0.15s; }
 /* contents list: progress of the selected level on top, then the chapters as an accordion */
 .toc { margin-top: 12px; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
 .toc__empty { margin: 16px 10px; font-size: 14px; color: var(--muted); }
-/* one frame: «Содержание учебника» with the level filter, the level progress and the chapters, split by thin lines */
+/* one frame: «Содержание тренажера» with the level filter, the level progress and the chapters, split by thin lines */
 .toc__section { display: grid; gap: 6px; padding: 0 10px 10px; border-bottom: 1px solid var(--border); }
 .toc__label { font-size: 13px; font-weight: 600; color: var(--muted); }
 .toc__note { display: block; margin-top: 2px; font-size: 10.5px; font-weight: 400; line-height: 1.35; opacity: .8; }
@@ -272,32 +311,42 @@ button { font: inherit; transition: linear 0.15s; }
 .search__label { font-size: 13px; font-weight: 600; color: var(--muted); }
 .search__input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--sheet); color: var(--ink); font: inherit; font-size: 14.5px; transition: background-color .15s linear, border-color .15s linear; }
 .search__input::placeholder { color: var(--muted); opacity: .4; }
-.lvl-prog { display: grid; gap: 5px; margin-bottom: 4px; padding: 8px 10px 10px; border-bottom: 1px solid var(--border); }
+.lvl-prog { display: grid; gap: 5px; padding: 8px 10px 10px; border-bottom: 1px solid var(--border); }
 .lvl-prog[hidden] { display: none; }
-/* «Разделы учебника» folds the whole chapter list away, leaving only «Содержание» and the level filter */
-.toc__toggle { display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px; border: 0; border-radius: 8px; background: transparent; font: inherit; text-align: left; cursor: pointer; }
+/* «Разделы тренажера» folds the whole chapter list away, leaving only «Содержание» and the level filter */
+/* a compact heading of the list, like «Уровни сложности»: the chapters start right under it, without a gap or a line;
+   4px above the hover fill, like its inset from the frame sides, whether or not the level progress is shown */
+.toc__toggle { display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 4px; padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; font: inherit; text-align: left; cursor: pointer; }
 .toc__toggle:hover { background: var(--hover); }
 .toc__toggle:hover .side__fold-arrow { color: var(--accent); }
-.toc__toggle[aria-expanded="true"] { margin-bottom: 4px; }
 .toc__toggle[aria-expanded="true"] .side__fold-arrow { transform: rotate(90deg); }
 .toc__count { margin-left: auto; font-family: var(--f-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .toc__count + .side__fold-arrow { margin-left: 0; }
 .lvl-prog__row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
 .lvl-prog__value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
 
-.chap { transition: background-color .15s linear; }
+/* 4px between the heading hover and the dividers, like «Разделы тренажера» */
+.chap { position: relative; isolation: isolate; padding-block: 4px; }
 .chap + .chap { border-top: 1px solid var(--border); }
-/* the open chapter and the chapter of the open page are tinted cards, so their topics do not run into the next chapter heading */
-:is(.chap--open, .chap--current) { margin-block: 4px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 19%, transparent); }
-:root[data-theme="light"] :is(.chap--open, .chap--current) { background: color-mix(in srgb, var(--accent) 13%, transparent); }
+/* the open chapter and the chapter of the open page are tinted cards, so their topics do not run into the next chapter heading.
+   The dividers stay; the tint is drawn 4px inside them, like the heading hover (::before, inset 4px top and bottom) */
+:is(.chap--open, .chap--current)::before { content: ""; position: absolute; z-index: -1; inset: 4px 0; border-radius: 8px; background: color-mix(in srgb, var(--accent) 19%, transparent); transition: background-color .15s linear; }
+/* light theme: a clean periwinkle; the accent at 13% over the grey-blue paper looked muddy */
+:root[data-theme="light"] :is(.chap--open, .chap--current)::before { background: #C8D3FA; }
 /* --hover is about as dark as the tinted card, so inside it the hover is an extra accent layer */
-:is(.chap--open, .chap--current) :is(.chap__btn, .topic-btn:not([aria-current])):hover { background: color-mix(in srgb, var(--accent) 20%, transparent); }
-:is(.chap--open, .chap--current), :is(.chap--open, .chap--current) + .chap { border-top-color: transparent; }
-/* the chapter has no padding of its own, so the heading hover fills the row (or the card) edge to edge */
-.chap--open { padding-bottom: 4px; }
-:is(.chap--open, .chap--current):first-child { margin-top: 0; }
-:is(.chap--open, .chap--current):last-child { margin-bottom: 0; }
-.chap__btn { display: grid; grid-template-columns: 1.8em minmax(0, 1fr) auto; align-items: center; gap: 6px; width: 100%; padding: 11px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 14.5px; font-weight: 600; line-height: 1.3; text-align: left; cursor: pointer; }
+:is(.chap--open, .chap--current) .topic-btn:not([aria-current]):hover { background: color-mix(in srgb, var(--accent) 20%, transparent); }
+/* the card's heading has no hover box of its own: hovering it deepens the whole card, so there are only two tones */
+:is(.chap--open, .chap--current) .chap__btn:hover { background: transparent; }
+/* …except on the open chapter of the open page, where the heading hover adds nothing */
+:is(.chap--open, .chap--current):not(.chap--open.chap--current):has(> .chap__btn:hover)::before { background: color-mix(in srgb, var(--accent) 27%, transparent); }
+:root[data-theme="light"] :is(.chap--open, .chap--current):not(.chap--open.chap--current):has(> .chap__btn:hover)::before { background: #B9C7F8; }
+/* inside the card the hovers are inset by another 4px on every side (8px from the dividers);
+   the inner paddings shrink by the same 4px so the text stays in line with plain chapters */
+:is(.chap--open, .chap--current) { padding: 8px 4px; }
+:is(.chap--open, .chap--current) .chap__btn { padding: 7px 6px; } /* 8+7 = 4+11: the heading text does not jump when the chapter opens */
+:is(.chap--open, .chap--current) .chap__topics { margin-left: 18px; }
+.chap__btn { display: grid; grid-template-columns: 1.8em minmax(0, 1fr) auto; align-items: center; gap: 6px; width: 100%; padding: 11px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 14.5px; font-weight: 600; line-height: 1.3; text-align: left; cursor: pointer;
+  transition: background-color .15s linear, color .15s linear; } /* only colours animate: the global button transition also eased the padding, which changes when a chapter opens, and the text jumped */
 .chap__btn:hover { background: var(--hover); }
 .chap__num { font-family: var(--f-mono); font-size: 12px; font-weight: 500; color: var(--muted); }
 /* the chapter of the open page: its number as a filled badge (the card tint is set above), visible while the chapter is collapsed */
@@ -320,16 +369,16 @@ button { font: inherit; transition: linear 0.15s; }
 
 .topic-btn { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; width: 100%; padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 14px; line-height: 1.3; text-align: left; cursor: pointer; }
 .topic-btn:hover { background: var(--hover); }
-/* an overview link: «Содержание учебника →» at the top of the contents box, «Обзор всего раздела →» first in an expanded chapter */
+/* an overview link: «Содержание тренажера →» at the top of the contents box, «Обзор всего раздела →» first in an expanded chapter */
 .topic-btn--overview { font-size: 13px; font-weight: 600; color: var(--accent); }
 .topic-btn__arrow { font-size: 17.5px; font-weight: 700; line-height: 1; }
 /* an arrow in a link-like button nudges the way it points while the button is hovered or focused */
 .arrow { display: inline-block; transition: transform .15s ease; }
 :is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start):is(:hover, :focus-visible) .arrow--next { transform: translateX(3px); }
 :is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):is(:hover, :focus-visible) .arrow--prev { transform: translateX(-3px); }
-/* «Содержание учебника» spans its section edge to edge, the text lines up with the labels; declared after .topic-btn so it wins */
+/* «Содержание тренажера» spans its section edge to edge, the text lines up with the labels; declared after .topic-btn so it wins */
 .toc__contents { width: auto; margin: 0 -10px -2px; } /* -2px with the 6px grid gap leaves the same space under the text as above it */
-/* a full-width line under «Содержание учебника» so the menu link does not merge with the level filter */
+/* a full-width line under «Содержание тренажера» so the menu link does not merge with the level filter */
 .toc__contents + .toc__label { margin-inline: -10px; padding: 8px 10px 0; border-top: 1px solid var(--border); }
 .topic-btn__meta { display: block; margin-top: 1px; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .04em; color: var(--muted); }
 .topic-btn[aria-current="page"] { background: var(--accent); color: var(--on-accent); }
@@ -365,6 +414,12 @@ button { font: inherit; transition: linear 0.15s; }
 .bookmarks__icon { margin: 0; color: var(--accent); transition: color .2s linear; }
 .bookmarks__count { margin-left: auto; font-family: var(--f-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
 .bookmarks__list { display: grid; gap: 6px; }
+/* level chips of «Избранное»: the same small pills as the menu filter, but gold like the block */
+.bookmarks__levels { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 10px 6px; }
+.bookmarks__level { padding: 2px 7px; border: 1px solid color-mix(in srgb, var(--gold-ink) 55%, transparent); border-radius: 99px; background: transparent;
+  color: var(--muted); font-family: var(--f-mono); font-size: 12px; cursor: pointer; transition: color .15s linear, border-color .15s linear, background-color .15s linear; }
+.bookmarks__level:is(:hover, :focus-visible) { border-color: var(--gold-ink); color: var(--gold-ink); }
+.bookmarks__level[aria-pressed="true"] { border-color: var(--gold-ink); background: var(--gold-ink); color: var(--sheet); }
 .bookmarks__empty { margin: 0; padding: 2px 10px 8px; font-size: 13px; color: var(--muted); }
 /* the frame and the heading (ribbon, «Избранное», count) light up while a bookmark is hovered or the open topic came from this list */
 .bookmarks--active, .bookmarks:has(.topic-btn:hover, .topic-btn:focus-visible) { border-color: var(--gold-ink); }
@@ -377,7 +432,8 @@ button { font: inherit; transition: linear 0.15s; }
 
 /* ---------- Sheet ---------- */
 .sheet {
-  min-width: 0; min-height: 100vh; padding-block: 36px 18px; padding-inline: clamp(18px, 5vw, 64px);
+  /* 100vh minus the 8px body margin above and below, or a short page still scrolls by 16px */
+  min-width: 0; min-height: calc(100vh - 16px); padding-block: 36px 18px; padding-inline: clamp(18px, 5vw, 64px);
   background-color: var(--sheet);
   border-left: 1px solid var(--border);
   border-radius: 10px;
@@ -487,20 +543,37 @@ button { font: inherit; transition: linear 0.15s; }
 
 /* «Правило изучено» and «Добавить в избранное» under the rule */
 .study { margin-top: 20px; }
-.study__btn { position: relative; display: block; width: 100%; padding-inline: 40px; }
+.study__btn { display: block; width: 100%; }
 .study__btn[aria-pressed="false"] { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); color: var(--accent); }
 .study__btn[aria-pressed="false"]:hover { border-color: var(--accent); background: var(--accent-soft); }
 .study__btn[aria-pressed="true"] { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
 .study__btn + .study__btn { margin-top: 8px; }
 .study__btn--bookmark[aria-pressed="true"] { border-color: var(--gold-ink); background: var(--gold-soft); color: var(--gold-ink); }
-.study__icon { margin: 0 6px 0 0; color: inherit; }
-.tip { position: absolute; top: 6px; right: 6px; display: grid; place-items: center; width: 18px; height: 18px;
-  border: 1px solid currentColor; border-radius: 50%; font-size: 11px; font-weight: 700; line-height: 1; opacity: .55; cursor: help; transition: opacity linear .15s; }
-.tip:hover { opacity: 1; }
-.tip__text { position: absolute; z-index: 3; right: -6px; bottom: calc(100% + 8px); width: max-content; max-width: 240px; padding: 6px 10px;
-  border-radius: 6px; background: var(--ink); color: var(--sheet); font-size: 12px; font-weight: 400; line-height: 1.4; text-align: left;
-  opacity: 0; visibility: hidden; pointer-events: none; transition: opacity linear .15s, visibility linear .15s; }
-.tip:hover .tip__text { opacity: 1; visibility: visible; }
+/* lowered 2px: the label is mostly lowercase, so a ribbon centred on the line box looked high */
+.study__icon { margin: 0 6px 0 0; color: inherit; vertical-align: -3px; }
+/* «В избранном» on pressing (after a reference clip): the ribbon swings from its top edge like a pendulum and settles,
+   while small pluses and dots flash around it */
+.bm-pop { position: relative; display: inline-block; margin-right: 6px; }
+.bm-pop .study__icon { margin: 0; transform-origin: 50% 0; animation: bm-swing 1.5s ease-in-out both; }
+@keyframes bm-swing { 12% { transform: rotate(-6deg); } 28% { transform: rotate(12deg); } 45% { transform: rotate(-9deg); }
+  62% { transform: rotate(6deg); } 78% { transform: rotate(-3deg); } 90% { transform: rotate(1deg); } 100% { transform: none; } }
+.bm-pop__spark { position: absolute; left: calc(50% + var(--x)); top: calc(50% + var(--y)); width: 5px; height: 5px; margin: -2.5px; opacity: 0;
+  background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat, linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
+  animation: bm-spark .8s var(--d) ease-out both; }
+.bm-pop__spark--dot { width: 3px; height: 3px; margin: -1.5px; border-radius: 50%; background: currentColor; }
+@keyframes bm-spark { 0% { opacity: 0; transform: scale(0); } 35% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(.5); } }
+/* «Правило изучено»: on pressing, the ✓ lands like a slot-machine reel — a column of symbols behind a one-line window, resting on the last one */
+/* the window sat at the bottom of the taller line box, 0.18em below the text centre; lifted back */
+.slot { position: relative; top: -.18em; display: inline-block; height: 1.25em; line-height: 1.25em; overflow: hidden; vertical-align: bottom; }
+.slot__reel { display: block; transform: translateY(calc(-1.25em * var(--last))); }
+.slot__reel > span { display: block; height: 1.25em; text-align: center; }
+/* the reel runs past the ✓ by .2em, then snaps back in the last .28s (an eased overshoot crawled for half a second) */
+.slot--spin .slot__reel { animation: slot-spin 1.4s linear; }
+@keyframes slot-spin {
+  from { transform: translateY(0); filter: blur(.6px); animation-timing-function: cubic-bezier(.3, .45, .55, 1); }
+  80% { transform: translateY(calc(-1.25em * var(--last) - .2em)); filter: none; animation-timing-function: ease-out; }
+  to { transform: translateY(calc(-1.25em * var(--last))); }
+}
 
 /* ---------- Exercises ---------- */
 .ex { margin: 0 0 28px; padding: 20px clamp(14px, 3vw, 26px); border: 1px solid var(--border); border-radius: 12px; background: var(--sheet); scroll-margin-top: 16px; }
@@ -530,12 +603,16 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__inline-key { margin-right: 4px; font-family: var(--f-en); font-style: italic; font-size: 15px; color: var(--bad); }
 .ex__verdict { margin-left: 8px; font-family: var(--f-body); font-weight: 700; font-size: 16px; }
 .ex__verdict--ok { color: var(--ok); }
+:root[data-theme="light"] .ex__verdict--ok { color: #0c942c; } /* a brighter green just for the ✓ next to a right answer */
 .ex__verdict--bad { color: var(--bad); }
 .ex__opts { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; }
-.ex__opt { padding: 3px 13px; border: 1px solid var(--border); border-radius: 99px; background: var(--well); color: var(--ink); font-family: var(--f-en); font-size: 15.5px; cursor: pointer; }
+/* Literata sits low in its line box: the padding moved from top to bottom centres the lowercase letters (same height) */
+.ex__opt { padding: 1px 13px 5px; border: 1px solid var(--border); border-radius: 99px; background: var(--well); color: var(--ink); font-family: var(--f-en); font-size: 15.5px; cursor: pointer; }
 .ex__opt:hover { border-color: var(--accent); }
 .ex__opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 .ex__opt--ok, .ex__opt--ok:is(:hover, [aria-pressed="true"]) { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+/* light theme: --ok-soft is almost the sheet colour (1.01:1), so a right option gets a slightly greener fill and a deeper green text (5.4:1) */
+:root[data-theme="light"] .ex__opt--ok, :root[data-theme="light"] .ex__opt--ok:is(:hover, [aria-pressed="true"]) { background: #CDEED5; color: #066B1D; }
 .ex__opt--bad, .ex__opt--bad:is(:hover, [aria-pressed="true"]) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
 .ex__opt--key:not(.ex__opt--ok) { border-color: var(--ok); border-style: dashed; }
 .ex__key { grid-column: 2; font-family: var(--f-en); font-style: italic; font-size: 15.5px; color: var(--ok); }
@@ -596,7 +673,8 @@ button { font: inherit; transition: linear 0.15s; }
   .side { position: sticky; top: 0; z-index: 20; max-height: none; overflow: visible; scrollbar-gutter: auto;
     padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px; background: var(--paper); border-bottom: 1px solid var(--border); }
   .side__head { align-items: center; }
-  .brand__title { font-size: 18px; }
+  .brand__title { font-size: 18px; gap: 6px; }
+  .brand__logo { width: 33px; height: 33px; top: 1.5px; }
   .brand__sub { display: none; }
   .icon-btn { width: 38px; height: 38px; }
   .side__menu { display: flex; flex: none; }
@@ -649,6 +727,8 @@ button { font: inherit; transition: linear 0.15s; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
+  .slot--spin .slot__reel, .bm-pop .study__icon { animation: none !important; }
+  .bm-pop__spark { display: none; }
 }
 </style>
 
@@ -660,7 +740,7 @@ button { font: inherit; transition: linear 0.15s; }
   <aside class="side app__side" id="side">
     <div class="side__head">
       <div class="brand">
-        <span class="brand__title">Грамматика <span class="brand__mark">онлайн</span></span>
+        <span class="brand__title"><svg class="brand__logo" viewBox="5 5 54 54" aria-hidden="true"><path class="brand__logo-plate" d="M11 5h42l6 6v14l-3 3v12l3 3v10l-6 6H11l-6-6V43l3-3V28l-3-3V11z"/><path class="brand__logo-ink" d="M32 13.5 55 23.5 32 33.5 9 23.5zM18 30.5V39l14 7 14-7v-8.5L32 37z"/><path class="brand__logo-tassel" d="M32 23.5 50 27v10" fill="none" stroke-width="3" stroke-linecap="square"/><rect class="brand__logo-pad" x="47.5" y="36.5" width="5" height="6.5" rx="1"/><path class="brand__logo-marks" d="M46 8.5h6v6h-6zM46 14.5l6-6M10.5 50.5h6M13.5 47.5v6M39 51h12M39 54.5h8" fill="none"/></svg><span>Грамматика <span class="brand__mark">онлайн</span></span></span>
         <span class="brand__sub">Английский язык A1–C2 по разделам сборника Ю.&nbsp;Голицынского</span>
       </div>
       <button class="icon-btn theme-toggle side__theme" type="button"><span class="theme-toggle__stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="theme-toggle__rays" aria-hidden="true"></span><svg class="icon-btn__icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path class="theme-toggle__moon-body" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg><svg class="icon-btn__icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></svg></button>
@@ -677,21 +757,21 @@ button { font: inherit; transition: linear 0.15s; }
         <button class="action-btn side__stat" id="progBtn" type="button" aria-controls="progFold" aria-expanded="false"></button>
         <div class="side__fold" id="progFold"><div class="side__fold-clip" id="progBody"></div></div>
       </div>
-      <div>
+      <div class="side__bm-group">
         <button class="action-btn side__stat side__bm" id="bmBtn" type="button" aria-controls="bmFold" aria-expanded="false"></button>
         <div class="side__fold" id="bmFold"><div class="side__fold-clip" id="bmBody"></div></div>
       </div>
     </div>
-    <nav aria-label="Разделы учебника">
+    <nav aria-label="Разделы тренажера">
       <label class="search" for="search"><span class="search__label">Поиск темы</span>
         <input class="search__input" id="search" type="search" placeholder="Например, «perfect»" autocomplete="off"></label>
       <div class="toc">
         <div class="toc__section">
-          <button class="topic-btn topic-btn--overview toc__contents" id="tocContents" type="button"><span>Содержание учебника</span><span class="arrow arrow--next topic-btn__arrow" aria-hidden="true">→</span></button>
-          <span class="toc__label" id="levelsLabel">Уровни сложности <span class="toc__note">Выберите любой — от лёгкого A1 до тяжёлого C2</span></span>
+          <button class="topic-btn topic-btn--overview toc__contents" id="tocContents" type="button"><span>Содержание тренажера</span><span class="arrow arrow--next topic-btn__arrow" aria-hidden="true">→</span></button>
+          <span class="toc__label" id="levelsLabel">Уровни сложности <span class="toc__note">Выберите любой — от легкого A1 до тяжелого C2</span></span>
           <div class="level-chips" id="levelChips" role="group" aria-labelledby="levelsLabel"></div></div>
         <div class="lvl-prog" id="lvlProg" aria-live="polite"></div>
-        <button class="toc__toggle" id="tocToggle" type="button" aria-controls="tocFold" aria-expanded="true"><span class="toc__label">Разделы учебника</span><span class="toc__count" id="tocCount"></span></button>
+        <button class="toc__toggle" id="tocToggle" type="button" aria-controls="tocFold" aria-expanded="true"><span class="toc__label">Разделы тренажера</span><span class="toc__count" id="tocCount"></span></button>
         <div class="side__fold side__fold--open" id="tocFold"><div class="side__fold-clip"><div id="tocList"></div></div></div>
       </div>
     </nav>
@@ -753,7 +833,7 @@ const store = {
 };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const fmt = s => { const sp = el('span'); sp.innerHTML = esc(s).replace(/\(([^)]+)\)/g, '<span class="ex__hint">($1)</span>'); return sp; };
-const pagesLabel = ch => ch.pages ? `Голицынский, с. ${ch.pages[0]}–${ch.pages[1]}` : 'Нет в учебнике';
+const pagesLabel = ch => ch.pages ? `Голицынский, с. ${ch.pages[0]}–${ch.pages[1]}` : 'Нет в сборнике';
 
 function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 function shuffled(arr, seed) { return arr.map((v, i) => ({ v, k: hash(seed + '|' + i + '|' + v) })).sort((a, b) => a.k - b.k).map(o => o.v); }
@@ -843,9 +923,9 @@ function overallBox() {
     <button class="overall__row overall__mistakes" type="button" data-go="mistakes"${route === 'mistakes' ? ' aria-current="page"' : ''}>
       <span>С ошибками</span><span class="overall__mistakes-end"><b class="overall__value">${wrong}</b>${arrowHtml('next')}</span></button>
     <div class="overall__book">
-      <div class="overall__row"><span>Прохождение учебника</span></div>
+      <div class="overall__row"><span>Прохождение тренажера</span></div>
       <div class="bar bar--labeled" style="--p:${book.share}%"><i class="bar__fill${book.full ? ' bar__fill--full' : ''}" style="width:${book.share}%"></i><span class="bar__label">${book.pct}%</span><span class="bar__label bar__label--on-fill" aria-hidden="true">${book.pct}%</span></div>
-      <p class="overall__note">Учитываются изученные правила и верные ответы в упражнениях. 100% — всё изучено и решено без ошибок.</p>
+      <p class="overall__note">Учитываются изученные правила и верные ответы в упражнениях. 100% — все изучено и решено без ошибок.</p>
     </div>`;
   return box;
 }
@@ -856,7 +936,7 @@ function renderOverall() {
   const b = $('#progBtn');
   b.innerHTML = `<span>Прогресс</span><span class="bar bar--thin side__stat-bar" aria-hidden="true">${barFill(book.full ? 100 : Math.min(book.share, 99))}</span>` +
     `<b class="side__stat-pct">${book.pct}%</b>` + (wrong ? `<span class="side__badge" title="С ошибками: ${wrong}">${wrong}</span>` : '') + FOLD_ARROW;
-  b.setAttribute('aria-label', `Прогресс: учебник пройден на ${book.pct}%` + (wrong ? `, с ошибками ${wrong}` : ''));
+  b.setAttribute('aria-label', `Прогресс: тренажер пройден на ${book.pct}%` + (wrong ? `, с ошибками ${wrong}` : ''));
   renderFold('prog');
 }
 
@@ -940,7 +1020,7 @@ function fillLevelChips() {
     const pct = tot ? 100 * s / tot : 0;
     if (level) b.style.setProperty('--lvl', pct + '%'); /* «Все» shows no liquid */
     b.classList.toggle('level-chip--done', tot > 0 && s === tot);
-    b.title = `${level ? LEVELS[level] : 'Весь учебник'} · пройдено ${Math.round(pct)}%`;
+    b.title = `${level ? LEVELS[level] : 'Весь тренажер'} · пройдено ${Math.round(pct)}%`;
   });
 }
 
@@ -949,6 +1029,11 @@ let openChap = store.get('gk2-open-chap', null);
 let justToggled = null;
 function setOpenChap(id) { openChap = id; store.set('gk2-open-chap', id); }
 
+/* sparks around the «В избранном» ribbon: offset from its centre (px), delay (s), a dot instead of a plus */
+/* the text starts 6px to the right, so the right-hand sparks sit only above and below it */
+const BM_SPARKS = [[-13, -9, .15, 0], [8, -13, .25, 1], [-12, 8, .35, 1], [1, -15, .45, 1], [-16, -1, .55, 0], [7, 14, .65, 0], [-5, 15, .7, 1]];
+/* the symbols on the «Правило изучено» reel; it stops on the last one */
+const SLOT_REEL = ['★', '✗', '?', '♦', '✓', '•', '✗', '★', '?', '✓'];
 /* an arrow that nudges the way it points while its button is hovered (see .arrow) */
 const arrowHtml = (dir, cls = '') => `<span class="arrow arrow--${dir}${cls ? ' ' + cls : ''}" aria-hidden="true">${dir === 'prev' ? '←' : '→'}</span>`;
 /* a progress pill: at 100% a green outline, below that a fill coloured by range; cls mixes in an element class of the parent */
@@ -988,7 +1073,7 @@ function renderToc() {
     const cs = chapterStats(ch, levelFilter);
     cs.tried = chapterStats(ch).tried;
     const lv = [...new Set(ch.topics.map(t => t.level))].sort();
-    cb.innerHTML = `<span class="chap__num">${ch.n}</span><span>${esc(ch.title)}<small class="chap__meta">${esc(ch.pages ? 'с. ' + ch.pages[0] + '–' + ch.pages[1] : 'сверх учебника')} · ${ch.topics.length} ${plural(ch.topics.length, 'тема', 'темы', 'тем')}</small>` +
+    cb.innerHTML = `<span class="chap__num">${ch.n}</span><span>${esc(ch.title)}<small class="chap__meta">${esc(ch.pages ? 'с. ' + ch.pages[0] + '–' + ch.pages[1] : 'сверх сборника')} · ${ch.topics.length} ${plural(ch.topics.length, 'тема', 'темы', 'тем')}</small>` +
       `<span class="chap__levels" aria-label="Уровни">${lv.map(l => `<span class="lvl-tag lvl-tag--sm" title="${LEVELS[l]}">${l}</span>`).join('')}</span></span>` +
       `<span class="chap__end">${cs.tried ? pill(cs.pct) : ''}` +
       '<span class="chap__arrow" aria-hidden="true"><svg class="chap__arrow-icon" viewBox="0 0 12 12" width="12" height="12"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>';
@@ -1020,6 +1105,7 @@ function renderToc() {
     list.append(box);
   });
   justToggled = null;
+  $('#tocToggle .toc__label').textContent = levelFilter ? `Разделы уровня ${levelFilter}` : 'Разделы тренажера';
   $('#tocCount').textContent = shown || '';
   syncTocFold();
   if (!shown) list.innerHTML = '<p class="toc__empty">Ничего не нашлось. Попробуйте «past», «артикль» или снимите фильтр уровня.</p>';
@@ -1041,16 +1127,31 @@ function topicButton(t, fromBookmarks = false) {
   return b;
 }
 
-/* «Избранное»: every bookmarked topic, newest first, regardless of the level filter and search.
-   It turns gold while the open topic was reached from this list. */
+/* «Избранное»: the bookmarked topics in book order, regardless of the menu's level filter and search;
+   its own level chips (only levels that have bookmarks, gk2-bm-level) narrow the list. It turns gold while the open topic was reached from this list. */
+let bmLevel = store.get('gk2-bm-level', '');
 function bookmarksBox() {
-  const marked = TOPICS.filter(t => bookmarks[t.id]).sort((a, b) => bookmarks[b.id] - bookmarks[a.id]);
+  const marked = TOPICS.filter(t => bookmarks[t.id]);
+  const levels = Object.keys(LEVELS).filter(l => marked.some(t => t.level === l));
+  const level = levels.includes(bmLevel) ? bmLevel : '';
   const box = el('section', 'bookmarks' + (viaBookmarks && bookmarks[route] ? ' bookmarks--active' : ''));
   box.setAttribute('aria-label', 'Избранное');
   box.innerHTML = `<div class="bookmarks__head">${bmIcon('bookmarks__icon')}<span>Избранное</span><b class="bookmarks__count">${marked.length || ''}</b></div>`;
+  if (levels.length > 1) {
+    const bar = el('div', 'bookmarks__levels'); bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'Уровень сложности');
+    ['', ...levels].forEach(l => {
+      const n = l ? marked.filter(t => t.level === l).length : marked.length;
+      const b = el('button', 'bookmarks__level', l || 'Все'); b.type = 'button';
+      b.title = `${l ? LEVELS[l] : 'Все уровни'} · ${n} ${plural(n, 'тема', 'темы', 'тем')}`;
+      b.setAttribute('aria-pressed', String(l === level));
+      b.addEventListener('click', () => { bmLevel = l; store.set('gk2-bm-level', l); renderFold('bm'); });
+      bar.append(b);
+    });
+    box.append(bar);
+  }
   const list = el('div', 'bookmarks__list');
-  marked.forEach(t => list.append(topicButton(t, true)));
-  if (!marked.length) list.innerHTML = '<p class="bookmarks__empty">Пока пусто. Отметьте тему кнопкой «Добавить в избранное» на её странице.</p>';
+  marked.filter(t => !level || t.level === level).forEach(t => list.append(topicButton(t, true)));
+  if (!marked.length) list.innerHTML = '<p class="bookmarks__empty">Пока пусто. Отметьте тему кнопкой «Добавить в избранное» на ее странице.</p>';
   box.append(list);
   return box;
 }
@@ -1081,7 +1182,7 @@ function setFold(kind, open) {
   $(box).inert = !open;
   $(btn).setAttribute('aria-expanded', String(open));
 }
-/* the whole chapter list folds under «Разделы учебника» (gk2-toc-folded); a search always shows it */
+/* the whole chapter list folds under «Разделы тренажера» (gk2-toc-folded); a search always shows it */
 let tocFolded = store.get('gk2-toc-folded', false);
 function syncTocFold() {
   const open = !tocFolded || !!$('#search').value.trim();
@@ -1175,11 +1276,11 @@ function renderMistakesPage(wrap) {
   const count = exCount(list);
   const p = el('p', 'sheet__intro');
   p.textContent = count
-    ? `Давайте вернёмся к тому, что пока не получилось: при последней проверке в ${count} ${plural(count, 'упражнении', 'упражнениях', 'упражнениях')} из ${list.length} ${plural(list.length, 'темы', 'тем', 'тем')}${level ? ' уровня ' + level : ''} нашлись ошибки или незаполненные строки. ${count > 1 ? 'Выберите любое' : 'Нажмите на него'}, чтобы продолжить.`
+    ? `Давайте вернемся к тому, что пока не получилось: при последней проверке в ${count} ${plural(count, 'упражнении', 'упражнениях', 'упражнениях')} из ${list.length} ${plural(list.length, 'темы', 'тем', 'тем')}${level ? ' уровня ' + level : ''} нашлись ошибки или незаполненные строки. ${count > 1 ? 'Выберите любое' : 'Нажмите на него'}, чтобы продолжить.`
     : 'Здесь появятся упражнения, в которых при проверке были ошибки или незаполненные строки.';
   wrap.append(p);
   if (!count) { wrap.append(el('p', 'mistakes__empty', 'Сейчас таких упражнений нет — все проверенные упражнения решены без ошибок.')); return; }
-  wrap.append(el('p', 'mistakes__hint', 'Задание пропадёт из списка, когда вы решите его без ошибок или нажмёте «Заново», и вернётся, если новая проверка снова найдёт недочёты.'));
+  wrap.append(el('p', 'mistakes__hint', 'Задание пропадет из списка, когда вы решите его без ошибок или нажмете «Заново», и вернется, если новая проверка снова найдет недочеты.'));
   const tools = el('div', 'mistakes__tools');
   /* level filter: only levels that have mistakes, each with its number of exercises; not needed for a single level */
   const levels = Object.keys(LEVELS).filter(l => all.some(m => m.t.level === l));
@@ -1240,7 +1341,7 @@ function renderContents(wrap) {
   });
   wrap.append(ol);
   const f = el('p', 'sheet__fine');
-  f.textContent = 'Тренажёр составлен по структуре сборника Ю. Б. Голицынского «Грамматика. Сборник упражнений» и не является его копией: правила и упражнения написаны заново и не повторяют текст книги. Номера страниц указаны по печатной нумерации 7-го издания («Каро», 2011).';
+  f.textContent = 'Тренажер составлен по структуре сборника Ю. Б. Голицынского «Грамматика. Сборник упражнений» и не является его копией: правила и упражнения написаны заново и не повторяют текст книги. Номера страниц указаны по печатной нумерации 7-го издания («Каро», 2011).';
   wrap.append(f);
 }
 
@@ -1273,27 +1374,31 @@ function renderTopic(t, wrap) {
   const study = el('div', 'study');
   const sb = el('button', 'btn study__btn'); sb.type = 'button';
   const sbLabel = el('span');
-  const tip = el('span', 'tip', '?'); tip.setAttribute('aria-hidden', 'true');
-  tip.append(el('span', 'tip__text', 'Отметка хранится в этом браузере.'));
-  sb.setAttribute('aria-description', 'Отметка хранится в этом браузере.');
-  tip.addEventListener('click', e => e.stopPropagation());
-  sb.append(sbLabel, tip);
-  const sync = () => { const on = !!studied[t.id]; sb.setAttribute('aria-pressed', String(on)); sbLabel.textContent = on ? 'Правило изучено ✓' : 'Отметить правило как изученное'; };
-  sb.addEventListener('click', () => { studied[t.id] = !studied[t.id]; if (!studied[t.id]) delete studied[t.id]; store.set('gk2-studied', studied); sync(); renderToc(); renderOverall(); });
+  sb.append(sbLabel);
+  /* animate = a click: the ✓ reel spins; on render it simply rests */
+  const sync = animate => {
+    const on = !!studied[t.id];
+    sb.setAttribute('aria-pressed', String(on));
+    if (on) {
+      sbLabel.innerHTML = `Правило изучено <span class="slot" aria-hidden="true"><span class="slot__reel" style="--last:${SLOT_REEL.length - 1}">${SLOT_REEL.map(c => `<span>${c}</span>`).join('')}</span></span>`;
+      if (animate) sbLabel.querySelector('.slot').classList.add('slot--spin');
+    } else sbLabel.textContent = 'Отметить правило как изученное';
+  };
+  sb.addEventListener('click', () => { studied[t.id] = !studied[t.id]; if (!studied[t.id]) delete studied[t.id]; store.set('gk2-studied', studied); sync(true); renderToc(); renderOverall(); });
   sync(); study.append(sb);
   /* bookmark: a topic the reader wants to come back to and repeat */
   const bb = el('button', 'btn study__btn study__btn--bookmark'); bb.type = 'button';
-  const bbTip = tip.cloneNode(true); bbTip.addEventListener('click', e => e.stopPropagation());
-  bb.setAttribute('aria-description', 'Отметка хранится в этом браузере.');
-  const bmSync = () => {
+  /* animate = a click that adds the bookmark: the ribbon swings and sparks flash around it (see .bm-pop) */
+  const bmSync = animate => {
     const on = !!bookmarks[t.id];
     bb.setAttribute('aria-pressed', String(on));
-    bb.innerHTML = on ? `${bmIcon('study__icon')}<span>В избранном</span>` : '<span>Добавить в избранное</span>';
-    bb.append(bbTip);
+    const icon = animate ? `<span class="bm-pop" aria-hidden="true">${bmIcon('study__icon')}${BM_SPARKS.map(([x, y, d, dot]) =>
+      `<i class="bm-pop__spark${dot ? ' bm-pop__spark--dot' : ''}" style="--x:${x}px;--y:${y}px;--d:${d}s"></i>`).join('')}</span>` : bmIcon('study__icon');
+    bb.innerHTML = on ? `${icon}<span>В избранном</span>` : '<span>Добавить в избранное</span>';
   };
   bb.addEventListener('click', () => {
     if (bookmarks[t.id]) delete bookmarks[t.id]; else bookmarks[t.id] = Date.now();
-    store.set('gk2-bookmarks', bookmarks); bmSync(); renderToc();
+    store.set('gk2-bookmarks', bookmarks); bmSync(true); renderToc();
   });
   bmSync(); study.append(bb);
   wrap.append(study);
@@ -1689,7 +1794,8 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   else if (id === 'mistakes') renderMistakesPage(wrap);
   else renderContents(wrap);
   main.append(wrap);
-  try { history.replaceState(null, '', '#' + id); } catch (e) {}
+  /* a move to another page adds a history entry, so the browser's Back / Forward work; the first render and re-renders of the same page only replace it */
+  try { if (booted && location.hash.slice(1) !== id) history.pushState(null, '', '#' + id); else history.replaceState(null, '', '#' + id); } catch (e) {}
   store.set('gk2-last', id);
   renderToc();
   renderOverall();
@@ -1730,11 +1836,11 @@ $('#toTop').addEventListener('click', () => {
 function syncThemeBtn() {
   const dark = document.documentElement.dataset.theme !== 'light';
   /* the label names the theme the button switches to; the icon-only button in the mobile top bar gets it as aria-label */
-  const action = dark ? 'Включить светлую тему' : 'Включить тёмную тему';
+  const action = dark ? 'Включить светлую тему' : 'Включить темную тему';
   document.querySelectorAll('.theme-toggle').forEach(b => {
     b.title = action;
     const label = b.querySelector('.theme-toggle__label');
-    if (label) label.textContent = dark ? 'Светлая тема' : 'Тёмная тема';
+    if (label) label.textContent = dark ? 'Светлая тема' : 'Темная тема';
     else b.setAttribute('aria-label', action);
   });
 }
@@ -1800,13 +1906,15 @@ addEventListener('keydown', e => {
   if ($('#drawer').classList.contains('drawer--open')) setDrawer(false, true);
 });
 matchMedia('(max-width: 880px)').addEventListener('change', () => setDrawer(false));
-window.addEventListener('hashchange', () => {
-  const id = location.hash.slice(1);
-  if (id && id !== route) go(id);
-});
+/* Back / Forward (popstate) and a hash typed into the address bar (hashchange) open that page */
+const followHash = () => { const id = location.hash.slice(1); if (id && id !== route) go(id); };
+window.addEventListener('popstate', followHash);
+window.addEventListener('hashchange', followHash);
+let booted = false;
 renderLevels();
 const startId = location.hash.slice(1);
 go(startId && (startId === 'contents' || startId === 'mistakes' || topicById[startId] || chapById[startId]) ? startId : store.get('gk2-last', 'contents'), false, false);
+booted = true;
 renderOverall();
 $('#tocToggle').insertAdjacentHTML('beforeend', FOLD_ARROW);
 $('#tocToggle').addEventListener('click', () => {

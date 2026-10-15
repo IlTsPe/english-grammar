@@ -62,7 +62,7 @@ ${T(["Случай", "Как образуется", "Пример"], [
 ])}
 ${E([
   ["I'm going to <b>the dentist's</b>.", "Я иду к зубному (в кабинет зубного)."],
-  ["We had dinner at <b>my aunt's</b>.", "Мы ужинали у тёти (дома у тёти)."]
+  ["We had dinner at <b>my aunt's</b>.", "Мы ужинали у тети (дома у тети)."]
 ])}
 ${N("Не путайте: <i>the boy's toys</i> — игрушки одного мальчика, <i>the boys' toys</i> — игрушки нескольких мальчиков.")}`,
   ex: [
@@ -113,7 +113,7 @@ ${N("Некоторые слова бывают и теми и другими с
       ["I'd like ___, please.", ["a cup of tea", "a tea cup of", "a teas"]], ["How much ___ do you have?", ["luggage", "luggages", "a luggage"]],
       ["Where ___ my glasses?", ["are", "is"]], ["The weather ___ terrible yesterday.", ["was", "were"]]
     ]},
-    { type: 'gap', task: 'Вставьте слово-измеритель: glass, piece, loaf, cup, bar, bottle, kilo.', items: [
+    { type: 'gap', task: 'Впишите слово-измеритель: glass, piece, loaf, cup, bar, bottle, kilo.', items: [
       ["a ___ of bread", "loaf"], ["a ___ of chocolate", "bar"], ["a ___ of advice", "piece"],
       ["a ___ of water", "glass|bottle"], ["a ___ of coffee", "cup"], ["a ___ of wine", "bottle|glass"],
       ["a ___ of potatoes", "kilo"], ["a ___ of furniture", "piece"]

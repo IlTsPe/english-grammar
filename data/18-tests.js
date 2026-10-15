@@ -1,12 +1,12 @@
 BOOK.push({ n: 18, id: 'tests', title: 'Контрольные упражнения', pages: [451, 455],
-intro: 'Смешанные задания на материал всех разделов. Делайте их после того, как пройдёте основные темы: здесь нет подсказки, какое правило нужно.',
+intro: 'Смешанные задания на материал всех разделов. Делайте их после того, как пройдете основные темы: здесь нет подсказки, какое правило нужно.',
 topics: [
 
 { id: 'test-1', level: 'A2', title: 'Контрольная 1: артикли, местоимения, количество', sub: 'разделы 1–6',
   rule: `
 <p>Перед контрольной быстро повторите ключевые правила разделов 1–6.</p>
 ${T(["Тема", "Главное правило"], [
-  ["Артикли", "<i>a / an</i> — один из многих, впервые; <i>the</i> — известный, единственный; без артикля — общий смысл, имена, приёмы пищи"],
+  ["Артикли", "<i>a / an</i> — один из многих, впервые; <i>the</i> — известный, единственный; без артикля — общий смысл, имена, приемы пищи"],
   ["Множественное число", "<i>-s / -es / -ies / -ves</i> и исключения: <i>men, children, feet, teeth, mice, people</i>"],
   ["some / any / no", "<i>some</i> — утверждение и просьба; <i>any</i> — вопрос и отрицание; <i>no</i> — без not"],
   ["much / many", "<i>many</i> — исчисляемые; <i>much</i> — неисчисляемые; <i>a few / a little</i> — немного (достаточно)"],
@@ -21,7 +21,7 @@ ${T(["Тема", "Главное правило"], [
       ["Two ___ are playing in the yard.", ["children", "childs", "childrens"]], ["Is this umbrella ___?", ["yours", "your", "you"]],
       ["I have ___ friends here, so I'm not lonely.", ["a few", "few", "a little"]], ["Nobody ___ the answer.", ["knows", "know", "don't know"]]
     ]},
-    { type: 'text', task: 'Вставьте пропущенные слова: артикли (или «-»), предлоги, местоимения, слова количества и степени сравнения.', text: "Last summer my family went ___ the seaside. We stayed ___ a small hotel near ___ beach. Every morning we had ___ breakfast on the terrace. My brother is ___ good swimmer, much ___ than me. One day he swam ___ the bay and back! There were very ___ tourists, so the beach was quiet. I bought ___ souvenirs for my friends. It was ___ best holiday of my life.",
+    { type: 'text', task: 'Впишите пропущенные слова: артикли (или «-»), предлоги, местоимения, слова количества и степени сравнения.', text: "Last summer my family went ___ the seaside. We stayed ___ a small hotel near ___ beach. Every morning we had ___ breakfast on the terrace. My brother is ___ good swimmer, much ___ than me. One day he swam ___ the bay and back! There were very ___ tourists, so the beach was quiet. I bought ___ souvenirs for my friends. It was ___ best holiday of my life.",
       answers: ["to", "in|at", "the", "-|0", "a", "better", "across", "few", "some", "the"] },
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["В нашем городе есть большой парк.", "There is a big park in our town.|There is a big park in our city.|There's a big park in our town."],
@@ -33,7 +33,7 @@ ${T(["Тема", "Главное правило"], [
 
 { id: 'test-2', level: 'B1', title: 'Контрольная 2: времена и пассив', sub: 'разделы 7–8',
   rule: `
-<p>Повторите сводную таблицу времён в теме 7.14 и пассив в разделе 8.</p>
+<p>Повторите сводную таблицу времен в теме 7.14 и пассив в разделе 8.</p>
 ${T(["Подсказка в предложении", "Время"], [
   ["<i>every day, usually, often, never</i>", "Present Simple"],
   ["<i>now, at the moment, Look!</i>", "Present Continuous"],
@@ -57,7 +57,7 @@ ${T(["Подсказка в предложении", "Время"], [
       answers: ["is", "studies", "went", "was living", "met", "had never been", "is writing", "has already written", "is going|is going to go|will go"] },
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Я уже прочитал эту книгу.", "I have already read this book.|I've already read this book.|I have read this book already."],
-      ["Когда я вошёл, они смотрели телевизор.", "When I came in, they were watching TV.|When I entered, they were watching TV.|They were watching TV when I came in."],
+      ["Когда я вошел, они смотрели телевизор.", "When I came in, they were watching TV.|When I entered, they were watching TV.|They were watching TV when I came in."],
       ["Этот дом построили в прошлом году.", "This house was built last year."],
       ["Завтра я буду работать весь день.", "Tomorrow I will be working all day.|I will be working all day tomorrow.|I'll be working all day tomorrow."]
     ]}
@@ -65,9 +65,9 @@ ${T(["Подсказка в предложении", "Время"], [
 
 { id: 'test-3', level: 'B2', title: 'Контрольная 3: косвенная речь, неличные формы, условные', sub: 'разделы 9–17',
   rule: `
-<p>Сложные темы второй половины сборника. Если ошибок больше трёх в упражнении, вернитесь к разделу.</p>
+<p>Сложные темы второй половины сборника. Если ошибок больше трех в упражнении, вернитесь к разделу.</p>
 ${T(["Тема", "Проверьте себя"], [
-  ["Косвенная речь", "сдвиг времён, прямой порядок слов в вопросе, <i>told me (not) to</i>"],
+  ["Косвенная речь", "сдвиг времен, прямой порядок слов в вопросе, <i>told me (not) to</i>"],
   ["Инфинитив / герундий", "<i>enjoy doing, decide to do, stop doing / to do</i>"],
   ["Complex Object", "<i>I want you to come; I saw him leave; made me laugh</i>"],
   ["Условные", "0/1: Present → will; 2: Past → would; 3: Past Perfect → would have V3"],
@@ -90,7 +90,7 @@ ${T(["Тема", "Проверьте себя"], [
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Он спросил, где я живу.", "He asked where I lived.|He asked me where I lived."],
       ["Я хочу, чтобы ты был счастлив.", "I want you to be happy."],
-      ["Если бы я знал, я бы пришёл.", "If I had known, I would have come.|If I'd known, I'd have come."],
+      ["Если бы я знал, я бы пришел.", "If I had known, I would have come.|If I'd known, I'd have come."],
       ["Жаль, что я не умею рисовать.", "I wish I could draw.|I wish I could paint."],
       ["Должно быть, он забыл.", "He must have forgotten."]
     ]}
