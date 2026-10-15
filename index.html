@@ -266,6 +266,11 @@ button { font: inherit; transition: linear 0.15s; }
 .search__input::placeholder { color: var(--muted); opacity: .4; }
 .lvl-prog { display: grid; gap: 5px; margin-bottom: 4px; padding: 8px 10px 10px; border-bottom: 1px solid var(--border); }
 .lvl-prog[hidden] { display: none; }
+/* «Разделы · Свернуть все» above the chapters */
+.toc__bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 4px 4px 10px; }
+.toc__collapse { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--accent); font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.toc__collapse:hover, .toc__collapse:focus-visible { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: var(--accent-soft); }
+.toc__collapse:disabled { opacity: .4; cursor: default; border-color: transparent; background: transparent; }
 .lvl-prog__row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
 .lvl-prog__value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
 
@@ -675,6 +680,8 @@ button { font: inherit; transition: linear 0.15s; }
           <span class="toc__label" id="levelsLabel">Уровни сложности <span class="toc__note">Выберите любой — от лёгкого A1 до тяжёлого C2</span></span>
           <div class="level-chips" id="levelChips" role="group" aria-labelledby="levelsLabel"></div></div>
         <div class="lvl-prog" id="lvlProg" aria-live="polite"></div>
+        <div class="toc__bar"><span class="toc__label">Разделы</span>
+          <button class="toc__collapse" id="tocCollapse" type="button" title="Свернуть все разделы. Переход к следующей теме не будет раскрывать раздел, пока вы сами не откроете любой"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M3 6.5 6 3.5l3 3M3 10 6 7l3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Свернуть все</button></div>
         <div id="tocList"></div>
       </div>
     </nav>
@@ -931,6 +938,14 @@ function fillLevelChips() {
 let openChap = store.get('gk2-open-chap', null);
 let justToggled = null;
 function setOpenChap(id) { openChap = id; store.set('gk2-open-chap', id); }
+/* false after «Свернуть все»: moving between topics (pager) no longer expands their chapter, until a chapter is opened by hand */
+let tocFollow = store.get('gk2-toc-follow', true);
+function setTocFollow(v) { tocFollow = v; store.set('gk2-toc-follow', v); }
+function syncCollapseBtn() { $('#tocCollapse').disabled = !$('#tocList .chap--open'); }
+function collapseAll() {
+  setOpenChap(null); setTocFollow(false);
+  document.querySelectorAll('#tocList .chap--open').forEach(box => setChapOpen(box, false));
+}
 
 /* an arrow that nudges the way it points while its button is hovered (see .arrow) */
 const arrowHtml = (dir, cls = '') => `<span class="arrow arrow--${dir}${cls ? ' ' + cls : ''}" aria-hidden="true">${dir === 'prev' ? '←' : '→'}</span>`;
@@ -945,6 +960,7 @@ function setChapOpen(box, open) {
   box.classList.toggle('chap--open', open);
   box.querySelector('.chap__btn').setAttribute('aria-expanded', String(open));
   box.querySelector('.chap__body').inert = !open;
+  if (box.isConnected) syncCollapseBtn();
 }
 
 function renderToc() {
@@ -979,7 +995,7 @@ function renderToc() {
     cb.addEventListener('click', () => {
       if (box.classList.contains('chap--open')) { setChapOpen(box, false); if (!q) setOpenChap(null); }
       else if (q) setChapOpen(box, true);
-      else { justToggled = ch.id; setOpenChap(ch.id); renderToc(); }
+      else { justToggled = ch.id; setOpenChap(ch.id); setTocFollow(true); renderToc(); }
     });
     box.append(cb);
     if (levelFilter && !q && match.length < ch.topics.length) {
@@ -1003,6 +1019,7 @@ function renderToc() {
     list.append(box);
   });
   justToggled = null;
+  syncCollapseBtn();
   if (!shown) list.innerHTML = '<p class="toc__empty">Ничего не нашлось. Попробуйте «past», «артикль» или снимите фильтр уровня.</p>';
   renderBookmarks();
 }
@@ -1649,7 +1666,7 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   mistakeFocus = pendingFocus; pendingFocus = null;
   const curCh = topicById[id] ? topicById[id].ch : chapById[id];
   /* «Избранное» and the contents list are independent: a topic opened from the bookmarks leaves the contents list (open chapter, level filter) untouched */
-  if (syncToc && !fromBookmarks && curCh && curCh.id !== openChap) { justToggled = curCh.id; setOpenChap(curCh.id); }
+  if (syncToc && tocFollow && !fromBookmarks && curCh && curCh.id !== openChap) { justToggled = curCh.id; setOpenChap(curCh.id); }
   const main = $('#main'); main.innerHTML = '';
   const wrap = el('div', 'sheet__inner');
   if (topicById[id]) {
@@ -1672,6 +1689,7 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
 }
 
 $('#tocContents').addEventListener('click', () => go('contents'));
+$('#tocCollapse').addEventListener('click', collapseAll);
 
 /* Hide / show the sidebar on desktop; the choice is remembered. */
 function setSide(collapsed, focus) {
