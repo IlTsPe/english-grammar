@@ -27,7 +27,7 @@ ${N("В пассиве после <i>make</i> частица <i>to</i> возв�
       ["I don't know what ___.", ["to say", "say"]], ["It's difficult ___ this text.", ["to translate", "translate"]],
       ["He was made ___ the room.", ["to leave", "leave"]], ["I'd rather ___ at home.", ["stay", "to stay"]]
     ]},
-    { type: 'gap', task: 'Впишите to там, где нужно. Если не нужно, поставьте «-».', items: [
+    { type: 'gap', task: 'Впишите to там, где он нужен, или «-», где не нужен.', items: [
       ["I'd like ___ visit London.", "to"], ["You should ___ see a doctor.", "-|0"],
       ["She promised ___ help me.", "to"], ["Let's ___ go to the park.", "-|0"],
       ["I'm glad ___ meet you.", "to"], ["He can't ___ swim.", "-|0"],

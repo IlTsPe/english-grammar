@@ -20,7 +20,7 @@ ${E([
 ])}
 ${N("В описательных придаточных (с запятыми) <i>that</i> не используется: <i>Moscow, <b>which</b> is the capital…</i>")}`,
   ex: [
-    { type: 'gap', task: 'Впишите who, which, that, whose, where или when. Если слово можно опустить, допустимо поставить «-».', items: [
+    { type: 'gap', task: 'Впишите who, which, that, whose, where или when. Если слово можно опустить, допустим и «-».', items: [
       ["The woman ___ lives next door is a doctor.", "who|that"], ["This is the house ___ I was born.", "where"],
       ["The book ___ you gave me was great.", "which|that|-|0"], ["That's the man ___ car was stolen.", "whose"],
       ["Moscow, ___ is the capital of Russia, is huge.", "which"], ["I remember the day ___ we first met.", "when|that|-|0"],

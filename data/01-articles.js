@@ -111,7 +111,7 @@ ${E([
 ])}
 ${N("Перед неисчисляемым существительным никогда не ставится <i>a / an</i>: <i>some water</i>, <i>a glass of water</i>, но не <i>a water</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Впишите артикль a, an, the или поставьте «-», если он не нужен.', items: [
+    { type: 'gap', task: 'Впишите артикль a, an, the или «-», если он не нужен.', items: [
       ["I like ___ tea with lemon.", "-|0"], ["___ tea in this cup is cold.", "the"],
       ["We have ___ lunch at one o'clock.", "-|0"], ["She speaks ___ French very well.", "-|0"],
       ["___ elephants are very big animals.", "-|0"], ["___ elephant at our zoo is twenty years old.", "the"],
@@ -195,7 +195,7 @@ ${E([
 ])}
 ${N("Озеро без слова <i>lake</i> употребляется с <i>the</i>: <i>the Baikal</i>, но <i>Lake Baikal</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Впишите the или поставьте «-».', items: [
+    { type: 'gap', task: 'Впишите the или «-».', items: [
       ["___ Volga is the longest river in Europe.", "the"], ["She lives in ___ France.", "-|0"],
       ["We flew over ___ Atlantic Ocean.", "the"], ["___ Elbrus is the highest mountain in Russia.", "-|0"],
       ["They went skiing in ___ Alps.", "the"], ["My uncle works in ___ USA.", "the"],
@@ -229,7 +229,7 @@ ${E([
 ])}
 ${N("<i>go to school / hospital / church</i> без артикля — когда идут туда по прямому назначению (учиться, лечиться, молиться). Если просто приходят в здание — с <i>the</i>.")}`,
   ex: [
-    { type: 'text', task: 'Впишите артикль the или поставьте «-», если артикль не нужен.', text: "I get up at seven in ___ morning. I have ___ breakfast and go to ___ school by ___ bus. After school I go ___ home on ___ foot. In ___ evening I do my homework, and at ten I go to ___ bed. On Saturdays we often go to ___ cinema, and at ___ weekend we go to ___ country.",
+    { type: 'text', task: 'Впишите артикль the или «-», если артикль не нужен.', text: "I get up at seven in ___ morning. I have ___ breakfast and go to ___ school by ___ bus. After school I go ___ home on ___ foot. In ___ evening I do my homework, and at ten I go to ___ bed. On Saturdays we often go to ___ cinema, and at ___ weekend we go to ___ country.",
       answers: ["the", "-|0", "-|0", "-|0", "-|0", "-|0", "the", "-|0", "the", "the", "the"] },
     { type: 'choice', task: 'Выберите правильный вариант.', items: [
       ["My father is ___ now.", ["at work", "at the work", "at a work"]], ["We usually go there ___.", ["by car", "by the car", "by a car"]],

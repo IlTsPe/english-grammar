@@ -701,6 +701,8 @@ button { font: inherit; transition: linear 0.15s; }
 /* light theme: --ok-soft is almost the sheet colour (1.01:1), so a right option gets a slightly greener fill and a deeper green text (5.4:1) */
 :root[data-theme="light"] .ex__opt--ok, :root[data-theme="light"] .ex__opt--ok:is(:hover, [aria-pressed="true"]) { background: #CDEED5; color: #066B1D; }
 .ex__opt--bad, .ex__opt--bad:is(:hover, [aria-pressed="true"]) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+/* the light theme's wrong choice: --bad on --bad-soft was 4.3:1 and the tint nearly the sheet's — a stronger tint, darker text (5.8:1) */
+:root[data-theme="light"] .ex__opt--bad, :root[data-theme="light"] .ex__opt--bad:is(:hover, [aria-pressed="true"]) { background: #F6D0CA; color: #A3001A; }
 .ex__opt--key:not(.ex__opt--ok) { border-color: var(--ok); border-style: dashed; }
 .ex__key { grid-column: 2; font-family: var(--f-en); font-style: italic; font-size: 15.5px; color: var(--ok); }
 .ex__key--wrong { color: var(--bad); }
@@ -823,7 +825,7 @@ button { font: inherit; transition: linear 0.15s; }
 <div class="app" id="app">
   <div class="float-tools" id="floatTools" hidden>
     <button class="action-btn float-tools__btn" id="sideShow" type="button" aria-controls="side" aria-expanded="false"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Показать меню</span></button>
-    <button class="action-btn theme-toggle float-tools__btn" type="button"><span class="theme-toggle__stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="theme-toggle__rays" aria-hidden="true"></span><svg class="action-btn__icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path class="theme-toggle__moon-body" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg><svg class="action-btn__icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></svg><span class="theme-toggle__label">Светлая тема</span></button>
+    <button class="action-btn theme-toggle float-tools__btn" type="button"></button>
   </div>
   <aside class="side app__side" id="side">
     <div class="side__head">
@@ -831,13 +833,13 @@ button { font: inherit; transition: linear 0.15s; }
         <span class="brand__title"><svg class="brand__logo" viewBox="5 5 54 54" aria-hidden="true"><path class="brand__logo-plate" d="M11 5h42l6 6v14l-3 3v12l3 3v10l-6 6H11l-6-6V43l3-3V28l-3-3V11z"/><path class="brand__logo-ink" d="M32 13.5 55 23.5 32 33.5 9 23.5zM18 30.5V39l14 7 14-7v-8.5L32 37z"/><path class="brand__logo-tassel" d="M32 23.5 50 27v10" fill="none" stroke-width="3" stroke-linecap="square"/><rect class="brand__logo-pad" x="47.5" y="36.5" width="5" height="6.5" rx="1"/><path class="brand__logo-marks" d="M46 8.5h6v6h-6zM46 14.5l6-6M10.5 50.5h6M13.5 47.5v6M39 51h12M39 54.5h8" fill="none"/></svg><span>Грамматика <span class="brand__mark">онлайн</span></span></span>
         <span class="brand__sub">Английский язык A1–C2 по разделам сборника Ю.&nbsp;Голицынского</span>
       </div>
-      <button class="icon-btn theme-toggle side__theme" type="button"><span class="theme-toggle__stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="theme-toggle__rays" aria-hidden="true"></span><svg class="icon-btn__icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path class="theme-toggle__moon-body" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg><svg class="icon-btn__icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></svg></button>
+      <button class="icon-btn theme-toggle side__theme" type="button"></button>
       <button class="action-btn side__menu" id="menuBtn" type="button" aria-controls="drawer" aria-expanded="false"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Разделы</span></button>
     </div>
     <div class="drawer" id="drawer">
     <div class="drawer__head"><span>Разделы</span><button class="icon-btn" id="drawerClose" type="button" title="Закрыть" aria-label="Закрыть разделы"><svg class="icon-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
     <div class="side__actions">
-      <button class="action-btn theme-toggle" type="button"><span class="theme-toggle__stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="theme-toggle__rays" aria-hidden="true"></span><svg class="action-btn__icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path class="theme-toggle__moon-body" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg><svg class="action-btn__icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></svg><span class="theme-toggle__label">Светлая тема</span></button>
+      <button class="action-btn theme-toggle" type="button"></button>
       <button class="action-btn side__hide" id="sideHide" type="button" aria-controls="side" aria-expanded="true"><svg class="action-btn__icon" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="side__hide-chev side__hide-chev--lead" d="M8.5 4.5 4 9l4.5 4.5"/><path class="side__hide-chev" d="M14 4.5 9.5 9l4.5 4.5"/></svg><span>Скрыть меню</span></button>
     </div>
     <div class="side__summary">
@@ -884,6 +886,31 @@ const E = list => `<ul class="examples">${list.map(([en, ru]) => `<li class="exa
 const N = t => `<div class="note"><div>${t}</div></div>`;
 const M = (label, words) => `<div class="markers"><span class="markers__label">${label}</span>${words.map(w => `<span class="markers__word">${w}</span>`).join('')}</div>`;
 const F = t => `<div class="formula">${t}</div>`;
+
+/* the theme buttons (desktop row, floating tools, mobile top bar) are empty in the HTML and filled here from one template:
+   stars and rays for the hover, the moon and the sun; the label only on the wide buttons (the mobile one is icon-only).
+   The label text is set by syncThemeBtn right after. It runs here, straight after the markup and before the data files
+   load, so the buttons are never seen empty or with the wrong theme name */
+function themeToggleHtml(iconOnly) {
+  const icon = iconOnly ? 'icon-btn__icon' : 'action-btn__icon';
+  return `<span class="theme-toggle__stars" aria-hidden="true">${'<i></i>'.repeat(8)}</span><span class="theme-toggle__rays" aria-hidden="true"></span>`
+    + `<svg class="${icon} theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path class="theme-toggle__moon-body" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg>`
+    + `<svg class="${icon} theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></svg>`
+    + (iconOnly ? '' : '<span class="theme-toggle__label"></span>');
+}
+document.querySelectorAll('.theme-toggle').forEach(b => { b.innerHTML = themeToggleHtml(b.classList.contains('icon-btn')); });
+syncThemeBtn();
+function syncThemeBtn() {
+  const dark = document.documentElement.dataset.theme !== 'light';
+  /* the label names the theme the button switches to; the icon-only button in the mobile top bar gets it as aria-label */
+  const action = dark ? 'Включить светлую тему' : 'Включить темную тему';
+  document.querySelectorAll('.theme-toggle').forEach(b => {
+    b.title = action;
+    const label = b.querySelector('.theme-toggle__label');
+    if (label) label.textContent = dark ? 'Светлая тема' : 'Темная тема';
+    else b.setAttribute('aria-label', action);
+  });
+}
 </script>
 <script charset="utf-8" src="data/01-articles.js"></script>
 <script charset="utf-8" src="data/02-nouns.js"></script>
@@ -2242,17 +2269,6 @@ $('#toTop').addEventListener('click', () => {
 });
 
 /* ---------- Theme ---------- */
-function syncThemeBtn() {
-  const dark = document.documentElement.dataset.theme !== 'light';
-  /* the label names the theme the button switches to; the icon-only button in the mobile top bar gets it as aria-label */
-  const action = dark ? 'Включить светлую тему' : 'Включить темную тему';
-  document.querySelectorAll('.theme-toggle').forEach(b => {
-    b.title = action;
-    const label = b.querySelector('.theme-toggle__label');
-    if (label) label.textContent = dark ? 'Светлая тема' : 'Темная тема';
-    else b.setAttribute('aria-label', action);
-  });
-}
 let themeTimer;
 /* on every hover the stars of the theme button get a new random order, and the rays are centred on the icon */
 document.querySelectorAll('.theme-toggle').forEach(b => {
@@ -2295,7 +2311,6 @@ document.querySelectorAll('.theme-toggle').forEach(b => b.addEventListener('clic
   clearTimeout(themeTimer);
   themeTimer = setTimeout(() => root.classList.remove('theme-anim'), 150);
 }));
-syncThemeBtn();
 $('#sideShow').addEventListener('click', () => setSide(false, true));
 setSide(!!store.get('gk2-side-collapsed', false), false);
 $('#search').addEventListener('input', renderToc);

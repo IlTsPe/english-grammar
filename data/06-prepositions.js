@@ -63,7 +63,7 @@ ${T(["Предлог", "С чем", "Пример"], [
 ])}
 ${N("Перед <i>this, next, last, every</i> предлог не ставится: <i>next week, last Monday, every day</i>, а не <i>on next Monday</i>.")}`,
   ex: [
-    { type: 'gap', task: 'Впишите at, on или in. Если предлог не нужен, поставьте «-».', items: [
+    { type: 'gap', task: 'Впишите at, on, in или «-», если предлог не нужен.', items: [
       ["The film starts ___ 7 o'clock.", "at"], ["I was born ___ 2005.", "in"],
       ["We have English ___ Monday.", "on"], ["It's very cold here ___ winter.", "in"],
       ["What do you do ___ the weekend?", "at|on"], ["My birthday is ___ 15 March.", "on"],
