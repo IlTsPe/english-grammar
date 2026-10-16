@@ -3,7 +3,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Грамматика онлайн</title>
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <script>
 /* theme: saved choice, dark by default; set before first paint. A «restore» link carries the theme it was copied in
    (…&theme=light): the page opens in it, without saving — after the import the progress brings its own theme */
@@ -49,6 +51,9 @@
   --gold: #F0C048; /* bookmarks: the ribbon, the same in both themes */
   --gold-soft: #fdedbb; /* fill of gold states: pressed «В избранном», the active topic in «Избранное» */
   --gold-ink: #b38b27; /* gold for text and frames, darker in the light theme to stay readable */
+  --scroll-thumb: #8C9EE2; /* scrollbars: the accent at 45% on the paper, the full accent on hover; the track stays see-through */
+  --scroll-thumb-hover: #2547D0;
+  --raise: 0 1px 1px rgb(20 27 58 / 6%), 0 2px 5px rgb(20 27 58 / 11%); /* a small shadow under the sidebar blocks: they stand off the paper */
   --f-display: 'Unbounded', 'Arial Black', system-ui, sans-serif;
   --f-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --f-en: 'Literata', Georgia, 'Times New Roman', serif;
@@ -59,11 +64,23 @@
   --grid: rgba(169, 156, 255, .07); --accent: #ADA2FF; --accent-soft: #29254A; --on-accent: #16132E;
   --ok: #5CD192; --ok-ink: #5CD192; --ok-soft: #16301F; --bad: #FF7F73; --bad-ink: #FF7F73; --bad-soft: #3A1E1D; --mid: #F0C048;
   --gold-soft: #352B12; --gold-ink: #F0C048;
+  --raise: 0 1px 1px rgb(52 49 79 / 40%), 0 2px 5px rgb(52 49 79 / 45%); /* the light theme's shadow in dark violet: a black one does not show on the near-black paper */
+  --scroll-thumb: #5F5A8E; --scroll-thumb-hover: #7E77BB; /* the accent at 50% and 70% on the paper: the full accent looks white here */
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
-/* applied only while the theme switches, so it does not interfere with other transitions */
+/* scrollbars in the theme colours: webkit pseudo-elements for Chrome and Safari (a rounded thumb that lights up on hover);
+   Firefox gets the standard property — Chrome would drop the pseudo-elements once scrollbar-color is set */
+@supports (-moz-appearance: none) { :root { scrollbar-color: var(--scroll-thumb) transparent; } }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 99px; background: var(--scroll-thumb) padding-box; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--scroll-thumb-hover); }
+/* the theme switch cross-fades: with View Transitions the browser fades a snapshot of the old page into the new one
+   on the GPU after a single restyle; elsewhere every element fades its colours (.theme-anim, only while the theme switches,
+   so it does not interfere with other transitions) — 3-5 times the style work on a long page */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .12s; animation-timing-function: linear; }
 :root.theme-anim, :root.theme-anim *, :root.theme-anim *::before, :root.theme-anim *::after {
   transition: background-color .1s linear, color .1s linear, border-color .1s linear, fill .1s linear, stroke .1s linear, box-shadow .1s linear !important;
 }
@@ -125,7 +142,7 @@ button { font: inherit; transition: linear 0.15s; }
 :root[data-theme="light"] .theme-toggle:is(:hover, :focus-visible) .theme-toggle__stars i { opacity: .7; transform: none; }
 
 /* ---------- Sidebar ---------- */
-.side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: calc(100vh - 16px); overflow-y: auto; scrollbar-gutter: stable; padding-block: 28px 24px; padding-inline: 5px 12px; } /* the wider right side keeps the scrollbar off the frames */
+.side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: calc(100vh - 16px); overflow-y: auto; scrollbar-gutter: stable; padding-block: 28px 24px; padding-inline: 5px 11px; } /* the wider right side keeps the scrollbar off the frames */
 /* the gutter is always reserved: otherwise the scrollbar narrows the panel, titles rewrap and the panel keeps a scrollbar it no longer needs */
 .side__head { display: flex; align-items: flex-start; gap: 8px; }
 .side__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
@@ -136,7 +153,7 @@ button { font: inherit; transition: linear 0.15s; }
 /* shown while the sidebar is collapsed: the menu button with the theme toggle under it, both the same width */
 .float-tools { position: fixed; z-index: 5; top: calc(env(safe-area-inset-top, 0px) + 16px); left: 35px; display: grid; gap: 6px; }
 .float-tools[hidden] { display: none; }
-.float-tools__btn { justify-content: flex-start; padding-inline: 12px 14px; box-shadow: 0 2px 8px rgba(0, 0, 0, .12); }
+.float-tools__btn { justify-content: flex-start; padding-inline: 12px 14px; box-shadow: var(--raise); }
 @media (min-width: 881px) {
   /* collapse animates the sidebar track to zero while the panel fades and slides out */
   .app { transition: grid-template-columns .15s linear, gap .15s linear; }
@@ -175,11 +192,62 @@ button { font: inherit; transition: linear 0.15s; }
 /* «Прогресс» and «Избранное»: full-width buttons one under the other, each expands its block under it like an accordion;
    the title on the left, the figures and the arrow on the right */
 .side__summary { display: grid; gap: 8px; margin-top: 8px; }
+/* the sidebar blocks are lifted off the paper by a small shadow (--raise): the top buttons, «Прогресс» and «Избранное» —
+   on their wrappers, so an opened block casts one shadow with its button — the contents and «Поддержать автора».
+   Kept within the 5px side padding, so the scrolling sidebar does not clip it */
+.side__actions .action-btn, .side__summary > div, .side__donate, .toc { box-shadow: var(--raise); }
+.side__summary > div { border-radius: 10px; }
 .side__stat { width: 100%; justify-content: flex-start; gap: 10px; padding-inline: 12px; transition: border-radius .15s linear, border-color .15s linear, background-color .15s linear; }
-.side__fold-arrow { flex: none; width: 12px; height: 12px; margin-left: auto; color: var(--muted); transition: transform .15s linear; }
+.side__fold-arrow { flex: none; width: 12px; height: 12px; margin-left: auto; color: var(--accent); transition: transform .15s linear; }
 .side__count + .side__fold-arrow { margin-left: 0; }
-.side__stat:hover .side__fold-arrow { color: inherit; }
+.side__stat:is(:hover, :focus-visible) .side__fold-arrow { color: inherit; } /* follows the button: green on «Поддержать автора» */
 .side__stat[aria-expanded="true"] .side__fold-arrow { transform: rotate(90deg); }
+/* «Поддержать автора»: a link to DonationAlerts in a new tab, under the contents block, laid out like «Прогресс» and
+   «Избранное»: a rouble coin on the left, an outward arrow on the right instead of the fold chevron */
+.side__donate { position: relative; isolation: isolate; overflow: hidden; margin-top: 12px; text-decoration: none; }
+/* the coin is wider than the bookmark of «Избранное» (11px), so it eats 4px of the gap. The coin and the arrow are centred
+   on the capitals of the title, not on its lowercase: the coin is taller than the letters, and lined up with the lowercase
+   it hung below the text, which then read as sitting above it */
+.side__donate-icon { position: relative; flex: none; width: 15px; height: 15px; margin-right: -4px; }
+/* hover / keyboard focus: the button turns green, the coin turns into a thick 3D coin spinning round its vertical axis,
+   and banknotes flutter down behind the title as if in the wind (clipped by the button);
+   the selector outweighs the light theme's sidebar hover */
+:root[data-theme="light"] .side__donate { --ok: #12A33A; --donate-fill: 16%; } /* a brighter green for the frame, fill, coin and notes; the title keeps --ok-ink (5:1) */
+:root[data-theme] .side .side__donate.side__stat:is(:hover, :focus-visible) { border-color: var(--ok); background: color-mix(in srgb, var(--ok) var(--donate-fill, 13%), transparent); color: var(--ok-ink); }
+/* the coin: two faces 3px apart with five discs between them for the rim; at rest only the flat outline of the front shows */
+.coin { --coin-face: transparent; transform-style: preserve-3d; }
+.coin__face, .coin__edge { position: absolute; inset: 0; }
+.coin__face { width: 100%; height: 100%; backface-visibility: hidden; overflow: visible; }
+.coin__face circle { fill: var(--coin-face); }
+.coin__face--front { transform: translateZ(1.5px); }
+.coin__face--back { transform: rotateY(180deg) translateZ(1.5px); }
+.coin__edge { border-radius: 50%; background: color-mix(in srgb, currentColor 70%, #000); opacity: 0; transform: translateZ(var(--z)); }
+.side__donate:is(:hover, :focus-visible) .coin { --coin-face: color-mix(in srgb, var(--ok) 30%, var(--sheet)); animation: coin-spin 1.4s linear infinite; }
+.side__donate:is(:hover, :focus-visible) .coin__edge { opacity: 1; }
+@keyframes coin-spin { from { transform: perspective(60px) rotateY(0); } to { transform: perspective(60px) rotateY(360deg); } }
+/* banknotes: made by script, spread over the whole width in even strips. Two motions so the fall is smooth:
+   the outer <i> only drops at an even speed and fades in and out; the inner <b> swings left and right like a pendulum,
+   tilts and flips over (ease-in-out, back and forth), as paper does in the wind. The note has two faces — a paler front
+   and a denser back — so a flip shows it is a sheet in space, not a flat sticker. Every new fall gets a new place, swing and flip */
+.side__donate-bills { position: absolute; z-index: -1; inset: 0; pointer-events: none; }
+.side__donate-bills i { position: absolute; top: 0; left: var(--x); width: 15px; height: 8px; margin-left: -7px; opacity: 0; perspective: 50px; }
+.side__donate-bills b { position: absolute; inset: 0; transform-style: preserve-3d; }
+/* each face carries a small rouble sign in the middle, like a banknote */
+.side__donate-bills b::before, .side__donate-bills b::after { content: "₽"; position: absolute; inset: 0; display: grid; place-items: center; border: 1px solid var(--ok); border-radius: 1.5px; backface-visibility: hidden;
+  color: var(--ok); font: 700 7.5px/1 var(--f-body); }
+.side__donate-bills b::before { background: linear-gradient(120deg, color-mix(in srgb, var(--ok) 45%, transparent), color-mix(in srgb, var(--ok) 20%, transparent)); }
+.side__donate-bills b::after { transform: rotateY(180deg); background: linear-gradient(120deg, color-mix(in srgb, var(--ok) 60%, transparent), color-mix(in srgb, var(--ok) 35%, transparent)); } /* a denser green, not mixed with black: on the light button black read as a dark blot */
+.side__donate:is(:hover, :focus-visible) .side__donate-bills i { animation: bill-fall var(--t) linear var(--d) infinite; }
+.side__donate:is(:hover, :focus-visible) .side__donate-bills b { animation: bill-sway var(--s) ease-in-out var(--sd) infinite alternate; }
+@keyframes bill-fall {
+  0% { opacity: 0; transform: translateY(-14px); }
+  10%, 82% { opacity: .75; }
+  100% { opacity: 0; transform: translateY(46px); }
+}
+@keyframes bill-sway {
+  from { transform: translateX(calc(var(--sw) * -1)) rotate(calc(var(--r) * -1)) rotateY(-55deg) rotateX(calc(var(--fl) * -1)); }
+  to { transform: translateX(var(--sw)) rotate(var(--r)) rotateY(55deg) rotateX(var(--fl)); }
+}
 /* the book progress bar fills the row between the title and the percentage, centred vertically */
 .side__stat-bar { flex: 1; min-width: 40px; }
 .side__stat-pct { font-family: var(--f-mono); font-size: 12px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -215,7 +283,6 @@ button { font: inherit; transition: linear 0.15s; }
 :root .side .side__bm-group .side__bm.side__stat[aria-expanded="true"]:hover { background: var(--bm-tint-hover); }
 /* while open, the block shows the progress bar, the percentage and the mistakes, so the button keeps only its title */
 .side__stat[aria-expanded="true"] :is(.side__stat-bar, .side__stat-pct, .side__badge) { display: none; }
-.side__fold .bookmarks__head { display: none; } /* the button above already says «Избранное» and the count */
 .side__fold .bookmarks__empty { padding-top: 8px; }
 .overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; gap: 8px; }
 :root[data-theme="light"] .overall { background: none; } /* sits on the tinted sidebar like the other frames there */
@@ -388,15 +455,15 @@ button { font: inherit; transition: linear 0.15s; }
 /* contents list: progress of the selected level on top, then the chapters as an accordion */
 .toc { margin-top: 12px; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
 .toc__empty { margin: 16px 10px; font-size: 14px; color: var(--muted); }
-/* one frame: «Содержание тренажера» with the level filter, the level progress and the chapters, split by thin lines */
+/* one frame: «Содержание тренажера» with the level filter, the level progress, the search and the chapters, split by thin lines */
 .toc__section { display: grid; gap: 6px; padding: 0 10px 10px; border-bottom: 1px solid var(--border); }
 .toc__label { font-size: 13px; font-weight: 600; color: var(--muted); }
 .toc__note { display: block; margin-top: 2px; font-size: 10.5px; font-weight: 400; line-height: 1.35; opacity: .8; }
 
-/* the search sits in its own frame above the contents */
-.search { display: grid; gap: 6px; margin-top: 12px; padding: 10px 13px 13px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
-.search__label { font-size: 13px; font-weight: 600; color: var(--muted); }
-.search__input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--sheet); color: var(--ink); font: inherit; font-size: 14.5px; transition: background-color .15s linear, border-color .15s linear; }
+/* the search is a section of the contents frame: under the levels and their progress, above «Разделы тренажера» */
+.search { display: grid; gap: 6px; padding: 8px 10px 10px; border-bottom: 1px solid var(--border); }
+.search__label { font-size: 12px; font-weight: 600; color: var(--muted); }
+.search__input { width: 100%; padding: 5px 10px; border: 1px solid var(--border); border-radius: 7px; background: var(--sheet); color: var(--ink); font: inherit; font-size: 13.5px; transition: background-color .15s linear, border-color .15s linear; }
 .search__input::placeholder { color: var(--muted); opacity: .4; }
 .lvl-prog { display: grid; gap: 5px; padding: 8px 10px 10px; border-bottom: 1px solid var(--border); }
 .lvl-prog[hidden] { display: none; }
@@ -405,9 +472,12 @@ button { font: inherit; transition: linear 0.15s; }
    4px above the hover fill, like its inset from the frame sides, whether or not the level progress is shown */
 .toc__toggle { display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 4px; padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; font: inherit; text-align: left; cursor: pointer; }
 .toc__toggle:hover { background: var(--hover); }
-.toc__toggle:hover .side__fold-arrow { color: var(--accent); }
 .toc__toggle[aria-expanded="true"] .side__fold-arrow { transform: rotate(90deg); }
-.toc__count { margin-left: auto; font-family: var(--f-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+/* the title, the count and the chevron: muted while the list is open, the accent when it is folded away (and on hover),
+   so a folded list reads as something to open */
+.toc__toggle[aria-expanded="true"] :is(.toc__label, .toc__count, .side__fold-arrow) { color: var(--muted); }
+.toc__toggle:is([aria-expanded="false"], :hover) :is(.toc__label, .toc__count, .side__fold-arrow) { color: var(--accent); }
+.toc__count { margin-left: auto; font-family: var(--f-mono); font-size: 11px; font-variant-numeric: tabular-nums; }
 .toc__count + .side__fold-arrow { margin-left: 0; }
 .lvl-prog__row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
 .lvl-prog__value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
@@ -442,8 +512,7 @@ button { font: inherit; transition: linear 0.15s; }
 .chap__levels { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; font-weight: 500; }
 .chap__end { display: flex; align-items: center; gap: 6px; }
 /* the arrow only shows the accordion state; the whole .chap__btn is the control */
-.chap__arrow { display: grid; place-items: center; width: 16px; height: 16px; color: var(--muted); }
-.chap__btn:hover .chap__arrow { color: var(--accent); }
+.chap__arrow { display: grid; place-items: center; width: 16px; height: 16px; color: var(--accent); }
 .chap__arrow-icon { transition: transform .15s linear; }
 .chap--open .chap__arrow-icon { transform: rotate(90deg); }
 .chap__body { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .15s linear, opacity .15s linear; }
@@ -497,9 +566,6 @@ button { font: inherit; transition: linear 0.15s; }
 .topic-btn:hover .topic-btn__bm, .topic-btn:focus-visible .topic-btn__bm { color: var(--gold-ink); }
 .topic-btn[aria-current="page"] .topic-btn__bm { color: var(--gold); }
 .bookmarks { margin-top: 12px; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; transition: border-color .2s linear; }
-.bookmarks__head { display: flex; align-items: center; gap: 6px; padding: 8px 10px 6px; font-size: 12px; font-weight: 600; color: var(--muted); transition: color .2s linear; }
-.bookmarks__icon { margin: 0; color: var(--accent); transition: color .2s linear; }
-.bookmarks__count { margin-left: auto; font-family: var(--f-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
 .bookmarks__list { display: grid; gap: 6px; }
 /* level chips of «Избранное»: the same small pills as the menu filter, but gold like the block */
 .bookmarks__levels { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 10px 6px; }
@@ -508,10 +574,8 @@ button { font: inherit; transition: linear 0.15s; }
 .bookmarks__level:is(:hover, :focus-visible) { border-color: var(--gold-ink); color: var(--gold-ink); }
 .bookmarks__level[aria-pressed="true"] { border-color: var(--gold-ink); background: var(--gold-ink); color: var(--sheet); }
 .bookmarks__empty { margin: 0; padding: 2px 10px 8px; font-size: 13px; color: var(--muted); }
-/* the frame and the heading (ribbon, «Избранное», count) light up while a bookmark is hovered or the open topic came from this list */
+/* the frame lights up while a bookmark is hovered or the open topic came from this list */
 .bookmarks--active, .bookmarks:has(.topic-btn:hover, .topic-btn:focus-visible) { border-color: var(--gold-ink); }
-.bookmarks--active .bookmarks__head, .bookmarks:has(.topic-btn:hover, .topic-btn:focus-visible) .bookmarks__head,
-.bookmarks--active .bookmarks__icon, .bookmarks:has(.topic-btn:hover, .topic-btn:focus-visible) .bookmarks__icon { color: var(--gold-ink); }
 /* the active topic in «Избранное» is gold like the pressed «В избранном» button; the title keeps the ink colour so it stays readable */
 .bookmarks__topic[aria-current="page"] { background: var(--gold-soft); color: var(--ink); }
 .bookmarks__topic[aria-current="page"] .topic-btn__meta, .bookmarks__topic[aria-current="page"] .topic-btn__bm { color: var(--gold-ink); opacity: 1; }
@@ -610,7 +674,6 @@ button { font: inherit; transition: linear 0.15s; }
 .rule i b, .examples__en b { font-weight: 600; background: linear-gradient(transparent -10%, var(--hl) 160%); }
 .formula { margin: 0 0 14px; padding: 10px 14px; border-radius: 8px; background: var(--accent-soft); font-family: var(--f-en); font-size: 17px; }
 .formula b { color: var(--accent); font-weight: 600; }
-.formula + .formula { margin-top: -6px; }
 .rule-table { overflow-x: auto; margin: 0 0 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); }
 .rule-table__table { width: 100%; border-collapse: collapse; font-size: 15px; }
 .rule-table__th { padding: 9px 12px; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--well); border-bottom: 1px solid var(--border); white-space: nowrap; }
@@ -772,7 +835,7 @@ button { font: inherit; transition: linear 0.15s; }
   .side__theme:hover { background: var(--accent-soft); }
   .side__actions { display: none; }
 
-  /* drawer: progress, levels, search and contents */
+  /* drawer: progress, bookmarks and the contents (levels, search, chapters) */
   .drawer { display: block; position: fixed; z-index: 30; top: 0; bottom: 0; left: 0; width: min(360px, 88vw); overflow-y: auto; overscroll-behavior: contain;
     padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px calc(env(safe-area-inset-bottom, 0px) + 24px); background: var(--paper); border-right: 1px solid var(--border);
     box-shadow: 8px 0 24px rgba(0, 0, 0, .18); transform: translateX(-105%); visibility: hidden; transition: transform .2s ease, visibility .2s linear; }
@@ -819,6 +882,7 @@ button { font: inherit; transition: linear 0.15s; }
   .slot--spin .slot__reel, .bm-pop .study__icon { animation: none !important; }
   .bm-pop__spark { display: none; }
   .modal[open], .modal[open]::backdrop { animation: none; }
+  .side__donate:is(:hover, :focus-visible) :is(.coin, .side__donate-bills :is(i, b)) { animation: none; } /* the button only turns green */
 }
 </style>
 
@@ -853,18 +917,19 @@ button { font: inherit; transition: linear 0.15s; }
       </div>
     </div>
     <nav aria-label="Разделы тренажера">
-      <label class="search" for="search"><span class="search__label">Поиск темы</span>
-        <input class="search__input" id="search" type="search" placeholder="Например, «perfect»" autocomplete="off"></label>
       <div class="toc">
         <div class="toc__section">
           <button class="topic-btn topic-btn--overview toc__contents" id="tocContents" type="button"><span>Содержание тренажера</span><span class="arrow arrow--next topic-btn__arrow" aria-hidden="true">→</span></button>
           <span class="toc__label" id="levelsLabel">Уровни сложности <span class="toc__note">Выберите любой — от легкого A1 до тяжелого C2</span></span>
           <div class="level-chips" id="levelChips" role="group" aria-labelledby="levelsLabel"></div></div>
         <div class="lvl-prog" id="lvlProg" aria-live="polite"></div>
+        <label class="search" for="search"><span class="search__label">Поиск темы</span>
+          <input class="search__input" id="search" type="search" placeholder="Например, «perfect»" autocomplete="off"></label>
         <button class="toc__toggle" id="tocToggle" type="button" aria-controls="tocFold" aria-expanded="true"><span class="toc__label">Разделы тренажера</span><span class="toc__count" id="tocCount"></span></button>
         <div class="side__fold side__fold--open" id="tocFold"><div class="side__fold-clip"><div id="tocList"></div></div></div>
       </div>
     </nav>
+    <a class="action-btn side__stat side__donate" href="https://www.donationalerts.com/r/pegasusgamespg" target="_blank" rel="noopener"><span class="side__donate-bills" id="donateBills" aria-hidden="true"></span><span class="coin side__donate-icon" aria-hidden="true"><span class="coin__edge" style="--z: -1.2px"></span><span class="coin__edge" style="--z: -0.6px"></span><span class="coin__edge" style="--z: 0px"></span><span class="coin__edge" style="--z: 0.6px"></span><span class="coin__edge" style="--z: 1.2px"></span><svg class="coin__face coin__face--front" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7.6"/><path d="M7.6 13V5.2h2.4a2.05 2.05 0 0 1 0 4.1H6.1M6.1 11.2h4.2"/></svg><svg class="coin__face coin__face--back" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7.6"/><path d="M7.6 13V5.2h2.4a2.05 2.05 0 0 1 0 4.1H6.1M6.1 11.2h4.2"/></svg></span><span>Поддержать автора</span><svg class="side__fold-arrow" viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 2.5h5v5M9.5 2.5 3 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
@@ -1284,7 +1349,6 @@ function bookmarksBox() {
   const level = levels.includes(bmLevel) ? bmLevel : '';
   const box = el('section', 'bookmarks' + (viaBookmarks && bookmarks[route] ? ' bookmarks--active' : ''));
   box.setAttribute('aria-label', 'Избранное');
-  box.innerHTML = `<div class="bookmarks__head">${bmIcon('bookmarks__icon')}<span>Избранное</span><b class="bookmarks__count">${marked.length || ''}</b></div>`;
   if (levels.length > 1) {
     const bar = el('div', 'bookmarks__levels'); bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'Уровень сложности');
     ['', ...levels].forEach(l => {
@@ -2304,10 +2368,10 @@ document.querySelectorAll('.theme-toggle').forEach(b => {
 document.querySelectorAll('.theme-toggle').forEach(b => b.addEventListener('click', () => {
   const root = document.documentElement;
   const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+  const apply = () => { root.dataset.theme = next; store.set('gk2-theme', next); syncThemeBtn(); };
+  if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) { document.startViewTransition(apply); return; }
   root.classList.add('theme-anim');
-  root.dataset.theme = next;
-  store.set('gk2-theme', next);
-  syncThemeBtn();
+  apply();
   clearTimeout(themeTimer);
   themeTimer = setTimeout(() => root.classList.remove('theme-anim'), 150);
 }));
@@ -2348,6 +2412,32 @@ booted = true;
 if (startId.startsWith(LINK_KEY)) openLink(startId);
 renderOverall();
 $('#tocToggle').insertAdjacentHTML('beforeend', FOLD_ARROW);
+
+/* «Поддержать автора»: banknotes for the hover rain, each with its own speed, start and swing; each keeps to its own strip
+   of the button, so the rain covers it edge to edge, corners included; on every new fall it gets a new place in the strip,
+   swing, tilt and flip, so the rain never repeats */
+(function () {
+  if (!matchMedia('(hover: hover)').matches) return; /* touch screens have no hover: no rain to fall */
+  const box = $('#donateBills'), N = 16, rnd = (a, b) => a + Math.random() * (b - a);
+  const shuffle = b => {
+    b.style.setProperty('--x', (2 + (+b.dataset.slot + Math.random()) * 96 / N).toFixed(1) + '%');
+    b.style.setProperty('--sw', rnd(3, 8).toFixed(1) + 'px');
+    b.style.setProperty('--r', rnd(10, 40).toFixed(0) + 'deg');
+    b.style.setProperty('--fl', rnd(30, 160).toFixed(0) + 'deg');
+  };
+  /* the strips are dealt out in random order, so neighbours in time do not fall side by side */
+  const slots = [...Array(N).keys()].sort(() => Math.random() - .5);
+  for (let n = 0; n < N; n++) {
+    const b = document.createElement('i');
+    b.dataset.slot = slots[n];
+    b.style.setProperty('--t', rnd(1.6, 2.4).toFixed(2) + 's');
+    b.style.setProperty('--d', (n * .13 + rnd(0, .1)).toFixed(2) + 's');
+    b.style.setProperty('--s', rnd(.5, .85).toFixed(2) + 's');
+    b.style.setProperty('--sd', (-rnd(0, .8)).toFixed(2) + 's');
+    shuffle(b); b.append(document.createElement('b')); box.append(b);
+  }
+  box.addEventListener('animationiteration', e => { if (e.animationName === 'bill-fall') shuffle(e.target); });
+})();
 $('#tocToggle').addEventListener('click', () => {
   /* during a search the list is forced open; the toggle then clears the search and folds it */
   if ($('#search').value.trim()) { $('#search').value = ''; tocFolded = true; }
