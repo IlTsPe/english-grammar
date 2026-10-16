@@ -5,9 +5,12 @@
 <title>Грамматика онлайн</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script>
-/* theme: saved choice, dark by default; set before first paint */
+/* theme: saved choice, dark by default; set before first paint. A «restore» link carries the theme it was copied in
+   (…&theme=light): the page opens in it, without saving — after the import the progress brings its own theme */
 (function () {
   var t; try { t = JSON.parse(localStorage.getItem('gk2-theme')); } catch (e) {}
+  var m = /^#restore=[^&]*&theme=(light|dark)/.exec(location.hash);
+  if (m) t = m[1];
   if (t !== 'light') t = 'dark';
   document.documentElement.dataset.theme = t;
 })();
@@ -38,8 +41,10 @@
   --hl: rgb(37 71 208 / 45%); /* highlight under key words in rules */
   --ok: #0a7a24; /* dark enough to read on the light sheet (4.9:1) */
   --ok-soft: #DDF2E1;
+  --ok-ink: #05601A; /* small green text (save / copy messages): --ok is 4.4:1 on the paper and 3.8:1 on the green card, this is 5.2:1+ */
   --bad: #BE3A2F;
   --bad-soft: #F3DFDA;
+  --bad-ink: #A3001A; /* small red text (warnings under buttons): --bad is 4.35:1 on the paper, this is 6.5:1 */
   --mid: #E0A800; /* yellow of a half-done progress pill */
   --gold: #F0C048; /* bookmarks: the ribbon, the same in both themes */
   --gold-soft: #fdedbb; /* fill of gold states: pressed «В избранном», the active topic in «Избранное» */
@@ -52,7 +57,7 @@
 :root[data-theme="dark"] {
   --paper: #11131D; --border: #373e63; --well: #11131D; --hover: #352C6E; --sheet: #191C29; --hl: rgb(170 98 255 / 71%); --ink: #E7E9F2; --muted: #9AA1B8; --line: #2D3145;
   --grid: rgba(169, 156, 255, .07); --accent: #ADA2FF; --accent-soft: #29254A; --on-accent: #16132E;
-  --ok: #5CD192; --ok-soft: #16301F; --bad: #FF7F73; --bad-soft: #3A1E1D; --mid: #F0C048;
+  --ok: #5CD192; --ok-ink: #5CD192; --ok-soft: #16301F; --bad: #FF7F73; --bad-ink: #FF7F73; --bad-soft: #3A1E1D; --mid: #F0C048;
   --gold-soft: #352B12; --gold-ink: #F0C048;
   color-scheme: dark;
 }
@@ -228,6 +233,87 @@ button { font: inherit; transition: linear 0.15s; }
 /* the book progress at the bottom of the block: a title, the bar with the percentage and how it is counted */
 .overall__book { display: grid; gap: 6px; margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--border); }
 .overall__note { margin: 0; font-size: 11px; line-height: 1.4; color: var(--muted); }
+/* «Резервная копия»: progress saved to a JSON file and loaded back, e.g. on another device or after clearing the browser */
+.overall__file { display: grid; gap: 6px; margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--border); }
+.overall__file-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.overall__file-btn { padding: 6px 8px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
+  background: none; color: var(--accent); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: border-color .15s, background-color .15s; }
+.overall__file-btn:is(:hover, :focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
+:root[data-theme="light"] .side .overall__file-btn:not(:disabled):hover { background: var(--hover); }
+.overall__file-btn:disabled, .overall__file-btn:disabled:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: none; opacity: .4; cursor: default; }
+.overall__file-btn--wide { grid-column: 1 / -1; }
+.overall__note--ok { color: var(--ok-ink); }
+/* the folded hint: its last words fade out into «Показать еще»; the two stay on one line so the fade stays whole */
+.overall__fade-row { white-space: nowrap; }
+.overall__fade { background: linear-gradient(to right, var(--muted) 15%, transparent); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* «Показать еще» / «Скрыть» after the hint text: a small link-like button */
+.overall__more-btn { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; font-weight: 600; text-decoration: underline dotted; text-underline-offset: 2px; cursor: pointer; }
+.overall__more-btn:is(:hover, :focus-visible) { text-decoration-style: solid; }
+.overall__note--bad { color: var(--bad-ink); }
+
+/* ---------- Modal: our own confirmation in place of the browser's confirm() ---------- */
+.modal { width: min(460px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 14px;
+  background: var(--sheet); color: var(--ink); box-shadow: 0 24px 60px -12px rgb(10 14 40 / 45%); }
+.modal::backdrop { background: rgb(20 27 58 / 40%); backdrop-filter: blur(3px); }
+:root[data-theme="dark"] .modal::backdrop { background: rgb(4 5 12 / 70%); }
+.modal[open] { animation: modal-in .18s ease-out; }
+.modal[open]::backdrop { animation: modal-fade .18s ease-out; }
+@keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+@keyframes modal-fade { from { opacity: 0; } }
+.modal__body { display: grid; gap: 14px; padding: 20px 22px 22px; }
+.modal__title { margin: 0; font-family: var(--f-display); font-size: 17px; font-weight: 600; line-height: 1.3; }
+/* the file box: a dashed drop zone with the pick button; once a file is read, its name, save time and contents */
+.modal__drop { display: grid; justify-items: center; gap: 8px; padding: 14px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
+  background: var(--well); text-align: center; transition: border-color .15s, background-color .15s; }
+.modal__drop--over { border-color: var(--accent); background: var(--accent-soft); }
+.modal__file { display: grid; gap: 10px; width: 100%; }
+.modal__file:empty { display: none; }
+.modal__name { display: grid; gap: 2px; margin: 0; font-size: 13px; overflow-wrap: anywhere; }
+.modal__name span { color: var(--muted); }
+.modal__stats { display: grid; gap: 8px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--sheet); text-align: left; }
+.modal__error { margin: 0; color: var(--bad-ink); font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.modal__pick { padding: 7px 16px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px; background: var(--sheet); color: var(--accent);
+  font-size: 13px; font-weight: 600; cursor: pointer; }
+.modal__pick:hover { border-color: var(--accent); background: var(--accent-soft); }
+.modal__hint { margin: 0; font-size: 12px; color: var(--muted); }
+.modal__text { margin: 0; font-size: 13px; line-height: 1.45; }
+/* the link to send: a card with the words «Прогресс по грамматике», the address itself stays hidden;
+   not clickable — opening it here would only load the same progress into the same browser */
+.modal__share { display: flex; align-items: center; gap: 8px; padding: 9px 12px 11px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
+  background: var(--well); color: var(--accent); font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere;
+  position: relative; z-index: 1; -webkit-user-select: none; user-select: none; transition: color .3s, border-color .3s, background-color .3s; }
+/* copied: the card turns the theme's green for 3 seconds */
+.modal__share--copied { border-color: var(--ok-ink); background: color-mix(in srgb, var(--ok) 12%, var(--well)); color: var(--ok-ink); }
+/* the underline weighs the text down: 1px less on top centres text + underline, the icon is put back with margin-top */
+.modal__share::before { content: ''; flex: none; width: 18px; height: 18px; margin-top: 2px; background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1'/%3E%3Cpath d='M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1'/%3E%3C/svg%3E") center / contain no-repeat; }
+/* «Ссылка скопирована» slides out from under the card: the card and the row share one box with no gap, the row opens (0fr → 1fr)
+   and the text moves down from behind the card's bottom edge, settling 5px below it */
+.modal__share-box { display: grid; }
+.modal__copied { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease-out; }
+.modal__copied--show { grid-template-rows: 1fr; }
+.modal__copied-clip { min-height: 0; overflow: hidden; }
+.modal__copied-text { display: block; padding-top: 5px; font-size: 12px; font-weight: 600; color: var(--ok-ink); transform: translateY(-100%); transition: transform .25s ease-out; }
+.modal__copied--show .modal__copied-text { transform: none; }
+.modal__copied--bad .modal__copied-text { color: var(--bad-ink); }
+/* the link window: buttons on the left, «Копировать» first; «Закрыть» turns red on hover */
+.modal__foot.modal__foot--start { justify-content: flex-start; }
+.modal__close { transition: border-color .15s, background-color .15s, color .15s; }
+.modal__close:is(:hover, :focus-visible) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+/* the overwrite warning: the most visible thing in the box */
+.modal__warn { display: grid; gap: 4px; padding: 12px 14px; border: 1.5px solid color-mix(in srgb, var(--bad) 60%, transparent); border-radius: 10px;
+  background: var(--bad-soft); font-size: 13px; line-height: 1.45; }
+.modal__warn-title { color: var(--bad); font-size: 14px; font-weight: 700; }
+.modal__warn p { margin: 0; }
+.modal__warn p + p { margin-top: 4px; }
+.modal__foot { display: flex; justify-content: flex-end; gap: 8px; }
+/* the confirming button is red: it overwrites data */
+.modal__ok, .modal__ok:hover { border-color: var(--bad); background: var(--bad); color: var(--on-accent); }
+.modal__ok:hover { filter: brightness(1.1); }
+.modal__ok:disabled, .modal__ok:disabled:hover { opacity: .4; filter: none; cursor: default; }
+@media (max-width: 560px) {
+  .modal__foot .btn { flex: 1 1 0; }
+}
 /* «С ошибками»: a row that opens the «Работа над ошибками» page */
 /* a muted red over a tint that rises from the bottom and fades into the block; it reaches past the row so the text stays in line.
    On hover the solid bottom part of the same gradient grows (--solid 0% → 100%), pushing the soft fade up and out past the top edge. */
@@ -255,6 +341,7 @@ button { font: inherit; transition: linear 0.15s; }
 .overall__mistakes:hover, .overall__mistakes:focus-visible, .overall__mistakes[aria-current="page"] { --solid: 100%; }
 .overall__mistakes-end { display: flex; align-items: center; gap: 6px; }.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
 .bar--thin { height: 4px; border-radius: 2px; }
+:root[data-theme="light"] .bar { background: #bac3d6; } /* the light track: --line was too pale to see the empty part */
 .bar__fill { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s ease, background-color .4s ease; }
 .bar__fill--full { background: var(--ok); } /* a bar filled to 100% turns green */
 /* a taller bar with its percentage inside: dark over the track, light over the fill; the light copy is clipped to the fill (--p) */
@@ -729,6 +816,7 @@ button { font: inherit; transition: linear 0.15s; }
   * { transition: none !important; }
   .slot--spin .slot__reel, .bm-pop .study__icon { animation: none !important; }
   .bm-pop__spark { display: none; }
+  .modal[open], .modal[open]::backdrop { animation: none; }
 }
 </style>
 
@@ -925,10 +1013,43 @@ function overallBox() {
     <div class="overall__book">
       <div class="overall__row"><span>Прохождение тренажера</span></div>
       <div class="bar bar--labeled" style="--p:${book.share}%"><i class="bar__fill${book.full ? ' bar__fill--full' : ''}" style="width:${book.share}%"></i><span class="bar__label">${book.pct}%</span><span class="bar__label bar__label--on-fill" aria-hidden="true">${book.pct}%</span></div>
-      <p class="overall__note">Учитываются изученные правила и верные ответы в упражнениях. 100% — все изучено и решено без ошибок.</p>
+      <p class="overall__note">${foldNote('book')}</p>
+    </div>
+    <div class="overall__file">
+      <div class="overall__row"><span>Резервная копия</span></div>
+      <div class="overall__file-btns">
+        <button class="overall__file-btn" type="button" data-file="export" title="Сохранить прогресс в файл"${saveLocked() ? ' disabled' : ''}>Сохранить</button>
+        <button class="overall__file-btn" type="button" data-file="import" title="Загрузить прогресс из файла">Загрузить</button>
+        <button class="overall__file-btn overall__file-btn--wide" type="button" data-file="link" title="Получить ссылку с прогрессом, чтобы отправить ее куда удобно">Отправить ссылкой</button>
+      </div>
+      <p class="overall__note${fileMsg ? ' overall__note--' + fileMsg[0] : ''}" role="status">${fileMsg ? esc(fileMsg[1]) : foldNote('backup')}</p>
     </div>`;
   return box;
 }
+
+/* folded notes in the «Прогресс» block. Folded, the text breaks off after a few words that fade out, with «Показать еще»
+   right after them (as in VK posts); open, the whole text with «Скрыть». Open or not is kept only while the page is open
+   (re-renders keep it, a reload starts folded). Each note: [shown text, fading words, the rest] */
+const FOLD_NOTES = {
+  book: ['', 'Учитываются изученные', ' правила и верные ответы в упражнениях. 100% — все изучено и решено без ошибок.'],
+  backup: ['Прогресс хранится только в этом браузере. ', 'Сохраните его в файл',
+    ' по кнопке «Сохранить» или отправьте ссылкой — «Отправить ссылкой», чтобы перенести прогресс в другой браузер/устройство.'],
+};
+const notesOpen = {};
+function foldNote(key) {
+  const [head, fade, tail] = FOLD_NOTES[key], open = !!notesOpen[key];
+  const btn = `<button class="overall__more-btn" type="button" data-fold-note="${key}" aria-expanded="${open}">${open ? 'Скрыть' : 'Показать еще'}</button>`;
+  /* folded: the fading words and the button wrap together, so the button always stands right after them */
+  return head + (open ? `${fade}${tail} ${btn}` : `<span class="overall__fade-row"><span class="overall__fade">${fade}</span> ${btn}</span>`);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-fold-note]');
+  if (!b) return;
+  const key = b.dataset.foldNote, note = b.closest('.overall__note');
+  notesOpen[key] = !notesOpen[key];
+  note.innerHTML = foldNote(key);
+  $('[data-fold-note]', note).focus();
+});
 
 /* the «Прогресс» button: the book progress bar and percentage, the number of exercises with mistakes */
 function renderOverall() {
@@ -1069,9 +1190,9 @@ function renderToc() {
     const box = el('div', current ? 'chap chap--current' : 'chap');
     const cb = el('button', 'chap__btn'); cb.type = 'button';
     if (current) cb.setAttribute('aria-current', 'location');
-    /* the pill counts only the selected level; it appears once the chapter has been started at any level */
+    /* the pill counts only the selected level and appears once a topic of that level has been started
+       (started only at another level, it showed a confusing 0%) */
     const cs = chapterStats(ch, levelFilter);
-    cs.tried = chapterStats(ch).tried;
     const lv = [...new Set(ch.topics.map(t => t.level))].sort();
     cb.innerHTML = `<span class="chap__num">${ch.n}</span><span>${esc(ch.title)}<small class="chap__meta">${esc(ch.pages ? 'с. ' + ch.pages[0] + '–' + ch.pages[1] : 'сверх сборника')} · ${ch.topics.length} ${plural(ch.topics.length, 'тема', 'темы', 'тем')}</small>` +
       `<span class="chap__levels" aria-label="Уровни">${lv.map(l => `<span class="lvl-tag lvl-tag--sm" title="${LEVELS[l]}">${l}</span>`).join('')}</span></span>` +
@@ -1164,6 +1285,294 @@ function renderBookmarks() {
   b.classList.toggle('side__bm--active', viaBookmarks && !!bookmarks[route]);
   renderFold('bm');
 }
+
+/* ---------- Backup: everything the app keeps in localStorage (gk2-*) as one JSON file ---------- */
+/* fileMsg: the last result shown under the buttons, [kind, text]; kept here because the block is re-rendered */
+const BACKUP_APP = 'grammar-online';
+/* a success message goes away after 15 seconds; another save within that time just updates it and starts the 15 seconds again */
+let fileMsg = null, fileMsgTimer;
+function showFileMsg(kind, text) {
+  fileMsg = [kind, text];
+  renderFold('prog');
+  clearTimeout(fileMsgTimer);
+  if (kind === 'ok') fileMsgTimer = setTimeout(() => { fileMsg = null; renderFold('prog'); }, 15000);
+}
+function backupKeys() {
+  const keys = [];
+  try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('gk2-')) keys.push(k); } } catch (e) {}
+  return keys.sort();
+}
+function backupObject(now) {
+  const data = {};
+  backupKeys().forEach(k => { data[k] = store.get(k, null); });
+  return { app: BACKUP_APP, version: 1, saved: now.toISOString(), data };
+}
+const isBackup = b => !!b && b.app === BACKUP_APP && !!b.data && typeof b.data === 'object' && !Array.isArray(b.data)
+  && Object.keys(b.data).every(k => k.startsWith('gk2-'));
+function exportBackup() {
+  const now = new Date();
+  const json = JSON.stringify(backupObject(now), null, 1);
+  const a = el('a');
+  a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+  const d = n => String(n).padStart(2, '0');
+  a.download = `grammar-progress-${now.getFullYear()}-${d(now.getMonth() + 1)}-${d(now.getDate())}-${d(now.getHours())}${d(now.getMinutes())}.json`;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  showFileMsg('ok', `Прогресс по грамматике успешно сохранен в файл «${a.download}». Файл сохранен в папку загрузок.`);
+}
+/* «Сохранить» pressed more than 3 times within 2 seconds: every press downloads one more file, so the button is locked
+   with a warning and a countdown to 0 — 7 seconds the first two times, 30 seconds after that. The count of warnings
+   is forgotten after a calm minute. The lock lives in localStorage, so reloading the page does not lift it
+   (key without the gk2- prefix: it stays out of backups). */
+const SAVE_LOCKS = [7, 7, 30], SAVE_KEY = 'gk-save-lock';
+let saveClicks = [], saveTick, saveShown;
+let { until: saveUntil = 0, total: saveTotal = 0, strikes: saveStrikes = 0 } = store.get(SAVE_KEY, {}) || {};
+/* a no-break space keeps the number with its word */
+const seconds = n => `${n} ${plural(n, 'секунду', 'секунды', 'секунд')}`;
+const saveLocked = () => Date.now() < saveUntil;
+function saveWarning(n) {
+  return (saveTotal > SAVE_LOCKS[0]
+      ? `Вы снова нажимаете «Сохранить» слишком часто, поэтому кнопка выключена на ${seconds(saveTotal)}.`
+      : 'Пожалуйста, не нажимайте «Сохранить» так часто: каждое нажатие скачивает еще один файл.'
+        + (saveStrikes === SAVE_LOCKS.length - 1 ? ` Если это повторится, кнопка выключится на ${seconds(SAVE_LOCKS.at(-1))}.` : ''))
+    + ` Кнопка снова заработает через ${seconds(n)}.`;
+}
+function saveClicked() {
+  const now = Date.now();
+  if (now < saveUntil) return;
+  saveClicks = saveClicks.filter(t => now - t < 2000).concat(now);
+  if (saveClicks.length <= 3) return exportBackup();
+  saveClicks = [];
+  if (now - saveUntil > 60000) saveStrikes = 0;
+  saveTotal = SAVE_LOCKS[Math.min(saveStrikes, SAVE_LOCKS.length - 1)];
+  saveStrikes++;
+  saveUntil = now + saveTotal * 1000;
+  store.set(SAVE_KEY, { until: saveUntil, total: saveTotal, strikes: saveStrikes });
+  showFileMsg('bad', saveWarning(saveTotal));
+  runSaveLock();
+}
+/* the countdown: only the text changes, the block is not rebuilt every second; at 0 the button comes back */
+function runSaveLock() {
+  clearInterval(saveTick);
+  saveShown = null;
+  const tick = () => {
+    const left = Math.max(0, Math.ceil((saveUntil - Date.now()) / 1000));
+    if (left === saveShown) return;
+    saveShown = left;
+    fileMsg = ['bad', saveWarning(left)];
+    document.querySelectorAll('.overall__file .overall__note').forEach(n => { n.textContent = fileMsg[1]; });
+    if (left > 0) return;
+    clearInterval(saveTick);
+    setTimeout(() => { if (fileMsg && fileMsg[0] === 'bad') fileMsg = null; renderFold('prog'); }, 400);
+  };
+  tick();
+  saveTick = setInterval(tick, 200);
+}
+if (saveLocked()) runSaveLock();
+/* what a backup holds: rules studied, exercises done, without and with mistakes, bookmarks (topics this version knows) */
+function backupSummary(data) {
+  const ids = o => Object.keys(o && typeof o === 'object' ? o : {}).filter(id => topicById[id]);
+  let ex = 0, perfect = 0, wrong = 0;
+  ids(data['gk2-progress']).forEach(id => {
+    const e = data['gk2-progress'][id];
+    if (!e || typeof e !== 'object') return;
+    Object.values(e).forEach(r => {
+      ex++;
+      if (!Array.isArray(r)) return;
+      if (r[0] < r[1]) wrong++; else perfect++;
+    });
+  });
+  return { studied: ids(data['gk2-studied']).length, ex, perfect, wrong, bm: ids(data['gk2-bookmarks']).length };
+}
+const EX_TOTAL = TOPICS.reduce((n, t) => n + t.ex.length, 0);
+/* a backup read from a file: its data and save time, or null when the file is not ours */
+function readBackup(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onerror = () => resolve(null);
+    reader.onload = () => {
+      let b;
+      try { b = JSON.parse(reader.result); } catch (e) { b = null; }
+      resolve(isBackup(b) ? b : null);
+    };
+    reader.readAsText(file);
+  });
+}
+/* «Отправить ссылкой»: the same backup packed into the address itself (#restore=…, deflate + base64url), so no file is needed.
+   Opening such a link shows the import window with that progress; the data leaves the address bar straight away. */
+const LINK_KEY = 'restore=';
+async function packLink(text) {
+  const bytes = new Uint8Array(await new Response(new Blob([text]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer());
+  let s = '';
+  bytes.forEach(c => { s += String.fromCharCode(c); });
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+async function unpackLink(code) {
+  const bytes = Uint8Array.from(atob(code.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+  return new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text();
+}
+async function shareLink() {
+  let url;
+  try { url = location.href.split('#')[0] + '#' + LINK_KEY + await packLink(JSON.stringify(backupObject(new Date()))) + '&theme=' + document.documentElement.dataset.theme; }
+  catch (e) { return showFileMsg('bad', 'Этот браузер не умеет создавать ссылку. Сохраните прогресс в файл.'); }
+  showLinkBox(url);
+}
+/* the link hidden behind the words «Прогресс по грамматике» (the long address is never shown); «Копировать» puts it
+   on the clipboard as a link with that text, plus the bare address for places that take plain text only */
+const LINK_TEXT = 'Прогресс по грамматике';
+function showLinkBox(url) {
+  const d = el('dialog', 'modal');
+  d.setAttribute('aria-labelledby', 'linkTitle');
+  d.innerHTML = `<div class="modal__body">
+    <h2 class="modal__title" id="linkTitle">Ссылка на ваш прогресс</h2>
+    <p class="modal__text">Отправьте ссылку куда удобно: мессенджер, почта, заметки. Откройте ее на другом устройстве, чтобы загрузить текущий прогресс.</p>
+    <div class="modal__share-box">
+      <span class="modal__share">${LINK_TEXT}</span>
+      <div class="modal__copied" role="status"><div class="modal__copied-clip"><span class="modal__copied-text"></span></div></div>
+    </div>
+    <div class="modal__foot modal__foot--start">
+      <button class="btn btn--primary" type="button" data-act="copy">Копировать</button>
+      <button class="btn modal__close" type="button" data-act="cancel">Закрыть</button>
+    </div>
+  </div>`;
+  const close = () => { clearTimeout(doneTimer); d.close(); d.remove(); };
+  async function copy() {
+    const html = `<a href="${esc(url)}">${LINK_TEXT}</a>`;
+    try {
+      /* a browser that neither allows nor refuses (no answer to the permission request) gets the fallback after a second */
+      await Promise.race([
+        navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([url], { type: 'text/plain' }) })]),
+        new Promise((_, fail) => setTimeout(fail, 1000))]);
+      return true;
+    } catch (e) {}
+    /* older browsers: the copy command, with our link put into the clipboard by the copy event */
+    const put = e => { e.clipboardData.setData('text/html', html); e.clipboardData.setData('text/plain', url); e.preventDefault(); };
+    document.addEventListener('copy', put);
+    try { return document.execCommand('copy'); } catch (e) { return false; } finally { document.removeEventListener('copy', put); }
+  }
+  /* «Ссылка скопирована» slides out and the card turns green for 3 seconds. While it is still shown, another click only
+     restarts the 3 seconds — the slide plays only when the message is not there */
+  let doneTimer;
+  function say(text, ok) {
+    const box = $('.modal__copied', d), share = $('.modal__share', d);
+    clearTimeout(doneTimer);
+    $('.modal__copied-text', d).textContent = text;
+    box.classList.toggle('modal__copied--bad', !ok);
+    box.classList.add('modal__copied--show');
+    share.classList.toggle('modal__share--copied', ok);
+    if (ok) doneTimer = setTimeout(() => { box.classList.remove('modal__copied--show'); share.classList.remove('modal__share--copied'); }, 3000);
+  }
+  d.addEventListener('click', async e => {
+    if (e.target === d) return close();
+    const act = (e.target.closest('[data-act]') || {}).dataset?.act;
+    if (act === 'cancel') close();
+    else if (act === 'copy') {
+      if (await copy()) say('Ссылка скопирована', true);
+      else say('Не получилось скопировать: браузер не дал доступ к буферу обмена. Разрешите его и попробуйте еще раз.', false);
+    }
+  });
+  d.addEventListener('cancel', e => { e.preventDefault(); close(); });
+  document.body.append(d);
+  d.showModal();
+  $('[data-act=copy]', d).focus();
+}
+async function openLink(hash) {
+  /* a link pasted into an open tab: the head script has already run, so the link's theme is put on here */
+  const theme = /&theme=(light|dark)/.exec(hash);
+  if (theme && document.documentElement.dataset.theme !== theme[1]) { document.documentElement.dataset.theme = theme[1]; syncThemeBtn(); }
+  let b = null;
+  try { b = JSON.parse(await unpackLink(hash.slice(LINK_KEY.length).split('&')[0])); } catch (e) {}
+  openImport({ backup: isBackup(b) ? b : null });
+}
+/* «Загрузить» opens this window straight away: first the red overwrite warning,
+   then the file — picked with the button or dropped onto the box — and what it holds. «Перезаписать» stays off until
+   a valid file is chosen; it replaces every gk2-* key with the file's and reloads. Esc, «Отмена» or the backdrop close it. */
+/* fromLink: {backup} read from a «restore» link (null when the link is broken) — shown at once in place of a file */
+function openImport(fromLink) {
+  let backup = null;
+  const d = el('dialog', 'modal');
+  d.setAttribute('aria-labelledby', 'modalTitle');
+  d.setAttribute('aria-describedby', 'modalWarn');
+  d.innerHTML = `<div class="modal__body">
+    <h2 class="modal__title" id="modalTitle">Загрузить прогресс ${fromLink ? 'по ссылке' : 'из файла'}</h2>
+    <div class="modal__warn" id="modalWarn">
+      <p>При импорте все данные о прогрессе, а также содержимое раздела «Избранное» в этом браузере на текущем устройстве будут <b class="modal__warn-title">перезаписаны</b> данными ${fromLink ? 'из ссылки' : 'из файла'}. Объединить их нельзя — произойдет полная перезапись.</p>
+      <p>Заранее убедитесь, что все необходимые данные сохранены.</p>
+    </div>
+    ${fromLink ? '<div class="modal__file" aria-live="polite"></div>' : `<div class="modal__drop">
+      <div class="modal__file" aria-live="polite"></div>
+      <button class="modal__pick" type="button" data-act="pick">Выбрать файл</button>
+      <p class="modal__hint">или перетащите файл .json сюда</p>
+    </div>`}
+    <div class="modal__foot">
+      <button class="btn" type="button" data-act="cancel">Отмена</button>
+      <button class="btn modal__ok" type="button" data-act="ok" disabled>Перезаписать</button>
+    </div>
+  </div>`;
+  const input = Object.assign(el('input'), { type: 'file', accept: '.json,application/json', hidden: true });
+  d.append(input);
+  const close = () => { clearTimeout(errorTimer); d.close(); d.remove(); };
+  const row = (label, value) => `<div class="overall__row"><span>${label}</span><b class="overall__value">${value}</b></div>`;
+  /* an error goes away after 15 seconds, like the message after saving; another error within that time just
+     replaces the text and starts the 15 seconds again. From a link it stays: there is nothing else to show */
+  let errorTimer;
+  function showError(html) {
+    const box = $('.modal__file', d);
+    clearTimeout(errorTimer);
+    box.innerHTML = `<p class="modal__error">${html}</p>`;
+    if (!fromLink) errorTimer = setTimeout(() => { if ($('.modal__error', box)) box.innerHTML = ''; }, 15000);
+  }
+  /* name: the file name, or null for a link */
+  function show(b, name) {
+    backup = b;
+    const box = $('.modal__file', d);
+    clearTimeout(errorTimer);
+    $('[data-act=ok]', d).disabled = !backup;
+    if (!fromLink) $('[data-act=pick]', d).textContent = 'Выбрать другой файл';
+    if (!backup) {
+      showError(name === null ? 'Ссылка повреждена или скопирована не полностью.' : `${esc(name)} — это не файл прогресса «Грамматика онлайн».`);
+      return;
+    }
+    const when = backup.saved && !isNaN(new Date(backup.saved)) ? new Date(backup.saved).toLocaleString('ru-RU', { dateStyle: 'long', timeStyle: 'short' }) : '';
+    const sum = backupSummary(backup.data);
+    box.innerHTML = `<p class="modal__name"><b>${name === null ? 'Прогресс из ссылки' : esc(name)}</b>${when ? `<span>сохранен ${esc(when)}</span>` : ''}</p>
+      <div class="modal__stats">${row('Правил изучено', `${sum.studied} из ${TOPICS.length}`)}${row('Выполнено упражнений', `${sum.ex} из ${EX_TOTAL}`)}${sum.ex ? row('Без ошибок', sum.perfect) : ''}${sum.wrong ? row('С ошибками', sum.wrong) : ''}${row('«Избранное»', sum.bm)}</div>`;
+  }
+  async function choose(file) { if (file) show(await readBackup(file), file.name); }
+  input.addEventListener('change', () => { const f = input.files[0]; input.value = ''; choose(f); });
+  d.addEventListener('click', e => {
+    if (e.target === d) return close(); /* the dimmed backdrop */
+    const btn = e.target.closest('[data-act]');
+    const act = btn && btn.dataset.act;
+    if (act === 'cancel') close();
+    else if (act === 'pick') input.click();
+    else if (act === 'ok' && backup) {
+      try {
+        backupKeys().forEach(k => localStorage.removeItem(k));
+        Object.entries(backup.data).forEach(([k, v]) => { if (v !== null) localStorage.setItem(k, JSON.stringify(v)); });
+      } catch (err) { showError('Браузер не дал сохранить данные.'); return; }
+      location.reload();
+    }
+  });
+  d.addEventListener('cancel', e => { e.preventDefault(); close(); });
+  /* a link brings its own data: no file picking or dropping there — files have their own window («Загрузить») */
+  const drop = $('.modal__drop', d);
+  if (drop) {
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('modal__drop--over'); });
+    drop.addEventListener('dragleave', e => { if (!drop.contains(e.relatedTarget)) drop.classList.remove('modal__drop--over'); });
+    drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('modal__drop--over'); choose(e.dataTransfer.files[0]); });
+  }
+  document.body.append(d);
+  d.showModal();
+  if (fromLink) show(fromLink.backup, null);
+  $(fromLink ? (fromLink.backup ? '[data-act=ok]' : '[data-act=cancel]') : '[data-act=pick]', d).focus();
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-file]');
+  if (!b) return;
+  const act = b.dataset.file;
+  if (act === 'export') saveClicked(); else if (act === 'link') shareLink(); else openImport();
+});
 
 /* ---------- Accordions: «Прогресс» and «Избранное» ---------- */
 /* each opens on its own; which ones are open is remembered (gk2-folds) */
@@ -1907,7 +2316,12 @@ addEventListener('keydown', e => {
 });
 matchMedia('(max-width: 880px)').addEventListener('change', () => setDrawer(false));
 /* Back / Forward (popstate) and a hash typed into the address bar (hashchange) open that page */
-const followHash = () => { const id = location.hash.slice(1); if (id && id !== route) go(id); };
+/* a «restore» link pasted into an open tab: put the page's own address back and offer the import */
+const followHash = () => {
+  const id = location.hash.slice(1);
+  if (id.startsWith(LINK_KEY)) { history.replaceState(null, '', '#' + route); openLink(id); }
+  else if (id && id !== route) go(id);
+};
 window.addEventListener('popstate', followHash);
 window.addEventListener('hashchange', followHash);
 let booted = false;
@@ -1915,6 +2329,8 @@ renderLevels();
 const startId = location.hash.slice(1);
 go(startId && (startId === 'contents' || startId === 'mistakes' || topicById[startId] || chapById[startId]) ? startId : store.get('gk2-last', 'contents'), false, false);
 booted = true;
+/* opened from a «restore» link: go() has already replaced the address with the page's own */
+if (startId.startsWith(LINK_KEY)) openLink(startId);
 renderOverall();
 $('#tocToggle').insertAdjacentHTML('beforeend', FOLD_ARROW);
 $('#tocToggle').addEventListener('click', () => {
