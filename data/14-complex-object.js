@@ -1,4 +1,4 @@
-BOOK.push({ n: 14, id: 'complex-object', title: 'Сложное дополнение (Complex Object)', pages: [352, 373],
+BOOK.push({ n: 14, id: 'complex-object', title: 'Сложное дополнение (Complex Object)',
 intro: 'Конструкция «дополнение + инфинитив»: <i>I want <b>you to come</b></i>. В русском ее обычно переводят придаточным со словами «чтобы», «как», «что».',
 topics: [
 

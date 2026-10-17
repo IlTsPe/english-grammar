@@ -1,4 +1,4 @@
-BOOK.push({ n: 11, id: 'participle', title: 'Причастие', pages: [305, 324],
+BOOK.push({ n: 11, id: 'participle', title: 'Причастие',
 intro: 'Причастие настоящего времени (<i>-ing</i>, Participle I) и прошедшего (<i>V3</i>, Participle II): как определение, в причастных оборотах и в паре <i>boring / bored</i>.',
 topics: [
 

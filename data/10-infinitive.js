@@ -1,4 +1,4 @@
-BOOK.push({ n: 10, id: 'infinitive', title: 'Инфинитив', pages: [294, 304],
+BOOK.push({ n: 10, id: 'infinitive', title: 'Инфинитив',
 intro: 'Когда инфинитив употребляется с частицей <i>to</i>, а когда без нее; инфинитив цели и конструкции с <i>too / enough</i>; формы инфинитива.',
 topics: [
 

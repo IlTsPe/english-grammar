@@ -1,4 +1,4 @@
-BOOK.push({ n: 15, id: 'complex-subject', title: 'Сложное подлежащее (Complex Subject)', pages: [374, 381],
+BOOK.push({ n: 15, id: 'complex-subject', title: 'Сложное подлежащее (Complex Subject)',
 intro: 'Конструкция «подлежащее + глагол + инфинитив»: <i>He <b>seems to know</b></i>, <i>She <b>is said to be</b> rich</i>. В русском она переводится вводными словами «кажется», «говорят», «вероятно».',
 topics: [
 

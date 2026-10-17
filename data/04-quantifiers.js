@@ -1,4 +1,4 @@
-BOOK.push({ n: 4, id: 'quantifiers', title: 'Much, many, (a) little, (a) few', pages: [95, 100],
+BOOK.push({ n: 4, id: 'quantifiers', title: 'Much, many, (a) little, (a) few',
 intro: 'Слова количества выбираются по тому, исчисляемое ли существительное. Повторите тему 2.3, если сомневаетесь, к какой группе относится слово.',
 topics: [
 

@@ -1,4 +1,4 @@
-BOOK.push({ n: 8, id: 'passive', title: 'Passive Voice', pages: [234, 255],
+BOOK.push({ n: 8, id: 'passive', title: 'Passive Voice',
 intro: 'Страдательный залог: когда важен не исполнитель, а действие или его объект. Сначала простые времена, затем все остальные и модальные глаголы, в конце — каузатив.',
 topics: [
 

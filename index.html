@@ -84,7 +84,7 @@
 :root.theme-anim, :root.theme-anim *, :root.theme-anim *::before, :root.theme-anim *::after {
   transition: background-color .1s linear, color .1s linear, border-color .1s linear, fill .1s linear, stroke .1s linear, box-shadow .1s linear !important;
 }
-body { background: var(--paper); color: var(--ink); font: 16px/1.6 var(--f-body); }
+body { margin-bottom: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--f-body); } /* no bottom margin: the sheet runs down to the very bottom */
 button { font: inherit; transition: linear 0.15s; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -189,13 +189,20 @@ button { font: inherit; transition: linear 0.15s; }
   background-size: 7px 7px; box-shadow: inset 0 0 0 1px var(--line);
 }
 .brand__sub { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); }
+/* the subtitle with the square «Инфо» button to its right (icon over the label); the button opens the about page */
+.brand__row { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+.brand__row .brand__sub { flex: 1; min-width: 0; margin-top: 0; }
+.brand__info { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 37px; height: 37px; padding: 0; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px; background: none; color: var(--accent); font: 600 10px/1 var(--f-body); white-space: nowrap; cursor: pointer; }
+.brand__info:hover, .brand__info:focus-visible { border-color: var(--accent); background: var(--accent-soft); }
+.brand__info[aria-current] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.brand__info-icon { width: 17px; height: 17px; }
 /* «Прогресс» and «Избранное»: full-width buttons one under the other, each expands its block under it like an accordion;
    the title on the left, the figures and the arrow on the right */
 .side__summary { display: grid; gap: 8px; margin-top: 8px; }
 /* the sidebar blocks are lifted off the paper by a small shadow (--raise): the top buttons, «Прогресс» and «Избранное» —
    on their wrappers, so an opened block casts one shadow with its button — the contents and «Поддержать автора».
    Kept within the 5px side padding, so the scrolling sidebar does not clip it */
-.side__actions .action-btn, .side__summary > div, .side__donate, .toc { box-shadow: var(--raise); }
+.side__actions .action-btn, .side__summary > div, .side__donate, .toc, .brand__info { box-shadow: var(--raise); }
 .side__summary > div { border-radius: 10px; }
 .side__stat { width: 100%; justify-content: flex-start; gap: 10px; padding-inline: 12px; transition: border-radius .15s linear, border-color .15s linear, background-color .15s linear; }
 .side__fold-arrow { flex: none; width: 12px; height: 12px; margin-left: auto; color: var(--accent); transition: transform .15s linear; }
@@ -290,6 +297,7 @@ button { font: inherit; transition: linear 0.15s; }
 :root[data-theme="light"] .side :is(.action-btn, .icon-btn, .search__input):not(:hover) { background: none; }
 /* accent-soft is almost the paper colour, so on the sidebar the hover uses the stronger --hover of the contents list */
 :root[data-theme="light"] .side :is(.action-btn, .icon-btn):hover { background: var(--hover); }
+:root[data-theme="light"] .brand__info:not([aria-current]):hover { background: var(--hover); }
 /* the theme toggles preview the palette they switch to: in the light theme a dark button with a violet moon and stars,
    in the dark theme a white button with a blue sun and rays (the doubled class and the order win over the sidebar hover rules) */
 :root[data-theme="light"] .theme-toggle.theme-toggle:is(:hover, :focus-visible) { border-color: color-mix(in srgb, #ADA2FF 55%, transparent); background: #191C29; color: #ADA2FF; }
@@ -583,19 +591,58 @@ button { font: inherit; transition: linear 0.15s; }
 
 /* ---------- Sheet ---------- */
 .sheet {
-  /* 100vh minus the 8px body margin above and below, or a short page still scrolls by 16px */
-  min-width: 0; min-height: calc(100vh - 16px); padding-block: 36px 18px; padding-inline: clamp(18px, 5vw, 64px);
+  /* 100vh minus the 8px body margin above (there is none below), or a short page still scrolls by 8px */
+  min-width: 0; min-height: calc(100vh - 8px); padding-block: 36px 18px; padding-inline: clamp(18px, 5vw, 64px);
   background-color: var(--sheet);
   border-left: 1px solid var(--border);
-  border-radius: 10px;
+  /* square bottom corners: the sheet reaches the bottom of the page, so its left border parts it from the menu all the way down */
+  border-radius: 10px 10px 0 0;
 }
 .sheet__inner { max-width: 880px; margin-inline: auto; }
+/* «Информация» and its pages: a spotlight from the top centre of the window (after the user's reference, a studio
+   spotlight). Only the light is added: the page and the sheet keep their usual colours, so moving to «Содержание»
+   changes nothing else. The layers are fixed to the window on both the page and the sheet, so the light runs
+   across them in one piece and stays in place while the page scrolls; every layer, the grain too, is window-sized.
+   The grain on top is an SVG whose noise is masked by an ellipse from the top, so it lies on the light only.
+   Dark (our accent in place of the reference's blue): pale lavender at the top edge, an accent cone below it,
+   a faint accent pool near the bottom and darker sides; the lights add up (screen). Softer than the reference,
+   so the title under it stays readable */
+.page--glow .pager__btn { background-color: color-mix(in srgb, var(--sheet) 50%, transparent); } /* an opaque sheet-grey card stood out on the glow */
+.page--glow :is(body, .sheet) { background-size: 100% 100%; background-attachment: fixed; }
+:root[data-theme="dark"].page--glow :is(body, .sheet) {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .2 0'/%3E%3C/filter%3E%3CradialGradient id='g' cx='.55' cy='-.1' r='.7'%3E%3Cstop offset='0' stop-color='white'/%3E%3Cstop offset='1' stop-color='black'/%3E%3C/radialGradient%3E%3Cmask id='m'%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3C/mask%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' mask='url(%23m)'/%3E%3C/svg%3E"),
+    radial-gradient(34% 40% at 55% -8%, rgb(226 222 255 / 22%), transparent 80%),
+    radial-gradient(55% 80% at 55% -5%, rgb(173 162 255 / 15%), transparent 80%),
+    radial-gradient(28% 16% at 55% 86%, rgb(173 162 255 / 8%), transparent 80%),
+    radial-gradient(120% 100% at 55% 35%, transparent 55%, rgb(4 4 12 / 40%));
+  background-blend-mode: normal, screen, screen, screen, normal;
+}
+/* Light: the same spotlight in light, clean hues of the accent's family (the dark accent itself read as dirt on
+   the grey sheet): a white core, a periwinkle cone with sky blue on the left and violet on the right; instead of
+   a pool, a smaller copy of the light rising from the bottom at half the strength; no darkened sides.
+   A dark grain under the top light */
+:root[data-theme="light"].page--glow :is(body, .sheet) {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .08 0 0 0 0 .1 0 0 0 0 .23 0 0 0 .32 0'/%3E%3C/filter%3E%3CradialGradient id='g' cx='.55' cy='-.1' r='.7'%3E%3Cstop offset='0' stop-color='white'/%3E%3Cstop offset='1' stop-color='black'/%3E%3C/radialGradient%3E%3Cmask id='m'%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3C/mask%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' mask='url(%23m)'/%3E%3C/svg%3E"),
+    radial-gradient(30% 34% at 55% -6%, rgb(255 255 255 / 70%), transparent 80%),
+    radial-gradient(46% 62% at 55% -10%, rgb(112 140 255 / 38%), transparent 78%),
+    radial-gradient(34% 50% at 32% -10%, rgb(96 204 255 / 30%), transparent 78%),
+    radial-gradient(34% 50% at 78% -10%, rgb(160 120 255 / 30%), transparent 78%),
+    radial-gradient(20% 22% at 55% 106%, rgb(255 255 255 / 35%), transparent 80%),
+    radial-gradient(30% 40% at 55% 110%, rgb(112 140 255 / 19%), transparent 78%),
+    radial-gradient(22% 32% at 40% 110%, rgb(96 204 255 / 15%), transparent 78%),
+    radial-gradient(22% 32% at 70% 110%, rgb(160 120 255 / 15%), transparent 78%);
+}
 .sheet__title { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 4.4vw, 40px); line-height: 1.12; letter-spacing: -.02em; margin: 12px 0 6px; text-wrap: balance; }
+.sheet__title:first-child { margin-top: 0; } /* a page without crumbs: the title starts at the sheet's own padding */
 .sheet__lead { margin: 0; font-family: var(--f-en); font-style: italic; font-size: 19px; color: var(--muted); }
 .sheet__intro { margin: 16px 0 0; }
+.sheet__link { color: inherit; text-underline-offset: 3px; }
+/* 600, as in the rules: light 700 on the dark sheet smears into blots */
+.sheet__intro b { font-weight: 600; }
 .sheet__section { display: flex; align-items: center; gap: 12px; margin: 40px 0 16px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .sheet__section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-.sheet__fine { margin-top: 24px; font-size: 13.5px; font-style: italic; text-align: center; color: var(--muted); }
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .crumbs__link { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
 .crumbs__link:hover { text-decoration: underline; }
@@ -616,16 +663,27 @@ button { font: inherit; transition: linear 0.15s; }
 .contents { list-style: none; margin: 24px 0 0; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
 .contents__item { padding-block: 4px; }
 .contents__item + .contents__item { border-top: 1px solid var(--border); }
-.contents__row { display: grid; grid-template-columns: 2.2em minmax(0, 1fr) auto; gap: 4px 10px; align-items: baseline; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink); text-align: left; cursor: pointer; }
+.contents__row { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 4px 10px; align-items: baseline; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink); text-align: left; cursor: pointer; }
 .contents__row:hover { background: var(--hover); }
 .contents__row:hover .contents__title { color: var(--accent); }
 .contents__num { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
-.contents__title { display: flex; align-items: baseline; gap: 8px; min-width: 0; font-size: 17px; font-weight: 600; }
-.contents__title::after { content: ""; flex: 1; min-width: 20px; border-bottom: 2px dotted var(--border); }
-.contents__page { font-family: var(--f-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.contents__meta { grid-column: 2 / 4; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; color: var(--muted); }
+.contents__title { min-width: 0; font-size: 17px; font-weight: 600; }
+.contents__meta { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; color: var(--muted); }
 .contents__levels { display: inline-flex; gap: 3px; }
 .contents__bar { width: 120px; align-self: center; }
+/* the pages of «Информация»: text in the rule's typography, lists, the figures as cards */
+.info { margin-top: 24px; }
+.info b { font-weight: 600; }
+.info ul { margin: 0 0 14px; padding-left: 22px; }
+.info li + li { margin-top: 6px; }
+.info .info__stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 0 0 28px; padding: 0; list-style: none; }
+.info__stat { display: grid; gap: 2px; padding: 12px 14px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
+.info__stat b { font-family: var(--f-display); font-size: 30px; font-weight: 700; line-height: 1.1; color: var(--accent); }
+.info__stat span { font-size: 14px; color: var(--muted); }
+.info .info__levels { display: grid; gap: 8px; margin: 0 0 14px; padding: 0; list-style: none; }
+.info__levels li { display: flex; align-items: baseline; gap: 10px; margin: 0; }
+.info :is(.info__stats, .info__levels) li + li { margin-top: 0; }
+.info__count { margin-left: auto; font-size: 14px; color: var(--muted); white-space: nowrap; }
 
 /* «Работа над ошибками»: the same frame as the contents, one row per topic with a button per exercise */
 .mistakes { list-style: none; margin: 24px 0 0; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
@@ -827,7 +885,7 @@ button { font: inherit; transition: linear 0.15s; }
   .side__head { align-items: center; }
   .brand__title { font-size: 18px; gap: 6px; }
   .brand__logo { width: 33px; height: 33px; top: 1.5px; }
-  .brand__sub { display: none; }
+  .brand__row { display: none; }
   .icon-btn { width: 38px; height: 38px; }
   .side__menu { display: flex; flex: none; }
   /* on mobile the theme is an icon in the top bar, so the drawer has no action row */
@@ -895,7 +953,10 @@ button { font: inherit; transition: linear 0.15s; }
     <div class="side__head">
       <div class="brand">
         <span class="brand__title"><svg class="brand__logo" viewBox="5 5 54 54" aria-hidden="true"><path class="brand__logo-plate" d="M11 5h42l6 6v14l-3 3v12l3 3v10l-6 6H11l-6-6V43l3-3V28l-3-3V11z"/><path class="brand__logo-ink" d="M32 13.5 55 23.5 32 33.5 9 23.5zM18 30.5V39l14 7 14-7v-8.5L32 37z"/><path class="brand__logo-tassel" d="M32 23.5 50 27v10" fill="none" stroke-width="3" stroke-linecap="square"/><rect class="brand__logo-pad" x="47.5" y="36.5" width="5" height="6.5" rx="1"/><path class="brand__logo-marks" d="M46 8.5h6v6h-6zM46 14.5l6-6M10.5 50.5h6M13.5 47.5v6M39 51h12M39 54.5h8" fill="none"/></svg><span>Грамматика <span class="brand__mark">онлайн</span></span></span>
+        <div class="brand__row">
         <span class="brand__sub">Английский язык A1–C2 по разделам сборника Ю.&nbsp;Голицынского</span>
+        <button class="brand__info" id="infoBtn" type="button"><svg class="brand__info-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.2" fill="none" stroke="currentColor" stroke-width="1.45"/><path d="M8 7.1v4.8" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="4.6" r="1.15" fill="currentColor"/></svg>Инфо</button>
+        </div>
       </div>
       <button class="icon-btn theme-toggle side__theme" type="button"></button>
       <button class="action-btn side__menu" id="menuBtn" type="button" aria-controls="drawer" aria-expanded="false"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Разделы</span></button>
@@ -1013,7 +1074,6 @@ const store = {
 };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const fmt = s => { const sp = el('span'); sp.innerHTML = esc(s).replace(/\(([^)]+)\)/g, '<span class="ex__hint">($1)</span>'); return sp; };
-const pagesLabel = ch => ch.pages ? `Голицынский, с. ${ch.pages[0]}–${ch.pages[1]}` : 'Нет в сборнике';
 
 function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 function shuffled(arr, seed) { return arr.map((v, i) => ({ v, k: hash(seed + '|' + i + '|' + v) })).sort((a, b) => a.k - b.k).map(o => o.v); }
@@ -1265,6 +1325,7 @@ function setChapOpen(box, open) {
 function renderToc() {
   const q = $('#search').value.trim().toLowerCase();
   const filtering = !!(q || levelFilter);
+  if (isAbout(route)) $('#infoBtn').setAttribute('aria-current', 'page'); else $('#infoBtn').removeAttribute('aria-current');
   if (route === 'contents') $('#tocContents').setAttribute('aria-current', 'page'); else $('#tocContents').removeAttribute('aria-current');
   renderLevelProgress();
   fillLevelChips();
@@ -1286,7 +1347,7 @@ function renderToc() {
        (started only at another level, it showed a confusing 0%) */
     const cs = chapterStats(ch, levelFilter);
     const lv = [...new Set(ch.topics.map(t => t.level))].sort();
-    cb.innerHTML = `<span class="chap__num">${ch.n}</span><span>${esc(ch.title)}<small class="chap__meta">${esc(ch.pages ? 'с. ' + ch.pages[0] + '–' + ch.pages[1] : 'сверх сборника')} · ${ch.topics.length} ${plural(ch.topics.length, 'тема', 'темы', 'тем')}</small>` +
+    cb.innerHTML = `<span class="chap__num">${ch.n}</span><span>${esc(ch.title)}<small class="chap__meta">${ch.topics.length} ${plural(ch.topics.length, 'тема', 'темы', 'тем')}</small>` +
       `<span class="chap__levels" aria-label="Уровни">${lv.map(l => `<span class="lvl-tag lvl-tag--sm" title="${LEVELS[l]}">${l}</span>`).join('')}</span></span>` +
       `<span class="chap__end">${cs.tried ? pill(cs.pct) : ''}` +
       '<span class="chap__arrow" aria-hidden="true"><svg class="chap__arrow-icon" viewBox="0 0 12 12" width="12" height="12"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>';
@@ -1766,6 +1827,141 @@ function numList(nums) {
   return out.join(', ');
 }
 
+/* «Информация»: the about page, opened from the button under the brand, and its own pages, one subject each
+   (route 'about-<id>'); body() is static markup, the figures are counted from the data */
+const ABOUT = [
+  { id: 'numbers', title: 'Тренажер в цифрах', sub: 'Разделы, темы, уровни и упражнения', body() {
+    const ex = TOPICS.flatMap(t => t.ex);
+    const items = ex.reduce((n, e) => n + units(e), 0);
+    const nLv = Object.keys(LEVELS).length;
+    const byType = type => ex.filter(e => e.type === type).length;
+    const [tests, extra] = CHAPTERS.slice(-2);
+    const stat = (n, one, few, many) => `<li class="info__stat"><b>${n}</b><span>${plural(n, one, few, many)}</span></li>`;
+    return `<ul class="info__stats">${stat(CHAPTERS.length, 'раздел', 'раздела', 'разделов')}${stat(TOPICS.length, 'тема', 'темы', 'тем')}${stat(nLv, 'уровень сложности', 'уровня сложности', 'уровней сложности')}${stat(ex.length, 'упражнение', 'упражнения', 'упражнений')}${stat(items, 'задание', 'задания', 'заданий')}</ul>
+      <h3>Разделы</h3>
+      <p>Первые ${CHAPTERS.length - 2} разделов идут в порядке сборника Голицынского. Раздел ${tests.n} «${esc(tests.title)}» собирает задания сразу на несколько тем, а раздел ${extra.n} «${esc(extra.title)}» — конструкции уровней B2–C2, которых в сборнике нет.</p>
+      <h3>Упражнения</h3>
+      <p>Задание — это одно предложение или один пропуск в тексте: именно они проверяются и засчитываются. Упражнения бывают четырех видов:</p>
+      <ul>
+        <li><b>Впишите пропущенное</b> — ${byType('gap')} упр.: слово или форму нужно ввести с клавиатуры;</li>
+        <li><b>Выберите вариант</b> — ${byType('choice')} упр.: один верный ответ из нескольких;</li>
+        <li><b>Текст с пропусками</b> — ${byType('text')} упр.: связный текст с несколькими пропусками;</li>
+        <li><b>Перевод</b> — ${byType('translate')} упр.: предложение нужно перевести на английский.</li>
+      </ul>
+      <p>Как распределены темы по уровням, рассказано на странице «Уровни сложности».</p>`;
+  } },
+  { id: 'sections', title: 'Разделы и темы', sub: 'Как устроен материал и как по нему перемещаться', body: () => `
+      <p>Тренажер разбит на разделы, раздел — на темы. В каждой теме сначала идет правило с примерами, а под ним — упражнения на это правило.</p>
+      <h3>Страница раздела</h3>
+      <p>Открыть ее можно строкой «Обзор всего раздела» в меню. На ней собраны карточки всех тем раздела: уровень, число упражнений, процент прохождения и отметка «Правило изучено».</p>
+      <h3>Страница темы</h3>
+      <p>Прочитав правило, нажмите «Отметить правило как изученное» — отметка попадет в прогресс. Внизу темы есть кнопки перехода к предыдущей и следующей теме в порядке сборника. Если соседняя тема другого уровня, под ними появится блок «Идти только по темам уровня…» — с ним легко не уйти со своего уровня.</p>
+      <h3>Меню</h3>
+      <ul>
+        <li><b>Содержание тренажера</b> — список всех разделов с общим прогрессом.</li>
+        <li><b>Поиск темы</b> — по названию темы или раздела; учитывает выбранный уровень сложности.</li>
+        <li><b>Список разделов</b> — раскрыт только один раздел, клик по названию сворачивает или раскрывает его. Раздел открытой сейчас темы выделен.</li>
+        <li><b>Разделы тренажера</b> — кнопка над списком сворачивает его целиком. Это удобно, если вы идете по темам кнопками внизу страницы и список не нужен.</li>
+      </ul>` },
+  { id: 'levels', title: 'Уровни сложности', sub: 'Шкала A1–C2 и фильтр в меню', body: () => `
+      <p>Каждой теме присвоен уровень по общеевропейской шкале — от начального A1 до свободного владения C2:</p>
+      <ul class="info__levels">${Object.keys(LEVELS).map(l => { const n = TOPICS.filter(t => t.level === l).length;
+        return `<li><span class="lvl-tag">${l}</span><span>${LEVELS[l]}</span><span class="info__count">${n} ${plural(n, 'тема', 'темы', 'тем')}</span></li>`; }).join('')}</ul>
+      <p>Уровень — ориентир, а не ограничение: тренажер можно проходить подряд, в порядке сборника.</p>
+      <h3>Фильтр в меню</h3>
+      <ul>
+        <li>В блоке «Уровень сложности» выберите «Все» или один уровень — в списке разделов и в поиске останутся только темы этого уровня, а процент у раздела будет считаться по ним.</li>
+        <li>Фильтр следует за открытой темой: открыли тему уровня B1 — выбран B1. Исключение — темы, открытые из «Избранного».</li>
+        <li>Кнопка уровня заполняется зеленым по мере прохождения его тем; полностью зеленая — уровень пройден. Точный процент показан строкой «Уровень … пройден на».</li>
+      </ul>` },
+  { id: 'exercises', title: 'Упражнения и проверка', sub: 'Как проверяются ответы', body: () => `
+      <h3>Проверка</h3>
+      <p>Кнопка «Проверить» становится доступной, когда введен хотя бы один ответ. Неверные ответы подсвечиваются красным, незаполненные отмечаются отдельно, рядом появляется счет.</p>
+      <ul>
+        <li>Регистр букв и знаки препинания не учитываются.</li>
+        <li>Сокращения засчитываются наравне с полными формами: <i>I'm</i> и <i>I am</i>, <i>don't</i> и <i>do not</i>, <i>it's</i> и <i>it is</i>.</li>
+        <li>В переводе ответ сравнивается с эталоном и допустимыми вариантами. Перевести одну мысль можно по-разному: если ваш вариант не совпал, но вы уверены в нем, нажмите «Мой вариант тоже верен».</li>
+      </ul>
+      <h3>Ответы и повтор</h3>
+      <ul>
+        <li><b>Показать ответы</b> — выводит верные ответы под каждым заданием; убрать их можно кнопкой «Скрыть ответы».</li>
+        <li><b>Заново</b> — очищает упражнение и его результат, чтобы решить его с чистого листа.</li>
+      </ul>
+      <p>Введенные ответы сохраняются: если уйти с темы и вернуться, они и результат проверки останутся на месте.</p>` },
+  { id: 'progress', title: 'Прогресс', sub: 'Что считается и как вернуться к ошибкам', body: () => `
+      <p>Кнопка «Прогресс» в меню показывает процент прохождения тренажера и красным — число упражнений с ошибками. По клику раскрывается блок со сводкой: сколько правил изучено, сколько упражнений выполнено, сколько из них без ошибок и сколько с ошибками.</p>
+      <h3>Как считается процент</h3>
+      <p>Изученное правило дает 1 балл, упражнение — до 1 балла в зависимости от доли верных ответов. 100% — все правила изучены и все упражнения решены без ошибок. В расчет идет последняя проверка упражнения, а не лучшая.</p>
+      <p>Прогресс по текущему разделу и по уровням показан вверху страниц раздела и темы, по уровню — в меню над списком разделов.</p>
+      <h3>Работа над ошибками</h3>
+      <p>Строка «С ошибками» в блоке «Прогресс» открывает список упражнений, где при последней проверке нашлись ошибки или незаполненные строки, с номерами этих заданий.</p>
+      <ul>
+        <li>Упражнения идут от A1 к C2, на странице есть свой фильтр уровня.</li>
+        <li>«Начать по порядку» открывает первое упражнение, а после него можно сразу перейти к следующему.</li>
+        <li>Упражнение пропадает из списка, когда вы решите его без ошибок или нажмете «Заново», и возвращается, если новая проверка снова найдет недочеты.</li>
+      </ul>` },
+  { id: 'data', title: 'Где хранятся данные', sub: 'Резервная копия и перенос прогресса', body: () => `
+      <div class="note"><span>Прогресс, ответы, «Избранное» и настройки хранятся <b>только в этом браузере на этом устройстве</b> — аккаунтов и сервера у тренажера нет. Данные пропадут, если очистить данные сайта или историю браузера; в режиме инкогнито — после закрытия окна. В другом браузере или на другом устройстве их не будет.</span></div>
+      <p>Поэтому время от времени стоит делать резервную копию, особенно перед очисткой браузера. Это делается в блоке «Прогресс», раздел «Резервная копия»:</p>
+      <ul>
+        <li><b>Сохранить</b> — скачивает файл с прогрессом в папку загрузок.</li>
+        <li><b>Загрузить</b> — восстанавливает прогресс из файла. Перед загрузкой показывается сводка по файлу. Текущий прогресс при этом полностью перезаписывается, а не объединяется с загруженным.</li>
+        <li><b>Отправить ссылкой</b> — копирует ссылку с прогрессом. Отправьте ее себе любым способом и откройте на другом устройстве: тренажер предложит загрузить прогресс. Ссылка длинная, и если мессенджер ее обрежет, воспользуйтесь файлом.</li>
+      </ul>` },
+  { id: 'bookmarks', title: 'Избранное', sub: 'Темы, к которым хочется вернуться', body: () => `
+      <p>На странице темы, под правилом, есть кнопка «Добавить в избранное». Повторное нажатие убирает тему из избранного. Такие темы отмечены лентой в меню и в карточках раздела.</p>
+      <h3>Список в меню</h3>
+      <ul>
+        <li>Кнопка «Избранное» показывает число тем и раскрывает их список в порядке сборника.</li>
+        <li>Если в избранном темы разных уровней, над списком появляется свой фильтр уровня.</li>
+        <li>«Избранное» не зависит от списка разделов: тема, открытая отсюда, не меняет фильтр уровня и не раскрывает свой раздел в меню.</li>
+      </ul>` }
+];
+const aboutPage = id => ABOUT.find(p => 'about-' + p.id === id);
+const isAbout = id => id === 'about' || !!aboutPage(id);
+
+function renderAboutPage(wrap) {
+  wrap.append(el('h1', 'sheet__title', 'Информация'));
+  const mail = el('a', 'sheet__link', 'pegasusgamesru@gmail.com');
+  mail.href = 'mailto:pegasusgamesru@gmail.com';
+  const contact = el('p', 'sheet__intro', 'Если у вас есть замечания или пожелания, можете направить их на почту: ');
+  contact.append(mail);
+  /* static text with <b> marks, so innerHTML is safe here */
+  const para = html => { const p = el('p', 'sheet__intro'); p.innerHTML = html; return p; };
+  wrap.append(
+    para('«Грамматика онлайн» — некоммерческий и независимый проект. Идея его создания появилась во время занятий по книге Ю. Б. Голицынского «Грамматика. Сборник упражнений».'),
+    para('Работать с бумажным сборником не всегда удобно: ответы нужно сверять вручную, из-за чего легко пропустить ошибку, да и сам учебник не самый мобильный предмет. Хотелось сразу видеть, где допущена ошибка, и в любой момент быстро возвращаться к сложной/интересной теме. Поиски бесплатных тренажеров со схожим подходом не привели к удовлетворительному результату (возможно, я плохо искал), поэтому и возникла идея создать его самостоятельно.'),
+    para('За основу взята <b>только структура сборника</b>: разделы и темы расположены в той же последовательности. При этом все правила, примеры и упражнения написаны заново и <b>не дублируют текст книги</b>, а также добавлен дополнительный раздел (№19). Тренажер не является электронной версией какого-либо издания книги — это самостоятельная разработка, созданная по ее мотивам.'),
+    para('В тренажере нет регистрации, платных разделов или ограничений по функционалу — весь функционал доступен сразу, без каких-либо условий. Если тренажер вам понравился, вы можете выразить благодарность автору, нажав кнопку <b>«Поддержать автора»</b> внизу меню.'));
+  wrap.append(el('div', 'sheet__section', 'Как устроен тренажер'));
+  const ol = el('ol', 'contents');
+  ABOUT.forEach((p, i) => {
+    const li = el('li', 'contents__item'); const b = el('button', 'contents__row'); b.type = 'button';
+    b.innerHTML = `<span class="contents__num">${i + 1}</span><span class="contents__title">${esc(p.title)}</span><span class="contents__meta">${esc(p.sub)}</span>`;
+    b.addEventListener('click', () => go('about-' + p.id));
+    li.append(b); ol.append(li);
+  });
+  wrap.append(ol, contact);
+}
+
+/* one page of «Информация», with the neighbours at the bottom */
+function renderAboutTopic(page, wrap) {
+  wrap.append(crumbs([{ label: 'Информация', to: 'about' }, page.title]));
+  wrap.append(el('h1', 'sheet__title', page.title));
+  const body = el('div', 'rule info'); body.innerHTML = page.body(); wrap.append(body);
+  const idx = ABOUT.indexOf(page);
+  const nav = el('nav', 'pager'); nav.setAttribute('aria-label', 'Соседние страницы');
+  const mk = (p, dir, label) => {
+    const b = el('button', 'pager__btn pager__btn--' + dir); b.type = 'button';
+    b.innerHTML = `<small class="pager__label"><span>${label}</span></small><span>${esc(p.title)}</span>`;
+    b.addEventListener('click', () => go('about-' + p.id));
+    nav.append(b);
+  };
+  if (idx > 0) mk(ABOUT[idx - 1], 'prev', `${arrowHtml('prev')} Предыдущая страница`);
+  if (idx < ABOUT.length - 1) mk(ABOUT[idx + 1], 'next', `Следующая страница ${arrowHtml('next')}`);
+  wrap.append(nav);
+}
+
 function renderMistakesPage(wrap) {
   wrap.append(crumbs([{ label: 'Содержание', to: 'contents' }, 'Работа над ошибками']));
   wrap.append(el('h1', 'sheet__title', 'Работа над ошибками'));
@@ -1823,7 +2019,7 @@ function renderMistakesPage(wrap) {
 }
 
 function renderContents(wrap) {
-  wrap.append(crumbs(['Сборник упражнений · 7-е издание']));
+  wrap.append(crumbs(['Тренажер грамматики · A1–C2']));
   wrap.append(el('h1', 'sheet__title', 'Содержание'));
   const p = el('p', 'sheet__intro');
   p.textContent = 'Разделы и их порядок повторяют сборник Ю. Голицынского «Грамматика. Сборник упражнений». Внутри каждого раздела — правила и упражнения с проверкой. Выберите раздел или тему слева, а фильтром уровня можно оставить только темы нужной сложности.';
@@ -1832,7 +2028,7 @@ function renderContents(wrap) {
   CHAPTERS.forEach(ch => {
     const li = el('li', 'contents__item'); const b = el('button', 'contents__row'); b.type = 'button';
     const cs = chapterStats(ch);
-    b.innerHTML = `<span class="contents__num">${ch.n}</span><span class="contents__title">${esc(ch.title)}</span><span class="contents__page">${ch.pages ? ch.pages[0] : '—'}</span>
+    b.innerHTML = `<span class="contents__num">${ch.n}</span><span class="contents__title">${esc(ch.title)}</span>
       <span class="contents__meta"><span>${ch.topics.length} ${plural(ch.topics.length, 'тема', 'темы', 'тем')} · ${ch.topics.reduce((n, t) => n + t.ex.length, 0)} упр.</span>
       <span class="contents__levels" aria-label="Уровни">${[...new Set(ch.topics.map(t => t.level))].map(l => `<span class="lvl-tag lvl-tag--sm" title="${LEVELS[l]}">${l}</span>`).join('')}</span>
       ${cs.tried ? `<span class="bar contents__bar">${barFill(cs.pct)}</span>${pctLabel(cs.pct, '', 'span')}` : ''}</span>`;
@@ -1840,13 +2036,10 @@ function renderContents(wrap) {
     li.append(b); ol.append(li);
   });
   wrap.append(ol);
-  const f = el('p', 'sheet__fine');
-  f.textContent = 'Тренажер составлен по структуре сборника Ю. Б. Голицынского «Грамматика. Сборник упражнений» и не является его копией: правила и упражнения написаны заново и не повторяют текст книги. Номера страниц указаны по печатной нумерации 7-го издания («Каро», 2011).';
-  wrap.append(f);
 }
 
 function renderChapter(ch, wrap) {
-  wrap.append(crumbs([{ label: 'Содержание', to: 'contents' }, `Раздел ${ch.n}`, pagesLabel(ch)]));
+  wrap.append(crumbs([{ label: 'Содержание', to: 'contents' }, `Раздел ${ch.n}`]));
   wrap.append(el('h1', 'sheet__title', ch.title));
   if (ch.intro) { const p = el('p', 'sheet__intro'); p.innerHTML = ch.intro; wrap.append(p); }
   wrap.append(progressBlock(ch));
@@ -1865,7 +2058,7 @@ function renderChapter(ch, wrap) {
 }
 
 function renderTopic(t, wrap) {
-  wrap.append(crumbs([{ label: 'Содержание', to: 'contents' }, { label: `${t.ch.n}. ${t.ch.title}`, to: 'ch-' + t.ch.id }, pagesLabel(t.ch)]));
+  wrap.append(crumbs([{ label: 'Содержание', to: 'contents' }, { label: `${t.ch.n}. ${t.ch.title}`, to: 'ch-' + t.ch.id }]));
   const h = el('h1', 'sheet__title', t.title); wrap.append(h);
   const lead = el('p', 'sheet__lead'); lead.innerHTML = `${esc(t.sub)} &nbsp;<span class="lvl-tag" title="${LEVELS[t.level]}">${t.level}</span>`; wrap.append(lead);
   wrap.append(progressBlock(t.ch, t.level));
@@ -2274,8 +2467,9 @@ function renderEx(t, ex, ei) {
 
 /* ---------- Router ---------- */
 /* syncToc = false on page load: the accordion keeps its saved open/closed state instead of following the route */
+const PAGES = ['contents', 'mistakes', 'about', ...ABOUT.map(p => 'about-' + p.id)];
 function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
-  if (!(id === 'contents' || id === 'mistakes' || topicById[id] || chapById[id])) id = 'contents';
+  if (!(PAGES.includes(id) || topicById[id] || chapById[id])) id = 'contents';
   route = id;
   viaBookmarks = fromBookmarks;
   mistakeFocus = pendingFocus; pendingFocus = null;
@@ -2292,8 +2486,11 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   }
   else if (chapById[id]) renderChapter(chapById[id], wrap);
   else if (id === 'mistakes') renderMistakesPage(wrap);
+  else if (id === 'about') renderAboutPage(wrap);
+  else if (aboutPage(id)) renderAboutTopic(aboutPage(id), wrap);
   else renderContents(wrap);
   main.append(wrap);
+  document.documentElement.classList.toggle('page--glow', isAbout(id));
   /* a move to another page adds a history entry, so the browser's Back / Forward work; the first render and re-renders of the same page only replace it */
   try { if (booted && location.hash.slice(1) !== id) history.pushState(null, '', '#' + id); else history.replaceState(null, '', '#' + id); } catch (e) {}
   store.set('gk2-last', id);
@@ -2305,6 +2502,7 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
 }
 
 $('#tocContents').addEventListener('click', () => go('contents'));
+$('#infoBtn').addEventListener('click', () => go('about'));
 
 /* Hide / show the sidebar on desktop; the choice is remembered. */
 function setSide(collapsed, focus) {
@@ -2406,7 +2604,7 @@ window.addEventListener('hashchange', followHash);
 let booted = false;
 renderLevels();
 const startId = location.hash.slice(1);
-go(startId && (startId === 'contents' || startId === 'mistakes' || topicById[startId] || chapById[startId]) ? startId : store.get('gk2-last', 'contents'), false, false);
+go(startId && (PAGES.includes(startId) || topicById[startId] || chapById[startId]) ? startId : store.get('gk2-last', 'contents'), false, false);
 booted = true;
 /* opened from a «restore» link: go() has already replaced the address with the page's own */
 if (startId.startsWith(LINK_KEY)) openLink(startId);
