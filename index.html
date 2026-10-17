@@ -703,14 +703,20 @@ button { font: inherit; transition: linear 0.15s; }
 .mistakes__tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 20px; }
 .mistakes__tools + .mistakes { margin-top: 12px; }
 .mistakes__levels { display: flex; flex-wrap: wrap; gap: 6px; }
-.mistakes__start { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; padding: 8px 16px; border: 1.5px solid var(--accent); border-radius: 10px;
-  background: var(--accent); color: var(--on-accent); font-size: 14px; font-weight: 600; cursor: pointer; transition: filter .15s; }
-.mistakes__start:hover { filter: brightness(1.12); }
-.mistakes__level { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 99px;
+/* calm, in the colors of the menu buttons (as «Сохранить» in «Резервная копия») */
+.mistakes__start { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; padding: 8px 16px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
+  background: none; color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color .15s, background-color .15s; }
+.mistakes__start:is(:hover, :focus-visible):not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+:root[data-theme="light"] .mistakes__start:not(:disabled):hover { background: var(--hover); }
+.mistakes__start:disabled { opacity: .45; cursor: default; }
+.mistakes__start:disabled .arrow--next { transform: none; }
+.mistakes__level { display: inline-flex; align-items: center; gap: 8px; padding: 4px 4px 4px 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 99px;
   background: var(--sheet); color: var(--accent); font-family: var(--f-mono); font-size: 13px; font-weight: 600; cursor: pointer; }
 .mistakes__level:hover { border-color: var(--accent); background: var(--accent-soft); }
 .mistakes__level[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
-.mistakes__level-count { font-weight: 400; opacity: .75; }
+/* the count sits in its own bubble, so «A1 1» does not read as one label */
+.mistakes__level-count { min-width: 20px; padding: 1px 6px; border-radius: 99px; background: var(--accent-soft); font-size: 12px; font-weight: 600; text-align: center; }
+.mistakes__level[aria-pressed="true"] .mistakes__level-count { background: color-mix(in srgb, var(--on-accent) 22%, transparent); }
 .mistakes__empty { margin: 24px 0 0; padding: 16px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--muted); }
 
 .topic-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 24px; }
@@ -808,7 +814,9 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__field--ok, .ex__field--ok:focus { color: var(--ok); border-bottom-color: var(--ok); }
 .ex__field--bad, .ex__field--bad:focus { color: var(--bad); border-bottom-color: var(--bad); }
 .ex__field--miss, .ex__field--miss:focus, .ex__blank--miss { border-bottom-color: var(--bad); border-bottom-style: dashed; }
-.ex__inline-key { margin-right: 4px; font-family: var(--f-en); font-style: italic; font-size: 15px; color: var(--bad); }
+/* the shown answer next to a gap: a green badge, so it reads apart from the hint in brackets and the sentence */
+.ex__inline-key { margin-right: 4px; padding: 0 7px 2px; border-radius: 6px; background: var(--ok-soft); font-family: var(--f-en); font-size: 15px; font-weight: 500; color: var(--ok-ink); }
+:root[data-theme="light"] .ex__inline-key { background: #C4E8CD; color: #055E19; }
 .ex__verdict { margin-left: 8px; font-family: var(--f-body); font-weight: 700; font-size: 16px; }
 .ex__verdict--ok { color: var(--ok); }
 :root[data-theme="light"] .ex__verdict--ok { color: #0c942c; } /* a brighter green just for the ✓ next to a right answer */
@@ -824,9 +832,12 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__opt--bad, .ex__opt--bad:is(:hover, [aria-pressed="true"]) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
 /* the light theme's wrong choice: --bad on --bad-soft was 4.3:1 and the tint nearly the sheet's — a stronger tint, darker text (5.8:1) */
 :root[data-theme="light"] .ex__opt--bad, :root[data-theme="light"] .ex__opt--bad:is(:hover, [aria-pressed="true"]) { background: #F6D0CA; color: #A3001A; }
-.ex__opt--key:not(.ex__opt--ok) { border-color: var(--ok); border-style: dashed; }
-.ex__key { grid-column: 2; font-family: var(--f-en); font-style: italic; font-size: 15.5px; color: var(--ok); }
-.ex__key--wrong { color: var(--bad); }
+/* «Показать ответы» in a choice exercise: the right option gets the green fill (dashed while it was not the one chosen) */
+.ex__opt--key, .ex__opt--key:is(:hover, [aria-pressed="true"]) { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+:root[data-theme="light"] .ex__opt--key, :root[data-theme="light"] .ex__opt--key:is(:hover, [aria-pressed="true"]) { background: #CDEED5; color: #066B1D; }
+.ex__opt--key:not(.ex__opt--ok) { border-style: dashed; }
+/* a shown answer is always green */
+.ex__key { grid-column: 2; font-family: var(--f-en); font-style: italic; font-size: 15.5px; font-weight: 500; color: var(--ok-ink); }
 .ex__self-ok { grid-column: 2; justify-self: start; padding: 2px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--well); color: var(--muted); font-size: 13px; cursor: pointer; }
 .ex__self-ok:hover { border-color: var(--ok); color: var(--ok); }
 .ex__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
@@ -842,6 +853,9 @@ button { font: inherit; transition: linear 0.15s; }
   background: var(--sheet); color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; }
 .ex__redo-link:hover { border-color: var(--accent); background: var(--accent-soft); }
 .ex__redo-link--next { margin-left: auto; }
+/* the level of the next exercise: a smaller tag, centered on the text line (as an inline box it sat on the baseline, low) */
+.ex__redo-text { display: inline-flex; align-items: center; gap: 5px; }
+.ex__redo-text .lvl-tag { padding: 0 4px; font-size: 9px; line-height: 1.45; }
 
 /* ---------- Pager ---------- */
 .pager-current { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 8px; margin-top: 20px;
@@ -1120,17 +1134,21 @@ let levelFilter = store.get('gk2-level', '');
 let route = null;
 let viaBookmarks = false; /* the open topic was reached from the «Избранное» list */
 
+/* a share in whole percent; 100 only when everything is done, so 199 of 200 shows 99, not a rounded 100 */
+const pctOf = (s, tot) => !tot ? 0 : s >= tot ? 100 : Math.min(99, Math.round(100 * s / tot));
+/* a topic's points: one per gap or item of its exercises, plus one for the rule marked as studied —
+   so with the rule not studied neither the topic nor its chapter or level reaches 100% */
 function topicStats(t) {
   const p = progress[t.id] || {};
-  let s = 0, tot = 0, tried = false;
+  let s = studied[t.id] ? 1 : 0, tot = 1, tried = !!studied[t.id];
   /* min(): a score saved before an exercise lost a gap must not push the topic past 100% */
   t.ex.forEach((ex, i) => { tot += units(ex); if (p[i]) { s += Math.min(p[i][0], units(ex)); tried = true; } });
-  return { s, tot, tried, pct: tot ? Math.round(100 * s / tot) : 0 };
+  return { s, tot, tried, pct: pctOf(s, tot) };
 }
 function chapterStats(ch, level) {
   let s = 0, tot = 0, tried = false;
   ch.topics.filter(t => !level || t.level === level).forEach(t => { const r = topicStats(t); s += r.s; tot += r.tot; tried = tried || r.tried; });
-  return { s, tot, tried, pct: tot ? Math.round(100 * s / tot) : 0 };
+  return { s, tot, tried, pct: pctOf(s, tot) };
 }
 
 /* Book progress: every rule is one point (when marked as studied), every exercise up to one point by the share of right answers
@@ -1266,7 +1284,7 @@ function renderLevelProgress() {
   const topics = TOPICS.filter(t => t.level === levelFilter);
   let s = 0, tot = 0;
   topics.forEach(t => { const r = topicStats(t); s += r.s; tot += r.tot; });
-  const pct = tot ? Math.round(100 * s / tot) : 0;
+  const pct = pctOf(s, tot);
   box.innerHTML = `<div class="lvl-prog__row"><span>Уровень <span class="lvl-tag lvl-tag--sm" title="${LEVELS[levelFilter]}">${levelFilter}</span> пройден на</span>${pctLabel(pct, 'lvl-prog__value')}</div>
     <div class="bar bar--thin">${barFill(pct)}</div>`;
 }
@@ -1284,7 +1302,7 @@ function renderLevels() {
 }
 
 /* each chip fills with green from the bottom up to the share of its level's points scored (for «Все» — the whole book);
-   at 100% (every exercise of every topic scored in full) it also gets --done */
+   at 100% (every rule studied and every exercise of every topic scored in full) it also gets --done */
 function fillLevelChips() {
   document.querySelectorAll('#levelChips .level-chip').forEach(b => {
     const level = b.dataset.level;
@@ -1293,7 +1311,7 @@ function fillLevelChips() {
     const pct = tot ? 100 * s / tot : 0;
     if (level) b.style.setProperty('--lvl', pct + '%'); /* «Все» shows no liquid */
     b.classList.toggle('level-chip--done', tot > 0 && s === tot);
-    b.title = `${level ? LEVELS[level] : 'Весь тренажер'} · пройдено ${Math.round(pct)}%`;
+    b.title = `${level ? LEVELS[level] : 'Весь тренажер'} · пройдено ${pctOf(s, tot)}%`;
   });
 }
 
@@ -1449,9 +1467,12 @@ function showFileMsg(kind, text) {
   clearTimeout(fileMsgTimer);
   if (kind === 'ok') fileMsgTimer = setTimeout(() => { fileMsg = null; renderFold('prog'); }, 15000);
 }
+/* keys of features that are gone: dropped from this browser, from new backups and when loading old ones */
+const OLD_KEYS = ['gk2-redo', 'gk2-toc-follow'];
+try { OLD_KEYS.forEach(k => localStorage.removeItem(k)); } catch (e) {}
 function backupKeys() {
   const keys = [];
-  try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('gk2-')) keys.push(k); } } catch (e) {}
+  try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('gk2-') && !OLD_KEYS.includes(k)) keys.push(k); } } catch (e) {}
   return keys.sort();
 }
 function backupObject(now) {
@@ -1583,8 +1604,7 @@ function showLinkBox(url) {
       <div class="modal__copied" role="status"><div class="modal__copied-clip"><span class="modal__copied-text"></span></div></div>
     </div>
     <div class="modal__foot modal__foot--start">
-      <button class="btn btn--primary" type="button" data-act="copy">Копировать</button>
-      <button class="btn modal__close" type="button" data-act="cancel">Закрыть</button>
+      <button class="btn btn--primary" type="button" data-act="copy">Копировать</button>      <button class="btn modal__close" type="button" data-act="cancel">Закрыть</button>
     </div>
   </div>`;
   const close = () => { clearTimeout(doneTimer); d.close(); d.remove(); };
@@ -1701,7 +1721,7 @@ function openImport(fromLink) {
     else if (act === 'ok' && backup) {
       try {
         backupKeys().forEach(k => localStorage.removeItem(k));
-        Object.entries(backup.data).forEach(([k, v]) => { if (v !== null) localStorage.setItem(k, JSON.stringify(v)); });
+        Object.entries(backup.data).forEach(([k, v]) => { if (v !== null && !OLD_KEYS.includes(k)) localStorage.setItem(k, JSON.stringify(v)); });
       } catch (err) { showError('Браузер не дал сохранить данные.'); return; }
       location.reload();
     }
@@ -1777,17 +1797,17 @@ function fillProgress(box) {
     const st = topicStats(t); s += st.s; tot += st.tot;
     t.ex.forEach((e, i) => { exn++; if (progress[t.id] && progress[t.id][i]) done++; });
   });
-  /* the whole book counts rules too, the same figure as in the sidebar; a chapter counts its exercises */
-  const pct = ch ? (tot ? Math.round(100 * s / tot) : 0) : bookProgress().pct;
+  /* the whole book: the same figure as in the sidebar; a chapter: its topics' points (the studied rules among them) */
+  const pct = ch ? pctOf(s, tot) : bookProgress().pct;
   /* breakdown by level, shown when the scope covers more than one level; the level of the open topic is filled */
   const levels = Object.keys(LEVELS).filter(l => topics.some(t => t.level === l));
   const rows = levels.length > 1 ? levels.map(l => {
     let ls = 0, lt = 0;
     topics.filter(t => t.level === l).forEach(t => { const st = topicStats(t); ls += st.s; lt += st.tot; });
-    const p = lt ? Math.round(100 * ls / lt) : 0;
+    const p = pctOf(ls, lt);
     return `<div class="page-prog__level" title="${LEVELS[l]}"><span class="lvl-tag page-prog__tag${l === box.dataset.level ? ' lvl-tag--filled' : ''}">${l}</span><span class="bar bar--thin">${barFill(p)}</span>${pctLabel(p, 'page-prog__value')}</div>`;
   }).join('') : '';
-  box.innerHTML = `<div class="page-prog__row"><span>${ch ? `Раздел ${ch.n} пройден на` : 'Учебник пройден на'}</span>${pctLabel(pct, 'page-prog__value')}</div>
+  box.innerHTML = `<div class="page-prog__row"><span>${ch ? `Раздел ${ch.n} пройден на` : 'Тренажер пройден на'}</span>${pctLabel(pct, 'page-prog__value')}</div>
     <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">${barFill(pct)}</div>
     <div class="page-prog__row"><span>Упражнений выполнено</span><b class="page-prog__value">${done} из ${exn}</b></div>` +
     (rows ? `<div class="page-prog__levels" aria-label="Прогресс по уровням">${rows}</div>` : '');
@@ -1897,8 +1917,8 @@ const ABOUT = [
       <p>Строка «С ошибками» в блоке «Прогресс» открывает список упражнений, где при последней проверке нашлись ошибки или незаполненные строки, с номерами этих заданий.</p>
       <ul>
         <li>Упражнения идут от A1 к C2, на странице есть свой фильтр уровня.</li>
-        <li>«Начать по порядку» открывает первое упражнение, а после него можно сразу перейти к следующему.</li>
-        <li>Упражнение пропадает из списка, когда вы решите его без ошибок или нажмете «Заново», и возвращается, если новая проверка снова найдет недочеты.</li>
+        <li>«Начать по порядку» открывает первое упражнение, а после него можно сразу перейти к следующему — по всем уровням или только по выбранному в фильтре.</li>
+        <li>Упражнение исчезает из списка, если вы выполните его без ошибок либо нажмете кнопку «Заново». Оно снова появится, если при следующей проверке будут ошибки.</li>
       </ul>` },
   { id: 'data', title: 'Где хранятся данные', sub: 'Резервная копия и перенос прогресса', body: () => `
       <div class="note"><span>Прогресс, ответы, «Избранное» и настройки хранятся <b>только в этом браузере на этом устройстве</b> — аккаунтов и сервера у тренажера нет. Данные пропадут, если очистить данные сайта или историю браузера; в режиме инкогнито — после закрытия окна. В другом браузере или на другом устройстве их не будет.</span></div>
@@ -1963,7 +1983,7 @@ function renderAboutTopic(page, wrap) {
 }
 
 function renderMistakesPage(wrap) {
-  wrap.append(crumbs([{ label: 'Содержание', to: 'contents' }, 'Работа над ошибками']));
+  /* no crumbs: the page is opened from «Прогресс», not from «Содержание» */
   wrap.append(el('h1', 'sheet__title', 'Работа над ошибками'));
   const all = mistakes();
   const level = mistakesFilter();
@@ -1972,11 +1992,11 @@ function renderMistakesPage(wrap) {
   const count = exCount(list);
   const p = el('p', 'sheet__intro');
   p.textContent = count
-    ? `Давайте вернемся к тому, что пока не получилось: при последней проверке в ${count} ${plural(count, 'упражнении', 'упражнениях', 'упражнениях')} из ${list.length} ${plural(list.length, 'темы', 'тем', 'тем')}${level ? ' уровня ' + level : ''} нашлись ошибки или незаполненные строки. ${count > 1 ? 'Выберите любое' : 'Нажмите на него'}, чтобы продолжить.`
+    ? `Давайте вернемся к тому, что пока не получилось: при последней проверке в ${count} ${plural(count, 'упражнении', 'упражнениях', 'упражнениях')} из ${list.length} ${plural(list.length, 'темы', 'тем', 'тем')}${level ? ' уровня ' + level : ''} нашлись ошибки или незаполненные строки. ${count > 1 ? 'Выберите из списка, что хотите исправить.' : 'Нажмите на него, чтобы продолжить.'}`
     : 'Здесь появятся упражнения, в которых при проверке были ошибки или незаполненные строки.';
   wrap.append(p);
-  if (!count) { wrap.append(el('p', 'mistakes__empty', 'Сейчас таких упражнений нет — все проверенные упражнения решены без ошибок.')); return; }
-  wrap.append(el('p', 'mistakes__hint', 'Задание пропадет из списка, когда вы решите его без ошибок или нажмете «Заново», и вернется, если новая проверка снова найдет недочеты.'));
+  if (!count) { wrap.append(el('p', 'mistakes__empty', 'Сейчас таких упражнений нет.')); return; }
+  wrap.append(el('p', 'mistakes__hint', 'Задание исчезнет из списка, если вы выполните его без ошибок либо нажмете кнопку «Заново». Оно снова появится, если при следующей проверке будут ошибки.'));
   const tools = el('div', 'mistakes__tools');
   /* level filter: only levels that have mistakes, each with its number of exercises; not needed for a single level */
   const levels = Object.keys(LEVELS).filter(l => all.some(m => m.t.level === l));
@@ -1992,9 +2012,11 @@ function renderMistakesPage(wrap) {
     });
     tools.append(bar);
   }
-  /* the first exercise of the (filtered) list; «Следующее» under each exercise then leads through the rest */
+  /* the first exercise of the (filtered) list; «Следующее» under each exercise then leads through the rest of the same
+     level filter, so the label names it. With a single exercise there is no order to follow: the button is off */
   const start = el('button', 'mistakes__start'); start.type = 'button';
-  start.innerHTML = `Начать по порядку ${arrowHtml('next')}`;
+  start.innerHTML = `Начать по порядку: ${level ? 'уровень ' + level : 'все уровни'} ${arrowHtml('next')}`;
+  start.disabled = count < 2;
   start.addEventListener('click', () => openExercise(list[0].t.id, list[0].exs[0][0]));
   tools.append(start);
   wrap.append(tools);
@@ -2077,7 +2099,12 @@ function renderTopic(t, wrap) {
       if (animate) sbLabel.querySelector('.slot').classList.add('slot--spin');
     } else sbLabel.textContent = 'Отметить правило как изученное';
   };
-  sb.addEventListener('click', () => { studied[t.id] = !studied[t.id]; if (!studied[t.id]) delete studied[t.id]; store.set('gk2-studied', studied); sync(true); renderToc(); renderOverall(); });
+  sb.addEventListener('click', () => {
+    studied[t.id] = !studied[t.id]; if (!studied[t.id]) delete studied[t.id]; store.set('gk2-studied', studied);
+    sync(true); renderToc(); renderOverall();
+    /* the rule counts in the topic, chapter and level figures */
+    const pp = $('#pageProg'); if (pp) fillProgress(pp);
+  });
   sync(); study.append(sb);
   /* bookmark: a topic the reader wants to come back to and repeat */
   const bb = el('button', 'btn study__btn study__btn--bookmark'); bb.type = 'button';
@@ -2367,9 +2394,7 @@ function renderEx(t, ex, ei) {
   }
   function showKey(row) {
     if (ex.type === 'choice') {
-      const good = row.sel === row.it[1][0];
-      row.key.textContent = good ? 'Верно' : 'Ответ: ' + row.it[1][0];
-      row.key.classList.toggle('ex__key--wrong', !good); row.key.hidden = false;
+      /* no text line: the right option itself turns green */
       row.opts.querySelectorAll('.ex__opt').forEach(b => b.classList.toggle('ex__opt--key', b.textContent === row.it[1][0]));
     } else if (ex.type === 'translate') {
       const alts = row.it[1].split('|');
@@ -2380,7 +2405,7 @@ function renderEx(t, ex, ei) {
       row.inputs.forEach((inp, k) => {
         const a = answerOf(row, k);
         if (accepts(a, inp.value)) return;
-        inp.after(el('span', 'ex__inline-key', '(' + firstAnswer(a) + ')'));
+        inp.after(el('span', 'ex__inline-key', firstAnswer(a)));
       });
     }
   }
@@ -2388,7 +2413,7 @@ function renderEx(t, ex, ei) {
     rows.forEach(row => {
       row.li.querySelectorAll('.ex__inline-key').forEach(k => k.remove());
       if (row.opts) row.opts.querySelectorAll('.ex__opt').forEach(b => b.classList.remove('ex__opt--key'));
-      if (row.key) { row.key.hidden = true; row.key.classList.remove('ex__key--wrong'); }
+      if (row.key) row.key.hidden = true;
     });
     setKeysShown(false);
   }
@@ -2437,7 +2462,9 @@ function renderEx(t, ex, ei) {
     redoBar.append(back);
     if (next) {
       const b = el('button', 'ex__redo-link ex__redo-link--next'); b.type = 'button';
-      b.innerHTML = `<span>Следующее: ${esc(next.t.num)} · Упр. ${next.i + 1}</span>${arrowHtml('next')}`;
+      /* the next one is of another level (this level has no more mistakes, or the list is not filtered): the button names it */
+      const lvl = next.t.level !== t.level ? ` · уровень <span class="lvl-tag lvl-tag--sm" title="${LEVELS[next.t.level]}">${next.t.level}</span>` : '';
+      b.innerHTML = `<span class="ex__redo-text">Следующее: ${esc(next.t.num)} · Упр. ${next.i + 1}${lvl}</span>${arrowHtml('next')}`;
       b.title = next.t.title;
       b.addEventListener('click', () => openExercise(next.t.id, next.i));
       redoBar.append(b);
