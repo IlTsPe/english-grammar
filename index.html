@@ -2253,8 +2253,8 @@ function renderEx(t, ex, ei) {
         Object.assign(row, { q, inputs: [inp], selfBtn });
         li.append(q, inp);
       }
-      row.key = el('div', 'ex__key'); row.key.hidden = true;
-      li.append(row.key);
+      /* the «Ответ: …» line: only a translation has one; a choice shows its answer on the option itself */
+      if (ex.type === 'translate') { row.key = el('div', 'ex__key'); row.key.hidden = true; li.append(row.key); }
       if (row.selfBtn) li.append(row.selfBtn);
       ol.append(li); rows.push(row);
     });
