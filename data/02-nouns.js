@@ -20,9 +20,9 @@ ${T(["Единственное", "Множественное"], [
   ["<i>mouse</i>", "<i>mice</i>"],
   ["<i>ox</i>", "<i>oxen</i>"],
   ["<i>person</i>", "<i>people</i>"],
-  ["<i>sheep, fish, deer, swine</i>", "не меняются"]
+  ["<i>sheep, fish, deer, aircraft</i>", "не меняются"]
 ])}
-${N("Составные слова со словами <i>man / woman</i> меняются целиком: <i>policeman → policemen</i>, <i>Englishwoman → Englishwomen</i>. У составных через дефис меняется главное слово: <i>passer-by → passers-by</i>.")}`,
+${N("В сложных словах с <i>man / woman</i> меняется эта часть: <i>policeman → policemen</i>, <i>Englishwoman → Englishwomen</i>. У составных через дефис меняется главное слово: <i>passer-by → passers-by</i>.")}`,
   ex: [
     { type: 'gap', task: 'Напишите форму множественного числа.', items: [
       ["box → ___", "boxes"], ["baby → ___", "babies"], ["day → ___", "days"], ["knife → ___", "knives"],
@@ -30,7 +30,7 @@ ${N("Составные слова со словами <i>man / woman</i> мен
       ["sheep → ___", "sheep"], ["woman → ___", "women"], ["watch → ___", "watches"], ["person → ___", "people|persons"],
       ["mouse → ___", "mice"], ["leaf → ___", "leaves"], ["key → ___", "keys"], ["policeman → ___", "policemen"]
     ]},
-    { type: 'gap', task: 'Поставьте выделенное существительное во множественное число и согласуйте глагол.', items: [
+    { type: 'gap', task: 'Поставьте существительное во множественное число.', items: [
       ["This child is clever. → These ___ are clever.", "children"],
       ["That man is a doctor. → Those ___ are doctors.", "men"],
       ["My tooth hurts. → My ___ hurt.", "teeth"],
@@ -41,11 +41,11 @@ ${N("Составные слова со словами <i>man / woman</i> мен
       ["The goose is white. → The ___ are white.", "geese"]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
-      ["Эти дети — мои племянники.", "These children are my nephews."],
-      ["У меня болят зубы.", "My teeth hurt.|My teeth ache.|I have toothache."],
+      ["Эти дети — мои племянники.", "These children are my nephews.|These kids are my nephews."],
+      ["У меня болят зубы.", "My teeth hurt.|My teeth ache.|I have toothache.|I have a toothache."],
       ["На столе три ножа.", "There are three knives on the table."],
       ["Эти женщины — учителя.", "These women are teachers."],
-      ["В саду много овец.", "There are many sheep in the garden.|There are a lot of sheep in the garden."]
+      ["На лугу много овец.", "There are many sheep in the field.|There are a lot of sheep in the field.|There are many sheep in the meadow.|There are a lot of sheep in the meadow."]
     ]}
   ]},
 
@@ -57,7 +57,7 @@ ${T(["Случай", "Как образуется", "Пример"], [
   ["множественное на <i>-s</i>", "только апостроф <i>'</i>", "<i>my <b>parents'</b> house, the <b>girls'</b> room</i>"],
   ["неправильное множественное", "<i>+ 's</i>", "<i>the <b>children's</b> toys, <b>women's</b> clothes</i>"],
   ["два владельца вместе", "<i>'s</i> у последнего", "<i><b>Tom and Ann's</b> flat</i> — общая квартира"],
-  ["время и расстояние", "<i>+ 's</i>", "<i><b>today's</b> paper, a <b>week's</b> holiday</i>"],
+  ["время и расстояние", "<i>+ 's</i>", "<i><b>today's</b> paper, a <b>week's</b> holiday, a <b>mile's</b> walk</i>"],
   ["предметы", "<i>of</i>", "<i>the roof <b>of the house</b>, the end <b>of the film</b></i>"]
 ])}
 ${E([
@@ -93,10 +93,10 @@ ${N("Не путайте: <i>the boy's toys</i> — игрушки одного 
 ${T(["Неисчисляемые", "Как посчитать"], [
   ["<i>water, milk, tea, juice</i>", "<i>a glass of water, a cup of tea, a bottle of milk</i>"],
   ["<i>bread, cheese, meat, butter</i>", "<i>a loaf of bread, a piece of cheese, a kilo of meat</i>"],
-  ["<i>sugar, salt, rice</i>", "<i>a spoon of sugar, a packet of rice</i>"],
-  ["<i>advice, information, news</i>", "<i>a piece of advice, a piece of information</i>"],
+  ["<i>sugar, salt, rice</i>", "<i>a spoonful of sugar, a packet of rice</i>"],
+  ["<i>advice, information, news, music, work</i>", "<i>a piece of advice, a piece of information, a piece of music</i>"],
   ["<i>money, furniture, luggage, homework</i>", "<i>a piece of furniture, two pieces of luggage</i>"],
-  ["<i>weather, music, work, progress</i>", "—"]
+  ["<i>weather, progress, fun, traffic</i>", "—"]
 ])}
 <h3>Согласование с глаголом</h3>
 ${E([
@@ -114,8 +114,8 @@ ${N("Некоторые слова бывают и теми и другими с
       ["Where ___ my glasses?", ["are", "is"]], ["The weather ___ terrible yesterday.", ["was", "were"]]
     ]},
     { type: 'gap', task: 'Впишите слово-измеритель: glass, piece, loaf, cup, bar, bottle, kilo.', items: [
-      ["a ___ of bread", "loaf"], ["a ___ of chocolate", "bar"], ["a ___ of advice", "piece"],
-      ["a ___ of water", "glass|bottle"], ["a ___ of coffee", "cup"], ["a ___ of wine", "bottle|glass"],
+      ["a ___ of bread", "loaf|piece"], ["a ___ of chocolate", "bar|piece"], ["a ___ of advice", "piece"],
+      ["a ___ of water", "glass|bottle|cup"], ["a ___ of coffee", "cup|kilo"], ["a ___ of wine", "bottle|glass"],
       ["a ___ of potatoes", "kilo"], ["a ___ of furniture", "piece"]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [

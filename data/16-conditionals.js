@@ -8,7 +8,7 @@ topics: [
 ${T(["Тип", "Условие (if)", "Результат", "Пример"], [
   ["0 — всегда так", "<i>Present Simple</i>", "<i>Present Simple</i>", "<i>If you <b>heat</b> ice, it <b>melts</b>.</i>"],
   ["1 — реальное будущее", "<i>Present Simple</i>", "<i>will + V</i>", "<i>If it <b>rains</b>, we <b>will stay</b> at home.</i>"],
-  ["1 — с модальным / приказом", "<i>Present Simple</i>", "<i>can / may / must; повелит.</i>", "<i>If you <b>are</b> tired, <b>go</b> to bed.</i>"]
+  ["1 — с модальным / приказом", "<i>Present Simple</i>", "<i>can / may / must или повелительное наклонение</i>", "<i>If you <b>are</b> tired, <b>go</b> to bed.</i>"]
 ])}
 ${E([
   ["<b>Unless</b> you hurry, you'll miss the train.", "Если не поторопишься… (unless = if not)"],
@@ -51,7 +51,7 @@ ${E([
 ${T(["1 тип: реально", "2 тип: нереально"], [
   ["<i>If I <b>have</b> time, I'<b>ll help</b> you.</i> (возможно, будет время)", "<i>If I <b>had</b> time, I'<b>d help</b> you.</i> (времени нет)"]
 ])}
-${N("Для всех лиц можно использовать <i>were</i>: <i>If I <b>were</b>…, If she <b>were</b>…</i> — это нормы письменной речи. В части с <i>if</i> <i>would</i> не ставится.")}`,
+${N("Для всех лиц можно использовать <i>were</i>: <i>If I <b>were</b>…, If she <b>were</b>…</i> — это норма письменной речи. В части с <i>if</i> <i>would</i> не ставится.")}`,
   ex: [
     { type: 'gap', task: 'Поставьте глагол в нужную форму.', items: [
       ["If I ___ (have) more money, I would buy a house.", "had"], ["If I were you, I ___ (not / do) that.", "would not do|'d not do"],
@@ -102,7 +102,7 @@ ${N("В русском все три нереальных типа перево�
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Если бы ты пришел вчера, ты бы увидел его.", "If you had come yesterday, you would have seen him.|If you'd come yesterday, you'd have seen him."],
-      ["Если бы я знал, я бы тебе сказал (тогда).", "If I had known, I would have told you.|If I'd known, I'd have told you."],
+      ["Если бы я знал, я бы тебе тогда сказал.", "If I had known, I would have told you.|If I'd known, I'd have told you."],
       ["Если бы мы не опоздали на поезд, мы бы уже были дома.", "If we hadn't missed the train, we would be at home now.|If we had not missed the train, we would be home now.|If we hadn't missed the train, we'd be home now.|If we hadn't missed the train, we would already be at home."]
     ]}
   ]},

@@ -27,6 +27,12 @@ ${N("Согласование не нужно, если в придаточно�
       ["I knew she ___ in Moscow.", ["lived", "lives", "will live"]], ["He said he ___ me the next day.", ["would call", "will call", "calls"]],
       ["She didn't know where I ___.", ["had been", "have been", "am"]], ["I thought you ___ coming.", ["weren't", "aren't", "won't"]],
       ["He told us the Moon ___ round the Earth.", ["goes", "went", "had gone"]], ["We were sure they ___ the match.", ["would win", "will win", "win"]]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Я знал, что он болен.", "I knew that he was ill.|I knew he was ill.|I knew that he was sick.|I knew he was sick."],
+      ["Я думал, что ты спишь.", "I thought that you were sleeping.|I thought you were sleeping.|I thought you were asleep."],
+      ["Она надеялась, что сдаст экзамен.", "She hoped that she would pass the exam.|She hoped she would pass the exam."],
+      ["Мы не знали, что они уже уехали.", "We didn't know that they had already left.|We didn't know they had already left."]
     ]}
   ]},
 
@@ -90,7 +96,7 @@ ${N("Типичная ошибка: <i>She asked me where <s>did I live</s></i>.
       ["“Where do you live?” she asked. → She asked me where I ___.", "lived"],
       ["“Are you hungry?” he asked. → He asked me ___ I was hungry.", "if|whether"],
       ["“What time is it?” Tom asked. → Tom asked what time ___.", "it was"],
-      ["“Did you like the film?” she asked. → She asked if I ___ the film.", "had liked"],
+      ["“Did you like the film?” she asked. → She asked if I ___ the film.", "had liked|liked"],
       ["“Can you swim?” he asked. → He asked if I ___ swim.", "could"],
       ["“Why are you crying?” Mum asked. → Mum asked why I ___.", "was crying"],
       ["“Where is the station?” → Do you know where the station ___?", "is"],
@@ -102,12 +108,18 @@ ${N("Типичная ошибка: <i>She asked me where <s>did I live</s></i>.
       ["She asked me where ___.", ["I lived", "did I live", "do I live"]], ["She asked me ___ I liked jazz.", ["if", "that", "do"]],
       ["Can you tell me what time ___?", ["the train leaves", "does the train leave", "leaves the train"]], ["He asked me why ___ late.", ["I was", "was I", "I am"]],
       ["I wonder ___ she will come.", ["whether", "that", "what"]], ["They asked us how long ___ there.", ["we had been", "had we been", "we have been"]]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Он спросил, где я живу.", "He asked where I lived.|He asked me where I lived."],
+      ["Она спросила, люблю ли я кофе.", "She asked if I liked coffee.|She asked me if I liked coffee.|She asked whether I liked coffee.|She asked me whether I liked coffee."],
+      ["Она спросила меня, сколько мне лет.", "She asked me how old I was.|She asked how old I was."],
+      ["Учитель спросил, закончили ли мы.", "The teacher asked if we had finished.|The teacher asked whether we had finished.|The teacher asked us if we had finished.|The teacher asked us whether we had finished."]
     ]}
   ]},
 
 { id: 'rep-commands', level: 'B1', title: 'Просьбы и приказы', sub: 'She told us not to be late',
   rule: `
-<p>Повелительное предложение передается инфинитивом. Глагол-вводящее слово выбирается по смыслу.</p>
+<p>Повелительное предложение передается инфинитивом. Вводящий глагол выбирается по смыслу.</p>
 ${F("told / asked / ordered / advised + <b>кого-то</b> + <b>(not) to V</b>")}
 ${T(["Прямая речь", "Косвенная речь"], [
   ["<i>“Close the window, please.”</i>", "<i>She <b>asked</b> me <b>to close</b> the window.</i>"],
@@ -135,8 +147,8 @@ ${N("Отрицание ставится перед <i>to</i>: <i>told us <b>not
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Учитель велел нам открыть книги.", "The teacher told us to open our books.|The teacher told us to open the books."],
       ["Мама попросила меня не опаздывать.", "Mum asked me not to be late.|Mother asked me not to be late.|My mother asked me not to be late.|My mum asked me not to be late."],
-      ["Он спросил, где я живу.", "He asked where I lived.|He asked me where I lived."],
-      ["Она спросила, люблю ли я кофе.", "She asked if I liked coffee.|She asked me if I liked coffee.|She asked whether I liked coffee.|She asked me whether I liked coffee."]
+      ["Врач посоветовал мне остаться в постели.", "The doctor advised me to stay in bed."],
+      ["Он велел мне не трогать его вещи.", "He told me not to touch his things."]
     ]}
   ]},
 
@@ -158,6 +170,12 @@ ${N("В косвенной речи будущее после прошедшег
       ["We were just ___ leave when the phone rang.", ["about to", "going", "on the point to"]], ["He was on the point of ___ up when he found the answer.", ["giving", "give", "to give"]],
       ["Little did they know that they ___ never meet again.", ["were to", "are to", "will"]], ["I knew you ___ like this film.", ["would", "will", "are going to"]],
       ["They ___ leaving the next morning, so they packed in the evening.", ["were", "would", "are"]]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Я собирался тебе позвонить, но забыл.", "I was going to call you, but I forgot.|I was going to phone you, but I forgot."],
+      ["Мы уже собирались уходить, когда зазвонил телефон.", "We were about to leave when the phone rang.|We were going to leave when the phone rang."],
+      ["Я знал, что тебе понравится.", "I knew you would like it.|I knew that you would like it."],
+      ["Она сказала, что придет позже.", "She said she would come later.|She said that she would come later."]
     ]}
   ]}
 ]});

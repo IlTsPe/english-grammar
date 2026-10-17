@@ -9,15 +9,15 @@ ${T(["Слово", "С чем", "Где чаще", "Пример"], [
   ["<i>many</i>", "исчисляемые", "вопросы, отрицания", "<i>How <b>many</b> books? I don't have <b>many</b> friends.</i>"],
   ["<i>much</i>", "неисчисляемые", "вопросы, отрицания", "<i>How <b>much</b> money? There isn't <b>much</b> time.</i>"],
   ["<i>a lot of / lots of</i>", "любые", "утверждения", "<i>She has <b>a lot of</b> friends. We have <b>lots of</b> time.</i>"],
-  ["<i>too many / too much</i>", "слишком много", "любые", "<i>There are <b>too many</b> people. You eat <b>too much</b> sugar.</i>"],
-  ["<i>so many / so much</i>", "так много", "любые", "<i>I've never seen <b>so many</b> stars.</i>"]
+  ["<i>too many / too much</i> — слишком много", "<i>many</i> — исчисляемые, <i>much</i> — неисчисляемые", "любые предложения", "<i>There are <b>too many</b> people. You eat <b>too much</b> sugar.</i>"],
+  ["<i>so many / so much</i> — так много", "<i>many</i> — исчисляемые, <i>much</i> — неисчисляемые", "любые предложения", "<i>I've never seen <b>so many</b> stars.</i>"]
 ])}
 ${E([
   ["<b>How many</b> apples do you need?", "Сколько яблок? (штук)"],
   ["<b>How much</b> is this bag?", "Сколько стоит эта сумка?"],
   ["Thank you very <b>much</b>! I like it very <b>much</b>.", "much как наречие: «очень»"]
 ])}
-${N("В утвердительных предложениях <i>much</i> звучит книжно. Вместо <i>I have much time</i> естественнее <i>I have <b>a lot of</b> time</i>.")}`,
+${N("В утвердительных предложениях <i>much</i> звучит книжно. Вместо <i>I have much time</i> естественнее <i>I have <b>a lot of</b> time</i>. Без существительного — <i>a lot</i>: <i>She reads <b>a lot</b>.</i>")}`,
   ex: [
     { type: 'gap', task: 'Впишите much или many.', items: [
       ["How ___ money have you got?", "much"], ["How ___ people live in this city?", "many"],
@@ -36,7 +36,7 @@ ${N("В утвердительных предложениях <i>much</i> зву
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Сколько у тебя книг?", "How many books have you got?|How many books do you have?"],
       ["Сколько стоит этот телефон?", "How much is this phone?|How much does this phone cost?"],
-      ["У нас мало времени (не много).", "We don't have much time.|We haven't got much time.|We do not have much time."],
+      ["У нас не так много времени.", "We don't have much time.|We haven't got much time.|We do not have much time."],
       ["У нее много друзей.", "She has a lot of friends.|She has many friends.|She has got a lot of friends.|She has lots of friends."],
       ["Ты ешь слишком много сахара.", "You eat too much sugar."]
     ]}
@@ -51,7 +51,7 @@ ${T(["", "Исчисляемые", "Неисчисляемые"], [
 ])}
 ${E([
   ["I have <b>a few</b> friends here, so I'm not lonely.", "Есть несколько друзей — хорошо."],
-  ["I have <b>few</b> friends here, I'm lonely.", "Мало друзей — плохо."],
+  ["I have <b>few</b> friends here, and I feel lonely.", "Мало друзей — плохо."],
   ["There's <b>a little</b> time left. Let's have coffee.", "Немного времени есть."],
   ["There's <b>little</b> time left. Hurry up!", "Времени мало."]
 ])}

@@ -6,8 +6,8 @@ topics: [
   rule: `
 <p>У английского глагола две основные формы причастия.</p>
 ${T(["Форма", "Значение", "Пример", "Перевод"], [
-  ["Participle I: <i>V-ing</i>", "активное, процесс", "<i>a <b>sleeping</b> child, the man <b>standing</b> at the door</i>", "спящий ребенок, стоящий у двери"],
-  ["Participle II: <i>V3</i>", "пассивное, результат", "<i>a <b>broken</b> cup, a letter <b>written</b> in pencil</i>", "разбитая чашка, написанное письмо"],
+  ["Participle I: <i>V-ing</i>", "активное, процесс", "<i>a <b>sleeping</b> child, the man <b>standing</b> at the door</i>", "спящий ребенок, человек, стоящий у двери"],
+  ["Participle II: <i>V3</i>", "пассивное, результат", "<i>a <b>broken</b> cup, a letter <b>written</b> in pencil</i>", "разбитая чашка, письмо, написанное карандашом"],
   ["Perfect Participle: <i>having V3</i>", "действие раньше другого", "<i><b>Having finished</b> the work, he left.</i>", "закончив работу"]
 ])}
 <h3>-ing или -ed: чувства</h3>
@@ -69,6 +69,12 @@ ${N("У оборота и главного предложения должно �
       ["___ (finish) the work, they went home.", "having finished"], ["Not ___ (want) to wake him, I left quietly.", "wanting"],
       ["___ (write) in simple English, the book is easy to read.", "written"], ["___ (live) in Spain for years, she speaks Spanish fluently.", "having lived"],
       ["While ___ (cross) the road, look both ways.", "crossing"], ["The people ___ (invite) to the party were all students.", "invited"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский, используя причастный оборот.', items: [
+      ["Закончив работу, они пошли домой.", "Having finished the work, they went home.|Having finished work, they went home.|Having finished their work, they went home."],
+      ["Не зная, что сказать, я молчал.", "Not knowing what to say, I kept silent.|Not knowing what to say, I was silent.|Not knowing what to say, I said nothing."],
+      ["Построенный в 1890 году, этот дом теперь музей.", "Built in 1890, the house is now a museum.|Built in 1890, this house is now a museum."],
+      ["Дети, играющие в саду, — мои племянники.", "The children playing in the garden are my nephews."]
     ]}
   ]}
 ]});

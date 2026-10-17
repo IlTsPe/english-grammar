@@ -22,7 +22,7 @@ ${E([
   ["<b>in</b> the picture, <b>in</b> the sky, <b>in</b> a car", "на картине, в небе, в машине"],
   ["<b>at</b> home, <b>at</b> work, <b>at</b> the cinema, <b>at</b> a party", "дома, на работе, в кино, на вечеринке"]
 ])}
-${N("Русское «на» не всегда <i>on</i>: «на картине» — <i>in the picture</i>, «на улице» — <i>in the street</i>, «на концерте» — <i>at the concert</i>.")}`,
+${N("Русское «на» не всегда <i>on</i>: «на картине» — <i>in the picture</i>, «на улице» — <i>in the street</i>, «на концерте» — <i>at the concert</i>. Этажи британцы считают иначе: наш первый этаж — <i>the ground floor</i>, второй — <i>the first floor</i>; в американском английском счет как у нас.")}`,
   ex: [
     { type: 'gap', task: 'Впишите in, on или at.', items: [
       ["The cat is ___ the box.", "in"], ["There is a picture ___ the wall.", "on"],
@@ -34,14 +34,14 @@ ${N("Русское «на» не всегда <i>on</i>: «на картине�
     ]},
     { type: 'choice', task: 'Выберите предлог.', items: [
       ["The ball is ___ the chair.", ["under", "between", "among"]], ["The bank is ___ the post office and the café.", ["between", "among", "opposite of"]],
-      ["There's a garden ___ the house.", ["behind", "behind of", "back"]], ["Our school is ___ the park.", ["opposite", "opposite to of", "in front"]],
+      ["There's a garden ___ the house.", ["behind", "behind of", "back"]], ["Our school is ___ the park.", ["opposite", "opposite of", "in front"]],
       ["The car is parked ___ the shop.", ["in front of", "in front", "before of"]], ["I found my letter ___ the old papers.", ["among", "between", "at"]],
-      ["The lamp is hanging ___ the table.", ["above", "on", "at"]], ["Sit ___ me, please.", ["next to", "next", "near to of"]]
+      ["The lamp is hanging ___ the table.", ["above", "on", "at"]], ["Sit ___ me, please.", ["next to", "next", "near of"]]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Книга на столе.", "The book is on the table."],
       ["Кошка под кроватью.", "The cat is under the bed."],
-      ["Мы живем на втором этаже.", "We live on the second floor."],
+      ["Мы живем на втором этаже.", "We live on the first floor.|We live on the second floor."],
       ["Он ждет тебя на остановке.", "He is waiting for you at the bus stop.|He's waiting for you at the bus stop."],
       ["Магазин находится напротив школы.", "The shop is opposite the school.|The shop is across from the school."]
     ]}
@@ -104,9 +104,9 @@ ${T(["Предлог", "Значение", "Пример"], [
 ${N("С <i>home</i> предлог <i>to</i> не ставится: <i>go <b>home</b>, come home</i>. С <i>arrive</i> — <i>in</i> или <i>at</i>, а не <i>to</i>: <i>arrive <b>in</b> Moscow, arrive <b>at</b> the station</i>.")}`,
   ex: [
     { type: 'gap', task: 'Впишите предлог: to, into, out of, across, through, along, past, off или from.', items: [
-      ["She took a pen ___ her bag.", "out of"], ["We walked ___ the forest.", "through"],
+      ["She took a pen ___ her bag.", "out of|from"], ["We walked ___ the forest.", "through"],
       ["He fell ___ his bike and hurt his knee.", "off"], ["They swam ___ the river.", "across"],
-      ["Let's go ___ the cinema tonight.", "to"], ["The cat jumped ___ the box.", "into"],
+      ["Let's go ___ the cinema tonight.", "to"], ["The cat jumped ___ the box and fell asleep in it.", "into"],
       ["We walked ___ the river bank.", "along"], ["I got a letter ___ my grandmother.", "from"],
       ["The bus drove ___ our house without stopping.", "past"], ["Come ___ the window and look!", "to"]
     ]},
@@ -114,6 +114,13 @@ ${N("С <i>home</i> предлог <i>to</i> не ставится: <i>go <b>hom
       ["We arrived ___ London at midnight.", ["in", "to", "at"]], ["Let's go ___.", ["home", "to home", "at home"]],
       ["The thief climbed ___ the window.", ["through", "across", "along"]], ["Get ___ the bus at the next stop.", ["off", "out", "from"]],
       ["They travelled ___ the world.", ["around", "across of", "through of"]], ["He came ___ the room and sat down.", ["into", "in to", "onto"]]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Он вошел в комнату.", "He went into the room.|He came into the room.|He walked into the room.|He entered the room."],
+      ["Мы шли через лес.", "We walked through the forest.|We were walking through the forest.|We went through the forest."],
+      ["Она переплыла реку.", "She swam across the river."],
+      ["Мы приехали в Москву вечером.", "We arrived in Moscow in the evening.|We came to Moscow in the evening.|In the evening we arrived in Moscow."],
+      ["Пойдем домой.", "Let's go home."]
     ]}
   ]},
 
@@ -152,7 +159,7 @@ ${N("Некоторые глаголы в английском не требую
       ["Я ищу свой телефон.", "I am looking for my phone.|I'm looking for my phone."],
       ["Она боится темноты.", "She is afraid of the dark.|She's afraid of the dark.|She is afraid of darkness."],
       ["Все зависит от тебя.", "Everything depends on you.|It all depends on you."],
-      ["Он хорошо играет в шахматы (хорош в шахматах).", "He is good at chess.|He's good at chess."],
+      ["Он хорошо играет в шахматы.", "He is good at chess.|He plays chess well."],
       ["Ответь на вопрос.", "Answer the question."]
     ]}
   ]}

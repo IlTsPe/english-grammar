@@ -18,7 +18,7 @@ ${E([
   ["<b>She</b> loves <b>him</b>, and <b>he</b> loves <b>her</b>.", "Подлежащее и дополнение."],
   ["This is <b>my</b> bag. The bag is <b>mine</b>.", "Перед существительным и без него."],
   ["He cut <b>himself</b>. Help <b>yourself</b>!", "Возвратное — действие на себя."],
-  ["I did it <b>myself</b>.", "Я сделал это сам."]
+  ["I did it <b>myself</b>.", "Усилительное — «сам»: я сделал это сам."]
 ])}
 ${N("Русское «свой» переводится по лицу: «Я взял свою книгу» — <i>I took <b>my</b> book</i>, «Она взяла свою» — <i>She took <b>her</b> book</i>. После <i>than, as</i> и в коротких ответах в разговорной речи используется объектная форма: <i>He is taller than <b>me</b>. — Who's there? — <b>Me</b>.</i>")}`,
   ex: [
@@ -75,8 +75,8 @@ ${N("В английском предложении только одно отр
       ["В холодильнике есть немного сыра.", "There is some cheese in the fridge."],
       ["У тебя есть вопросы?", "Have you got any questions?|Do you have any questions?"],
       ["У меня нет времени.", "I have no time.|I don't have any time.|I haven't got any time.|I've got no time."],
-      ["Хотите чаю?", "Would you like some tea?|Do you want some tea?"],
-      ["Возьми любую книгу.", "Take any book."]
+      ["Хотите чаю?", "Would you like some tea?|Do you want some tea?|Would you like tea?|Do you want tea?|Would you like a cup of tea?"],
+      ["Возьми любую книгу.", "Take any book.|Take any book you like.|Take any book you want."]
     ]}
   ]},
 
@@ -93,7 +93,7 @@ ${E([
   ["<b>Somebody</b> is knocking at the door.", "Кто-то стучит."],
   ["Is there <b>anybody</b> at home?", "Дома кто-нибудь есть?"],
   ["I didn't see <b>anything</b>. = I saw <b>nothing</b>.", "Я ничего не видел."],
-  ["<b>Everybody</b> <b>is</b> here.", "Все здесь — глагол в единственном числе!"]
+  ["<b>Everybody</b> <b>is</b> here.", "Все здесь."]
 ])}
 ${N("Производные от <i>every-</i> и <i>no-</i> согласуются с глаголом в единственном числе: <i>Everyone <b>knows</b>. Nobody <b>was</b> there.</i>")}`,
   ex: [
@@ -116,7 +116,7 @@ ${N("Производные от <i>every-</i> и <i>no-</i> согласуют�
       ["Я ничего не знаю.", "I know nothing.|I don't know anything.|I do not know anything."],
       ["Все знают об этом.", "Everybody knows about it.|Everyone knows about it.|Everybody knows about this.|Everyone knows about this."],
       ["Дома кто-нибудь есть?", "Is there anybody at home?|Is anybody at home?|Is anyone at home?|Is there anyone at home?|Is anybody home?|Is anyone home?"],
-      ["Я нигде не могу найти ключи.", "I can't find my keys anywhere.|I cannot find my keys anywhere."]
+      ["Я нигде не могу найти ключи.", "I can't find my keys anywhere.|I cannot find my keys anywhere.|I can't find the keys anywhere.|I cannot find the keys anywhere."]
     ]}
   ]},
 
@@ -125,7 +125,7 @@ ${N("Производные от <i>every-</i> и <i>no-</i> согласуют�
 <p>Эти слова говорят о целой группе или о каждом ее члене.</p>
 ${T(["Слово", "Значение", "Пример"], [
   ["<i>every</i>", "каждый (все вместе, 3 и больше), + ед. ч.", "<i><b>Every</b> student has a book.</i>"],
-  ["<i>each</i>", "каждый в отдельности, в том числе из двух", "<i><b>Each</b> of my hands. <b>Each</b> student got a mark.</i>"],
+  ["<i>each</i>", "каждый в отдельности, в том числе из двух", "<i>She had a bag in <b>each</b> hand. <b>Each</b> student got a mark.</i>"],
   ["<i>all</i>", "все, весь, + мн. ч. или неисчисляемое", "<i><b>All</b> students, <b>all</b> the money, <b>all</b> day</i>"],
   ["<i>both</i>", "оба (из двух)", "<i><b>Both</b> my parents are doctors.</i>"],
   ["<i>either</i>", "любой из двух; в отрицании — ни один", "<i>You can take <b>either</b> road.</i>"],
@@ -140,7 +140,7 @@ ${E([
 ${N("<i>every</i> не употребляется с <i>of</i>: <i><b>each</b> of the students</i>, но не <i>every of</i>. После <i>neither</i> глагол утвердительный: <i>Neither of them <b>knows</b></i>.")}`,
   ex: [
     { type: 'choice', task: 'Выберите правильный вариант.', items: [
-      ["___ of the twins has a red bicycle.", ["Each", "Every", "All"]], ["I've read ___ his books.", ["all", "every", "each of"]],
+      ["___ of the twins has a red bicycle.", ["Each", "Every", "All"]], ["I've read ___ his books.", ["all", "every", "every of"]],
       ["___ my sisters are married.", ["Both", "Either", "Each"]], ["___ of the two answers is correct. Try again.", ["Neither", "Either", "Both"]],
       ["We go to the sea ___ summer.", ["every", "all", "both"]], ["You can come on Monday or Tuesday — ___ day is fine.", ["either", "neither", "both"]],
       ["___ the money was spent.", ["All", "Every", "Each"]], ["Neither of them ___ English.", ["speaks", "speak", "don't speak"]],
@@ -151,6 +151,13 @@ ${N("<i>every</i> не употребляется с <i>of</i>: <i><b>each</b> o
       ["She gave ___ of the four children an apple.", "each"], ["___ the shops are closed on Sunday.", "all"],
       ["___ of my parents smokes. They both hate cigarettes.", "neither"], ["There are trees on ___ side of the street.", "either|each"],
       ["He spent ___ his money on books.", "all"], ["We can meet ___ today or tomorrow.", "either"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Оба моих брата — врачи.", "Both my brothers are doctors.|Both of my brothers are doctors.|My brothers are both doctors."],
+      ["Каждый ученик получил книгу.", "Every student got a book.|Each student got a book.|Every pupil got a book.|Each pupil got a book.|Every student received a book.|Each student received a book."],
+      ["Ни один из двух ответов не верен.", "Neither answer is correct.|Neither of the answers is correct.|Neither answer is right.|Neither of the answers is right."],
+      ["Ты можешь сесть на любой из двух автобусов.", "You can take either bus.|You can take either of the buses.|You can take either of the two buses."],
+      ["Он работал весь день.", "He worked all day.|He worked all day long.|He was working all day.|He worked the whole day."]
     ]}
   ]}
 ]});

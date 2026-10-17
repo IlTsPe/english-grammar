@@ -10,7 +10,7 @@ ${T(["Когда", "Пример", "Перевод"], [
   ["один из многих, любой", "<i>Give me <b>a</b> pen, please.</i>", "Дай мне ручку (какую-нибудь)."],
   ["профессия, характеристика (кто это? что это?)", "<i>She is <b>a</b> doctor. It is <b>a</b> cat.</i>", "Она врач. Это кошка."],
   ["после <i>what</i> в восклицании", "<i>What <b>a</b> nice day!</i>", "Какой хороший день!"],
-  ["в значении «один», «в»", "<i>twice <b>a</b> week, <b>an</b> hour ago</i>", "дважды в неделю, час назад"]
+  ["в значении «один» или «в» (раз в неделю)", "<i>twice <b>a</b> week, <b>an</b> hour ago</i>", "дважды в неделю, час назад"]
 ])}
 <h3>a или an</h3>
 <p>Выбор зависит от первого <b>звука</b> следующего слова, а не от буквы.</p>
@@ -46,7 +46,7 @@ ${N("Если перед существительным стоит притяж�
 
 { id: 'art-the', level: 'A1', title: 'Определенный артикль the', sub: 'the sun, the book on the table',
   rule: `
-<p>Определенный артикль <i>the</i> произошел от указательного местоимения <i>that</i> и значит «тот самый, понятно какой». Он ставится перед существительными в любом числе, в том числе неисчисляемыми.</p>
+<p>Определенный артикль <i>the</i> произошел от указательного местоимения <i>that</i> и значит «тот самый, понятно какой». Он ставится перед существительными в единственном и множественном числе, а также перед неисчисляемыми.</p>
 ${T(["Когда", "Пример"], [
   ["предмет уже упоминался", "<i>I have a cat. <b>The</b> cat is black.</i>"],
   ["из ситуации ясно, о чем речь", "<i>Close <b>the</b> door, please. Where is <b>the</b> teacher?</i>"],
@@ -109,7 +109,7 @@ ${E([
   ["<b>Dogs</b> are friendly.", "Собаки вообще."],
   ["<b>The dogs</b> next door bark all night.", "Конкретные собаки соседей."]
 ])}
-${N("Перед неисчисляемым существительным никогда не ставится <i>a / an</i>: <i>some water</i>, <i>a glass of water</i>, но не <i>a water</i>.")}`,
+${N("Перед неисчисляемым существительным обычно не ставится <i>a / an</i>: <i>some water</i>, <i>a glass of water</i>, но не <i>a water</i>. Исключение — разговорное «одна порция»: <i>Can I have <b>a</b> coffee?</i> (= <i>a cup of coffee</i>).")}`,
   ex: [
     { type: 'gap', task: 'Впишите артикль a, an, the или «-», если он не нужен.', items: [
       ["I like ___ tea with lemon.", "-|0"], ["___ tea in this cup is cold.", "the"],
@@ -120,7 +120,7 @@ ${N("Перед неисчисляемым существительным ник
       ["I'll see you on ___ Friday.", "-|0"], ["Open your books at ___ page 25.", "-|0"]
     ]},
     { type: 'choice', task: 'Выберите правильный вариант.', items: [
-      ["___ is good for your health.", ["Sport", "A sport", "The sports"]], ["I need ___ to write my essay.", ["some paper", "a paper", "paper a"]],
+      ["___ is good for your health.", ["Sport", "A sport", "The sports"]], ["I need ___ to write my essay.", ["some paper", "a paper", "the papers"]],
       ["Where is ___ I gave you?", ["the money", "money", "a money"]], ["___ are my favourite flowers.", ["Roses", "The rose", "A roses"]],
       ["We study ___ at school.", ["history", "the history", "a history"]], ["He had ___ for breakfast.", ["eggs and toast", "an eggs and toast", "the eggs and a toast"]],
       ["Look! ___ is falling.", ["Snow", "A snow", "Snows"]], ["Can I have ___ water, please?", ["a glass of", "a", "an"]]
@@ -150,7 +150,7 @@ ${E([
   ["<b>The book is</b> on the table.", "Книга уже известна, говорим, где она. Нужен the."],
   ["<b>Where is</b> the book? — <b>It is</b> on the table.", "Вопрос о месте известного предмета."]
 ])}
-${N("При перечислении глагол согласуется с <b>первым</b> существительным: <i>There <b>is</b> a sofa and two armchairs.</i> После <i>there is</i> обычно стоит <i>a / an</i>, а не <i>the</i>.")}`,
+${N("При перечислении глагол согласуется с <b>первым</b> существительным: <i>There <b>is</b> a sofa and two armchairs.</i>")}`,
   ex: [
     { type: 'gap', task: 'Впишите is или are.', items: [
       ["There ___ a park near my house.", "is"], ["There ___ two windows in the room.", "are"],
@@ -167,11 +167,11 @@ ${N("При перечислении глагол согласуется с <b>�
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["На столе книга.", "There is a book on the table."],
-      ["В нашем городе много парков.", "There are many parks in our town.|There are a lot of parks in our town.|There are many parks in our city.|There are a lot of parks in our city."],
+      ["В нашем городе много парков.", "There are many parks in our town.|There are a lot of parks in our town.|There are many parks in our city.|There are a lot of parks in our city.|Our town has many parks.|Our town has a lot of parks.|Our city has many parks.|Our city has a lot of parks."],
       ["В холодильнике нет молока.", "There is no milk in the fridge.|There isn't any milk in the fridge."],
       ["Здесь есть банкомат?", "Is there a cash machine here?|Is there an ATM here?|Is there a cash machine near here?|Is there an ATM near here?"],
-      ["Вчера в парке было много людей.", "There were many people in the park yesterday.|There were a lot of people in the park yesterday."],
-      ["Где моя ручка? — Она на столе.", "Where is my pen? — It is on the table.|Where's my pen? It's on the table.|Where is my pen? It is on the desk."]
+      ["Вчера в парке было много людей.", "There were many people in the park yesterday.|There were a lot of people in the park yesterday.|Yesterday there were many people in the park.|Yesterday there were a lot of people in the park."],
+      ["Где моя ручка? — Она на столе.", "Where is my pen? — It is on the table.|Where is my pen? — It is on the desk."]
     ]}
   ]},
 
@@ -208,6 +208,13 @@ ${N("Озеро без слова <i>lake</i> употребляется с <i>t
       ["We swam in ___.", ["the Black Sea", "Black Sea", "a Black Sea"]], ["They climbed ___.", ["Everest", "the Everest", "an Everest"]],
       ["Have you been to ___?", ["the United Kingdom", "United Kingdom", "an United Kingdom"]], ["Moscow is in ___ of Europe.", ["the east", "east", "an east"]],
       ["Let's meet in ___.", ["Red Square", "the Red Square", "a Red Square"]], ["We are going to ___ tonight.", ["the Bolshoi Theatre", "Bolshoi Theatre", "a Bolshoi Theatre"]]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Волга впадает в Каспийское море.", "The Volga flows into the Caspian Sea."],
+      ["Байкал — самое глубокое озеро в мире.", "Lake Baikal is the deepest lake in the world.|Baikal is the deepest lake in the world.|The Baikal is the deepest lake in the world."],
+      ["Мой брат живет в США.", "My brother lives in the USA.|My brother lives in the US.|My brother lives in the United States."],
+      ["Альпы — красивые горы.", "The Alps are beautiful mountains."],
+      ["Эрмитаж находится в Санкт-Петербурге.", "The Hermitage is in St Petersburg.|The Hermitage is in Saint Petersburg.|The Hermitage is situated in St Petersburg.|The Hermitage is located in St Petersburg."]
     ]}
   ]},
 
@@ -225,15 +232,15 @@ ${T(["Без артикля", "С артиклем"], [
 ])}
 ${E([
   ["She goes to <b>school</b> by <b>bus</b>.", "Она ездит в школу на автобусе."],
-  ["Her mother went to <b>the school</b> to talk to the teacher.", "Мама пошла в здание школы — не учиться. Нужен the."]
+  ["Her mother went to <b>the school</b> to talk to the teacher.", "Мама пошла в школу поговорить с учителем."]
 ])}
 ${N("<i>go to school / hospital / church</i> без артикля — когда идут туда по прямому назначению (учиться, лечиться, молиться). Если просто приходят в здание — с <i>the</i>.")}`,
   ex: [
-    { type: 'text', task: 'Впишите артикль the или «-», если артикль не нужен.', text: "I get up at seven in ___ morning. I have ___ breakfast and go to ___ school by ___ bus. After school I go ___ home on ___ foot. In ___ evening I do my homework, and at ten I go to ___ bed. On Saturdays we often go to ___ cinema, and at ___ weekend we go to ___ country.",
-      answers: ["the", "-|0", "-|0", "-|0", "-|0", "-|0", "the", "-|0", "the", "the", "the"] },
+    { type: 'text', task: 'Впишите the или «-», если артикль не нужен.', text: "I get up at seven in ___ morning. I have ___ breakfast and go to ___ school by ___ bus. After school I go ___ home on ___ foot. In ___ evening I do my homework, and at ten I go to ___ bed. On Saturdays we often go to ___ cinema, and in summer we go to ___ country.",
+      answers: ["the", "-|0", "-|0", "-|0", "-|0", "-|0", "the", "-|0", "the", "the"] },
     { type: 'choice', task: 'Выберите правильный вариант.', items: [
       ["My father is ___ now.", ["at work", "at the work", "at a work"]], ["We usually go there ___.", ["by car", "by the car", "by a car"]],
-      ["Turn ___ at the corner.", ["to the left", "to left", "to a left"]], ["He was taken to ___ after the accident.", ["hospital", "a hospital", "the hospitals"]],
+      ["The bank is ___.", ["on the left", "on left", "in left"]], ["He was taken to ___ after the accident.", ["hospital", "in hospital", "the hospitals"]],
       ["Let's go to ___ tonight.", ["the theatre", "theatre", "a theatres"]], ["I can't sleep ___.", ["at night", "at the night", "in night"]],
       ["Always tell ___.", ["the truth", "truth", "a truth"]], ["Excuse me, what's ___?", ["the time", "time", "a time"]]
     ]},
@@ -242,7 +249,7 @@ ${N("<i>go to school / hospital / church</i> без артикля — когд�
       ["Вечером мы ходим в кино.", "In the evening we go to the cinema.|We go to the cinema in the evening.|In the evening we go to the movies."],
       ["Мой папа сейчас на работе.", "My father is at work now.|My dad is at work now."],
       ["Я ложусь спать в одиннадцать.", "I go to bed at eleven.|I go to bed at 11.|I go to bed at eleven o'clock."],
-      ["Она ездит на работу на автобусе.", "She goes to work by bus."]
+      ["Она ездит на работу на автобусе.", "She goes to work by bus.|She takes the bus to work."]
     ]}
   ]}
 ]});

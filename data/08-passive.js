@@ -75,6 +75,12 @@ ${N("Future Continuous и Perfect Continuous в пассиве практиче�
       ["We must wash the car. → The car ___.", "must be washed"],
       ["They had sold the house. → The house ___.", "had been sold"],
       ["People grow rice in China. → Rice ___ in China.", "is grown"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский, используя пассив.', items: [
+      ["Мою машину сейчас ремонтируют.", "My car is being repaired now.|My car is being repaired at the moment."],
+      ["Письмо уже отправлено.", "The letter has already been sent.|The letter has been sent already."],
+      ["Эту работу нужно сделать к пятнице.", "This work must be done by Friday.|This work has to be done by Friday.|This work needs to be done by Friday.|The work must be done by Friday."],
+      ["Когда мы пришли, все билеты уже были проданы.", "When we arrived, all the tickets had already been sold.|When we came, all the tickets had already been sold.|When we arrived, all the tickets had been sold."]
     ]}
   ]},
 

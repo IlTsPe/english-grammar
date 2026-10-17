@@ -50,7 +50,7 @@ ${E([
   ["— <b>May</b> I take your pen? — Yes, you <b>may</b>. / Yes, of course.", "Ответ на просьбу."],
   ["I <b>might</b> go to the party, but I'm not sure.", "Может быть, пойду (не уверен)."]
 ])}
-${N("В вопросах с <i>might</i> о предположении обычно не спрашивают: <i>Is it likely that…?</i> или <i>Do you think…?</i> — естественнее, чем <i>Might it rain?</i>")}`,
+${N("Для вопроса-предположения <i>might</i> обычно не используют: <i>Do you think it will rain?</i> или <i>Is it likely to rain?</i> звучит естественнее, чем <i>Might it rain?</i>")}`,
   ex: [
     { type: 'choice', task: 'Выберите правильный вариант.', items: [
       ["___ I come in?", ["May", "Must", "Should"]], ["Take an umbrella. It ___ rain later.", ["might", "must", "can't"]],
@@ -186,6 +186,12 @@ ${N("<i>You <b>needn't have</b> bought me a present</i> — вежливое «�
       ["The meeting ___ taken place on Monday, but it was cancelled.", ["was to have", "must have", "should"]], ["He left home at seventeen. Twenty years later he ___ become a famous painter.", ["was to", "should", "must"]],
       ["I've asked him twice, but he ___ listen!", ["won't", "mustn't", "shan't"]], ["There's nothing good on TV. We ___ go to bed early.", ["might as well", "are bound", "would rather to"]],
       ["Take an umbrella. It's ___ to rain.", ["bound", "must", "certain of"]], ["You ___ have bought me a present, but thank you!", ["needn't", "mustn't", "can't"]]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Тебе не нужно было покупать мне подарок.", "You needn't have bought me a present."],
+      ["Машина не заводится.", "The car won't start."],
+      ["Наверняка пойдет дождь.", "It is bound to rain."],
+      ["Мы можем с тем же успехом пойти пешком.", "We might as well walk.|We may as well walk.|We might as well go on foot."]
     ]}
   ]}
 ]});

@@ -8,7 +8,7 @@ topics: [
 ${T(["Тип прилагательного", "Сравнительная", "Превосходная"], [
   ["односложные", "<i>cold → cold<b>er</b></i>", "<i><b>the</b> cold<b>est</b></i>"],
   ["оканчиваются на <i>-e</i>", "<i>nice → nice<b>r</b></i>", "<i><b>the</b> nice<b>st</b></i>"],
-  ["краткий гласный + согласная", "<i>big → big<b>ger</b>, hot → hot<b>ter</b></i>", "<i><b>the</b> big<b>gest</b></i>"],
+  ["односложные: краткий гласный + одна согласная (согласная удваивается)", "<i>big → big<b>ger</b>, hot → hot<b>ter</b></i>", "<i><b>the</b> big<b>gest</b></i>"],
   ["двусложные на <i>-y</i>", "<i>easy → eas<b>ier</b>, happy → happ<b>ier</b></i>", "<i><b>the</b> eas<b>iest</b></i>"],
   ["двусложные и длиннее", "<i><b>more</b> interesting, <b>more</b> famous</i>", "<i><b>the most</b> interesting</i>"],
   ["меньшая степень", "<i><b>less</b> expensive</i>", "<i><b>the least</b> expensive</i>"]
@@ -41,7 +41,7 @@ ${N("Нельзя сочетать оба способа: <i>more bigger</i>, <i
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Мой брат старше меня.", "My brother is older than me.|My brother is older than I am.|My brother is older than I."],
-      ["Это самый лучший день в моей жизни.", "This is the best day of my life.|This is the best day in my life.|It's the best day of my life.|It is the best day of my life."],
+      ["Это лучший день в моей жизни.", "This is the best day of my life.|This is the best day in my life.|It's the best day of my life.|It is the best day of my life."],
       ["Сегодня холоднее, чем вчера.", "It is colder today than yesterday.|Today is colder than yesterday.|It's colder today than yesterday.|It's colder today than it was yesterday.|It is colder today than it was yesterday."],
       ["Эта задача труднее.", "This task is more difficult.|This task is harder.|This problem is more difficult.|This problem is harder."],
       ["Это самое дешевое кафе в городе.", "This is the cheapest cafe in town.|This is the cheapest café in town.|This is the cheapest cafe in the city.|It's the cheapest cafe in town."]
@@ -79,6 +79,13 @@ ${N("<i>very</i> не ставится перед сравнительной с�
       ["My phone is different ___ yours.", "from|to|than"],
       ["The sooner we start, the ___ (soon) we'll finish.", "sooner"],
       ["The film was not as good ___ the book.", "as"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Она такая же высокая, как ее мама.", "She is as tall as her mother.|She is as tall as her mum.|She is as tall as her mom."],
+      ["Сегодня не так холодно, как вчера.", "It isn't as cold today as yesterday.|It isn't so cold today as yesterday.|It is not as cold today as yesterday.|Today it isn't as cold as yesterday.|It isn't as cold today as it was yesterday."],
+      ["Чем больше ты читаешь, тем больше знаешь.", "The more you read, the more you know."],
+      ["Становится все темнее и темнее.", "It's getting darker and darker.|It is getting darker and darker."],
+      ["Эта машина намного быстрее.", "This car is much faster.|This car is far faster.|This car is a lot faster."]
     ]}
   ]},
 
@@ -112,6 +119,13 @@ ${N("<i>friendly, lovely, lonely, silly</i> — прилагательные, х
       ["Please speak ___ (slow).", "slowly"], ["The children played ___ (quiet).", "quietly"],
       ["You did it very ___ (good)!", "well"], ["He opened the box ___ (careful).", "carefully"],
       ["I ___ (easy) found the house.", "easily"], ["We got up ___ (early) this morning.", "early"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Она хорошо поет.", "She sings well."],
+      ["Езжай осторожно!", "Drive carefully!"],
+      ["Суп пахнет вкусно.", "The soup smells good.|The soup smells delicious.|The soup smells nice."],
+      ["Он много работает.", "He works hard.|He works a lot."],
+      ["Я тебя почти не слышу.", "I can hardly hear you."]
     ]}
   ]}
 ]});

@@ -26,6 +26,12 @@ ${N("В описательных придаточных (с запятыми) <i
       ["Moscow, ___ is the capital of Russia, is huge.", "which"], ["I remember the day ___ we first met.", "when|that|-|0"],
       ["My brother, ___ lives in Kazan, is a teacher.", "who"], ["The film ___ we saw yesterday was boring.", "which|that|-|0"],
       ["Is this the shop ___ you bought your coat?", "where"], ["The girl ___ mother is a singer is in my class.", "whose"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Женщина, которая живет по соседству, — врач.", "The woman who lives next door is a doctor.|The woman that lives next door is a doctor."],
+      ["Это дом, где я родился.", "This is the house where I was born.|This is the house in which I was born."],
+      ["Это человек, у которого украли машину.", "This is the man whose car was stolen.|That is the man whose car was stolen."],
+      ["Книга, которую ты мне дал, очень интересная.", "The book you gave me is very interesting.|The book that you gave me is very interesting.|The book which you gave me is very interesting."]
     ]}
   ]},
 
@@ -78,6 +84,11 @@ ${E([
       ["I'd rather ___ (stay) at home tonight.", "stay"], ["He talks as if he ___ (know) everything.", "knew"],
       ["I'd rather you ___ (tell) me the truth yesterday.", "had told|'d told"], ["The doctor insisted that he ___ (stay) in bed.", "stay|should stay"],
       ["It is essential that every student ___ (attend) the meeting.", "attend|should attend"], ["It's time we ___ (go) home.", "went"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Тебе давно пора найти работу.", "It is high time you found a job.|It is time you found a job."],
+      ["Я бы предпочел, чтобы ты здесь не курил.", "I would rather you didn't smoke here.|I would rather you did not smoke here."],
+      ["Он говорит так, будто все знает.", "He talks as if he knew everything.|He speaks as if he knew everything.|He talks as though he knew everything.|He speaks as though he knew everything."]
     ]}
   ]},
 
@@ -98,6 +109,12 @@ ${N("Глагол после <i>What…</i> обычно в единственн
       ["It was in 2010 ___ we first met.", "that"], ["All I want ___ a cup of tea.", "is"],
       ["What he did ___ to call the police.", "was"], ["The reason ___ I called is to apologise.", "why|that"],
       ["It ___ not until midnight that she came home.", "was"], ["What surprised me ___ his reaction.", "was"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Именно Том разбил окно.", "It was Tom who broke the window.|It was Tom that broke the window."],
+      ["Что мне нужно, так это отпуск.", "What I need is a holiday.|What I need is a vacation."],
+      ["Все, чего я хочу, — это чашка чая.", "All I want is a cup of tea."],
+      ["Мы познакомились именно в 2010 году.", "It was in 2010 that we met.|It was in 2010 that we first met."]
     ]}
   ]},
 
@@ -137,7 +154,7 @@ ${T(["Заместитель", "Пример", "Значение"], [
   ["<i>so / not</i>", "<i>I think <b>so</b>. I hope <b>not</b>. I'm afraid <b>not</b>.</i>", "заменяет целое предложение"],
   ["<i>one / ones</i>", "<i>Can I see the red <b>one</b>? Bigger <b>ones</b>?</i>", "заменяет исчисляемое существительное"],
   ["вспомогательный глагол", "<i>She said she'd call, but she <b>didn't</b>.</i>", "заменяет глагольную группу"],
-  ["<i>so / neither + aux + подлежащее</i>", "<i>He can swim, and <b>so can I</b>. — <b>Neither am I</b>.</i>", "«я тоже», «я тоже не»"],
+  ["<i>so / neither + aux + подлежащее</i>", "<i>He can swim, and <b>so can I</b>. — I'm not tired. — <b>Neither am I</b>.</i>", "«я тоже», «я тоже не»"],
   ["<i>to</i>", "<i>You don't have to if you don't want <b>to</b>.</i>", "заменяет инфинитив"]
 ])}
 ${N("После <i>hope, think, expect, suppose</i> отрицательный ответ строится по-разному: <i>I hope <b>not</b></i>, но <i>I <b>don't think so</b></i>.")}`,
@@ -148,6 +165,12 @@ ${N("После <i>hope, think, expect, suppose</i> отрицательный �
       ["— I'm not hungry. — Neither ___ I.", "am"], ["You don't have to come if you don't want ___.", "to"],
       ["These shoes are too small. Have you got any bigger ___?", "ones"], ["— Did you lock the door? — I'm afraid ___. Sorry!", "not"],
       ["She promised to call, but she ___ (не позвонила).", "did not"], ["— I love jazz. — So ___ I.", "do"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Надеюсь, что нет.", "I hope not."],
+      ["— Я устал. — Я тоже.", "I am tired. — So am I."],
+      ["Мне не нравится эта сумка. Покажите красную.", "I don't like this bag. Show me the red one.|I don't like this bag. Can I see the red one?"],
+      ["Она обещала позвонить, но не позвонила.", "She promised to call, but she didn't.|She promised to phone, but she didn't."]
     ]}
   ]}
 ]});

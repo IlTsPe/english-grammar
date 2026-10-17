@@ -8,7 +8,7 @@ topics: [
 ${T(["Где", "Слова", "Пример"], [
   ["после глаголов", "<i>enjoy, finish, mind, avoid, suggest, keep, miss, practise, deny, imagine, consider, give up, put off, can't stand, can't help</i>", "<i>I enjoy <b>walking</b>. Would you mind <b>opening</b> the window?</i>"],
   ["после предлогов", "<i>in, at, of, for, about, without, before, after, instead of, by</i>", "<i>Thank you for <b>coming</b>. He left without <b>saying</b> goodbye.</i>"],
-  ["после прилагательное + предлог", "<i>good at, interested in, afraid of, fond of, tired of, proud of</i>", "<i>She is good at <b>drawing</b>.</i>"],
+  ["после сочетания «прилагательное + предлог»", "<i>good at, interested in, afraid of, fond of, tired of, proud of</i>", "<i>She is good at <b>drawing</b>.</i>"],
   ["после выражений", "<i>it's no use, it's worth, there's no point in, look forward to, be used to</i>", "<i>It's worth <b>seeing</b>. I look forward to <b>hearing</b> from you.</i>"],
   ["как подлежащее", "—", "<i><b>Smoking</b> is bad for you.</i>"]
 ])}
@@ -28,7 +28,7 @@ ${N("В <i>look forward to</i>, <i>be used to</i>, <i>object to</i> слово <
       ["Keep ___! You're doing well.", ["trying", "to try", "try"]], ["Instead of ___, help me!", ["complaining", "to complain", "complain"]]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
-      ["Я люблю (наслаждаюсь) читать.", "I enjoy reading."],
+      ["Я люблю читать.", "I enjoy reading.|I like reading.|I love reading.|I like to read.|I love to read."],
       ["Спасибо, что пришли.", "Thank you for coming.|Thanks for coming."],
       ["Он ушел, не сказав ни слова.", "He left without saying a word.|He went away without saying a word."],
       ["Этот музей стоит посетить.", "This museum is worth visiting.|The museum is worth visiting."],
@@ -66,6 +66,12 @@ ${N("После <i>would like / would love / would prefer</i> — только �
       ["They agreed ___ (meet) at six.", "to meet"], ["I suggest ___ (take) a taxi.", "taking"],
       ["Please remember ___ (buy) some milk.", "to buy"], ["I'll never forget ___ (see) the ocean for the first time.", "seeing"],
       ["He managed ___ (open) the box.", "to open"], ["I regret ___ (shout) at you yesterday.", "shouting"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Он бросил курить.", "He stopped smoking.|He gave up smoking.|He has stopped smoking.|He has given up smoking."],
+      ["Не забудь запереть дверь.", "Don't forget to lock the door.|Remember to lock the door."],
+      ["Я помню, как встретил ее в Париже.", "I remember meeting her in Paris."],
+      ["Мы остановились, чтобы отдохнуть.", "We stopped to rest.|We stopped to have a rest.|We stopped to take a rest."]
     ]}
   ]}
 ]});

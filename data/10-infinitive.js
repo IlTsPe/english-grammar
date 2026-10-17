@@ -104,6 +104,12 @@ ${N("Перфектный инфинитив после модальных гл�
       ["I want ___ (invite) to the party.", "to be invited"], ["She is happy ___ (pass) the exam yesterday.", "to have passed"],
       ["He pretended ___ (read) when I came in.", "to be reading"], ["This problem must ___ (solve) today.", "be solved"],
       ["They seem ___ (know) each other for years.", "to have known"], ["The letter is supposed ___ (send) last week.", "to have been sent"]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Кажется, он забыл об этом.", "He seems to have forgotten about it.|He seems to have forgotten it."],
+      ["Рад, что повидал тебя.", "I am glad to have seen you.|I'm glad to have seen you."],
+      ["Это письмо нужно отправить сегодня.", "This letter must be sent today.|This letter has to be sent today.|This letter needs to be sent today."],
+      ["Кажется, она спит.", "She seems to be sleeping.|She seems to be asleep."]
     ]}
   ]}
 ]});

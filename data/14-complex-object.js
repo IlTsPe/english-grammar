@@ -60,10 +60,10 @@ ${N("В пассиве частица <i>to</i> появляется: <i>He was 
     { type: 'gap', task: 'Закончите предложение, используя Complex Object с глаголом восприятия.', items: [
       ["He crossed the street. I saw it. → I saw him ___ the street.", "cross|crossing"],
       ["She was singing. I heard it. → I heard her ___.", "singing|sing"],
-      ["The door opened. We heard it. → We heard the door ___.", "open"],
+      ["The door opened. We heard it. → We heard the door ___.", "open|opening"],
       ["They were playing football. We watched them. → We watched them ___ football.", "playing|play"],
       ["Somebody touched my arm. I felt it. → I felt somebody ___ my arm.", "touch|touching"],
-      ["The car stopped. Did you see it? → Did you see the car ___?", "stop"]
+      ["The car stopped. Did you see it? → Did you see the car ___?", "stop|stopping"]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Я видел, как он вошел в дом.", "I saw him enter the house.|I saw him come into the house.|I saw him go into the house."],

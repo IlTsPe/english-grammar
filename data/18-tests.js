@@ -22,7 +22,7 @@ ${T(["Тема", "Главное правило"], [
       ["I have ___ friends here, so I'm not lonely.", ["a few", "few", "a little"]], ["Nobody ___ the answer.", ["knows", "know", "don't know"]]
     ]},
     { type: 'text', task: 'Впишите пропущенные слова: артикли (или «-»), предлоги, местоимения, слова количества и степени сравнения.', text: "Last summer my family went ___ the seaside. We stayed ___ a small hotel near ___ beach. Every morning we had ___ breakfast on the terrace. My brother is ___ good swimmer, much ___ than me. One day he swam ___ the bay and back! There were very ___ tourists, so the beach was quiet. I bought ___ souvenirs for my friends. It was ___ best holiday of my life.",
-      answers: ["to", "in|at", "the", "-|0", "a", "better", "across", "few", "some", "the"] },
+      answers: ["to", "in|at", "the", "-|0", "a", "better", "across", "few", "some|a few", "the"] },
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["В нашем городе есть большой парк.", "There is a big park in our town.|There is a big park in our city.|There's a big park in our town."],
       ["У меня мало времени.", "I have little time.|I don't have much time.|I haven't got much time."],

@@ -105,6 +105,7 @@ ${E([
   ["swim → swim<b>ming</b>, sit → sit<b>ting</b>, run → run<b>ning</b>", "краткий ударный слог: согласная удваивается"],
   ["lie → l<b>ying</b>, die → d<b>ying</b>", "ie → y"]
 ])}
+<h3>Другие значения</h3>
 ${E([
   ["We <b>are meeting</b> Sarah tomorrow.", "Договоренность на будущее."],
   ["He <b>is always losing</b> his keys!", "always + Continuous — раздражение."]
@@ -284,7 +285,7 @@ ${N("После <i>if, when, before, after, until, as soon as</i> в прида�
       ["I'll phone you when I ___ (get) home.", "get"], ["If it ___ (rain), we'll stay at home.", "rains"],
       ["Wait here until I ___ (come) back.", "come"], ["She ___ (be) sixteen next month.", "will be"],
       ["As soon as he ___ (arrive), we'll start.", "arrives"], ["I think you ___ (like) this film.", "will like"],
-      ["The train ___ (leave) at 8:30 tomorrow morning.", "leaves"], ["Before you ___ (go) out, close the windows.", "go"]
+      ["The train ___ (leave) at 8:30 tomorrow morning.", "leaves|will leave"], ["Before you ___ (go) out, close the windows.", "go"]
     ]},
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Я помогу тебе.", "I will help you.|I'll help you."],
@@ -360,7 +361,7 @@ ${E([
 ${N("Вопрос <i>When…?</i> всегда требует Past Simple: <i>When <b>did</b> you <b>arrive</b>?</i>, а не <i>When have you arrived?</i>")}`,
   ex: [
     { type: 'gap', task: 'Present Perfect или Past Simple? Поставьте глагол в нужную форму.', items: [
-      ["I ___ (lose) my keys. I can't open the door.", "have lost"], ["He ___ (finish) school in 2018.", "finished"],
+      ["I ___ (break) my phone. Can I use yours?", "have broken"], ["He ___ (finish) school in 2018.", "finished"],
       ["I ___ (see) this film last week.", "saw"], ["She ___ (be) to London twice.", "has been|'s been"],
       ["When ___ you ___ (buy) this car?", ["did", "buy"]], ["We ___ (not / have) a holiday this year.", "have not had"],
       ["Tolstoy ___ (write) 'War and Peace'.", "wrote"], ["I ___ (just / meet) your brother.", "have just met"],
@@ -435,7 +436,7 @@ ${N("Если порядок действий ясен из <i>before / after</i
     { type: 'gap', task: 'Поставьте глагол в Past Perfect.', items: [
       ["When we arrived at the station, the train ___ (already / leave).", "had already left|had left already|'d already left"],
       ["She ___ (never / see) the sea before she moved to Sochi.", "had never seen|'d never seen"],
-      ["After he ___ (finish) his work, he went home.", "had finished"], ["I didn't recognise him because he ___ (change) so much.", "had changed"],
+      ["After he ___ (finish) his work, he went home.", "had finished|finished"], ["I didn't recognise him because he ___ (change) so much.", "had changed"],
       ["By the time the police came, the thieves ___ (escape).", "had escaped"], ["They ___ (not / eat) anything all day, so they were starving.", "had not eaten"],
       ["I was sure I ___ (see) her before.", "had seen"], ["By 2010 he ___ (write) five books.", "had written"]
     ]},
@@ -473,6 +474,12 @@ ${N("После <i>by the time</i> в придаточном стоит Present 
     { type: 'choice', task: 'Выберите правильный вариант.', items: [
       ["By next week I ___ the book.", ["will have read", "will be reading", "am reading"]], ["At 10 am tomorrow I ___ an exam, so I can't answer the phone.", ["will be taking", "will have taken", "take"]],
       ["Hurry up! The film ___ by the time we get there.", ["will have started", "will be starting", "starts"]], ["By the time she ___, we'll have eaten everything.", ["arrives", "will arrive", "will have arrived"]]
+    ]},
+    { type: 'translate', task: 'Переведите на английский.', items: [
+      ["Завтра в это время я буду лететь в Москву.", "This time tomorrow I will be flying to Moscow.|I will be flying to Moscow this time tomorrow."],
+      ["К пятнице я закончу проект.", "I will have finished the project by Friday.|By Friday I will have finished the project."],
+      ["Не звони в восемь — мы будем ужинать.", "Don't call at eight — we will be having dinner.|Don't phone at eight — we will be having dinner.|Don't call at eight — we will be having supper."],
+      ["К лету она проработает здесь пять лет.", "By the summer she will have been working here for five years.|By summer she will have been working here for five years.|By the summer she will have worked here for five years."]
     ]}
   ]},
 
