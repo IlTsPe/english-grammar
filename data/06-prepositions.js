@@ -139,7 +139,15 @@ ${T(["Глагол + предлог", "Прилагательное + предл
   ["<i>laugh <b>at</b></i> — смеяться над", "<i>tired <b>of</b></i> — уставший от"],
   ["<i>belong <b>to</b></i> — принадлежать", "<i>married <b>to</b></i> — женат на, замужем за"]
 ])}
-${N("Некоторые глаголы в английском не требуют предлога, хотя в русском он есть: <i>enter the room</i> (войти <b>в</b> комнату), <i>answer the question</i> (ответить <b>на</b> вопрос), <i>discuss the plan</i> (обсудить план, без about!).")}`,
+${N("Некоторые глаголы в английском не требуют предлога, хотя в русском он есть: <i>enter the room</i> (войти <b>в</b> комнату), <i>answer the question</i> (ответить <b>на</b> вопрос), <i>discuss the plan</i> (обсудить план, без about!).")}
+<h3>with / by, to / of</h3>
+<p>Русский творительный и дательный падежи переводятся разными предлогами — смотря по смыслу.</p>
+${T(["Предлог", "Значение", "Пример"], [
+  ["<i>with</i>", "инструмент: чем", "<i>write <b>with</b> a pen, cut <b>with</b> a knife</i>"],
+  ["<i>by</i>", "исполнитель, способ, транспорт", "<i>written <b>by</b> Tolstoy, <b>by</b> bus, <b>by</b> post, <b>by</b> hand</i>"],
+  ["<i>to</i>", "кому, куда", "<i>give it <b>to</b> him, explain <b>to</b> us, a letter <b>to</b> my friend</i>"],
+  ["<i>of</i>", "чей, чего, часть целого", "<i>the leg <b>of</b> the table, a cup <b>of</b> tea, the capital <b>of</b> France</i>"]
+])}`,
   ex: [
     { type: 'gap', task: 'Впишите предлог.', items: [
       ["It depends ___ the weather.", "on"], ["Listen ___ me carefully.", "to"],
@@ -161,6 +169,13 @@ ${N("Некоторые глаголы в английском не требую
       ["Все зависит от тебя.", "Everything depends on you.|It all depends on you."],
       ["Он хорошо играет в шахматы.", "He is good at chess.|He plays chess well."],
       ["Ответь на вопрос.", "Answer the question."]
+    ]},
+    { type: 'gap', task: 'Впишите with, by, to или of.', items: [
+      ["He wrote the letter ___ a pencil.", "with"], ["The novel was written ___ Tolstoy.", "by"],
+      ["We went to the seaside ___ train.", "by"], ["Cut the bread ___ this knife.", "with"],
+      ["Give the book ___ your sister.", "to"], ["Moscow is the capital ___ Russia.", "of"],
+      ["I'd like a cup ___ coffee.", "of"], ["Explain the rule ___ me, please.", "to"],
+      ["The town was destroyed ___ an earthquake.", "by"], ["The top ___ the mountain was covered ___ snow.", ["of", "with"]]
     ]}
   ]}
 ]});

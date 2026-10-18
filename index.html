@@ -206,7 +206,7 @@ button { font: inherit; transition: linear 0.15s; }
 .side__summary > div { border-radius: 10px; }
 .side__stat { width: 100%; justify-content: flex-start; gap: 10px; padding-inline: 12px; transition: border-radius .15s linear, border-color .15s linear, background-color .15s linear; }
 .side__fold-arrow { flex: none; width: 12px; height: 12px; margin-left: auto; color: var(--accent); transition: transform .15s linear; }
-.side__count + .side__fold-arrow { margin-left: 0; }
+.side__count:not(:empty) + .side__fold-arrow { margin-left: 0; }
 .side__stat:is(:hover, :focus-visible) .side__fold-arrow { color: inherit; } /* follows the button: green on «Поддержать автора» */
 .side__stat[aria-expanded="true"] .side__fold-arrow { transform: rotate(90deg); }
 /* «Поддержать автора»: a link to DonationAlerts in a new tab, under the contents block, laid out like «Прогресс» and
@@ -291,6 +291,11 @@ button { font: inherit; transition: linear 0.15s; }
 /* while open, the block shows the progress bar, the percentage and the mistakes, so the button keeps only its title */
 .side__stat[aria-expanded="true"] :is(.side__stat-bar, .side__stat-pct, .side__badge) { display: none; }
 .side__fold .bookmarks__empty { padding-top: 8px; }
+/* «Мои заметки»: not a drop-down, just a way to its page; filled with the accent while that page is open, like «Инфо»
+   (the long selector wins over the light-theme «no fill on sidebar controls» rule) */
+:root[data-theme] .side .side__stat.side__notes[aria-current="page"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.side__notes[aria-current="page"] .side__fold-arrow { color: inherit; }
+.notes-icon { flex: none; width: 15px; height: 15px; }
 .overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; gap: 8px; }
 :root[data-theme="light"] .overall { background: none; } /* sits on the tinted sidebar like the other frames there */
 /* the same for the controls in the sidebar: no grey sheet fill on the tinted paper (hover fills stay) */
@@ -722,6 +727,30 @@ button { font: inherit; transition: linear 0.15s; }
 /* the count sits in its own bubble, so «A1 1» does not read as one label */
 .mistakes__level-count { min-width: 20px; padding: 1px 6px; border-radius: 99px; background: var(--accent-soft); font-size: 12px; font-weight: 600; text-align: center; }
 .mistakes__level[aria-pressed="true"] .mistakes__level-count { background: color-mix(in srgb, var(--on-accent) 22%, transparent); }
+/* «Мои заметки»: free notes, not tied to topics — each a card: the text (a field while editing, it grows with the text),
+   then the date and the buttons; «Удалить» turns the footer into a question */
+.notes-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 20px; }
+.notes-tools__add { margin-left: 0; }
+.notes-tools__hint { font-size: 13.5px; color: var(--bad-ink); }
+.notes-list { display: grid; gap: 12px; list-style: none; margin: 16px 0 0; padding: 0; }
+.notes-list__item { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 12px; background: var(--sheet); transition: border-color .15s linear; }
+.notes-list__item--edit { border-color: var(--accent); }
+.notes-list__text { margin: 0; padding: 12px 14px; font-size: 15px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.notes-list__field { display: block; width: 100%; min-height: 50px; padding: 12px 14px; border: 0; border-radius: 11px 11px 0 0; background: var(--accent-soft); color: var(--ink); font: 15px/1.5 var(--f-body);
+  resize: none; field-sizing: content; outline: none; }
+.notes-list__field::placeholder { color: var(--muted); }
+.notes-list__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-height: 40px; padding: 5px 6px 5px 14px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--muted); }
+.notes-list__date { margin-right: auto; }
+.notes-list__ask { margin-right: auto; color: var(--bad-ink); font-weight: 600; }
+.notes-list__btn { padding: 4px 10px; border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px; background: none; color: var(--accent); font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.notes-list__btn:is(:hover, :focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
+/* «Удалить»: red text without a frame; the frame and fill show on hover */
+.notes-list__btn--del { border-color: transparent; color: var(--bad-ink); }
+/* the dark-theme red is bright: at rest it is mixed with the muted grey, full on hover */
+:root[data-theme="dark"] .notes-list__btn--del:not(:hover, :focus-visible) { color: color-mix(in srgb, var(--bad) 85%, var(--muted)); }
+.notes-list__btn--del:is(:hover, :focus-visible) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad-ink); }
+.notes-list__btn--confirm { border-color: var(--bad); background: var(--bad); color: var(--sheet); }
+.notes-list__btn--confirm:is(:hover, :focus-visible) { border-color: var(--bad-ink); background: var(--bad-ink); color: var(--sheet); }
 .mistakes__empty { margin: 24px 0 0; padding: 16px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--muted); }
 
 .topic-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 24px; }
@@ -996,6 +1025,9 @@ button { font: inherit; transition: linear 0.15s; }
         <button class="action-btn side__stat side__bm" id="bmBtn" type="button" aria-controls="bmFold" aria-expanded="false"></button>
         <div class="side__fold" id="bmFold"><div class="side__fold-clip" id="bmBody"></div></div>
       </div>
+      <div>
+        <button class="action-btn side__stat side__notes" id="notesBtn" type="button"></button>
+      </div>
     </div>
     <nav aria-label="Разделы тренажера">
       <div class="toc">
@@ -1135,6 +1167,8 @@ function units(ex) {
 let progress = store.get('gk2-progress', {});
 let studied = store.get('gk2-studied', {});
 let bookmarks = store.get('gk2-bookmarks', {}); /* topic id → time it was bookmarked */
+let notes = store.get('gk2-notes', []); /* «Мои заметки», see renderNotesPage */
+if (!Array.isArray(notes)) notes = [];
 let answers = store.get('gk2-answers', {});
 let levelFilter = store.get('gk2-level', '');
 let route = null;
@@ -1408,6 +1442,7 @@ function renderToc() {
   syncTocFold();
   if (!shown) list.innerHTML = '<p class="toc__empty">Ничего не нашлось. Попробуйте «past», «артикль» или снимите фильтр уровня.</p>';
   renderBookmarks();
+  renderNotes();
 }
 
 /* the bookmark ribbon; cls mixes in the element class of the place it sits in */
@@ -1461,6 +1496,20 @@ function renderBookmarks() {
   b.classList.toggle('side__bm--active', viaBookmarks && !!bookmarks[route]);
   renderFold('bm');
 }
+
+/* «Мои заметки»: free notes, not tied to topics — [{ id, text, c: created, at: last edit }], newest first;
+   kept in gk2-notes, so they go into backups and links */
+const notesIcon = (cls = '') => `<svg class="notes-icon${cls ? ' ' + cls : ''}" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.8 2.7a1.5 1.5 0 0 1 2.1 2.1L5.6 12.1 2.5 13l.9-3.1z"/><path d="M9.6 3.9l2.1 2.1"/></svg>`;
+const noteDate = at => new Date(at).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+/* the menu button only leads to the page: the count and an arrow, highlighted while the page is open */
+function renderNotes() {
+  const b = $('#notesBtn');
+  b.innerHTML = `${notesIcon()}<span>Мои заметки</span><b class="side__count">${notes.length || ''}</b>` + FOLD_ARROW;
+  b.setAttribute('aria-label', `Мои заметки: ${notes.length}`);
+  if (route === 'notes') b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+}
+const NOTE_FOLD = 255; /* a longer note is folded on its page */
+const saveNotes = () => { store.set('gk2-notes', notes); renderNotes(); };
 
 /* ---------- Backup: everything the app keeps in localStorage (gk2-*) as one JSON file ---------- */
 /* fileMsg: the last result shown under the buttons, [kind, text]; kept here because the block is re-rendered */
@@ -1548,7 +1597,7 @@ function runSaveLock() {
   saveTick = setInterval(tick, 200);
 }
 if (saveLocked()) runSaveLock();
-/* what a backup holds: rules studied, exercises done, without and with mistakes, bookmarks (topics this version knows) */
+/* what a backup holds: rules studied, exercises done, without and with mistakes, bookmarks (topics this version knows) and notes */
 function backupSummary(data) {
   const ids = o => Object.keys(o && typeof o === 'object' ? o : {}).filter(id => topicById[id]);
   let ex = 0, perfect = 0, wrong = 0;
@@ -1561,7 +1610,7 @@ function backupSummary(data) {
       if (r[0] < r[1]) wrong++; else perfect++;
     });
   });
-  return { studied: ids(data['gk2-studied']).length, ex, perfect, wrong, bm: ids(data['gk2-bookmarks']).length };
+  return { studied: ids(data['gk2-studied']).length, ex, perfect, wrong, bm: ids(data['gk2-bookmarks']).length, notes: Array.isArray(data['gk2-notes']) ? data['gk2-notes'].length : 0 };
 }
 const EX_TOTAL = TOPICS.reduce((n, t) => n + t.ex.length, 0);
 /* a backup read from a file: its data and save time, or null when the file is not ours */
@@ -1714,7 +1763,7 @@ function openImport(fromLink) {
     const when = backup.saved && !isNaN(new Date(backup.saved)) ? new Date(backup.saved).toLocaleString('ru-RU', { dateStyle: 'long', timeStyle: 'short' }) : '';
     const sum = backupSummary(backup.data);
     box.innerHTML = `<p class="modal__name"><b>${name === null ? 'Прогресс из ссылки' : esc(name)}</b>${when ? `<span>сохранен ${esc(when)}</span>` : ''}</p>
-      <div class="modal__stats">${row('Правил изучено', `${sum.studied} из ${TOPICS.length}`)}${row('Выполнено упражнений', `${sum.ex} из ${EX_TOTAL}`)}${sum.ex ? row('Без ошибок', sum.perfect) : ''}${sum.wrong ? row('С ошибками', sum.wrong) : ''}${row('«Избранное»', sum.bm)}</div>`;
+      <div class="modal__stats">${row('Правил изучено', `${sum.studied} из ${TOPICS.length}`)}${row('Выполнено упражнений', `${sum.ex} из ${EX_TOTAL}`)}${sum.ex ? row('Без ошибок', sum.perfect) : ''}${sum.wrong ? row('С ошибками', sum.wrong) : ''}${row('«Избранное»', sum.bm)}${row('Заметки', sum.notes)}</div>`;
   }
   async function choose(file) { if (file) show(await readBackup(file), file.name); }
   input.addEventListener('change', () => { const f = input.files[0]; input.value = ''; choose(f); });
@@ -1757,7 +1806,7 @@ document.addEventListener('click', e => {
 const FOLD_ARROW = '<svg class="side__fold-arrow" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 let folds = store.get('gk2-folds', {});
 const FOLD = { prog: ['#progBtn', '#progFold', '#progBody'], bm: ['#bmBtn', '#bmFold', '#bmBody'] };
-/* the content is rendered while open and refreshed whenever progress or bookmarks change */
+/* the content is rendered while open and refreshed whenever progress, bookmarks change */
 function renderFold(kind) {
   if (folds[kind]) $(FOLD[kind][2]).replaceChildren(kind === 'prog' ? overallBox() : bookmarksBox());
 }
@@ -1896,7 +1945,9 @@ const ABOUT = [
         <li><b>Резервная копия</b> — кнопки «Сохранить», «Загрузить» и «Отправить ссылкой». Подробнее о работе с данными — на странице «Где хранятся данные».</li>
       </ul>
       <h3>Избранное</h3>
-      <p>На кнопке отображается количество отмеченных тем, а при нажатии открывается их список. Подробнее на странице «Избранное».</p>
+      <p>На кнопке отображается количество отмеченных тем, а при нажатии открывается их список. Подробнее на странице «Избранное и заметки».</p>
+      <h3>Мои заметки</h3>
+      <p>На кнопке отображается количество созданных заметок, а при нажатии открывается страница «Мои заметки». Подробнее на странице «Избранное и заметки».</p>
       <h3>Содержание и уровни сложности</h3>
       <ul>
         <li><b>Содержание тренажера</b> — список всех разделов с общим прогрессом.</li>
@@ -1914,7 +1965,7 @@ const ABOUT = [
       <p>После нажатия открывается страница DonationAlerts в новой вкладке, где можно поддержать автора.</p>` },
   { id: 'data', title: 'Где хранятся данные', sub: 'Перенос прогресса', body: () => `
       <div class="note"><div>
-        <p>Прогресс, ответы, «Избранное» и другие данные сохраняются локально, то есть <b>только в этом браузере и только на этом устройстве</b>. У тренажера нет серверного хранения данных.</p>
+        <p>Прогресс, ответы, «Избранное», заметки и другие данные сохраняются локально, то есть <b>только в этом браузере и только на этом устройстве</b>. У тренажера нет серверного хранения данных.</p>
         <p>Данные будут утеряны, если:</p>
         <ul>
           <li>очистить файлы cookie и данные сайтов;</li>
@@ -1973,13 +2024,22 @@ const ABOUT = [
       <p>Если упражнение выполнено без ошибок, панель окрашивается в зеленый цвет и на ней появляется отметка «Исправлено».</p>
       <h3>Когда упражнение исчезает из списка</h3>
       <p>Упражнение пропадает из списка, если вы выполнили его без ошибок или нажали кнопку «Заново». Оно вновь отобразится в списке, если при следующей проверке в нем обнаружатся ошибки или незаполненные строки.</p>` },
-  { id: 'bookmarks', title: 'Избранное', sub: 'Темы, к которым хочется вернуться', body: () => `
+  { id: 'bookmarks', title: 'Избранное и заметки', sub: 'Информация, к которой хочется вернуться', body: () => `
       <p>На странице каждой темы имеется кнопка «Добавить в избранное». После нажатия тема добавляется в блок «Избранное», а в самих разделах рядом с ней появляется иконка ленточки. Повторное нажатие кнопки удаляет тему из избранного.</p>
       <h3>Список в меню</h3>
       <ul>
         <li>Кнопка «Избранное» показывает количество тем и открывает их список. Темы отображаются в порядке нумерации, а не в порядке добавления.</li>
         <li>Если темы относятся к разным уровням сложности, то над списком появляется фильтр по уровню.</li>
-      </ul>` }
+      </ul>
+      <h3>Мои заметки</h3>
+      <p>Здесь можно делать любые личные записи: перефразировать правила, добавлять примеры, записывать слова, которые никак не удается запомнить и т.д. Все заметки собираются в один общий список и не привязываются к темам / разделам. На кнопке видно, сколько всего заметок, а при нажатии откроется страница «Мои заметки».</p>
+      <ul>
+        <li><b>Новая заметка</b> — при нажатии на кнопку в начало списка добавляется пустая заметка.</li>
+        <li><b>Сохранение</b> — изменения сохраняются только после нажатия кнопки «Сохранить». Если покинуть страницу, не нажав кнопку, внесенные данные не сохранятся.</li>
+        <li><b>Редактирование</b> — нажмите кнопку «Редактировать», чтобы открыть режим правки. Для сохранения изменений воспользуйтесь кнопкой «Сохранить». Под каждой заметкой указана дата ее последнего редактирования.</li>
+        <li><b>Удаление</b> — под каждой заметкой имеется кнопка «Удалить». Чтобы избежать случайного удаления, потребуется дополнительное подтверждение — «Да, удалить». Если нажать «Отмена», заметка останется без изменений.</li>
+      </ul>
+      <p>Заметки входят в резервную копию: сохраняются в файл и в ссылку вместе с прогрессом и восстанавливаются при загрузке.</p>` }
 ];
 const aboutPage = id => ABOUT.find(p => 'about-' + p.id === id);
 const isAbout = id => id === 'about' || !!aboutPage(id);
@@ -2082,6 +2142,94 @@ function renderMistakesPage(wrap) {
     li.append(head, chips); ol.append(li);
   });
   wrap.append(ol);
+}
+
+/* «Мои заметки»: all notes, newest first. A note is read-only until «Редактировать»; the edited text is saved
+   only by its «Сохранить». «Удалить» asks again before deleting */
+function renderNotesPage(wrap) {
+  /* no crumbs: the page is opened from the menu, not from «Содержание» */
+  wrap.append(el('h1', 'sheet__title', 'Мои заметки'));
+  wrap.append(el('p', 'sheet__intro', 'Записывайте сюда правила, примеры, слова — все, что хочется сохранить. Заметки входят в резервную копию прогресса.'));
+  const tools = el('div', 'notes-tools');
+  const add = el('button', 'mistakes__start notes-tools__add'); add.type = 'button';
+  add.innerHTML = `${notesIcon()}<span>Новая заметка</span>`;
+  /* while any note is open for editing (a new one or «Редактировать», changed or not) no other new note can be started */
+  const hint = el('span', 'notes-tools__hint', 'Сохраните изменения в открытой заметке, чтобы создать новую.');
+  tools.append(add, hint);
+  const ol = el('ol', 'notes-list');
+  wrap.append(tools, ol);
+  const syncAdd = () => {
+    const blocked = !!$('.notes-list__item--edit', ol);
+    add.disabled = blocked; hint.hidden = !blocked;
+  };
+  const btn = (text, mod) => { const b = el('button', 'notes-list__btn' + (mod ? ' notes-list__btn--' + mod : ''), text); b.type = 'button'; return b; };
+  function card(n, editing = false) {
+    const li = el('li', 'notes-list__item');
+    const foot = el('div', 'notes-list__foot');
+    const date = () => el('span', 'notes-list__date', notes.includes(n) ? 'Изменена ' + noteDate(n.at) : 'Новая заметка');
+    let open = false; /* a long note is shown folded until «Показать еще» */
+    const fillText = p => {
+      if (n.text.length <= NOTE_FOLD) { p.textContent = n.text; return; }
+      const more = el('button', 'overall__more-btn', open ? 'Скрыть' : 'Показать еще'); more.type = 'button';
+      more.setAttribute('aria-expanded', String(open));
+      more.addEventListener('click', () => { open = !open; fillText(p); $('.overall__more-btn', p).focus(); });
+      if (open) { p.replaceChildren(n.text, ' ', more); return; }
+      /* folded as in the «Прогресс» notes: the text up to the limit, its last words fading out, then the button */
+      const head = n.text.slice(0, NOTE_FOLD).replace(/\s+\S*$/, '');
+      const words = head.split(/(\s+)/), k = Math.max(0, words.length - 5);
+      const row = el('span', 'overall__fade-row');
+      row.append(el('span', 'overall__fade', words.slice(k).join('')), ' ', more);
+      p.replaceChildren(words.slice(0, k).join(''), row);
+    };
+    const view = () => {
+      const text = el('p', 'notes-list__text'); fillText(text);
+      const edit = btn('Редактировать'), del = btn('Удалить', 'del');
+      edit.addEventListener('click', () => { render(true); $('textarea', li).focus(); });
+      del.addEventListener('click', ask);
+      foot.replaceChildren(date(), edit, del);
+      li.replaceChildren(text, foot);
+    };
+    const editor = () => {
+      const area = el('textarea', 'notes-list__field'); area.rows = 3;
+      area.setAttribute('aria-label', 'Текст заметки');
+      area.placeholder = 'Текст заметки…';
+      area.value = n.text;
+      const save = btn('Сохранить');
+      save.addEventListener('click', () => {
+        /* an emptied note keeps its last text: a note goes away only through «Удалить»; a new one without text is not kept */
+        if (area.value.trim()) {
+          n.text = area.value; n.at = Date.now();
+          if (!notes.includes(n)) notes.unshift(n);
+          saveNotes();
+        }
+        if (!notes.includes(n)) li.remove(); else render(false);
+        syncAdd();
+      });
+      foot.replaceChildren(date(), save);
+      li.replaceChildren(area, foot);
+    };
+    /* the second step of «Удалить»: the footer asks to confirm, «Отмена» brings the buttons back */
+    function ask() {
+      const yes = btn('Да, удалить', 'confirm'), no = btn('Отмена');
+      yes.addEventListener('click', () => {
+        const i = notes.indexOf(n);
+        if (i >= 0) { notes.splice(i, 1); saveNotes(); }
+        li.remove();
+      });
+      no.addEventListener('click', () => { render(false); $('.notes-list__btn--del', li).focus(); });
+      foot.replaceChildren(el('span', 'notes-list__ask', 'Удалить эту заметку?'), yes, no);
+      no.focus();
+    }
+    const render = e => { li.classList.toggle('notes-list__item--edit', e); if (e) editor(); else view(); syncAdd(); };
+    render(editing);
+    return li;
+  }
+  add.addEventListener('click', () => {
+    const li = card({ id: Date.now().toString(36), text: '', c: Date.now(), at: Date.now() }, true);
+    ol.prepend(li); $('textarea', li).focus(); syncAdd();
+  });
+  ol.append(...notes.map(n => card(n)));
+  syncAdd();
 }
 
 function renderContents(wrap) {
@@ -2538,7 +2686,7 @@ function renderEx(t, ex, ei) {
 
 /* ---------- Router ---------- */
 /* syncToc = false on page load: the accordion keeps its saved open/closed state instead of following the route */
-const PAGES = ['contents', 'mistakes', 'about', ...ABOUT.map(p => 'about-' + p.id)];
+const PAGES = ['contents', 'mistakes', 'notes', 'about',...ABOUT.map(p => 'about-' + p.id)];
 function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   if (!(PAGES.includes(id) || topicById[id] || chapById[id])) id = 'contents';
   route = id;
@@ -2557,6 +2705,7 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   }
   else if (chapById[id]) renderChapter(chapById[id], wrap);
   else if (id === 'mistakes') renderMistakesPage(wrap);
+  else if (id === 'notes') renderNotesPage(wrap);
   else if (id === 'about') renderAboutPage(wrap);
   else if (aboutPage(id)) renderAboutTopic(aboutPage(id), wrap);
   else renderContents(wrap);
@@ -2574,6 +2723,7 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
 
 $('#tocContents').addEventListener('click', () => go('contents'));
 $('#infoBtn').addEventListener('click', () => go('about'));
+$('#notesBtn').addEventListener('click', () => go('notes'));
 
 /* Hide / show the sidebar on desktop; the choice is remembered. */
 function setSide(collapsed, focus) {
@@ -2714,5 +2864,5 @@ $('#tocToggle').addEventListener('click', () => {
   store.set('gk2-toc-folded', tocFolded);
   renderToc();
 });
-['prog', 'bm'].forEach(k => { $(FOLD[k][0]).addEventListener('click', () => setFold(k, !folds[k])); setFold(k, !!folds[k]); });
+Object.keys(FOLD).forEach(k => { $(FOLD[k][0]).addEventListener('click', () => setFold(k, !folds[k])); setFold(k, !!folds[k]); });
 </script>

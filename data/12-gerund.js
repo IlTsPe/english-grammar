@@ -12,7 +12,15 @@ ${T(["Где", "Слова", "Пример"], [
   ["после выражений", "<i>it's no use, it's worth, there's no point in, look forward to, be used to</i>", "<i>It's worth <b>seeing</b>. I look forward to <b>hearing</b> from you.</i>"],
   ["как подлежащее", "—", "<i><b>Smoking</b> is bad for you.</i>"]
 ])}
-${N("В <i>look forward to</i>, <i>be used to</i>, <i>object to</i> слово <i>to</i> — предлог, поэтому дальше идет <i>-ing</i>: <i>I look forward to <b>seeing</b> you</i>, а не <i>to see</i>.")}`,
+${N("В <i>look forward to</i>, <i>be used to</i>, <i>object to</i> слово <i>to</i> — предлог, поэтому дальше идет <i>-ing</i>: <i>I look forward to <b>seeing</b> you</i>, а не <i>to see</i>.")}
+<h3>Кто выполняет действие</h3>
+<p>Если действие герундия выполняет не подлежащее, а кто-то другой, перед герундием ставят притяжательное местоимение или существительное в притяжательном падеже. В разговорной речи чаще говорят проще — объектное местоимение или существительное без <i>'s</i>.</p>
+${E([
+  ["I don't mind <b>his coming</b> late. = I don't mind <b>him coming</b> late.", "Я не против того, что он приходит поздно."],
+  ["I insist on <b>your going</b> there.", "Я настаиваю, чтобы ты пошел туда."],
+  ["Excuse <b>my interrupting</b> you.", "Простите, что перебиваю."],
+  ["We heard of <b>Ann's winning</b> the prize.", "Мы слышали о том, что Аня получила приз."]
+])}`,
   ex: [
     { type: 'gap', task: 'Поставьте глагол в форму герундия.', items: [
       ["I enjoy ___ (read) detective stories.", "reading"], ["Would you mind ___ (close) the door?", "closing"],
@@ -33,6 +41,16 @@ ${N("В <i>look forward to</i>, <i>be used to</i>, <i>object to</i> слово <
       ["Он ушел, не сказав ни слова.", "He left without saying a word.|He went away without saying a word."],
       ["Этот музей стоит посетить.", "This museum is worth visiting.|The museum is worth visiting."],
       ["Я с нетерпением жду встречи с тобой.", "I am looking forward to seeing you.|I'm looking forward to seeing you.|I look forward to seeing you."]
+    ]},
+    { type: 'gap', task: 'Впишите притяжательное местоимение или существительное перед герундием.', items: [
+      ["I don't mind ___ (he) smoking here.", "his|him"],
+      ["She insisted on ___ (I) staying for dinner.", "my|me"],
+      ["Excuse ___ (I) interrupting you.", "my|me"],
+      ["Do you mind ___ (we) opening the window?", "our|us"],
+      ["We were surprised at ___ (Tom) coming so early.", "Tom's|Tom"],
+      ["Mother was against ___ (they) going out so late.", "their|them"],
+      ["I'm sure of ___ (you) passing the exam.", "your|you"],
+      ["I remember ___ (my sister) crying when she was little.", "my sister's|my sister"]
     ]}
   ]},
 

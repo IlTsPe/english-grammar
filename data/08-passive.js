@@ -17,7 +17,15 @@ ${E([
   ["The letter <b>was written</b> with a pencil.", "Инструмент — with."],
   ["<b>Was</b> the window <b>broken</b> by the children? — It <b>wasn't broken</b>.", "Вопрос и отрицание — с помощью be."]
 ])}
-${N("Русские неопределенно-личные предложения часто переводятся пассивом: «Здесь говорят по-английски» — <i>English <b>is spoken</b> here</i>; «Мне подарили книгу» — <i>I <b>was given</b> a book</i>.")}`,
+${N("Русские неопределенно-личные предложения часто переводятся пассивом: «Здесь говорят по-английски» — <i>English <b>is spoken</b> here</i>; «Мне подарили книгу» — <i>I <b>was given</b> a book</i>.")}
+<h3>Глагол с предлогом</h3>
+<p>Если глагол употребляется с предлогом (<i>look after, laugh at, send for, listen to, speak about, take care of</i>), в пассиве предлог остается сразу после глагола — даже в конце предложения.</p>
+${E([
+  ["They <b>sent for</b> the doctor. → The doctor <b>was sent for</b>.", "За врачом послали."],
+  ["Everybody <b>laughed at</b> him. → He <b>was laughed at</b>.", "Над ним смеялись."],
+  ["The children <b>are</b> well <b>looked after</b>.", "За детьми хорошо присматривают."],
+  ["This film <b>is</b> much <b>spoken about</b>.", "Об этом фильме много говорят."]
+])}`,
   ex: [
     { type: 'gap', task: 'Поставьте глагол в Present, Past или Future Simple Passive.', items: [
       ["English ___ (speak) all over the world.", "is spoken"], ["This house ___ (build) in 1905.", "was built"],
@@ -38,6 +46,16 @@ ${N("Русские неопределенно-личные предложени
       ["Письмо будет отправлено завтра.", "The letter will be sent tomorrow."],
       ["Меня пригласили на день рождения.", "I was invited to a birthday party.|I was invited to the birthday party."],
       ["Эту книгу написал Пушкин.", "This book was written by Pushkin."]
+    ]},
+    { type: 'gap', task: 'Перепишите предложение в пассиве (впишите сказуемое вместе с предлогом).', items: [
+      ["They sent for the doctor. → The doctor ___.", "was sent for"],
+      ["Everybody laughed at his joke. → His joke ___.", "was laughed at"],
+      ["Granny looks after the children. → The children ___ by Granny.", "are looked after"],
+      ["We will speak about this problem tomorrow. → This problem ___ tomorrow.", "will be spoken about"],
+      ["Nobody listened to him. → He ___.", "was not listened to"],
+      ["They took care of the old dog. → The old dog ___.", "was taken care of"],
+      ["People often talk about this film. → This film ___ a lot.", "is talked about"],
+      ["Somebody switched off the light. → The light ___.", "was switched off"]
     ]}
   ]},
 

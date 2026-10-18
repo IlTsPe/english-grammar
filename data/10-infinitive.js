@@ -18,7 +18,19 @@ ${T(["С to (самые частые глаголы)", "Пример"], [
   ["после вопросительных слов", "<i>I don't know what <b>to do</b>. Show me how <b>to use</b> it.</i>"],
   ["после <i>the first, the last, the only</i>", "<i>He was the first <b>to come</b>.</i>"]
 ])}
-${N("В пассиве после <i>make</i> частица <i>to</i> возвращается: <i>They made him <b>work</b></i> → <i>He was made <b>to work</b></i>.")}`,
+${N("В пассиве после <i>make</i> частица <i>to</i> возвращается: <i>They made him <b>work</b></i> → <i>He was made <b>to work</b></i>.")}
+<h3>Устойчивые обороты с инфинитивом</h3>
+<p>Некоторые обороты с инфинитивом стали вводными словами: они выражают отношение говорящего и обычно отделяются запятой.</p>
+${T(["Оборот", "Перевод"], [
+  ["<i>to tell the truth</i>", "по правде говоря"],
+  ["<i>to be honest</i>", "честно говоря"],
+  ["<i>to begin with</i>", "начнем с того, что; во-первых"],
+  ["<i>to say nothing of</i>", "не говоря уже о"],
+  ["<i>to put it mildly</i>", "мягко говоря"],
+  ["<i>to make matters worse</i>", "в довершение всего"],
+  ["<i>strange to say</i>", "как ни странно"],
+  ["<i>needless to say</i>", "само собой разумеется"]
+])}`,
   ex: [
     { type: 'choice', task: 'Нужна ли частица to? Выберите вариант.', items: [
       ["I want ___ a doctor.", ["to become", "become"]], ["You must ___ harder.", ["work", "to work"]],
@@ -39,6 +51,14 @@ ${N("В пассиве после <i>make</i> частица <i>to</i> возв�
       ["Мама не разрешает мне смотреть телевизор поздно.", "Mum doesn't let me watch TV late.|My mother doesn't let me watch TV late.|My mum doesn't let me watch TV late."],
       ["Я не знаю, что делать.", "I don't know what to do.|I do not know what to do."],
       ["Тебе лучше остаться дома.", "You had better stay at home.|You'd better stay at home.|You'd better stay home."]
+    ]},
+    { type: 'choice', task: 'Выберите подходящий оборот.', items: [
+      ["___, I haven't read the book — I've only seen the film.", ["To tell the truth", "To begin with", "To make matters worse"]],
+      ["I can't go: ___, I have no money, and besides, I'm tired.", ["to begin with", "to put it mildly", "strange to say"]],
+      ["It was raining, and ___, we got lost.", ["to make matters worse", "to begin with", "to put it mildly"]],
+      ["He isn't very polite, ___.", ["to put it mildly", "to begin with", "to make matters worse"]],
+      ["He speaks French and German, ___ English.", ["to say nothing of", "to tell the truth", "to begin with"]],
+      ["___, he passed the exam without studying at all.", ["Strange to say", "To put it mildly", "To say nothing of"]]
     ]}
   ]},
 

@@ -22,7 +22,15 @@ ${T(["Единственное", "Множественное"], [
   ["<i>person</i>", "<i>people</i>"],
   ["<i>sheep, fish, deer, aircraft</i>", "не меняются"]
 ])}
-${N("В сложных словах с <i>man / woman</i> меняется эта часть: <i>policeman → policemen</i>, <i>Englishwoman → Englishwomen</i>. У составных через дефис меняется главное слово: <i>passer-by → passers-by</i>.")}`,
+${N("В сложных словах с <i>man / woman</i> меняется эта часть: <i>policeman → policemen</i>, <i>Englishwoman → Englishwomen</i>. У составных через дефис меняется главное слово: <i>passer-by → passers-by</i>.")}
+<h3>Род существительных</h3>
+<p>Грамматического рода у английских существительных нет. Но у некоторых названий людей и животных есть отдельное слово для женского рода — чаще всего с суффиксом <i>-ess</i>.</p>
+${T(["Мужской род", "Женский род"], [
+  ["<i>actor, waiter, host, prince, lion</i>", "<i>actr<b>ess</b>, waitr<b>ess</b>, host<b>ess</b>, princ<b>ess</b>, lion<b>ess</b></i>"],
+  ["<i>hero, emperor, tiger</i>", "<i>hero<b>ine</b>, emp<b>ress</b>, tig<b>ress</b></i>"],
+  ["<i>man, boy, father, brother, uncle, king, husband, nephew</i>", "<i>woman, girl, mother, sister, aunt, queen, wife, niece</i>"]
+])}
+${N("Сейчас многие профессии называют одним словом для мужчин и женщин: <i>a doctor, a teacher, a writer</i>. Вместо <i>poetess</i> и <i>authoress</i> обычно говорят <i>poet</i> и <i>author</i>, а <i>actor</i> все чаще говорят и о женщинах.")}`,
   ex: [
     { type: 'gap', task: 'Напишите форму множественного числа.', items: [
       ["box → ___", "boxes"], ["baby → ___", "babies"], ["day → ___", "days"], ["knife → ___", "knives"],
@@ -46,6 +54,11 @@ ${N("В сложных словах с <i>man / woman</i> меняется эт�
       ["На столе три ножа.", "There are three knives on the table."],
       ["Эти женщины — учителя.", "These women are teachers."],
       ["На лугу много овец.", "There are many sheep in the field.|There are a lot of sheep in the field.|There are many sheep in the meadow.|There are a lot of sheep in the meadow."]
+    ]},
+    { type: 'gap', task: 'Напишите существительное женского рода.', items: [
+      ["actor → ___", "actress"], ["waiter → ___", "waitress"], ["host → ___", "hostess"], ["prince → ___", "princess"],
+      ["lion → ___", "lioness"], ["hero → ___", "heroine"], ["emperor → ___", "empress"], ["tiger → ___", "tigress"],
+      ["king → ___", "queen"], ["husband → ___", "wife"], ["nephew → ___", "niece"], ["uncle → ___", "aunt"]
     ]}
   ]},
 

@@ -56,7 +56,17 @@ ${E([
   ["The children <b>playing</b> in the garden are my nephews.", "= who are playing"],
   ["Most goods <b>made</b> in this factory are exported.", "= which are made"]
 ])}
-${N("У оборота и главного предложения должно быть <b>одно подлежащее</b>. <i>Walking home, the rain started</i> — ошибка: получается, что домой шел дождь. Правильно: <i>Walking home, <b>I</b> got caught in the rain.</i>")}`,
+${N("У оборота и главного предложения должно быть <b>одно подлежащее</b>. <i>Walking home, the rain started</i> — ошибка: получается, что домой шел дождь. Правильно: <i>Walking home, <b>I</b> got caught in the rain.</i>")}
+<h3>Независимый причастный оборот</h3>
+<p>Иногда у оборота есть свое подлежащее — существительное или местоимение перед причастием. Такой оборот называют независимым. Он характерен для книжной и официальной речи и отделяется запятой. На русский его обычно переводят придаточным с «так как», «когда», «после того как» или деепричастием.</p>
+${E([
+  ["<b>The weather being</b> fine, we went for a walk.", "Так как погода была хорошая, мы пошли гулять."],
+  ["<b>The work having been done</b>, they went home.", "Когда работа была сделана, они пошли домой."],
+  ["<b>It being</b> Sunday, the shops were closed.", "Так как было воскресенье, магазины были закрыты."],
+  ["She sat by the fire, <b>her eyes closed</b>.", "Она сидела у огня, закрыв глаза."],
+  ["<b>Weather permitting</b>, we'll start tomorrow.", "Если погода позволит, мы отправимся завтра."]
+])}
+${N("Это не та ошибка, о которой сказано выше: в независимом обороте подлежащее названо прямо (<i><b>The weather</b> being fine</i>), поэтому у главного предложения может быть свое подлежащее.")}`,
   ex: [
     { type: 'choice', task: 'Выберите правильную форму причастия.', items: [
       ["___ the letter, she burst into tears.", ["Having read", "Read", "Being read"]], ["___ in 1890, the building is now a museum.", ["Built", "Building", "Having built"]],
@@ -75,6 +85,16 @@ ${N("У оборота и главного предложения должно �
       ["Не зная, что сказать, я молчал.", "Not knowing what to say, I kept silent.|Not knowing what to say, I was silent.|Not knowing what to say, I said nothing."],
       ["Построенный в 1890 году, этот дом теперь музей.", "Built in 1890, the house is now a museum.|Built in 1890, this house is now a museum."],
       ["Дети, играющие в саду, — мои племянники.", "The children playing in the garden are my nephews."]
+    ]},
+    { type: 'gap', task: 'Замените придаточное независимым причастным оборотом (впишите причастие).', items: [
+      ["As the weather was fine, we went out. → The weather ___ fine, we went out.", "being"],
+      ["When the work had been done, they went home. → The work ___ done, they went home.", "having been"],
+      ["As it was Sunday, the shops were closed. → It ___ Sunday, the shops were closed.", "being"],
+      ["As there was no bus, we walked. → There ___ no bus, we walked.", "being"],
+      ["When the sun had set, it got cold. → The sun ___, it got cold.", "having set"],
+      ["If the weather permits, we'll start tomorrow. → Weather ___, we'll start tomorrow.", "permitting"],
+      ["As the door was locked, I couldn't get in. → The door ___ locked, I couldn't get in.", "being"],
+      ["After the guests had left, we washed up. → The guests ___, we washed up.", "having left"]
     ]}
   ]}
 ]});
