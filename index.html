@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" class="pointer-still">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Грамматика онлайн</title>
@@ -53,7 +53,8 @@
   --gold-ink: #b38b27; /* gold for text and frames, darker in the light theme to stay readable */
   --scroll-thumb: #8C9EE2; /* scrollbars: the accent at 45% on the paper, the full accent on hover; the track stays see-through */
   --scroll-thumb-hover: #2547D0;
-  --raise: 0 1px 1px rgb(20 27 58 / 6%), 0 2px 5px rgb(20 27 58 / 11%); /* a small shadow under the sidebar blocks: they stand off the paper */
+  --raise: 0 1px 1px rgb(20 27 58 / 6%), 0 2px 5px rgb(20 27 58 / 11%);
+  --raise-down: 0 6px 8px -4px rgb(20 27 58 / 26%); /* the same shadow only under the bottom edge: the mobile top bar */ /* a small shadow under the sidebar blocks: they stand off the paper */
   --f-display: 'Unbounded', 'Arial Black', system-ui, sans-serif;
   --f-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --f-en: 'Literata', Georgia, 'Times New Roman', serif;
@@ -64,7 +65,8 @@
   --grid: rgba(169, 156, 255, .07); --accent: #ADA2FF; --accent-soft: #29254A; --on-accent: #16132E;
   --ok: #5CD192; --ok-ink: #5CD192; --ok-soft: #16301F; --bad: #FF7F73; --bad-ink: #FF7F73; --bad-soft: #3A1E1D; --mid: #F0C048;
   --gold-soft: #352B12; --gold-ink: #F0C048;
-  --raise: 0 1px 1px rgb(52 49 79 / 40%), 0 2px 5px rgb(52 49 79 / 45%); /* the light theme's shadow in dark violet: a black one does not show on the near-black paper */
+  --raise: 0 1px 1px rgb(52 49 79 / 40%), 0 2px 5px rgb(52 49 79 / 45%);
+  --raise-down: 0 6px 8px -4px rgb(52 49 79 / 95%); /* the light theme's shadow in dark violet: a black one does not show on the near-black paper */
   --scroll-thumb: #5F5A8E; --scroll-thumb-hover: #7E77BB; /* the accent at 50% and 70% on the paper: the full accent looks white here */
   color-scheme: dark;
 }
@@ -76,7 +78,7 @@
 ::-webkit-scrollbar { width: 11px; height: 11px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 99px; background: var(--scroll-thumb) padding-box; }
-::-webkit-scrollbar-thumb:hover { background-color: var(--scroll-thumb-hover); }
+@media (hover: hover) { ::-webkit-scrollbar-thumb:hover { background-color: var(--scroll-thumb-hover); } }
 /* the theme switch cross-fades: with View Transitions the browser fades a snapshot of the old page into the new one
    on the GPU after a single restyle; elsewhere every element fades its colours (.theme-anim, only while the theme switches,
    so it does not interfere with other transitions) — 3-5 times the style work on a long page */
@@ -92,17 +94,18 @@ button { font: inherit; transition: linear 0.15s; }
 
 /* ---------- Buttons ---------- */
 .btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--sheet); color: var(--ink); font-size: 14.5px; font-weight: 600; cursor: pointer; }
-.btn:hover { border-color: var(--accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .btn:hover { border-color: var(--accent); } }
 .btn--primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); opacity: .7; }
-.btn--primary:hover { opacity: 1; }
-.btn--primary:disabled, .btn--primary:disabled:hover { opacity: .35; cursor: default; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .btn--primary:hover { opacity: 1; } }
+.btn--primary:disabled { opacity: .35; cursor: default; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .btn--primary:disabled:hover { opacity: .35; cursor: default; } }
 .icon-btn { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: 8px; background: var(--sheet); color: var(--muted); cursor: pointer; }
-.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .icon-btn:hover { border-color: var(--accent); color: var(--accent); } }
 .icon-btn__icon { width: 16px; height: 16px; }
 /* a labelled button for sidebar actions: theme, hide / show the menu, open the sections on mobile */
 .action-btn { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 6px 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
   background: var(--sheet); color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.2; white-space: nowrap; cursor: pointer; }
-.action-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .action-btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .action-btn__icon { flex: none; width: 18px; height: 18px; }
 /* the theme button shows the theme it switches to: a sun in the dark theme, a moon in the light one */
 .theme-toggle__moon { display: none; }
@@ -113,7 +116,8 @@ button { font: inherit; transition: linear 0.15s; }
 /* the sun turns together with its rays, one turn in 12s like ray-turn; the script runs it so it can ease to a stop when the pointer leaves */
 /* the moon rests turned 15° clockwise and swings 25° back on hover, so it ends slightly tilted instead of lying with the cut on top */
 .theme-toggle__moon-body { transform-box: fill-box; transform-origin: center; transform: rotate(15deg); transition: transform .7s cubic-bezier(.34, 1.8, .64, 1); }
-.theme-toggle:is(:hover, :focus-visible) .theme-toggle__moon-body { transform: rotate(-10deg); }
+.theme-toggle:is(:focus-visible) .theme-toggle__moon-body { transform: rotate(-10deg); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .theme-toggle:hover .theme-toggle__moon-body { transform: rotate(-10deg); } }
 /* «Темная тема»: on hover small stars light up across the button, under the label, one after another */
 .theme-toggle { position: relative; overflow: hidden; }
 .theme-toggle > :not(.theme-toggle__stars, .theme-toggle__rays) { position: relative; }
@@ -127,7 +131,8 @@ button { font: inherit; transition: linear 0.15s; }
   mask: radial-gradient(circle at var(--cx, 30px) var(--cy, 50%), transparent 11px, #000 16px, #000 calc(var(--ray-r) * .55), transparent var(--ray-r));
   transition: --ray-r .6s ease-out, opacity .3s ease; }
 @keyframes ray-turn { to { --ray-a: 360deg; } }
-:root:not([data-theme="light"]) .theme-toggle:is(:hover, :focus-visible) .theme-toggle__rays { --ray-r: 220px; opacity: 1; animation: ray-turn 12s linear infinite; }
+:root:not([data-theme="light"]) .theme-toggle:is(:focus-visible) .theme-toggle__rays { --ray-r: 220px; opacity: 1; animation: ray-turn 12s linear infinite; }
+@media (hover: hover) { :root:not([data-theme="light"]):where(:root:not(.pointer-still)) .theme-toggle:hover .theme-toggle__rays { --ray-r: 220px; opacity: 1; animation: ray-turn 12s linear infinite; } }
 .theme-toggle__stars i { position: absolute; width: var(--s); height: var(--s); background: currentColor; opacity: 0; transform: scale(.2) rotate(-45deg);
   clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); transition: opacity .2s ease, transform .35s cubic-bezier(.3, 1.5, .6, 1); }
 /* an uneven scatter; the order they light up in is re-rolled on every hover by the script */
@@ -139,7 +144,8 @@ button { font: inherit; transition: linear 0.15s; }
 .theme-toggle__stars i:nth-child(6) { --s: 7px; left: 62%; top: 68%; }
 .theme-toggle__stars i:nth-child(7) { --s: 5px; left: 75%; top: 14%; }
 .theme-toggle__stars i:nth-child(8) { --s: 6px; left: 94%; top: 28%; }
-:root[data-theme="light"] .theme-toggle:is(:hover, :focus-visible) .theme-toggle__stars i { opacity: .7; transform: none; }
+:root[data-theme="light"] .theme-toggle:is(:focus-visible) .theme-toggle__stars i { opacity: .7; transform: none; }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .theme-toggle:hover .theme-toggle__stars i { opacity: .7; transform: none; } }
 
 /* ---------- Sidebar ---------- */
 .side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: calc(100vh - 16px); overflow-y: auto; scrollbar-gutter: stable; padding-block: 28px 24px; padding-inline: 5px 11px; } /* the wider right side keeps the scrollbar off the frames */
@@ -149,11 +155,33 @@ button { font: inherit; transition: linear 0.15s; }
 /* «Скрыть меню»: two chevrons slide left on hover, the leading one faster, the second catching up */
 .side__hide-chev { transition: transform .32s ease; }
 .side__hide-chev--lead { transition-duration: .16s; }
-.side__hide:is(:hover, :focus-visible) .side__hide-chev { transform: translateX(-3px); }
+.side__hide:is(:focus-visible) .side__hide-chev { transform: translateX(-3px); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .side__hide:hover .side__hide-chev { transform: translateX(-3px); } }
 /* shown while the sidebar is collapsed: the menu button with the theme toggle under it, both the same width */
 .float-tools { position: fixed; z-index: 5; top: calc(env(safe-area-inset-top, 0px) + 16px); left: 35px; display: grid; gap: 6px; }
 .float-tools[hidden] { display: none; }
 .float-tools__btn { justify-content: flex-start; padding-inline: 12px 14px; box-shadow: var(--raise); }
+/* top bars' corners (the mobile .side and the .float-tools bar below 1300px): a 10px strip behind the bar's top edge,
+   masked down to the two bits outside its rounded corners and painted like the page (the «Информация» spotlight too),
+   so the corners stay rounded while the text scrolling under the stuck bar does not show in them */
+:is(.side, .float-tools)::before { background-color: var(--paper);
+  mask: radial-gradient(circle at 100% 100%, transparent 9.5px, #000 10px) left top / 10px 10px no-repeat,
+        radial-gradient(circle at 0 100%, transparent 9.5px, #000 10px) right top / 10px 10px no-repeat; }
+/* «Содержание тренажера», «Мои заметки», «Инфо» in the floating tools: only in the top bar (below 1300px) */
+.float-tools__link, .float-tools__logo { display: none; }
+/* page links in the top bars (desktop and mobile): copies of the menu's «Содержание», «Заметки», «Инфо», filled while their page is open */
+.page-link[aria-current] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .page-link[aria-current]:hover { border-color: var(--accent); background: var(--accent); } }
+/* the top bar buttons change size and padding at the breakpoints; animating that (button { transition: linear .15s }) made
+   them shrink and vanish one by one, so only the colours animate */
+.side__bar .action-btn, .float-tools__btn { transition-property: color, background-color, border-color, box-shadow; }
+/* «Инфо» in the top bars: the icon alone, in a square button; the name stays in title and aria-label */
+.action-btn.page-link.page-link--icon { justify-content: center; padding-inline: 0; }
+.page-link--icon > span { display: none; }
+.float-tools .page-link--icon { width: 40px; }
+.side__bar .page-link--icon { width: 35px; }
+.page-link__count { font-family: var(--f-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+.page-link__count:empty { display: none; }
 @media (min-width: 881px) {
   /* collapse animates the sidebar track to zero while the panel fades and slides out */
   .app { transition: grid-template-columns .15s linear, gap .15s linear; }
@@ -167,12 +195,48 @@ button { font: inherit; transition: linear 0.15s; }
 @media (min-width: 1300px) {
   .app--side-collapsed .app__sheet { padding-top: 36px; }
 }
+/* below 1300px the text would run under the floating buttons, so they become a top bar above the sheet, like the mobile one:
+   the menu button on the left, the theme on the right; it spans the whole grid row and stays on screen while scrolling */
+@media (min-width: 881px) and (max-width: 1299px) {
+  /* the mobile bar's z-index, so nothing on the sheet is drawn over it */
+  .float-tools { position: sticky; top: 0; z-index: 20; grid-column: 1 / -1; display: flex; align-items: center; gap: 8px;
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px; background: var(--paper); border-radius: 10px 10px 0 0; box-shadow: var(--raise-down); }
+  .float-tools__link { display: flex; }
+  /* the logo from the menu leads the bar, the size of the mobile one; .app outweighs the smaller-screen .app .brand__logo steps */
+  .app .float-tools__logo.brand__logo { display: block; top: 0; width: 36px; height: 36px; margin-right: 4px; }
+  .float-tools .theme-toggle { margin-left: auto; }
+  /* the sheet keeps its usual top padding and loses its top corners under the bar; 60px is the bar */
+  .float-tools::before { content: ""; position: absolute; z-index: -1; inset: 0 0 auto; height: 10px; } /* see «top bars' corners» */
+  /* the bar starts at the window's edge, without the 8px body margin over it; 60px is the bar */
+  body:has(.app--side-collapsed) { margin-top: 0; }
+  .app--side-collapsed .app__sheet { padding-top: 36px; border-radius: 0; min-height: calc(100vh - 60px); }
+  .app--side-collapsed :is(.ex, .notes-tools) { scroll-margin-top: 76px; } /* clears the sticky bar */
+}
+/* below 1190px the 310px menu takes too much of the screen: a narrower column and a smaller title */
+@media (min-width: 881px) and (max-width: 1189px) {
+  .app:not(.app--side-collapsed) { grid-template-columns: 272px minmax(0, 1fr); gap: 10px; }
+  .app .brand__title { font-size: 19px; }
+  .app .brand__logo { width: 38px; height: 38px; }
+  .app .brand__sub { font-size: 12px; }
+  .side .action-btn { font-size: 12.5px; }
+  .side__actions .action-btn { gap: 5px; padding-inline: 8px; }
+}
+/* below 1010px one more step down */
+@media (min-width: 881px) and (max-width: 1009px) {
+  .app:not(.app--side-collapsed) { grid-template-columns: 260px minmax(0, 1fr); }
+  .app .brand__title { font-size: 18px; }
+  .app .brand__logo { width: 36px; height: 36px; }
+  .side .action-btn { font-size: 12px; }
+  .side__actions { gap: 6px; }
+}
 @media (max-width: 880px) {
   .side__hide, .float-tools { display: none; }
 }
 .brand { flex: 1; min-width: 0; }
 /* the favicon sits left of the title, centred on its lines */
-.brand__title { display: flex; align-items: center; gap: 7px; font-family: var(--f-display); font-weight: 700; font-size: 21px; line-height: 1.15; letter-spacing: -.01em; }
+.brand__title { display: flex; align-items: center; gap: 7px; font-family: var(--f-display); font-weight: 700; font-size: 21px; line-height: 1.15; letter-spacing: -.01em; color: inherit; text-decoration: none; }
+/* the title is a link to «Содержание тренажера» */
+.brand__title:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 /* the favicon drawing, inline so it follows the theme (2px lower than the line-box centre — the visible text sits lower): a blue plate with a pale cap in the light theme, a violet plate with a dark cap in the dark one */
 /* the tassel: gold in both themes (#F0C048 dark, #E0A800 light) */
 .brand__logo { flex: none; position: relative; top: 2px; width: 42px; height: 42px; --logo-plate: #ADA2FF; --logo-ink: #16132E; --logo-tassel: #F0C048; }
@@ -193,7 +257,8 @@ button { font: inherit; transition: linear 0.15s; }
 .brand__row { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
 .brand__row .brand__sub { flex: 1; min-width: 0; margin-top: 0; }
 .brand__info { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 37px; height: 37px; padding: 0; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px; background: none; color: var(--accent); font: 600 10px/1 var(--f-body); white-space: nowrap; cursor: pointer; }
-.brand__info:hover, .brand__info:focus-visible { border-color: var(--accent); background: var(--accent-soft); }
+.brand__info:focus-visible { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .brand__info:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .brand__info[aria-current] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 .brand__info-icon { width: 17px; height: 17px; }
 /* «Прогресс» and «Избранное»: full-width buttons one under the other, each expands its block under it like an accordion;
@@ -204,10 +269,12 @@ button { font: inherit; transition: linear 0.15s; }
    Kept within the 5px side padding, so the scrolling sidebar does not clip it */
 .side__actions .action-btn, .side__summary > div, .side__donate, .toc, .brand__info { box-shadow: var(--raise); }
 .side__summary > div { border-radius: 10px; }
+.side__summary > .side__info { display: none; } /* only in the narrow drawer: elsewhere «Инфо» is under the title or in the top bar */
 .side__stat { width: 100%; justify-content: flex-start; gap: 10px; padding-inline: 12px; transition: border-radius .15s linear, border-color .15s linear, background-color .15s linear; }
 .side__fold-arrow { flex: none; width: 12px; height: 12px; margin-left: auto; color: var(--accent); transition: transform .15s linear; }
 .side__count:not(:empty) + .side__fold-arrow { margin-left: 0; }
-.side__stat:is(:hover, :focus-visible) .side__fold-arrow { color: inherit; } /* follows the button: green on «Поддержать автора» */
+.side__stat:is(:focus-visible) .side__fold-arrow { color: inherit; } /* follows the button: green on «Поддержать автора» */
+@media (hover: hover) { :where(:root:not(.pointer-still)) .side__stat:hover .side__fold-arrow { color: inherit; } }
 .side__stat[aria-expanded="true"] .side__fold-arrow { transform: rotate(90deg); }
 /* «Поддержать автора»: a link to DonationAlerts in a new tab, under the contents block, laid out like «Прогресс» and
    «Избранное»: a rouble coin on the left, an outward arrow on the right instead of the fold chevron */
@@ -220,7 +287,17 @@ button { font: inherit; transition: linear 0.15s; }
    and banknotes flutter down behind the title as if in the wind (clipped by the button);
    the selector outweighs the light theme's sidebar hover */
 :root[data-theme="light"] .side__donate { --ok: #12A33A; --donate-fill: 16%; } /* a brighter green for the frame, fill, coin and notes; the title keeps --ok-ink (5:1) */
-:root[data-theme] .side .side__donate.side__stat:is(:hover, :focus-visible) { border-color: var(--ok); background: color-mix(in srgb, var(--ok) var(--donate-fill, 13%), transparent); color: var(--ok-ink); }
+/* at rest a quiet green instead of the accent: a half-tone frame and the title toned down towards the muted text */
+/* .action-btn in the selector outweighs the light theme's «no fill on sidebar controls», which comes later */
+:root[data-theme] .side .side__donate.side__stat.action-btn { border-color: color-mix(in srgb, var(--ok) 35%, transparent); background: color-mix(in srgb, var(--ok) 4%, transparent); color: color-mix(in srgb, var(--ok-ink) 60%, var(--muted)); }
+/* the light theme needs more: a half-tone green frame vanished on the pale sidebar */
+:root[data-theme="light"] .side .side__donate.side__stat.action-btn { border-color: color-mix(in srgb, var(--ok) 55%, transparent); color: color-mix(in srgb, var(--ok-ink) 80%, var(--muted)); }
+.side__donate .side__fold-arrow { color: inherit; }
+/* its raise in green: the same offsets as --raise, a dark green in place of the violet / navy */
+.side .side__donate { box-shadow: 0 1px 1px rgb(14 64 30 / 30%), 0 2px 5px rgb(14 64 30 / 35%); }
+:root[data-theme="light"] .side .side__donate { box-shadow: 0 1px 1px rgb(5 96 26 / 7%), 0 2px 5px rgb(5 96 26 / 12%); }
+:root[data-theme] .side .side__donate.side__stat:is(:focus-visible) { border-color: var(--ok); background: color-mix(in srgb, var(--ok) var(--donate-fill, 13%), transparent); color: var(--ok-ink); }
+@media (hover: hover) { :root[data-theme]:where(:root:not(.pointer-still)) .side .side__donate.side__stat:hover { border-color: var(--ok); background: color-mix(in srgb, var(--ok) var(--donate-fill, 13%), transparent); color: var(--ok-ink); } }
 /* the coin: two faces 3px apart with five discs between them for the rim; at rest only the flat outline of the front shows */
 .coin { --coin-face: transparent; transform-style: preserve-3d; }
 .coin__face, .coin__edge { position: absolute; inset: 0; }
@@ -229,8 +306,10 @@ button { font: inherit; transition: linear 0.15s; }
 .coin__face--front { transform: translateZ(1.5px); }
 .coin__face--back { transform: rotateY(180deg) translateZ(1.5px); }
 .coin__edge { border-radius: 50%; background: color-mix(in srgb, currentColor 70%, #000); opacity: 0; transform: translateZ(var(--z)); }
-.side__donate:is(:hover, :focus-visible) .coin { --coin-face: color-mix(in srgb, var(--ok) 30%, var(--sheet)); animation: coin-spin 1.4s linear infinite; }
-.side__donate:is(:hover, :focus-visible) .coin__edge { opacity: 1; }
+.side__donate:is(:focus-visible) .coin { --coin-face: color-mix(in srgb, var(--ok) 30%, var(--sheet)); animation: coin-spin 1.4s linear infinite; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .side__donate:hover .coin { --coin-face: color-mix(in srgb, var(--ok) 30%, var(--sheet)); animation: coin-spin 1.4s linear infinite; } }
+.side__donate:is(:focus-visible) .coin__edge { opacity: 1; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .side__donate:hover .coin__edge { opacity: 1; } }
 @keyframes coin-spin { from { transform: perspective(60px) rotateY(0); } to { transform: perspective(60px) rotateY(360deg); } }
 /* banknotes: made by script, spread over the whole width in even strips. Two motions so the fall is smooth:
    the outer <i> only drops at an even speed and fades in and out; the inner <b> swings left and right like a pendulum,
@@ -244,8 +323,10 @@ button { font: inherit; transition: linear 0.15s; }
   color: var(--ok); font: 700 7.5px/1 var(--f-body); }
 .side__donate-bills b::before { background: linear-gradient(120deg, color-mix(in srgb, var(--ok) 45%, transparent), color-mix(in srgb, var(--ok) 20%, transparent)); }
 .side__donate-bills b::after { transform: rotateY(180deg); background: linear-gradient(120deg, color-mix(in srgb, var(--ok) 60%, transparent), color-mix(in srgb, var(--ok) 35%, transparent)); } /* a denser green, not mixed with black: on the light button black read as a dark blot */
-.side__donate:is(:hover, :focus-visible) .side__donate-bills i { animation: bill-fall var(--t) linear var(--d) infinite; }
-.side__donate:is(:hover, :focus-visible) .side__donate-bills b { animation: bill-sway var(--s) ease-in-out var(--sd) infinite alternate; }
+.side__donate:is(:focus-visible) .side__donate-bills i { animation: bill-fall var(--t) linear var(--d) infinite; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .side__donate:hover .side__donate-bills i { animation: bill-fall var(--t) linear var(--d) infinite; } }
+.side__donate:is(:focus-visible) .side__donate-bills b { animation: bill-sway var(--s) ease-in-out var(--sd) infinite alternate; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .side__donate:hover .side__donate-bills b { animation: bill-sway var(--s) ease-in-out var(--sd) infinite alternate; } }
 @keyframes bill-fall {
   0% { opacity: 0; transform: translateY(-14px); }
   10%, 82% { opacity: .75; }
@@ -265,11 +346,13 @@ button { font: inherit; transition: linear 0.15s; }
 .side__count:empty { display: none; }
 .side__bm .bm-icon { margin: 0; color: currentColor; }
 /* «Избранное» turns gold on hover, while open and while the open topic came from its list */
-.side__bm:is(:hover, :focus-visible, [aria-expanded="true"]), .side__bm--active { border-color: var(--gold-ink); color: var(--gold-ink); }
+.side__bm:is(:focus-visible, [aria-expanded="true"]), .side__bm--active { border-color: var(--gold-ink); color: var(--gold-ink); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .side__bm:hover { border-color: var(--gold-ink); color: var(--gold-ink); } }
 /* the frame of an open «Прогресс»: full accent in the light theme; in the dark one the accent is near-white, so it is muted like the other frames */
 .side__summary { --fold-bc: var(--accent); }
 :root:not([data-theme="light"]) .side__summary { --fold-bc: color-mix(in srgb, var(--accent) 55%, transparent); }
-.side__stat[aria-expanded="true"]:not(.side__bm), .side__stat[aria-expanded="true"]:not(.side__bm):hover { border-color: var(--fold-bc); border-bottom-color: transparent; }
+.side__stat[aria-expanded="true"]:not(.side__bm) { border-color: var(--fold-bc); border-bottom-color: transparent; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .side__stat[aria-expanded="true"]:not(.side__bm):hover { border-color: var(--fold-bc); border-bottom-color: transparent; } }
 /* the block under its button; the grid rows animate it open and closed */
 .side__fold { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .15s linear, opacity .15s linear; }
 .side__fold--open { grid-template-rows: 1fr; opacity: 1; }
@@ -287,26 +370,31 @@ button { font: inherit; transition: linear 0.15s; }
 :root[data-theme="light"] .side__bm-group { --gold-ink: #855E00; --bm-tint: color-mix(in srgb, var(--gold) 16%, transparent); --bm-tint-hover: color-mix(in srgb, var(--gold) 28%, transparent); }
 /* :root .side … wins over the light-theme «no fill on sidebar controls» rules below */
 :root .side .side__bm-group .side__bm.side__stat[aria-expanded="true"], .side__bm-group .side__fold .bookmarks { background: var(--bm-tint); }
-:root .side .side__bm-group .side__bm.side__stat[aria-expanded="true"]:hover { background: var(--bm-tint-hover); }
+@media (hover: hover) { :root:where(:root:not(.pointer-still)) .side .side__bm-group .side__bm.side__stat[aria-expanded="true"]:hover { background: var(--bm-tint-hover); } }
 /* while open, the block shows the progress bar, the percentage and the mistakes, so the button keeps only its title */
 .side__stat[aria-expanded="true"] :is(.side__stat-bar, .side__stat-pct, .side__badge) { display: none; }
 .side__fold .bookmarks__empty { padding-top: 8px; }
 /* «Мои заметки»: not a drop-down, just a way to its page; filled with the accent while that page is open, like «Инфо»
    (the long selector wins over the light-theme «no fill on sidebar controls» rule) */
 :root[data-theme] .side .side__stat.side__notes[aria-current="page"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
-.side__notes[aria-current="page"] .side__fold-arrow { color: inherit; }
+:is(.side__notes, .side__info .page-link)[aria-current] .side__fold-arrow { color: inherit; }
 .notes-icon { flex: none; width: 15px; height: 15px; }
 .overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; gap: 8px; }
 :root[data-theme="light"] .overall { background: none; } /* sits on the tinted sidebar like the other frames there */
 /* the same for the controls in the sidebar: no grey sheet fill on the tinted paper (hover fills stay) */
-:root[data-theme="light"] .side :is(.action-btn, .icon-btn, .search__input):not(:hover) { background: none; }
+:root[data-theme="light"] .side :is(.action-btn, .icon-btn, .search__input):not(:where(:root:not(.pointer-still)) :hover) { background: none; }
 /* accent-soft is almost the paper colour, so on the sidebar the hover uses the stronger --hover of the contents list */
-:root[data-theme="light"] .side :is(.action-btn, .icon-btn):hover { background: var(--hover); }
-:root[data-theme="light"] .brand__info:not([aria-current]):hover { background: var(--hover); }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .side :is(.action-btn, .icon-btn):hover { background: var(--hover); } }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .brand__info:not([aria-current]):hover { background: var(--hover); } }
+/* page links in the sidebar and the mobile top bar keep their accent fill on their page, hovered too: the light-theme rules above
+   take the fill off every sidebar control */
+:root[data-theme] .side .page-link[aria-current], :root[data-theme] .side .page-link[aria-current]:hover { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 /* the theme toggles preview the palette they switch to: in the light theme a dark button with a violet moon and stars,
    in the dark theme a white button with a blue sun and rays (the doubled class and the order win over the sidebar hover rules) */
-:root[data-theme="light"] .theme-toggle.theme-toggle:is(:hover, :focus-visible) { border-color: color-mix(in srgb, #ADA2FF 55%, transparent); background: #191C29; color: #ADA2FF; }
-:root:not([data-theme="light"]) .theme-toggle.theme-toggle:is(:hover, :focus-visible) { border-color: color-mix(in srgb, #2547D0 55%, transparent); background: #FFFFFF; color: #2547D0; }
+:root[data-theme="light"] .theme-toggle.theme-toggle:is(:focus-visible) { border-color: color-mix(in srgb, #ADA2FF 55%, transparent); background: #191C29; color: #ADA2FF; }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .theme-toggle.theme-toggle:hover { border-color: color-mix(in srgb, #ADA2FF 55%, transparent); background: #191C29; color: #ADA2FF; } }
+:root:not([data-theme="light"]) .theme-toggle.theme-toggle:is(:focus-visible) { border-color: color-mix(in srgb, #2547D0 55%, transparent); background: #FFFFFF; color: #2547D0; }
+@media (hover: hover) { :root:not([data-theme="light"]):where(:root:not(.pointer-still)) .theme-toggle.theme-toggle:hover { border-color: color-mix(in srgb, #2547D0 55%, transparent); background: #FFFFFF; color: #2547D0; } }
 :root[data-theme="light"] .side .level-chip:not([aria-pressed="true"]) { --face: var(--paper); }
 .overall__row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--muted); }
 .overall__value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
@@ -318,9 +406,11 @@ button { font: inherit; transition: linear 0.15s; }
 .overall__file-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .overall__file-btn { padding: 6px 8px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
   background: none; color: var(--accent); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: border-color .15s, background-color .15s; }
-.overall__file-btn:is(:hover, :focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
-:root[data-theme="light"] .side .overall__file-btn:not(:disabled):hover { background: var(--hover); }
-.overall__file-btn:disabled, .overall__file-btn:disabled:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: none; opacity: .4; cursor: default; }
+.overall__file-btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .overall__file-btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .side .overall__file-btn:not(:disabled):hover { background: var(--hover); } }
+.overall__file-btn:disabled { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: none; opacity: .4; cursor: default; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .overall__file-btn:disabled:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: none; opacity: .4; cursor: default; } }
 .overall__file-btn--wide { grid-column: 1 / -1; }
 .overall__note--ok { color: var(--ok-ink); }
 /* the folded hint: its last words fade out into «Показать еще»; the two stay on one line so the fade stays whole */
@@ -328,7 +418,8 @@ button { font: inherit; transition: linear 0.15s; }
 .overall__fade { background: linear-gradient(to right, var(--muted) 15%, transparent); -webkit-background-clip: text; background-clip: text; color: transparent; }
 /* «Показать еще» / «Скрыть» after the hint text: a small link-like button */
 .overall__more-btn { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; font-weight: 600; text-decoration: underline dotted; text-underline-offset: 2px; cursor: pointer; }
-.overall__more-btn:is(:hover, :focus-visible) { text-decoration-style: solid; }
+.overall__more-btn:is(:focus-visible) { text-decoration-style: solid; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .overall__more-btn:hover { text-decoration-style: solid; } }
 .overall__note--bad { color: var(--bad-ink); }
 
 /* ---------- Modal: our own confirmation in place of the browser's confirm() ---------- */
@@ -354,7 +445,7 @@ button { font: inherit; transition: linear 0.15s; }
 .modal__error { margin: 0; color: var(--bad-ink); font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
 .modal__pick { padding: 7px 16px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px; background: var(--sheet); color: var(--accent);
   font-size: 13px; font-weight: 600; cursor: pointer; }
-.modal__pick:hover { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .modal__pick:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .modal__hint { margin: 0; font-size: 12px; color: var(--muted); }
 .modal__text { margin: 0; font-size: 13px; line-height: 1.45; }
 /* the link to send: a card with the words «Прогресс по грамматике», the address itself stays hidden;
@@ -379,7 +470,8 @@ button { font: inherit; transition: linear 0.15s; }
 /* the link window: buttons on the left, «Копировать» first; «Закрыть» turns red on hover */
 .modal__foot.modal__foot--start { justify-content: flex-start; }
 .modal__close { transition: border-color .15s, background-color .15s, color .15s; }
-.modal__close:is(:hover, :focus-visible) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+.modal__close:is(:focus-visible) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .modal__close:hover { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); } }
 /* the overwrite warning: the most visible thing in the box */
 .modal__warn { display: grid; gap: 4px; padding: 12px 14px; border: 1.5px solid color-mix(in srgb, var(--bad) 60%, transparent); border-radius: 10px;
   background: var(--bad-soft); font-size: 13px; line-height: 1.45; }
@@ -388,9 +480,11 @@ button { font: inherit; transition: linear 0.15s; }
 .modal__warn p + p { margin-top: 4px; }
 .modal__foot { display: flex; justify-content: flex-end; gap: 8px; }
 /* the confirming button is red: it overwrites data */
-.modal__ok, .modal__ok:hover { border-color: var(--bad); background: var(--bad); color: var(--on-accent); }
-.modal__ok:hover { filter: brightness(1.1); }
-.modal__ok:disabled, .modal__ok:disabled:hover { opacity: .4; filter: none; cursor: default; }
+.modal__ok { border-color: var(--bad); background: var(--bad); color: var(--on-accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .modal__ok:hover { border-color: var(--bad); background: var(--bad); color: var(--on-accent); } }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .modal__ok:hover { filter: brightness(1.1); } }
+.modal__ok:disabled { opacity: .4; filter: none; cursor: default; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .modal__ok:disabled:hover { opacity: .4; filter: none; cursor: default; } }
 @media (max-width: 560px) {
   .modal__foot .btn { flex: 1 1 0; }
 }
@@ -414,11 +508,13 @@ button { font: inherit; transition: linear 0.15s; }
   color: color-mix(in srgb, var(--bad) 70%, var(--muted)); font: inherit; font-size: 13px; text-align: left; cursor: pointer;
   transition: --solid .3s ease-out, border-color .3s ease-out; }
 /* the outline shows only on hover (and keyboard focus) and while «Работа над ошибками» is open */
-.overall__mistakes:is(:hover, :focus-visible, [aria-current="page"]) { border-color: color-mix(in srgb, var(--bad) 35%, transparent); }
+.overall__mistakes:is(:focus-visible, [aria-current="page"]) { border-color: color-mix(in srgb, var(--bad) 35%, transparent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .overall__mistakes:hover { border-color: color-mix(in srgb, var(--bad) 35%, transparent); } }
 .overall__mistakes .overall__value { color: inherit; }
 /* the pale light theme needs a little more red to be noticed */
 :root[data-theme="light"] .overall__mistakes { --tint: 16%; color: color-mix(in srgb, var(--bad) 88%, var(--muted)); }
-.overall__mistakes:hover, .overall__mistakes:focus-visible, .overall__mistakes[aria-current="page"] { --solid: 100%; }
+.overall__mistakes:focus-visible, .overall__mistakes[aria-current="page"] { --solid: 100%; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .overall__mistakes:hover { --solid: 100%; } }
 .overall__mistakes-end { display: flex; align-items: center; gap: 6px; }.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
 .bar--thin { height: 4px; border-radius: 2px; }
 :root[data-theme="light"] .bar { background: #bac3d6; } /* the light track: --line was too pale to see the empty part */
@@ -431,10 +527,15 @@ button { font: inherit; transition: linear 0.15s; }
 
 /* on desktop the drawer is just part of the sidebar; on mobile it slides in over the page */
 .drawer { display: contents; }
-.drawer__head, .side__menu, .side__theme, .drawer-backdrop { display: none; }
+.drawer__head, .side__bar, .drawer-backdrop { display: none; }
 
 
-.level-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.level-chips { display: flex; flex-wrap: wrap; gap: 5px; } /* room enough to hit a chip with a finger; they wrap onto a second line in a narrow menu */
+/* touch screens: bigger chips and gaps */
+@media (pointer: coarse) {
+  .level-chips { gap: 8px; }
+  .level-chip { padding: 4px 10px; }
+}
 /* Level chips: the level's progress rises from the bottom as green «liquid» (--lvl, set from the script), and the outline turns green
    up to the same line. The outline is drawn by a border-box gradient behind a padding-box fill, since border-image ignores rounded corners.
    --lvl is registered so it animates; «Все» has no liquid. */
@@ -442,7 +543,7 @@ button { font: inherit; transition: linear 0.15s; }
 .level-chip {
   --bc: color-mix(in srgb, var(--accent) 55%, transparent); /* outline above the liquid */
   --face: var(--sheet); /* chip background */
-  position: relative; isolation: isolate; overflow: hidden; padding: 2px 7px; border: 1px solid transparent; border-radius: 99px;
+  position: relative; isolation: isolate; overflow: hidden; padding: 2px 6px; border: 1px solid transparent; border-radius: 99px;
   background: linear-gradient(var(--face), var(--face)) padding-box, linear-gradient(to top, var(--ok) var(--lvl), var(--bc) var(--lvl)) border-box;
   color: var(--muted); font-family: var(--f-mono); font-size: 12px; cursor: pointer; transition: --lvl .6s ease, color .15s linear;
 }
@@ -458,10 +559,11 @@ button { font: inherit; transition: linear 0.15s; }
 :root[data-theme="light"] .level-chip[aria-pressed="true"]:not(.level-chip--done) {
   /* the outline follows the fill: the same green up to the liquid line, the chip's blue above it */
   background: linear-gradient(var(--face), var(--face)) padding-box, linear-gradient(to top, #25A84A var(--lvl), var(--bc) var(--lvl)) border-box; }
-.level-chip:hover { --bc: var(--accent); color: var(--ink); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .level-chip:hover { --bc: var(--accent); color: var(--ink); } }
 .level-chip[aria-pressed="true"] { --bc: var(--accent); --face: var(--accent); color: var(--on-accent); font-weight: 700; }
 /* a level whose every topic is done at 100% (for «Все» — the whole book) turns green */
-.level-chip--done, .level-chip--done:hover { --bc: var(--ok); color: var(--ok); }
+.level-chip--done { --bc: var(--ok); color: var(--ok); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .level-chip--done:hover { --bc: var(--ok); color: var(--ok); } }
 .level-chip--done::before { box-shadow: none; } /* a full chip has no liquid surface line */
 .level-chip--done[aria-pressed="true"] { --bc: var(--ok); --face: var(--ok); color: var(--on-accent); }
 
@@ -484,12 +586,13 @@ button { font: inherit; transition: linear 0.15s; }
 /* a compact heading of the list, like «Уровни сложности»: the chapters start right under it, without a gap or a line;
    4px above the hover fill, like its inset from the frame sides, whether or not the level progress is shown */
 .toc__toggle { display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 4px; padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; font: inherit; text-align: left; cursor: pointer; }
-.toc__toggle:hover { background: var(--hover); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .toc__toggle:hover { background: var(--hover); } }
 .toc__toggle[aria-expanded="true"] .side__fold-arrow { transform: rotate(90deg); }
 /* the title, the count and the chevron: muted while the list is open, the accent when it is folded away (and on hover),
    so a folded list reads as something to open */
 .toc__toggle[aria-expanded="true"] :is(.toc__label, .toc__count, .side__fold-arrow) { color: var(--muted); }
-.toc__toggle:is([aria-expanded="false"], :hover) :is(.toc__label, .toc__count, .side__fold-arrow) { color: var(--accent); }
+.toc__toggle:is([aria-expanded="false"]) :is(.toc__label, .toc__count, .side__fold-arrow) { color: var(--accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .toc__toggle:hover :is(.toc__label, .toc__count, .side__fold-arrow) { color: var(--accent); } }
 .toc__count { margin-left: auto; font-family: var(--f-mono); font-size: 11px; font-variant-numeric: tabular-nums; }
 .toc__count + .side__fold-arrow { margin-left: 0; }
 .lvl-prog__row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
@@ -504,12 +607,12 @@ button { font: inherit; transition: linear 0.15s; }
 /* light theme: a clean periwinkle; the accent at 13% over the grey-blue paper looked muddy */
 :root[data-theme="light"] :is(.chap--open, .chap--current)::before { background: #C8D3FA; }
 /* --hover is about as dark as the tinted card, so inside it the hover is an extra accent layer */
-:is(.chap--open, .chap--current) .topic-btn:not([aria-current]):hover { background: color-mix(in srgb, var(--accent) 20%, transparent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) :is(.chap--open, .chap--current) .topic-btn:not([aria-current]):hover { background: color-mix(in srgb, var(--accent) 20%, transparent); } }
 /* the card's heading has no hover box of its own: hovering it deepens the whole card, so there are only two tones */
-:is(.chap--open, .chap--current) .chap__btn:hover { background: transparent; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) :is(.chap--open, .chap--current) .chap__btn:hover { background: transparent; } }
 /* …only while the card is collapsed (the chapter of the open page); on an open card the heading hover adds nothing */
-.chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: color-mix(in srgb, var(--accent) 27%, transparent); }
-:root[data-theme="light"] .chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: #B9C7F8; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: color-mix(in srgb, var(--accent) 27%, transparent); } }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: #B9C7F8; } }
 /* inside the card the hovers are inset by another 4px on every side (8px from the dividers);
    the inner paddings shrink by the same 4px so the text stays in line with plain chapters */
 :is(.chap--open, .chap--current) { padding: 8px 4px; }
@@ -517,7 +620,7 @@ button { font: inherit; transition: linear 0.15s; }
 :is(.chap--open, .chap--current) .chap__topics { margin-left: 18px; }
 .chap__btn { display: grid; grid-template-columns: 1.8em minmax(0, 1fr) auto; align-items: center; gap: 6px; width: 100%; padding: 11px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 14.5px; font-weight: 600; line-height: 1.3; text-align: left; cursor: pointer;
   transition: background-color .15s linear, color .15s linear; } /* only colours animate: the global button transition also eased the padding, which changes when a chapter opens, and the text jumped */
-.chap__btn:hover { background: var(--hover); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .chap__btn:hover { background: var(--hover); } }
 .chap__num { font-family: var(--f-mono); font-size: 12px; font-weight: 500; color: var(--muted); }
 /* the chapter of the open page: its number as a filled badge (the card tint is set above), visible while the chapter is collapsed */
 .chap--current .chap__num { padding-block: 2px; border-radius: 6px; background: var(--accent); color: var(--on-accent); font-weight: 600; text-align: center; }
@@ -537,14 +640,16 @@ button { font: inherit; transition: linear 0.15s; }
 .chap__topic + .chap__topic::before, .bookmarks__topic + .bookmarks__topic::before { content: ""; position: absolute; left: 10px; right: 10px; top: -3.5px; height: 1px; background: color-mix(in srgb, var(--accent) 30%, transparent); }
 
 .topic-btn { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; width: 100%; padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 14px; line-height: 1.3; text-align: left; cursor: pointer; }
-.topic-btn:hover { background: var(--hover); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .topic-btn:hover { background: var(--hover); } }
 /* an overview link: «Содержание тренажера →» at the top of the contents box, «Обзор всего раздела →» first in an expanded chapter */
 .topic-btn--overview { font-size: 13px; font-weight: 600; color: var(--accent); }
 .topic-btn__arrow { font-size: 17.5px; font-weight: 700; line-height: 1; }
 /* an arrow in a link-like button nudges the way it points while the button is hovered or focused */
 .arrow { display: inline-block; transition: transform .15s ease; }
-:is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start):is(:hover, :focus-visible) .arrow--next { transform: translateX(3px); }
-:is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):is(:hover, :focus-visible) .arrow--prev { transform: translateX(-3px); }
+:is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start):is(:focus-visible) .arrow--next { transform: translateX(3px); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) :is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start):hover .arrow--next { transform: translateX(3px); } }
+:is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):is(:focus-visible) .arrow--prev { transform: translateX(-3px); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) :is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):hover .arrow--prev { transform: translateX(-3px); } }
 /* «Содержание тренажера» spans its section edge to edge, the text lines up with the labels; declared after .topic-btn so it wins */
 .toc__contents { width: auto; margin: 0 -10px -2px; } /* -2px with the 6px grid gap leaves the same space under the text as above it */
 /* a full-width line under «Содержание тренажера» so the menu link does not merge with the level filter */
@@ -576,7 +681,8 @@ button { font: inherit; transition: linear 0.15s; }
 /* in the sidebar the ribbon is accent-coloured and turns gold on hover and on the active topic */
 .topic-btn__bm { color: var(--accent); transition: color .2s linear; }
 /* hover uses the same gold as the heading and the active bookmark; on the accent fill of the active topic the brighter gold reads better */
-.topic-btn:hover .topic-btn__bm, .topic-btn:focus-visible .topic-btn__bm { color: var(--gold-ink); }
+.topic-btn:focus-visible .topic-btn__bm { color: var(--gold-ink); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .topic-btn:hover .topic-btn__bm { color: var(--gold-ink); } }
 .topic-btn[aria-current="page"] .topic-btn__bm { color: var(--gold); }
 .bookmarks { margin-top: 12px; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; transition: border-color .2s linear; }
 .bookmarks__list { display: grid; gap: 6px; }
@@ -584,11 +690,13 @@ button { font: inherit; transition: linear 0.15s; }
 .bookmarks__levels { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 10px 6px; }
 .bookmarks__level { padding: 2px 7px; border: 1px solid color-mix(in srgb, var(--gold-ink) 55%, transparent); border-radius: 99px; background: transparent;
   color: var(--muted); font-family: var(--f-mono); font-size: 12px; cursor: pointer; transition: color .15s linear, border-color .15s linear, background-color .15s linear; }
-.bookmarks__level:is(:hover, :focus-visible) { border-color: var(--gold-ink); color: var(--gold-ink); }
+.bookmarks__level:is(:focus-visible) { border-color: var(--gold-ink); color: var(--gold-ink); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .bookmarks__level:hover { border-color: var(--gold-ink); color: var(--gold-ink); } }
 .bookmarks__level[aria-pressed="true"] { border-color: var(--gold-ink); background: var(--gold-ink); color: var(--sheet); }
 .bookmarks__empty { margin: 0; padding: 2px 10px 8px; font-size: 13px; color: var(--muted); }
 /* the frame lights up while a bookmark is hovered or the open topic came from this list */
-.bookmarks--active, .bookmarks:has(.topic-btn:hover, .topic-btn:focus-visible) { border-color: var(--gold-ink); }
+.bookmarks--active, .bookmarks:has(.topic-btn:focus-visible) { border-color: var(--gold-ink); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .bookmarks:has(.topic-btn:hover) { border-color: var(--gold-ink); } }
 /* the active topic in «Избранное» is gold like the pressed «В избранном» button; the title keeps the ink colour so it stays readable */
 .bookmarks__topic[aria-current="page"] { background: var(--gold-soft); color: var(--ink); }
 .bookmarks__topic[aria-current="page"] .topic-btn__meta, .bookmarks__topic[aria-current="page"] .topic-btn__bm { color: var(--gold-ink); opacity: 1; }
@@ -613,8 +721,8 @@ button { font: inherit; transition: linear 0.15s; }
    a faint accent pool near the bottom and darker sides; the lights add up (screen). Softer than the reference,
    so the title under it stays readable */
 .page--glow .pager__btn { background-color: color-mix(in srgb, var(--sheet) 50%, transparent); } /* an opaque sheet-grey card stood out on the glow */
-.page--glow :is(body, .sheet) { background-size: 100% 100%; background-attachment: fixed; }
-:root[data-theme="dark"].page--glow :is(body, .sheet) {
+.page--glow :is(body, .sheet), .page--glow :is(.side, .float-tools)::before { background-size: 100% 100%; background-attachment: fixed; }
+:root[data-theme="dark"].page--glow :is(body, .sheet), :root[data-theme="dark"].page--glow :is(.side, .float-tools)::before {
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .2 0'/%3E%3C/filter%3E%3CradialGradient id='g' cx='.55' cy='-.1' r='.7'%3E%3Cstop offset='0' stop-color='white'/%3E%3Cstop offset='1' stop-color='black'/%3E%3C/radialGradient%3E%3Cmask id='m'%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3C/mask%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' mask='url(%23m)'/%3E%3C/svg%3E"),
     radial-gradient(34% 40% at 55% -8%, rgb(226 222 255 / 22%), transparent 80%),
@@ -627,7 +735,7 @@ button { font: inherit; transition: linear 0.15s; }
    the grey sheet): a white core, a periwinkle cone with sky blue on the left and violet on the right; instead of
    a pool, a smaller copy of the light rising from the bottom at half the strength; no darkened sides.
    A dark grain under the top light */
-:root[data-theme="light"].page--glow :is(body, .sheet) {
+:root[data-theme="light"].page--glow :is(body, .sheet), :root[data-theme="light"].page--glow :is(.side, .float-tools)::before {
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .08 0 0 0 0 .1 0 0 0 0 .23 0 0 0 .32 0'/%3E%3C/filter%3E%3CradialGradient id='g' cx='.55' cy='-.1' r='.7'%3E%3Cstop offset='0' stop-color='white'/%3E%3Cstop offset='1' stop-color='black'/%3E%3C/radialGradient%3E%3Cmask id='m'%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3C/mask%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' mask='url(%23m)'/%3E%3C/svg%3E"),
     radial-gradient(30% 34% at 55% -6%, rgb(255 255 255 / 70%), transparent 80%),
@@ -650,7 +758,7 @@ button { font: inherit; transition: linear 0.15s; }
 .sheet__section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .crumbs__link { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
-.crumbs__link:hover { text-decoration: underline; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .crumbs__link:hover { text-decoration: underline; } }
 .crumbs__sep { opacity: .6; }
 .lvl-tag { display: inline-block; padding: 0 6px; border: 1px solid currentColor; border-radius: 4px; font-family: var(--f-mono); font-size: 11px; letter-spacing: .04em; color: var(--accent); }
 .lvl-tag--sm { font-size: 10px; line-height: 1.5; }
@@ -669,8 +777,8 @@ button { font: inherit; transition: linear 0.15s; }
 .contents__item { padding-block: 4px; }
 .contents__item + .contents__item { border-top: 1px solid var(--border); }
 .contents__row { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 4px 10px; align-items: baseline; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink); text-align: left; cursor: pointer; }
-.contents__row:hover { background: var(--hover); }
-.contents__row:hover .contents__title { color: var(--accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .contents__row:hover { background: var(--hover); } }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .contents__row:hover .contents__title { color: var(--accent); } }
 .contents__num { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
 .contents__title { min-width: 0; font-size: 17px; font-weight: 600; }
 .contents__meta { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; color: var(--muted); }
@@ -702,11 +810,11 @@ button { font: inherit; transition: linear 0.15s; }
 .mistakes__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
 .mistakes__num { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
 .mistakes__title { padding: 0; border: 0; background: none; color: var(--ink); font-size: 17px; font-weight: 600; text-align: left; cursor: pointer; }
-.mistakes__title:hover { color: var(--accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .mistakes__title:hover { color: var(--accent); } }
 .mistakes__chapter { flex-basis: 100%; font-size: 12.5px; color: var(--muted); } /* the chapter on its own line under the title */
 .mistakes__exs { display: flex; flex-wrap: wrap; gap: 6px; }
 .mistakes__ex { padding: 3px 12px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 99px; background: var(--sheet); color: var(--accent); font-family: var(--f-mono); font-size: 12px; cursor: pointer; }
-.mistakes__ex:hover { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .mistakes__ex:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .mistakes__score { color: var(--bad); }
 .mistakes__note { color: var(--muted); }
 .mistakes__hint { margin: 8px 0 0; font-size: 13.5px; color: var(--muted); }
@@ -716,13 +824,14 @@ button { font: inherit; transition: linear 0.15s; }
 /* calm, in the colors of the menu buttons (as «Сохранить» in «Резервная копия») */
 .mistakes__start { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; padding: 8px 16px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
   background: none; color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color .15s, background-color .15s; }
-.mistakes__start:is(:hover, :focus-visible):not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
-:root[data-theme="light"] .mistakes__start:not(:disabled):hover { background: var(--hover); }
+.mistakes__start:is(:focus-visible):not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .mistakes__start:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); } }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .mistakes__start:not(:disabled):hover { background: var(--hover); } }
 .mistakes__start:disabled { opacity: .45; cursor: default; }
 .mistakes__start:disabled .arrow--next { transform: none; }
 .mistakes__level { display: inline-flex; align-items: center; gap: 8px; padding: 4px 4px 4px 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 99px;
   background: var(--sheet); color: var(--accent); font-family: var(--f-mono); font-size: 13px; font-weight: 600; cursor: pointer; }
-.mistakes__level:hover { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .mistakes__level:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .mistakes__level[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 /* the count sits in its own bubble, so «A1 1» does not read as one label */
 .mistakes__level-count { min-width: 20px; padding: 1px 6px; border-radius: 99px; background: var(--accent-soft); font-size: 12px; font-weight: 600; text-align: center; }
@@ -743,7 +852,8 @@ button { font: inherit; transition: linear 0.15s; }
 .notes-pages { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 20px; }
 .notes-pages__btn { display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
   background: var(--sheet); color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer; }
-.notes-pages__btn:is(:hover, :focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
+.notes-pages__btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .notes-pages__btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .notes-pages__btn[aria-current="page"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 .notes-pages__gap { display: inline-grid; place-items: center; min-width: 20px; height: 38px; color: var(--muted); }
 .notes-list { display: grid; gap: 12px; list-style: none; margin: 16px 0 0; padding: 0; }
@@ -757,19 +867,22 @@ button { font: inherit; transition: linear 0.15s; }
 .notes-list__date { margin-right: auto; }
 .notes-list__ask { margin-right: auto; color: var(--bad-ink); font-weight: 600; }
 .notes-list__btn { padding: 4px 10px; border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px; background: none; color: var(--accent); font-size: 12.5px; font-weight: 600; cursor: pointer; }
-.notes-list__btn:is(:hover, :focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
+.notes-list__btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .notes-list__btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
 /* «Удалить»: red text without a frame; the frame and fill show on hover */
 .notes-list__btn--del { border-color: transparent; color: var(--bad-ink); }
 /* the dark-theme red is bright: at rest it is mixed with the muted grey, full on hover */
-:root[data-theme="dark"] .notes-list__btn--del:not(:hover, :focus-visible) { color: color-mix(in srgb, var(--bad) 85%, var(--muted)); }
-.notes-list__btn--del:is(:hover, :focus-visible) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad-ink); }
+:root[data-theme="dark"] .notes-list__btn--del:not(:where(:root:not(.pointer-still)) :hover, :focus-visible) { color: color-mix(in srgb, var(--bad) 85%, var(--muted)); }
+.notes-list__btn--del:is(:focus-visible) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad-ink); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .notes-list__btn--del:hover { border-color: var(--bad); background: var(--bad-soft); color: var(--bad-ink); } }
 .notes-list__btn--confirm { border-color: var(--bad); background: var(--bad); color: var(--sheet); }
-.notes-list__btn--confirm:is(:hover, :focus-visible) { border-color: var(--bad-ink); background: var(--bad-ink); color: var(--sheet); }
+.notes-list__btn--confirm:is(:focus-visible) { border-color: var(--bad-ink); background: var(--bad-ink); color: var(--sheet); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .notes-list__btn--confirm:hover { border-color: var(--bad-ink); background: var(--bad-ink); color: var(--sheet); } }
 .mistakes__empty { margin: 24px 0 0; padding: 16px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--muted); }
 
 .topic-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 24px; }
 .topic-card { display: grid; gap: 6px; align-content: start; padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); color: var(--ink); text-align: left; cursor: pointer; }
-.topic-card:hover { border-color: var(--accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .topic-card:hover { border-color: var(--accent); } }
 .topic-card__num { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
 .topic-card__title { font-weight: 600; line-height: 1.3; }
 .topic-card__sub { font-family: var(--f-en); font-style: italic; font-size: 14px; color: var(--muted); }
@@ -788,6 +901,7 @@ button { font: inherit; transition: linear 0.15s; }
 .formula { margin: 0 0 14px; padding: 10px 14px; border-radius: 8px; background: var(--accent-soft); font-family: var(--f-en); font-size: 17px; }
 .formula b { color: var(--accent); font-weight: 600; }
 .rule-table { overflow-x: auto; margin: 0 0 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); }
+.rule :is(p, ul, ol) + .rule-table { margin-top: 10px; } /* the rule text does not run into the table of examples */
 .rule-table__table { width: 100%; border-collapse: collapse; font-size: 15px; }
 .rule-table__th { padding: 9px 12px; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--well); border-bottom: 1px solid var(--border); white-space: nowrap; }
 .rule-table__cell { padding: 8px 12px; vertical-align: top; border-bottom: 1px solid var(--border); }
@@ -808,7 +922,7 @@ button { font: inherit; transition: linear 0.15s; }
 .study { margin-top: 20px; }
 .study__btn { display: block; width: 100%; }
 .study__btn[aria-pressed="false"] { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); color: var(--accent); }
-.study__btn[aria-pressed="false"]:hover { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .study__btn[aria-pressed="false"]:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .study__btn[aria-pressed="true"] { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
 .study__btn + .study__btn { margin-top: 8px; }
 .study__btn--bookmark[aria-pressed="true"] { border-color: var(--gold-ink); background: var(--gold-soft); color: var(--gold-ink); }
@@ -873,24 +987,30 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__opts { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; }
 /* Literata sits low in its line box: the padding moved from top to bottom centres the lowercase letters (same height) */
 .ex__opt { padding: 1px 13px 5px; border: 1px solid var(--border); border-radius: 99px; background: var(--well); color: var(--ink); font-family: var(--f-en); font-size: 15.5px; cursor: pointer; }
-.ex__opt:hover { border-color: var(--accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .ex__opt:hover { border-color: var(--accent); } }
 .ex__opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
-.ex__opt--ok, .ex__opt--ok:is(:hover, [aria-pressed="true"]) { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+.ex__opt--ok, .ex__opt--ok:is([aria-pressed="true"]) { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .ex__opt--ok:hover { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); } }
 /* light theme: --ok-soft is almost the sheet colour (1.01:1), so a right option gets a slightly greener fill and a deeper green text (5.4:1) */
-:root[data-theme="light"] .ex__opt--ok, :root[data-theme="light"] .ex__opt--ok:is(:hover, [aria-pressed="true"]) { background: #CDEED5; color: #066B1D; }
-.ex__opt--bad, .ex__opt--bad:is(:hover, [aria-pressed="true"]) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+:root[data-theme="light"] .ex__opt--ok, :root[data-theme="light"] .ex__opt--ok:is([aria-pressed="true"]) { background: #CDEED5; color: #066B1D; }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .ex__opt--ok:hover { background: #CDEED5; color: #066B1D; } }
+.ex__opt--bad, .ex__opt--bad:is([aria-pressed="true"]) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .ex__opt--bad:hover { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); } }
 /* the light theme's wrong choice: --bad on --bad-soft was 4.3:1 and the tint nearly the sheet's — a stronger tint, darker text (5.8:1) */
-:root[data-theme="light"] .ex__opt--bad, :root[data-theme="light"] .ex__opt--bad:is(:hover, [aria-pressed="true"]) { background: #F6D0CA; color: #A3001A; }
+:root[data-theme="light"] .ex__opt--bad, :root[data-theme="light"] .ex__opt--bad:is([aria-pressed="true"]) { background: #F6D0CA; color: #A3001A; }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .ex__opt--bad:hover { background: #F6D0CA; color: #A3001A; } }
 /* «Показать ответы» in a choice exercise: the right option gets the green fill (dashed while it was not the one chosen) */
-.ex__opt--key, .ex__opt--key:is(:hover, [aria-pressed="true"]) { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
-:root[data-theme="light"] .ex__opt--key, :root[data-theme="light"] .ex__opt--key:is(:hover, [aria-pressed="true"]) { background: #CDEED5; color: #066B1D; }
+.ex__opt--key, .ex__opt--key:is([aria-pressed="true"]) { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .ex__opt--key:hover { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); } }
+:root[data-theme="light"] .ex__opt--key, :root[data-theme="light"] .ex__opt--key:is([aria-pressed="true"]) { background: #CDEED5; color: #066B1D; }
+@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .ex__opt--key:hover { background: #CDEED5; color: #066B1D; } }
 .ex__opt--key:not(.ex__opt--ok) { border-style: dashed; }
 /* a shown answer is always green */
 .ex__key { grid-column: 2; font-family: var(--f-en); font-style: italic; font-size: 15.5px; font-weight: 500; color: var(--ok-ink); }
 .ex__self-ok { grid-column: 2; justify-self: start; padding: 2px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--well); color: var(--muted); font-size: 13px; cursor: pointer; }
-.ex__self-ok:hover { border-color: var(--ok); color: var(--ok); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .ex__self-ok:hover { border-color: var(--ok); color: var(--ok); } }
 .ex__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
-.ex__btn:not(.btn--primary):hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .ex__btn:not(.btn--primary):hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); } }
 .ex__score { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
 .ex__score--good { color: var(--ok); }
 .ex__score--low { color: var(--bad); }
@@ -900,7 +1020,7 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__redo-status { flex-basis: 100%; margin: 0; color: var(--ok); font-size: 14px; font-weight: 600; }
 .ex__redo-link { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
   background: var(--sheet); color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; }
-.ex__redo-link:hover { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .ex__redo-link:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .ex__redo-link--next { margin-left: auto; }
 /* the level of the next exercise: a smaller tag, centered on the text line (as an inline box it sat on the baseline, low) */
 .ex__redo-text { display: inline-flex; align-items: center; gap: 5px; }
@@ -913,7 +1033,7 @@ button { font: inherit; transition: linear 0.15s; }
 .pager-current__title { font-family: var(--f-body); font-size: 14px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink); }
 .pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
 .pager__btn { display: grid; gap: 2px; padding: 12px 16px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; background: var(--sheet); color: var(--accent); font-weight: 600; text-align: left; cursor: pointer; }
-.pager__btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .pager__btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .pager__btn--next { text-align: right; grid-column: 2; }
 .pager__label { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-family: var(--f-mono); font-size: 11.5px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .pager__btn--next .pager__label { justify-content: flex-end; }
@@ -925,7 +1045,7 @@ button { font: inherit; transition: linear 0.15s; }
 /* small cards in the style of the main pager buttons: a direction caption over the topic title */
 .pager-level__link { display: grid; gap: 1px; padding: 8px 12px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
   background: var(--sheet); color: var(--accent); font-size: 14px; font-weight: 600; line-height: 1.35; text-align: left; cursor: pointer; }
-.pager-level__link:hover { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .pager-level__link:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .pager-level__dir { font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .pager-level__link--prev { grid-column: 1; }
 .pager-level__link--next { grid-column: 2; text-align: right; }
@@ -936,39 +1056,80 @@ button { font: inherit; transition: linear 0.15s; }
   box-shadow: 0 4px 14px rgba(0, 0, 0, .14); opacity: 0; visibility: hidden; transform: translateY(8px);
   transition: opacity .15s linear, transform .15s linear, visibility .15s linear, background-color .15s linear, border-color .15s linear; }
 .to-top--visible { opacity: 1; visibility: visible; transform: none; }
-.to-top:hover { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .to-top:hover { border-color: var(--accent); background: var(--accent-soft); } }
 
 @media (max-width: 880px) {
+  /* the top bar starts at the window's edge: the 8px body margin above it showed the page (and the «Информация» spotlight) */
+  body { margin-top: 0; }
   .to-top { right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); }
   .app { grid-template-columns: minmax(0, 1fr); gap: 0; padding-inline: 0; }
 
-  /* top bar: brand, theme and menu buttons; stays on screen while scrolling */
+  /* top bar: brand and the Меню / Содержание / Заметки / Инфо / Тема buttons; stays on screen while scrolling */
   .side { position: sticky; top: 0; z-index: 20; max-height: none; overflow: visible; scrollbar-gutter: auto;
-    padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px; background: var(--paper); border-bottom: 1px solid var(--border); }
-  .side__head { align-items: center; }
+    padding: calc(env(safe-area-inset-top, 0px) + 11.5px) 16px 11.5px; background: var(--paper);
+    border-radius: 10px 10px 0 0; box-shadow: var(--raise-down); }
+  /* the page colour behind the rounded top corners, so the content scrolling under the sticky bar does not show through them */
+  .side::before { content: ""; position: absolute; z-index: -1; inset: 0 0 auto; height: 10px; } /* see «top bars' corners» */
+  .side__head { align-items: center; flex-wrap: wrap; gap: 8px; }
   .brand__title { font-size: 18px; gap: 6px; }
-  .brand__logo { width: 33px; height: 33px; top: 1.5px; }
+  .brand__title > span { display: none; } /* only the logo: «Грамматика онлайн» would crowd the buttons */
+  .brand__logo { width: 33px; height: 33px; top: 0; } /* centred in the bar like the buttons */
   .brand__row { display: none; }
   .icon-btn { width: 38px; height: 38px; }
-  .side__menu { display: flex; flex: none; }
-  /* on mobile the theme is an icon in the top bar, so the drawer has no action row */
-  .side__theme { display: grid; flex: none; width: 40px; height: 40px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--accent); }
-  .side__theme:hover { background: var(--accent-soft); }
+  /* buttons with the menu's raise, one size at every width up to 880px; the theme is here, so the drawer has no action row */
+  /* the buttons start right after the title and keep to the left; only «Тема» goes to the right edge */
+  .brand { flex: none; }
+  .side__bar { display: flex; flex: 1 1 0; gap: 8px; }
+  .side__theme { margin-left: auto; }
+  .side__bar .action-btn { min-height: 35px; padding: 4px 10px; gap: 7px; border-radius: 10px; font-size: 13px; box-shadow: var(--raise); }
+  .side__bar .action-btn__icon { width: 18px; height: 18px; }
   .side__actions { display: none; }
 
   /* drawer: progress, bookmarks and the contents (levels, search, chapters) */
   .drawer { display: block; position: fixed; z-index: 30; top: 0; bottom: 0; left: 0; width: min(360px, 88vw); overflow-y: auto; overscroll-behavior: contain;
     padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px calc(env(safe-area-inset-bottom, 0px) + 24px); background: var(--paper); border-right: 1px solid var(--border);
-    box-shadow: 8px 0 24px rgba(0, 0, 0, .18); transform: translateX(-105%); visibility: hidden; transition: transform .2s ease, visibility .2s linear; }
+    box-shadow: 10px 0 32px rgba(0, 0, 0, .25); transform: translateX(-105%); visibility: hidden; transition: transform .2s ease, visibility .2s linear; }
   .drawer--open { transform: none; visibility: visible; }
   .drawer__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: var(--f-display); font-weight: 700; font-size: 17px; }
+  .drawer__head .icon-btn { box-shadow: var(--raise); } /* the close button: the same raise as the menu buttons */
   .side__summary { margin-top: 12px; }
-  .drawer-backdrop { display: block; position: fixed; z-index: 25; inset: 0; background: rgba(8, 10, 20, .45); opacity: 0; visibility: hidden; transition: opacity .2s linear, visibility .2s linear; }
+  /* frosted glass over the page while the drawer is open: the page blurs behind the dimming */
+  .drawer-backdrop { display: block; position: fixed; z-index: 25; inset: 0; background: rgba(8, 10, 20, .45); -webkit-backdrop-filter: blur(6px) saturate(1.3); backdrop-filter: blur(6px) saturate(1.3);
+    opacity: 0; visibility: hidden; transition: opacity .2s linear, visibility .2s linear; }
+  :root:not([data-theme="light"]) .drawer-backdrop { -webkit-backdrop-filter: blur(6px) saturate(1); backdrop-filter: blur(6px) saturate(1); } /* no extra colour in the dark theme */
   .drawer-backdrop--open { opacity: 1; visibility: visible; }
   .search__input { font-size: 16px; } /* 16px+ keeps iOS from zooming in on focus */
 
   .ex, .notes-tools { scroll-margin-top: 76px; } /* clears the sticky top bar */
   .sheet { padding-inline: 16px; padding-block: 24px 14px; border-inline: 0; border-radius: 0; min-height: 0; }
+}
+/* «Содержание тренажера» and «Мои заметки» are in the top bar here, so the drawer drops its own; the levels label
+   then opens the contents box, without the line that parted it from «Содержание» */
+@media (min-width: 650px) and (max-width: 880px) {
+  .toc__contents, .side__summary > div:has(> .side__notes) { display: none; }
+  .toc__contents + .toc__label { border-top: 0; }
+}
+/* below 650px the five buttons do not fit: back to the title with an icon-only theme button and «Меню» on the right,
+   «Содержание», «Заметки», «Инфо» are in the drawer */
+@media (max-width: 649px) {
+  .brand { flex: 1; min-width: 0; }
+  .brand__title > span { display: inline; }
+  .side__bar { flex: none; } /* the title takes the free width, so it stays on one line */
+  .side__bar .page-link { display: none; }
+  .side__summary > .side__info { display: block; } /* «Инфо» is in the drawer, under «Мои заметки» */
+  /* the theme comes first and its auto margin pushes both buttons to the right */
+  .side__bar .side__theme { order: -1; width: 35px; padding: 0; }
+  .side__theme .theme-toggle__label { display: none; }
+  .side__theme .action-btn__icon { width: 16px; height: 16px; }
+}
+/* below 499px the title goes on two lines, «Грамматика» over «онлайн», at 15px so the two lines (34.5px) are no taller
+   than the buttons and the bar keeps its height */
+@media (max-width: 498px) {
+  .brand__title > span { display: flex; flex-direction: column; align-items: flex-start; font-size: 15px; line-height: 1.15; }
+}
+/* below 360px the title does not fit beside the buttons even on two lines: only the logo stays */
+@media (max-width: 359px) {
+  .brand__title > span { display: none; }
 }
 @media (max-width: 560px) {
   .sheet__title { font-size: 26px; }
@@ -1004,29 +1165,39 @@ button { font: inherit; transition: linear 0.15s; }
   .slot--spin .slot__reel, .bm-pop .study__icon { animation: none !important; }
   .bm-pop__spark { display: none; }
   .modal[open], .modal[open]::backdrop { animation: none; }
-  .side__donate:is(:hover, :focus-visible) :is(.coin, .side__donate-bills :is(i, b)) { animation: none; } /* the button only turns green */
+  .side__donate:is(:focus-visible) :is(.coin, .side__donate-bills :is(i, b)) { animation: none; } /* the button only turns green */
+  @media (hover: hover) { :where(:root:not(.pointer-still)) .side__donate:hover :is(.coin, .side__donate-bills :is(i, b)) { animation: none; } }
 }
 </style>
 
 <div class="app" id="app">
   <div class="float-tools" id="floatTools" hidden>
+    <svg class="brand__logo float-tools__logo" viewBox="5 5 54 54" aria-hidden="true"><path class="brand__logo-plate" d="M11 5h42l6 6v14l-3 3v12l3 3v10l-6 6H11l-6-6V43l3-3V28l-3-3V11z"/><path class="brand__logo-ink" d="M32 13.5 55 23.5 32 33.5 9 23.5zM18 30.5V39l14 7 14-7v-8.5L32 37z"/><path class="brand__logo-tassel" d="M32 23.5 50 27v10" fill="none" stroke-width="3" stroke-linecap="square"/><rect class="brand__logo-pad" x="47.5" y="36.5" width="5" height="6.5" rx="1"/><path class="brand__logo-marks" d="M46 8.5h6v6h-6zM46 14.5l6-6M10.5 50.5h6M13.5 47.5v6M39 51h12M39 54.5h8" fill="none"/></svg>
     <button class="action-btn float-tools__btn" id="sideShow" type="button" aria-controls="side" aria-expanded="false"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Показать меню</span></button>
+    <button class="action-btn float-tools__btn float-tools__link page-link" data-go="contents" type="button"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span>Содержание тренажера</span></button>
+    <button class="action-btn float-tools__btn float-tools__link page-link" data-go="notes" data-label="Мои заметки" type="button"></button>
+    <button class="action-btn float-tools__btn float-tools__link page-link page-link--icon" data-go="about" type="button" title="Инфо" aria-label="Инфо"><svg class="action-btn__icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.2" fill="none" stroke="currentColor" stroke-width="1.45"/><path d="M8 7.1v4.8" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="4.6" r="1.15" fill="currentColor"/></svg><span>Инфо</span></button>
     <button class="action-btn theme-toggle float-tools__btn" type="button"></button>
   </div>
   <aside class="side app__side" id="side">
     <div class="side__head">
       <div class="brand">
-        <span class="brand__title"><svg class="brand__logo" viewBox="5 5 54 54" aria-hidden="true"><path class="brand__logo-plate" d="M11 5h42l6 6v14l-3 3v12l3 3v10l-6 6H11l-6-6V43l3-3V28l-3-3V11z"/><path class="brand__logo-ink" d="M32 13.5 55 23.5 32 33.5 9 23.5zM18 30.5V39l14 7 14-7v-8.5L32 37z"/><path class="brand__logo-tassel" d="M32 23.5 50 27v10" fill="none" stroke-width="3" stroke-linecap="square"/><rect class="brand__logo-pad" x="47.5" y="36.5" width="5" height="6.5" rx="1"/><path class="brand__logo-marks" d="M46 8.5h6v6h-6zM46 14.5l6-6M10.5 50.5h6M13.5 47.5v6M39 51h12M39 54.5h8" fill="none"/></svg><span>Грамматика <span class="brand__mark">онлайн</span></span></span>
+        <a class="brand__title" id="brandLink" href="#contents"><svg class="brand__logo" viewBox="5 5 54 54" aria-hidden="true"><path class="brand__logo-plate" d="M11 5h42l6 6v14l-3 3v12l3 3v10l-6 6H11l-6-6V43l3-3V28l-3-3V11z"/><path class="brand__logo-ink" d="M32 13.5 55 23.5 32 33.5 9 23.5zM18 30.5V39l14 7 14-7v-8.5L32 37z"/><path class="brand__logo-tassel" d="M32 23.5 50 27v10" fill="none" stroke-width="3" stroke-linecap="square"/><rect class="brand__logo-pad" x="47.5" y="36.5" width="5" height="6.5" rx="1"/><path class="brand__logo-marks" d="M46 8.5h6v6h-6zM46 14.5l6-6M10.5 50.5h6M13.5 47.5v6M39 51h12M39 54.5h8" fill="none"/></svg><span>Грамматика <span class="brand__mark">онлайн</span></span></a>
         <div class="brand__row">
         <span class="brand__sub">Английский язык A1–C2 по разделам сборника Ю.&nbsp;Голицынского</span>
         <button class="brand__info" id="infoBtn" type="button"><svg class="brand__info-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.2" fill="none" stroke="currentColor" stroke-width="1.45"/><path d="M8 7.1v4.8" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="4.6" r="1.15" fill="currentColor"/></svg>Инфо</button>
         </div>
       </div>
-      <button class="icon-btn theme-toggle side__theme" type="button"></button>
-      <button class="action-btn side__menu" id="menuBtn" type="button" aria-controls="drawer" aria-expanded="false"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Разделы</span></button>
+      <div class="side__bar">
+        <button class="action-btn side__menu" id="menuBtn" type="button" aria-controls="drawer" aria-expanded="false"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Меню</span></button>
+        <button class="action-btn page-link" data-go="contents" type="button"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span>Содержание</span></button>
+        <button class="action-btn page-link" data-go="notes" data-label="Заметки" type="button"></button>
+        <button class="action-btn page-link page-link--icon" data-go="about" type="button" title="Инфо" aria-label="Инфо"><svg class="action-btn__icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.2" fill="none" stroke="currentColor" stroke-width="1.45"/><path d="M8 7.1v4.8" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="4.6" r="1.15" fill="currentColor"/></svg><span>Инфо</span></button>
+        <button class="action-btn theme-toggle side__theme" data-label="Тема" type="button"></button>
+      </div>
     </div>
     <div class="drawer" id="drawer">
-    <div class="drawer__head"><span>Разделы</span><button class="icon-btn" id="drawerClose" type="button" title="Закрыть" aria-label="Закрыть разделы"><svg class="icon-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="drawer__head"><span>Меню</span><button class="icon-btn" id="drawerClose" type="button" title="Закрыть" aria-label="Закрыть меню"><svg class="icon-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
     <div class="side__actions">
       <button class="action-btn theme-toggle" type="button"></button>
       <button class="action-btn side__hide" id="sideHide" type="button" aria-controls="side" aria-expanded="true"><svg class="action-btn__icon" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="side__hide-chev side__hide-chev--lead" d="M8.5 4.5 4 9l4.5 4.5"/><path class="side__hide-chev" d="M14 4.5 9.5 9l4.5 4.5"/></svg><span>Скрыть меню</span></button>
@@ -1042,6 +1213,9 @@ button { font: inherit; transition: linear 0.15s; }
       </div>
       <div>
         <button class="action-btn side__stat side__notes" id="notesBtn" type="button"></button>
+      </div>
+      <div class="side__info">
+        <button class="action-btn side__stat page-link" data-go="about" type="button"><svg class="notes-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.2" fill="none" stroke="currentColor" stroke-width="1.45"/><path d="M8 7.1v4.8" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="4.6" r="1.15" fill="currentColor"/></svg><span>Инфо</span><svg class="side__fold-arrow" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
     <nav aria-label="Разделы тренажера">
@@ -1100,8 +1274,9 @@ function syncThemeBtn() {
   document.querySelectorAll('.theme-toggle').forEach(b => {
     b.title = action;
     const label = b.querySelector('.theme-toggle__label');
-    if (label) label.textContent = dark ? 'Светлая тема' : 'Темная тема';
-    else b.setAttribute('aria-label', action);
+    /* the mobile top bar button is labelled just «Тема» (data-label), so it also gets the full action as aria-label */
+    if (label) label.textContent = b.dataset.label || (dark ? 'Светлая тема' : 'Темная тема');
+    if (!label || b.dataset.label) b.setAttribute('aria-label', action);
   });
 }
 </script>
@@ -1395,11 +1570,26 @@ function setChapOpen(box, open) {
   box.querySelector('.chap__body').inert = !open;
 }
 
+/* a hover needs a real mouse move: a re-render or a scroll puts new items under a resting cursor, and the browser lit them up
+   as if hovered. While <html> has .pointer-still the hover rules are off (they are gated by :where(:root:not(.pointer-still)));
+   it is set at load and on every contents re-render and cleared by the first mouse move. Touch never clears it */
+let pointerAt = '';
+function holdHover() { document.documentElement.classList.add('pointer-still'); }
+document.addEventListener('pointermove', e => {
+  if (e.pointerType !== 'mouse') return;
+  const at = e.clientX + ',' + e.clientY;
+  if (at === pointerAt) return; /* the browser's own move after a layout change, with the same coordinates */
+  pointerAt = at;
+  document.documentElement.classList.remove('pointer-still');
+});
+
 function renderToc() {
+  holdHover();
   const q = $('#search').value.trim().toLowerCase();
   const filtering = !!(q || levelFilter);
   if (isAbout(route)) $('#infoBtn').setAttribute('aria-current', 'page'); else $('#infoBtn').removeAttribute('aria-current');
   if (route === 'contents') $('#tocContents').setAttribute('aria-current', 'page'); else $('#tocContents').removeAttribute('aria-current');
+  document.querySelectorAll('.page-link').forEach(b => b.toggleAttribute('aria-current', b.dataset.go === 'about' ? isAbout(route) : route === b.dataset.go));
   renderLevelProgress();
   fillLevelChips();
   const list = $('#tocList'); list.innerHTML = '';
@@ -1522,6 +1712,10 @@ function renderNotes() {
   b.innerHTML = `${notesIcon()}<span>Мои заметки</span><b class="side__count">${notes.length || ''}</b>` + FOLD_ARROW;
   b.setAttribute('aria-label', `Мои заметки: ${notes.length}`);
   if (route === 'notes') b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  document.querySelectorAll('.page-link[data-go="notes"]').forEach(h => {
+    h.innerHTML = `${notesIcon('action-btn__icon')}<span>${h.dataset.label}</span><b class="page-link__count">${notes.length || ''}</b>`;
+    h.setAttribute('aria-label', `Мои заметки: ${notes.length}`);
+  });
 }
 const NOTE_FOLD = 255; /* a longer note is folded on its page */
 const NOTES_PAGE = 7; /* notes per page of «Мои заметки» */
@@ -2295,7 +2489,7 @@ function renderContents(wrap) {
   wrap.append(crumbs(['Тренажер грамматики · A1–C2']));
   wrap.append(el('h1', 'sheet__title', 'Содержание'));
   const p = el('p', 'sheet__intro');
-  p.textContent = 'Разделы и их порядок повторяют сборник Ю. Голицынского «Грамматика. Сборник упражнений». Внутри каждого раздела — правила и упражнения с проверкой. Выберите раздел или тему слева, а фильтром уровня можно оставить только темы нужной сложности.';
+  p.textContent = 'Внутри каждого раздела — правила и упражнения с проверкой. Выберите раздел или тему слева, а фильтром уровня можно оставить только темы нужной сложности.';
   wrap.append(p, progressBlock(null));
   const ol = el('ol', 'contents');
   CHAPTERS.forEach(ch => {
@@ -2783,6 +2977,8 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
 $('#tocContents').addEventListener('click', () => go('contents'));
 $('#infoBtn').addEventListener('click', () => go('about'));
 $('#notesBtn').addEventListener('click', () => go('notes'));
+document.querySelectorAll('.page-link').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
+$('#brandLink').addEventListener('click', e => { e.preventDefault(); go('contents'); });
 
 /* Hide / show the sidebar on desktop; the choice is remembered. */
 function setSide(collapsed, focus) {
