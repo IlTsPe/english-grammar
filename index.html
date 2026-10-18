@@ -732,6 +732,20 @@ button { font: inherit; transition: linear 0.15s; }
 .notes-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 20px; }
 .notes-tools__add { margin-left: 0; }
 .notes-tools__hint { font-size: 13.5px; color: var(--bad-ink); }
+.notes-tools__search { flex: 0 1 280px; min-width: 0; margin-left: auto; padding: 9px 12px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
+  background: var(--sheet); color: var(--ink); font: inherit; font-size: 14px; }
+.notes-tools__search::placeholder { color: var(--muted); }
+.notes-tools__search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.notes-tools__search[hidden] { display: none; }
+.notes-list__none { margin: 16px 0 0; padding: 16px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--muted); }
+.notes-list__none[hidden], .notes-list__item[hidden], .notes-pages[hidden] { display: none; }
+.notes-tools { scroll-margin-top: 16px; }
+.notes-pages { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 20px; }
+.notes-pages__btn { display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
+  background: var(--sheet); color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer; }
+.notes-pages__btn:is(:hover, :focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
+.notes-pages__btn[aria-current="page"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.notes-pages__gap { display: inline-grid; place-items: center; min-width: 20px; height: 38px; color: var(--muted); }
 .notes-list { display: grid; gap: 12px; list-style: none; margin: 16px 0 0; padding: 0; }
 .notes-list__item { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 12px; background: var(--sheet); transition: border-color .15s linear; }
 .notes-list__item--edit { border-color: var(--accent); }
@@ -953,7 +967,7 @@ button { font: inherit; transition: linear 0.15s; }
   .drawer-backdrop--open { opacity: 1; visibility: visible; }
   .search__input { font-size: 16px; } /* 16px+ keeps iOS from zooming in on focus */
 
-  .ex { scroll-margin-top: 76px; } /* clears the sticky top bar */
+  .ex, .notes-tools { scroll-margin-top: 76px; } /* clears the sticky top bar */
   .sheet { padding-inline: 16px; padding-block: 24px 14px; border-inline: 0; border-radius: 0; min-height: 0; }
 }
 @media (max-width: 560px) {
@@ -970,6 +984,7 @@ button { font: inherit; transition: linear 0.15s; }
   .ex__score { order: -1; width: 100%; margin-left: 0; text-align: right; }
   .ex__score:empty { display: none; }
   .ex__redo-link, .mistakes__start { flex: 1 1 100%; justify-content: center; margin-left: 0; }
+  .notes-tools__search { flex: 1 1 100%; margin-left: 0; font-size: 16px; } /* 16px+ keeps iOS from zooming in on focus */
   .pager { grid-template-columns: minmax(0, 1fr); }
   .pager__btn--next { grid-column: 1; }
   .pager-level { grid-template-columns: minmax(0, 1fr); }
@@ -1509,6 +1524,7 @@ function renderNotes() {
   if (route === 'notes') b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
 }
 const NOTE_FOLD = 255; /* a longer note is folded on its page */
+const NOTES_PAGE = 7; /* notes per page of «Мои заметки» */
 const saveNotes = () => { store.set('gk2-notes', notes); renderNotes(); };
 
 /* ---------- Backup: everything the app keeps in localStorage (gk2-*) as one JSON file ---------- */
@@ -2038,6 +2054,8 @@ const ABOUT = [
         <li><b>Сохранение</b> — изменения сохраняются только после нажатия кнопки «Сохранить». Если покинуть страницу, не нажав кнопку, внесенные данные не сохранятся.</li>
         <li><b>Редактирование</b> — нажмите кнопку «Редактировать», чтобы открыть режим правки. Для сохранения изменений воспользуйтесь кнопкой «Сохранить». Под каждой заметкой указана дата ее последнего редактирования.</li>
         <li><b>Удаление</b> — под каждой заметкой имеется кнопка «Удалить». Чтобы избежать случайного удаления, потребуется дополнительное подтверждение — «Да, удалить». Если нажать «Отмена», заметка останется без изменений.</li>
+        <li><b>Поиск</b> — отображается только после того, как появится хотя бы одна заметка. Поиск работает по содержимому заметок — находятся все записи, где встречается введенное сочетание символов. При этом регистр букв не учитывается.</li>
+        <li><b>Пагинация</b> — на странице отображается только семь записей, остальные переносятся на другую страницу. Переключаться между страницами можно с помощью стрелок и номеров, расположенных под заметками.</li>
       </ul>
       <p>Заметки входят в резервную копию: сохраняются в файл и в ссылку вместе с прогрессом и восстанавливаются при загрузке.</p>` }
 ];
@@ -2155,16 +2173,57 @@ function renderNotesPage(wrap) {
   add.innerHTML = `${notesIcon()}<span>Новая заметка</span>`;
   /* while any note is open for editing (a new one or «Редактировать», changed or not) no other new note can be started */
   const hint = el('span', 'notes-tools__hint', 'Сохраните изменения в открытой заметке, чтобы создать новую.');
-  tools.append(add, hint);
+  /* search through the note texts; shown only while there are notes. A note open for editing always stays in view */
+  const search = el('input', 'notes-tools__search'); search.type = 'search';
+  search.placeholder = 'Поиск по заметкам'; search.setAttribute('aria-label', 'Поиск по заметкам'); search.autocomplete = 'off';
+  tools.append(add, hint, search);
   const ol = el('ol', 'notes-list');
-  wrap.append(tools, ol);
+  const none = el('p', 'notes-list__none', 'Ничего не нашлось. Попробуйте другое слово.');
+  /* more than NOTES_PAGE notes (found ones while searching) are split into pages */
+  const pages = el('nav', 'notes-pages'); pages.setAttribute('aria-label', 'Страницы заметок');
+  wrap.append(tools, ol, none, pages);
+  let page = 0;
+  const filter = () => {
+    const q = search.value.trim().toLowerCase();
+    const shown = [...ol.children].filter(li => !q || li.classList.contains('notes-list__item--edit') || li.note.text.toLowerCase().includes(q));
+    const count = Math.ceil(shown.length / NOTES_PAGE);
+    page = Math.min(page, Math.max(0, count - 1));
+    [...ol.children].forEach(li => { const i = shown.indexOf(li); li.hidden = i < 0 || Math.floor(i / NOTES_PAGE) !== page; });
+    none.hidden = !q || shown.length > 0;
+    pages.replaceChildren();
+    pages.hidden = count < 2;
+    if (count < 2) return;
+    const pageBtn = (k, html, label) => {
+      const b = el('button', 'notes-pages__btn'); b.type = 'button'; b.innerHTML = html;
+      if (label) b.setAttribute('aria-label', label);
+      if (k === page && !label) b.setAttribute('aria-current', 'page');
+      b.addEventListener('click', () => { page = k; filter(); tools.scrollIntoView({ block: 'start' }); });
+      pages.append(b);
+    };
+    /* the arrows only where there is somewhere to go; with many pages: the first, the last, the current with its neighbours
+       and «…» for the gaps (1 … 4 5 6 … 100), near an edge five in a row (1 2 3 4 5 … 100) */
+    if (page > 0) pageBtn(page - 1, arrowHtml('prev'), 'Предыдущая страница');
+    const nums = new Set(count <= 7 ? [...Array(count).keys()] : [0, count - 1, page - 1, page, page + 1]);
+    if (count > 7 && page <= 3) [1, 2, 3, 4].forEach(k => nums.add(k));
+    if (count > 7 && page >= count - 4) [2, 3, 4, 5].forEach(k => nums.add(count - k));
+    let prev = -1;
+    [...nums].filter(k => k >= 0 && k < count).sort((x, y) => x - y).forEach(k => {
+      if (k - prev === 2) pageBtn(prev + 1, String(prev + 2)); /* a gap of one page shows that page, not «…» */
+      else if (k - prev > 2) pages.append(el('span', 'notes-pages__gap', '…'));
+      pageBtn(k, String(k + 1)); prev = k;
+    });
+    if (page < count - 1) pageBtn(page + 1, arrowHtml('next'), 'Следующая страница');
+  };
+  search.addEventListener('input', () => { page = 0; filter(); });
   const syncAdd = () => {
     const blocked = !!$('.notes-list__item--edit', ol);
     add.disabled = blocked; hint.hidden = !blocked;
+    search.hidden = !notes.length;
+    if (!notes.length && search.value) { search.value = ''; filter(); }
   };
   const btn = (text, mod) => { const b = el('button', 'notes-list__btn' + (mod ? ' notes-list__btn--' + mod : ''), text); b.type = 'button'; return b; };
   function card(n, editing = false) {
-    const li = el('li', 'notes-list__item');
+    const li = el('li', 'notes-list__item'); li.note = n;
     const foot = el('div', 'notes-list__foot');
     const date = () => el('span', 'notes-list__date', notes.includes(n) ? 'Изменена ' + noteDate(n.at) : 'Новая заметка');
     let open = false; /* a long note is shown folded until «Показать еще» */
@@ -2214,7 +2273,7 @@ function renderNotesPage(wrap) {
       yes.addEventListener('click', () => {
         const i = notes.indexOf(n);
         if (i >= 0) { notes.splice(i, 1); saveNotes(); }
-        li.remove();
+        li.remove(); syncAdd(); filter();
       });
       no.addEventListener('click', () => { render(false); $('.notes-list__btn--del', li).focus(); });
       foot.replaceChildren(el('span', 'notes-list__ask', 'Удалить эту заметку?'), yes, no);
@@ -2226,10 +2285,10 @@ function renderNotesPage(wrap) {
   }
   add.addEventListener('click', () => {
     const li = card({ id: Date.now().toString(36), text: '', c: Date.now(), at: Date.now() }, true);
-    ol.prepend(li); $('textarea', li).focus(); syncAdd();
+    ol.prepend(li); page = 0; syncAdd(); filter(); $('textarea', li).focus();
   });
   ol.append(...notes.map(n => card(n)));
-  syncAdd();
+  syncAdd(); filter();
 }
 
 function renderContents(wrap) {
