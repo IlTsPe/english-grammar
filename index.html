@@ -99,9 +99,6 @@ button { font: inherit; transition: linear 0.15s; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .btn--primary:hover { opacity: 1; } }
 .btn--primary:disabled { opacity: .35; cursor: default; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .btn--primary:disabled:hover { opacity: .35; cursor: default; } }
-.icon-btn { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: 8px; background: var(--sheet); color: var(--muted); cursor: pointer; }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .icon-btn:hover { border-color: var(--accent); color: var(--accent); } }
-.icon-btn__icon { width: 16px; height: 16px; }
 /* a labelled button for sidebar actions: theme, hide / show the menu, open the sections on mobile */
 .action-btn { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 6px 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
   background: var(--sheet); color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.2; white-space: nowrap; cursor: pointer; }
@@ -228,9 +225,6 @@ button { font: inherit; transition: linear 0.15s; }
   .app .brand__logo { width: 36px; height: 36px; }
   .side .action-btn { font-size: 12px; }
   .side__actions { gap: 6px; }
-}
-@media (max-width: 880px) {
-  .side__hide, .float-tools { display: none; }
 }
 .brand { flex: 1; min-width: 0; }
 /* the favicon sits left of the title, centred on its lines */
@@ -382,10 +376,12 @@ button { font: inherit; transition: linear 0.15s; }
 .overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; gap: 8px; }
 :root[data-theme="light"] .overall { background: none; } /* sits on the tinted sidebar like the other frames there */
 /* the same for the controls in the sidebar: no grey sheet fill on the tinted paper (hover fills stay) */
-:root[data-theme="light"] .side :is(.action-btn, .icon-btn, .search__input):not(:where(:root:not(.pointer-still)) :hover) { background: none; }
+:root[data-theme="light"] .side :is(.action-btn, .search__input):not(:where(:root:not(.pointer-still)) :hover) { background: none; }
 /* accent-soft is almost the paper colour, so on the sidebar the hover uses the stronger --hover of the contents list */
-@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .side :is(.action-btn, .icon-btn):hover { background: var(--hover); } }
-@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .brand__info:not([aria-current]):hover { background: var(--hover); } }
+@media (hover: hover) {
+  :root[data-theme="light"]:where(:root:not(.pointer-still)) .side .action-btn:hover { background: var(--hover); }
+  :root[data-theme="light"]:where(:root:not(.pointer-still)) .brand__info:not([aria-current]):hover { background: var(--hover); }
+}
 /* page links in the sidebar and the mobile top bar keep their accent fill on their page, hovered too: the light-theme rules above
    take the fill off every sidebar control */
 :root[data-theme] .side .page-link[aria-current], :root[data-theme] .side .page-link[aria-current]:hover { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
@@ -407,8 +403,10 @@ button { font: inherit; transition: linear 0.15s; }
 .overall__file-btn { padding: 6px 8px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
   background: none; color: var(--accent); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: border-color .15s, background-color .15s; }
 .overall__file-btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .overall__file-btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
-@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .side .overall__file-btn:not(:disabled):hover { background: var(--hover); } }
+@media (hover: hover) {
+  :where(:root:not(.pointer-still)) .overall__file-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+  :root[data-theme="light"]:where(:root:not(.pointer-still)) .side .overall__file-btn:not(:disabled):hover { background: var(--hover); }
+}
 .overall__file-btn:disabled { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: none; opacity: .4; cursor: default; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .overall__file-btn:disabled:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: none; opacity: .4; cursor: default; } }
 .overall__file-btn--wide { grid-column: 1 / -1; }
@@ -481,13 +479,9 @@ button { font: inherit; transition: linear 0.15s; }
 .modal__foot { display: flex; justify-content: flex-end; gap: 8px; }
 /* the confirming button is red: it overwrites data */
 .modal__ok { border-color: var(--bad); background: var(--bad); color: var(--on-accent); }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .modal__ok:hover { border-color: var(--bad); background: var(--bad); color: var(--on-accent); } }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .modal__ok:hover { filter: brightness(1.1); } }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .modal__ok:hover { border-color: var(--bad); background: var(--bad); color: var(--on-accent); filter: brightness(1.1); } }
 .modal__ok:disabled { opacity: .4; filter: none; cursor: default; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .modal__ok:disabled:hover { opacity: .4; filter: none; cursor: default; } }
-@media (max-width: 560px) {
-  .modal__foot .btn { flex: 1 1 0; }
-}
 /* «С ошибками»: a row that opens the «Работа над ошибками» page */
 /* a muted red over a tint that rises from the bottom and fades into the block; it reaches past the row so the text stays in line.
    On hover the solid bottom part of the same gradient grows (--solid 0% → 100%), pushing the soft fade up and out past the top edge. */
@@ -611,8 +605,10 @@ button { font: inherit; transition: linear 0.15s; }
 /* the card's heading has no hover box of its own: hovering it deepens the whole card, so there are only two tones */
 @media (hover: hover) { :where(:root:not(.pointer-still)) :is(.chap--open, .chap--current) .chap__btn:hover { background: transparent; } }
 /* …only while the card is collapsed (the chapter of the open page); on an open card the heading hover adds nothing */
-@media (hover: hover) { :where(:root:not(.pointer-still)) .chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: color-mix(in srgb, var(--accent) 27%, transparent); } }
-@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: #B9C7F8; } }
+@media (hover: hover) {
+  :where(:root:not(.pointer-still)) .chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: color-mix(in srgb, var(--accent) 27%, transparent); }
+  :root[data-theme="light"]:where(:root:not(.pointer-still)) .chap--current:not(.chap--open):has(> .chap__btn:hover)::before { background: #B9C7F8; }
+}
 /* inside the card the hovers are inset by another 4px on every side (8px from the dividers);
    the inner paddings shrink by the same 4px so the text stays in line with plain chapters */
 :is(.chap--open, .chap--current) { padding: 8px 4px; }
@@ -747,14 +743,24 @@ button { font: inherit; transition: linear 0.15s; }
     radial-gradient(22% 32% at 40% 110%, rgb(96 204 255 / 15%), transparent 78%),
     radial-gradient(22% 32% at 70% 110%, rgb(160 120 255 / 15%), transparent 78%);
 }
-.sheet__title { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 4.4vw, 40px); line-height: 1.12; letter-spacing: -.02em; margin: 12px 0 6px; text-wrap: balance; }
+.sheet__title { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 4.4vw, 40px); line-height: 1.12; letter-spacing: -.02em; margin: 12px 0 0; text-wrap: balance; } /* no bottom margin: the element after the title sets the gap, so margins never overlap */
 .sheet__title:first-child { margin-top: 0; } /* a page without crumbs: the title starts at the sheet's own padding */
-.sheet__lead { margin: 0; font-family: var(--f-en); font-style: italic; font-size: 19px; color: var(--muted); }
+.sheet__lead { margin: 6px 0 0; font-family: var(--f-en); font-style: italic; font-size: 19px; color: var(--muted); }
 .sheet__intro { margin: 16px 0 0; }
+@media (max-width: 458px) { .sheet__intro { font-size: 15px; } }
+/* the folded intro of «Информация»: the fading words start in the colour of the text (the fade itself is transparent text) */
+.info-intro .overall__fade { background-image: linear-gradient(to right, var(--ink) 15%, transparent); }
+.sheet__intro--contact { margin-block: 20px; }
+/* «Поддержать автора» in the text: the colour of that button in the menu */
+.sheet__donate { color: color-mix(in srgb, var(--ok-ink) 60%, var(--muted)); }
+:root[data-theme="light"] .sheet__donate { color: #0d8929; }
+/* three fading words and the button may be wider than a phone's line: the words wrap, the button stays after the last one */
+.info-intro .overall__fade-row { white-space: normal; }
 .sheet__link { color: inherit; text-underline-offset: 3px; }
 /* 600, as in the rules: light 700 on the dark sheet smears into blots */
 .sheet__intro b { font-weight: 600; }
 .sheet__section { display: flex; align-items: center; gap: 12px; margin: 40px 0 16px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.sheet__section--about { margin: 30px 0 10px; }
 .sheet__section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .crumbs__link { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
@@ -777,64 +783,86 @@ button { font: inherit; transition: linear 0.15s; }
 .contents__item { padding-block: 4px; }
 .contents__item + .contents__item { border-top: 1px solid var(--border); }
 .contents__row { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 4px 10px; align-items: baseline; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink); text-align: left; cursor: pointer; }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .contents__row:hover { background: var(--hover); } }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .contents__row:hover .contents__title { color: var(--accent); } }
+@media (hover: hover) {
+  :where(:root:not(.pointer-still)) .contents__row:hover { background: var(--hover); }
+  :where(:root:not(.pointer-still)) .contents__row:hover .contents__title { color: var(--accent); }
+}
 .contents__num { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.contents--about { margin-top: 0; } /* the heading above sets the gap */
+.contents--about .contents__num { grid-row: 1 / span 2; align-self: center; text-align: center; } /* «Как устроен тренажер»: centred on the title and its note */
 .contents__title { min-width: 0; font-size: 17px; font-weight: 600; }
 .contents__meta { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; color: var(--muted); }
 .contents__levels { display: inline-flex; gap: 3px; }
 .contents__bar { width: 120px; align-self: center; }
 /* the pages of «Информация»: text in the rule's typography, lists, the figures as cards */
-.info { margin-top: 24px; }
+.info { margin-top: 14px; }
 .info b { font-weight: 600; }
-.info ul { margin: 0 0 14px; padding-left: 22px; }
+.info ul { margin: 0 0 10px; padding-left: 22px; }
 .info li + li { margin-top: 6px; }
 .info .note ul { margin: 0; }
+.info .note::before { font-weight: 700; } /* «Важно» on the «Информация» pages */
 .info > p:first-child + h3 { margin-top: 12px; } /* the opening paragraph sits closer to the first heading */
-.info .info__stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 0 0 28px; padding: 0; list-style: none; }
+.info .info__stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
 .info__stat { display: grid; gap: 2px; padding: 12px 14px; text-align: center; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
 .info__stat b { font-family: var(--f-display); font-size: 30px; font-weight: 700; line-height: 1.1; color: var(--accent); }
 .info__stat span { font-size: 14px; color: var(--muted); }
+@media (max-width: 568px) {
+  .info .info__stats { gap: 7px; }
+  .info__stat { padding: 8px 14px; }
+  .info__stat b { font-size: 25px; }
+  .info__stat span { font-size: 12px; }
+}
 .info .info__levels { display: grid; gap: 8px; margin: 0 0 14px; padding: 12px 14px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; list-style: none; }
 .info__levels li { display: flex; align-items: baseline; gap: 10px; margin: 0; }
 .info :is(.info__stats, .info__levels) li + li { margin-top: 0; }
 /* a dotted leader from the level name to the topic count, as the old contents had */
 .info__level-name { display: flex; flex: 1; align-items: baseline; gap: 8px; min-width: 0; }
 .info__level-name::after { content: ""; flex: 1; min-width: 20px; border-bottom: 2px dotted var(--border); }
+/* below 400px «Свободное владение» wrapped (366–379px) or kept only a stub of dots: the name stays on one line, the row is tighter */
+@media (max-width: 399px) {
+  .info .info__levels { padding-inline: 12px; }
+  .info__levels li { gap: 8px; font-size: 14px; }
+  .info__level-name { gap: 6px; white-space: nowrap; }
+}
 .info__count { font-size: 14px; color: var(--ink); white-space: nowrap; }
 
 /* «Работа над ошибками»: the same frame as the contents, one row per topic with a button per exercise */
 .mistakes { list-style: none; margin: 24px 0 0; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
 .mistakes__item { display: grid; gap: 8px; padding: 12px; }
 .mistakes__item + .mistakes__item { border-top: 1px solid var(--border); }
-.mistakes__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+/* the number, then the title wrapping by words with the level tag after its last word; the chapter on its own line */
+.mistakes__head { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; gap: 4px 10px; }
 .mistakes__num { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
-.mistakes__title { padding: 0; border: 0; background: none; color: var(--ink); font-size: 17px; font-weight: 600; text-align: left; cursor: pointer; }
+.mistakes__title { justify-self: start; padding: 0; border: 0; background: none; color: var(--ink); font-size: 17px; font-weight: 600; text-align: left; cursor: pointer; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .mistakes__title:hover { color: var(--accent); } }
-.mistakes__chapter { flex-basis: 100%; font-size: 12.5px; color: var(--muted); } /* the chapter on its own line under the title */
+.mistakes__title .lvl-tag { margin-left: 8px; font-weight: 400; vertical-align: 2px; }
+.mistakes__chapter { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); }
 .mistakes__exs { display: flex; flex-wrap: wrap; gap: 6px; }
 .mistakes__ex { padding: 3px 12px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 99px; background: var(--sheet); color: var(--accent); font-family: var(--f-mono); font-size: 12px; cursor: pointer; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .mistakes__ex:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .mistakes__score { color: var(--bad); }
 .mistakes__note { color: var(--muted); }
-.mistakes__hint { margin: 8px 0 0; font-size: 13.5px; color: var(--muted); }
-.mistakes__tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 20px; }
+.mistakes__tools { display: flex; flex-wrap: wrap; align-items: center; row-gap: 12px; margin-top: 20px; }
 .mistakes__tools + .mistakes { margin-top: 12px; }
 .mistakes__levels { display: flex; flex-wrap: wrap; gap: 6px; }
 /* calm, in the colors of the menu buttons (as «Сохранить» in «Резервная копия») */
 .mistakes__start { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; padding: 8px 16px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
   background: none; color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color .15s, background-color .15s; }
 .mistakes__start:is(:focus-visible):not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .mistakes__start:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); } }
-@media (hover: hover) { :root[data-theme="light"]:where(:root:not(.pointer-still)) .mistakes__start:not(:disabled):hover { background: var(--hover); } }
+@media (hover: hover) {
+  :where(:root:not(.pointer-still)) .mistakes__start:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+  :root[data-theme="light"]:where(:root:not(.pointer-still)) .mistakes__start:not(:disabled):hover { background: var(--hover); }
+}
 .mistakes__start:disabled { opacity: .45; cursor: default; }
+/* the chips and the button do not fit in one row: the button goes under the chips across the whole width (set by the script) */
+.mistakes__tools--stacked .mistakes__start { flex: 1 1 100%; justify-content: center; margin-left: 0; }
 .mistakes__start:disabled .arrow--next { transform: none; }
 .mistakes__level { display: inline-flex; align-items: center; gap: 8px; padding: 4px 4px 4px 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 99px;
   background: var(--sheet); color: var(--accent); font-family: var(--f-mono); font-size: 13px; font-weight: 600; cursor: pointer; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .mistakes__level:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .mistakes__level[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 /* the count sits in its own bubble, so «A1 1» does not read as one label */
-.mistakes__level-count { min-width: 20px; padding: 1px 6px; border-radius: 99px; background: var(--accent-soft); font-size: 12px; font-weight: 600; text-align: center; }
+.mistakes__level-count { min-width: 20px; padding: 1px 6px; border-radius: 99px; background: color-mix(in srgb, var(--accent) 24%, var(--sheet)); font-size: 12px; font-weight: 600; text-align: center; }
 .mistakes__level[aria-pressed="true"] .mistakes__level-count { background: color-mix(in srgb, var(--on-accent) 22%, transparent); }
 /* «Мои заметки»: free notes, not tied to topics — each a card: the text (a field while editing, it grows with the text),
    then the date and the buttons; «Удалить» turns the footer into a question */
@@ -847,15 +875,15 @@ button { font: inherit; transition: linear 0.15s; }
 .notes-tools__search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .notes-tools__search[hidden] { display: none; }
 .notes-list__none { margin: 16px 0 0; padding: 16px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--muted); }
-.notes-list__none[hidden], .notes-list__item[hidden], .notes-pages[hidden] { display: none; }
+.notes-list__none[hidden], .notes-list__item[hidden], .paging[hidden] { display: none; }
 .notes-tools { scroll-margin-top: 16px; }
-.notes-pages { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 20px; }
-.notes-pages__btn { display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
+.paging { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 20px; }
+.paging__btn { display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
   background: var(--sheet); color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer; }
-.notes-pages__btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .notes-pages__btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
-.notes-pages__btn[aria-current="page"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
-.notes-pages__gap { display: inline-grid; place-items: center; min-width: 20px; height: 38px; color: var(--muted); }
+.paging__btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .paging__btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
+.paging__btn[aria-current="page"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.paging__gap { display: inline-grid; place-items: center; min-width: 20px; height: 38px; color: var(--muted); }
 .notes-list { display: grid; gap: 12px; list-style: none; margin: 16px 0 0; padding: 0; }
 .notes-list__item { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 12px; background: var(--sheet); transition: border-color .15s linear; }
 .notes-list__item--edit { border-color: var(--accent); }
@@ -878,7 +906,7 @@ button { font: inherit; transition: linear 0.15s; }
 .notes-list__btn--confirm { border-color: var(--bad); background: var(--bad); color: var(--sheet); }
 .notes-list__btn--confirm:is(:focus-visible) { border-color: var(--bad-ink); background: var(--bad-ink); color: var(--sheet); }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .notes-list__btn--confirm:hover { border-color: var(--bad-ink); background: var(--bad-ink); color: var(--sheet); } }
-.mistakes__empty { margin: 24px 0 0; padding: 16px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--muted); }
+.mistakes__empty { margin-top: 12px; padding: 16px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--muted); }
 
 .topic-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 24px; }
 .topic-card { display: grid; gap: 6px; align-content: start; padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); color: var(--ink); text-align: left; cursor: pointer; }
@@ -896,12 +924,14 @@ button { font: inherit; transition: linear 0.15s; }
 .rule p { margin: 0; }
 .rule p + p { margin-top: 10px; }
 .rule h3 { margin: 18px 0 3px; font-size: 20px; font-weight: 700; text-wrap: balance; }
+/* a heading sets the gap above it: the block before it drops its bottom margin, so the two never overlap */
+.rule.rule > :has(+ h3) { margin-bottom: 0; }
 .rule i { font-family: var(--f-en); font-style: normal; }
 .rule i b, .examples__en b { font-weight: 600; background: linear-gradient(transparent -10%, var(--hl) 160%); }
 .formula { margin: 0 0 14px; padding: 10px 14px; border-radius: 8px; background: var(--accent-soft); font-family: var(--f-en); font-size: 17px; }
 .formula b { color: var(--accent); font-weight: 600; }
 .rule-table { overflow-x: auto; margin: 0 0 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); }
-.rule :is(p, ul, ol) + .rule-table { margin-top: 10px; } /* the rule text does not run into the table of examples */
+.rule :is(p, ul:not(.examples), ol) + .rule-table { margin-top: 10px; } /* the rule text does not run into the table of examples */
 .rule-table__table { width: 100%; border-collapse: collapse; font-size: 15px; }
 .rule-table__th { padding: 9px 12px; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--well); border-bottom: 1px solid var(--border); white-space: nowrap; }
 .rule-table__cell { padding: 8px 12px; vertical-align: top; border-bottom: 1px solid var(--border); }
@@ -1050,18 +1080,19 @@ button { font: inherit; transition: linear 0.15s; }
 .pager-level__link--prev { grid-column: 1; }
 .pager-level__link--next { grid-column: 2; text-align: right; }
 
-/* scroll-to-top: appears once 30% of the page has been scrolled */
+/* scroll-to-top: appears once 30% of the page has been scrolled. OFF for now (backlog: it covers the page navigation)
 .to-top { position: fixed; z-index: 6; right: 24px; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); display: grid; place-items: center; width: 54px; height: 54px; padding: 0;
   border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 12px; background: var(--sheet); color: var(--accent); cursor: pointer;
   box-shadow: 0 4px 14px rgba(0, 0, 0, .14); opacity: 0; visibility: hidden; transform: translateY(8px);
   transition: opacity .15s linear, transform .15s linear, visibility .15s linear, background-color .15s linear, border-color .15s linear; }
 .to-top--visible { opacity: 1; visibility: visible; transform: none; }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .to-top:hover { border-color: var(--accent); background: var(--accent-soft); } }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .to-top:hover { border-color: var(--accent); background: var(--accent-soft); } } */
 
 @media (max-width: 880px) {
+  .side__hide, .float-tools { display: none; }
   /* the top bar starts at the window's edge: the 8px body margin above it showed the page (and the «Информация» spotlight) */
   body { margin-top: 0; }
-  .to-top { right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); }
+  /* .to-top { right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); } — scroll-to-top is off, see above */
   .app { grid-template-columns: minmax(0, 1fr); gap: 0; padding-inline: 0; }
 
   /* top bar: brand and the Меню / Содержание / Заметки / Инфо / Тема buttons; stays on screen while scrolling */
@@ -1075,7 +1106,6 @@ button { font: inherit; transition: linear 0.15s; }
   .brand__title > span { display: none; } /* only the logo: «Грамматика онлайн» would crowd the buttons */
   .brand__logo { width: 33px; height: 33px; top: 0; } /* centred in the bar like the buttons */
   .brand__row { display: none; }
-  .icon-btn { width: 38px; height: 38px; }
   /* buttons with the menu's raise, one size at every width up to 880px; the theme is here, so the drawer has no action row */
   /* the buttons start right after the title and keep to the left; only «Тема» goes to the right edge */
   .brand { flex: none; }
@@ -1091,7 +1121,9 @@ button { font: inherit; transition: linear 0.15s; }
     box-shadow: 10px 0 32px rgba(0, 0, 0, .25); transform: translateX(-105%); visibility: hidden; transition: transform .2s ease, visibility .2s linear; }
   .drawer--open { transform: none; visibility: visible; }
   .drawer__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: var(--f-display); font-weight: 700; font-size: 17px; }
-  .drawer__head .icon-btn { box-shadow: var(--raise); } /* the close button: the same raise as the menu buttons */
+  /* the close button: the «Меню» button of the top bar (35px high, its icon, border and raise); its width is set from «Меню» in setDrawer */
+  .drawer__close { width: 35px; min-height: 35px; padding: 0; box-shadow: var(--raise);
+    transition-property: background-color, border-color, color; } /* no width transition: it would grow on every opening */
   .side__summary { margin-top: 12px; }
   /* frosted glass over the page while the drawer is open: the page blurs behind the dimming */
   .drawer-backdrop { display: block; position: fixed; z-index: 25; inset: 0; background: rgba(8, 10, 20, .45); -webkit-backdrop-filter: blur(6px) saturate(1.3); backdrop-filter: blur(6px) saturate(1.3);
@@ -1127,16 +1159,22 @@ button { font: inherit; transition: linear 0.15s; }
 @media (max-width: 498px) {
   .brand__title > span { display: flex; flex-direction: column; align-items: flex-start; font-size: 15px; line-height: 1.15; }
 }
+/* below 529px the menu takes the whole width of the window */
+@media (max-width: 528px) {
+  .drawer { width: 100%; border-right: 0; }
+}
 /* below 360px the title does not fit beside the buttons even on two lines: only the logo stays */
 @media (max-width: 359px) {
   .brand__title > span { display: none; }
 }
 @media (max-width: 560px) {
+  .modal__foot .btn { flex: 1 1 0; }
   .sheet__title { font-size: 26px; }
   .sheet__lead { font-size: 17px; }
   .examples__item { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .note { grid-template-columns: minmax(0, 1fr); gap: 6px; }
   .note::before { align-self: start; }
+  .info .note::before { text-align: center; }
   .ex { padding: 16px 14px; }
   .ex__q:not(.ex__q--ru), .ex__text { font-size: 17px; }
   /* exercise footer: score on its own line above, the three buttons share one row */
@@ -1151,6 +1189,7 @@ button { font: inherit; transition: linear 0.15s; }
   .pager-level { grid-template-columns: minmax(0, 1fr); }
   .pager-level__link--prev, .pager-level__link--next { grid-column: 1; }
   .contents__bar { width: 80px; }
+  .contents--about .contents__row { padding: 8px 12px; }
   /* rule tables become stacked cards: one row per card, column names as labels */
   .rule-table { overflow: visible; border: 0; background: none; }
   .rule-table__table, .rule-table__body, .rule-table__row, .rule-table__cell { display: block; }
@@ -1197,7 +1236,7 @@ button { font: inherit; transition: linear 0.15s; }
       </div>
     </div>
     <div class="drawer" id="drawer">
-    <div class="drawer__head"><span>Меню</span><button class="icon-btn" id="drawerClose" type="button" title="Закрыть" aria-label="Закрыть меню"><svg class="icon-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="drawer__head"><span>Меню</span><button class="action-btn drawer__close" id="drawerClose" type="button" title="Закрыть" aria-label="Закрыть меню"><svg class="action-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
     <div class="side__actions">
       <button class="action-btn theme-toggle" type="button"></button>
       <button class="action-btn side__hide" id="sideHide" type="button" aria-controls="side" aria-expanded="true"><svg class="action-btn__icon" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="side__hide-chev side__hide-chev--lead" d="M8.5 4.5 4 9l4.5 4.5"/><path class="side__hide-chev" d="M14 4.5 9.5 9l4.5 4.5"/></svg><span>Скрыть меню</span></button>
@@ -1236,9 +1275,11 @@ button { font: inherit; transition: linear 0.15s; }
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
   <main class="sheet app__sheet" id="main"></main>
+  <!-- scroll-to-top is off for now (backlog)
   <button class="to-top" id="toTop" type="button" title="Наверх" aria-label="Прокрутить наверх" tabindex="-1">
     <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
+  -->
 </div>
 
 <script>
@@ -1255,17 +1296,17 @@ const M = (label, words) => `<div class="markers"><span class="markers__label">$
 const F = t => `<div class="formula">${t}</div>`;
 
 /* the theme buttons (desktop row, floating tools, mobile top bar) are empty in the HTML and filled here from one template:
-   stars and rays for the hover, the moon and the sun; the label only on the wide buttons (the mobile one is icon-only).
+   stars and rays for the hover, the moon and the sun, the label (hidden by CSS on the icon-only mobile button).
    The label text is set by syncThemeBtn right after. It runs here, straight after the markup and before the data files
    load, so the buttons are never seen empty or with the wrong theme name */
-function themeToggleHtml(iconOnly) {
-  const icon = iconOnly ? 'icon-btn__icon' : 'action-btn__icon';
+function themeToggleHtml() {
+  const icon = 'action-btn__icon';
   return `<span class="theme-toggle__stars" aria-hidden="true">${'<i></i>'.repeat(8)}</span><span class="theme-toggle__rays" aria-hidden="true"></span>`
     + `<svg class="${icon} theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path class="theme-toggle__moon-body" d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg>`
     + `<svg class="${icon} theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></svg>`
-    + (iconOnly ? '' : '<span class="theme-toggle__label"></span>');
+    + '<span class="theme-toggle__label"></span>';
 }
-document.querySelectorAll('.theme-toggle').forEach(b => { b.innerHTML = themeToggleHtml(b.classList.contains('icon-btn')); });
+document.querySelectorAll('.theme-toggle').forEach(b => { b.innerHTML = themeToggleHtml(); });
 syncThemeBtn();
 function syncThemeBtn() {
   const dark = document.documentElement.dataset.theme !== 'light';
@@ -1479,6 +1520,7 @@ const mistakeCount = () => mistakes().reduce((n, m) => n + m.exs.length, 0);
 /* the level filter of «Работа над ошибками»: its own, not the sidebar one (that one follows every opened topic);
    a saved level with no mistakes left falls back to «Все» */
 let mistakesLevel = store.get('gk2-mistakes-level', '');
+let mistakesPage = 0; /* the open page of the list, only while the site is open */
 function mistakesFilter() {
   return mistakesLevel && mistakes().some(m => m.t.level === mistakesLevel) ? mistakesLevel : '';
 }
@@ -1719,6 +1761,33 @@ function renderNotes() {
 }
 const NOTE_FOLD = 255; /* a longer note is folded on its page */
 const NOTES_PAGE = 7; /* notes per page of «Мои заметки» */
+const MISTAKES_PAGE = 7; /* topics per page of «Работа над ошибками» */
+/* page numbers in `nav` (hidden with a single page); `pick(k)` opens page k. The arrows only where there is somewhere to go;
+   with many pages: the first, the last, the current with its neighbours and «…» for the gaps (1 … 4 5 6 … 100),
+   near an edge five in a row (1 2 3 4 5 … 100) */
+function fillPaging(nav, page, count, pick) {
+  nav.replaceChildren();
+  nav.hidden = count < 2;
+  if (count < 2) return;
+  const pageBtn = (k, html, label) => {
+    const b = el('button', 'paging__btn'); b.type = 'button'; b.innerHTML = html;
+    if (label) b.setAttribute('aria-label', label);
+    if (k === page && !label) b.setAttribute('aria-current', 'page');
+    b.addEventListener('click', () => pick(k));
+    nav.append(b);
+  };
+  if (page > 0) pageBtn(page - 1, arrowHtml('prev'), 'Предыдущая страница');
+  const nums = new Set(count <= 7 ? [...Array(count).keys()] : [0, count - 1, page - 1, page, page + 1]);
+  if (count > 7 && page <= 3) [1, 2, 3, 4].forEach(k => nums.add(k));
+  if (count > 7 && page >= count - 4) [2, 3, 4, 5].forEach(k => nums.add(count - k));
+  let prev = -1;
+  [...nums].filter(k => k >= 0 && k < count).sort((x, y) => x - y).forEach(k => {
+    if (k - prev === 2) pageBtn(prev + 1, String(prev + 2)); /* a gap of one page shows that page, not «…» */
+    else if (k - prev > 2) nav.append(el('span', 'paging__gap', '…'));
+    pageBtn(k, String(k + 1)); prev = k;
+  });
+  if (page < count - 1) pageBtn(page + 1, arrowHtml('next'), 'Следующая страница');
+}
 const saveNotes = () => { store.set('gk2-notes', notes); renderNotes(); };
 
 /* ---------- Backup: everything the app keeps in localStorage (gk2-*) as one JSON file ---------- */
@@ -2256,21 +2325,85 @@ const ABOUT = [
 const aboutPage = id => ABOUT.find(p => 'about-' + p.id === id);
 const isAbout = id => id === 'about' || !!aboutPage(id);
 
+const ABOUT_FOLD = 347, FADE_WORDS = 3, aboutNarrow = matchMedia('(max-width: 998px)');
+let aboutOpen = false; /* kept only while the page is open */
+aboutNarrow.addEventListener('change', () => { if (route === 'about') go('about', false, false); });
 function renderAboutPage(wrap) {
   wrap.append(el('h1', 'sheet__title', 'Информация'));
   const mail = el('a', 'sheet__link', 'pegasusgamesru@gmail.com');
   mail.href = 'mailto:pegasusgamesru@gmail.com';
-  const contact = el('p', 'sheet__intro', 'Если у вас есть замечания или пожелания, можете направить их на почту: ');
+  const contact = el('p', 'sheet__intro sheet__intro--contact', 'Если у вас есть замечания или пожелания, можете направить их на почту: ');
   contact.append(mail);
   /* static text with <b> marks, so innerHTML is safe here */
   const para = html => { const p = el('p', 'sheet__intro'); p.innerHTML = html; return p; };
-  wrap.append(
-    para('«Грамматика онлайн» — некоммерческий и независимый проект. Идея его создания появилась во время занятий по книге Ю. Б. Голицынского «Грамматика. Сборник упражнений».'),
-    para('Работать с бумажным сборником не всегда удобно: ответы нужно сверять вручную, из-за чего легко пропустить ошибку, да и сам учебник не самый мобильный предмет. Хотелось сразу видеть, где допущена ошибка, и в любой момент быстро возвращаться к сложной/интересной теме. Поиски бесплатных тренажеров со схожим подходом не привели к удовлетворительному результату (возможно, я плохо искал), поэтому и возникла идея создать его самостоятельно.'),
-    para('За основу взята <b>только структура сборника</b>: разделы и темы расположены в той же последовательности. При этом все правила, примеры и упражнения написаны заново и <b>не дублируют текст книги</b>, а также добавлен дополнительный раздел (№19). Тренажер не является электронной версией какого-либо издания книги — это самостоятельная разработка, созданная по ее мотивам.'),
-    para('В тренажере нет регистрации, платных разделов или ограничений по функционалу — весь функционал доступен сразу, без каких-либо условий. Если тренажер вам понравился, вы можете выразить благодарность автору, нажав кнопку <b>«Поддержать автора»</b> внизу меню.'));
-  wrap.append(el('div', 'sheet__section', 'Как устроен тренажер'));
-  const ol = el('ol', 'contents');
+  const paras = [
+    '«Грамматика онлайн» — некоммерческий и независимый проект. Идея его создания появилась во время занятий по книге Ю. Б. Голицынского «Грамматика. Сборник упражнений».',
+    'Работать с бумажным сборником не всегда удобно: ответы нужно сверять вручную, из-за чего легко пропустить ошибку, да и сам учебник не самый мобильный предмет. Хотелось сразу видеть, где допущена ошибка, и в любой момент быстро возвращаться к сложной/интересной теме. Поиски бесплатных тренажеров со схожим подходом не привели к удовлетворительному результату (возможно, я плохо искал), поэтому и возникла идея создать его самостоятельно.',
+    'За основу взята <b>только структура сборника</b>: разделы и темы расположены в той же последовательности. При этом все правила, примеры и упражнения написаны заново и <b>не дублируют текст книги</b>, а также добавлен дополнительный раздел (№19). Тренажер не является электронной версией какого-либо издания книги — это самостоятельная разработка, созданная по ее мотивам.',
+    'В тренажере нет регистрации, платных разделов или ограничений по функционалу — весь функционал доступен сразу, без каких-либо условий. Если тренажер вам понравился, вы можете выразить благодарность автору, нажав кнопку <b class="sheet__donate">«Поддержать автора»</b> внизу меню.'];
+  /* below 999px the text is folded after ABOUT_FOLD characters, like a long note */
+  const intro = el('div', 'info-intro');
+  const fill = () => {
+    const ps = paras.map(para);
+    const more = el('button', 'overall__more-btn', aboutOpen ? 'Скрыть' : 'Показать еще'); more.type = 'button';
+    more.setAttribute('aria-expanded', String(aboutOpen));
+    more.addEventListener('click', () => { aboutOpen = !aboutOpen; fill(); $('.overall__more-btn', intro).focus({ preventScroll: aboutOpen }); });
+    if (!aboutNarrow.matches) { intro.replaceChildren(...ps); return; }
+    if (aboutOpen) { ps.at(-1).append(' ', more); intro.replaceChildren(...ps); return; }
+    let left = ABOUT_FOLD;
+    const shown = [];
+    for (const p of ps) {
+      shown.push(p);
+      if (p.textContent.length < left) { left -= p.textContent.length; continue; }
+      /* the text up to the limit, broken at a word; its last FADE_WORDS words fade out before the button («Хотелось сразу видеть,») */
+      const full = p.textContent, head = full.slice(0, left).replace(/\s+\S*$/, '');
+      const words = head.split(/(\s+)/), k = Math.max(0, words.length - 2 * FADE_WORDS + 1);
+      const plain = words.slice(0, k).join(''), fade = words.slice(k).join('');
+      fadeTokens = words.slice(k);
+      restTokens = full.slice(head.length).split(/(\s+)/).filter(Boolean);
+      const row = el('span', 'overall__fade-row');
+      row.append(el('span', 'overall__fade', fade), ' ', more);
+      p.replaceChildren(plain, row); break;
+    }
+    intro.replaceChildren(...shown);
+    fitFade();
+  };
+  /* the fading words and the hidden text after them, in words and spaces */
+  let fadeTokens = [], restTokens = [];
+  /* only the words on the button's line fade: those the line break left on the line above stay plain text;
+     with fewer than FADE_WORDS on the button's line, the next words of the hidden text join it */
+  const fitFade = () => {
+    const fade = $('.overall__fade', intro);
+    if (!fade || !intro.isConnected) return;
+    const row = fade.parentNode, btn = $('.overall__more-btn', row);
+    const tokens = fadeTokens.slice();
+    let words, i, extra = 0;
+    const lay = () => {
+      while (row.firstChild !== btn) row.firstChild.remove(); /* the button stays in place, so it keeps the focus */
+      words = tokens.map(w => el('span', '', w));
+      btn.before(...words, ' ');
+      const r = btn.getBoundingClientRect(), y = (r.top + r.bottom) / 2;
+      i = words.findIndex(w => { const q = w.getBoundingClientRect(); return q.top <= y && q.bottom >= y; });
+      if (i < 0) i = words.length;
+    };
+    const onLine = () => words.slice(i).filter(w => /\S/.test(w.textContent)).length;
+    lay();
+    /* on a narrow line the button may keep wrapping away: at most six words join, and the try with most words by the button wins */
+    let best = [onLine(), 0];
+    while (best[0] < FADE_WORDS && extra < Math.min(restTokens.length, 12)) {
+      tokens.push(...restTokens.slice(extra, extra + 2)); extra += 2; /* a space and a word */
+      lay();
+      if (onLine() > best[0]) best = [onLine(), extra];
+    }
+    if (extra !== best[1]) { tokens.length = fadeTokens.length + best[1]; lay(); }
+    const text = ws => ws.map(w => w.textContent).join('');
+    words.forEach(w => w.remove());
+    btn.previousSibling.before(text(words.slice(0, i)), el('span', 'overall__fade', text(words.slice(i))));
+  };
+  new ResizeObserver(fitFade).observe(intro);
+  fill();
+  wrap.append(intro, el('div', 'sheet__section sheet__section--about', 'Как устроен тренажер'));
+  const ol = el('ol', 'contents contents--about');
   ABOUT.forEach((p, i) => {
     const li = el('li', 'contents__item'); const b = el('button', 'contents__row'); b.type = 'button';
     b.innerHTML = `<span class="contents__num">${i + 1}</span><span class="contents__title">${esc(p.title)}</span><span class="contents__meta">${esc(p.sub)}</span>`;
@@ -2306,13 +2439,12 @@ function renderMistakesPage(wrap) {
   const list = level ? all.filter(m => m.t.level === level) : all;
   const exCount = ms => ms.reduce((n, m) => n + m.exs.length, 0);
   const count = exCount(list);
-  const p = el('p', 'sheet__intro');
-  p.textContent = count
-    ? `Давайте вернемся к тому, что пока не получилось: при последней проверке в ${count} ${plural(count, 'упражнении', 'упражнениях', 'упражнениях')} из ${list.length} ${plural(list.length, 'темы', 'тем', 'тем')}${level ? ' уровня ' + level : ''} нашлись ошибки или незаполненные строки. ${count > 1 ? 'Выберите из списка, что хотите исправить.' : 'Нажмите на него, чтобы продолжить.'}`
-    : 'Здесь появятся упражнения, в которых при проверке были ошибки или незаполненные строки.';
+  /* with mistakes: only the note on how the list changes; without: what will appear here */
+  const p = count
+    ? el('p', 'sheet__intro', 'Задание исчезнет из списка, если вы выполните его без ошибок либо нажмете кнопку «Заново». Оно снова появится, если при следующей проверке будут ошибки или незаполненные данные.')
+    : el('p', 'sheet__intro', 'Здесь появятся упражнения, в которых при проверке были ошибки или незаполненные строки.');
   wrap.append(p);
   if (!count) { wrap.append(el('p', 'mistakes__empty', 'Сейчас таких упражнений нет.')); return; }
-  wrap.append(el('p', 'mistakes__hint', 'Задание исчезнет из списка, если вы выполните его без ошибок либо нажмете кнопку «Заново». Оно снова появится, если при следующей проверке будут ошибки.'));
   const tools = el('div', 'mistakes__tools');
   /* level filter: only levels that have mistakes, each with its number of exercises; not needed for a single level */
   const levels = Object.keys(LEVELS).filter(l => all.some(m => m.t.level === l));
@@ -2323,7 +2455,7 @@ function renderMistakesPage(wrap) {
       b.innerHTML = `${label}<span class="mistakes__level-count">${n}</span>`;
       if (v) b.title = LEVELS[v];
       b.setAttribute('aria-pressed', String(v === level));
-      b.addEventListener('click', () => { mistakesLevel = v; store.set('gk2-mistakes-level', v); go('mistakes', false); });
+      b.addEventListener('click', () => { mistakesLevel = v; mistakesPage = 0; store.set('gk2-mistakes-level', v); go('mistakes', false); });
       bar.append(b);
     });
     tools.append(bar);
@@ -2336,14 +2468,23 @@ function renderMistakesPage(wrap) {
   start.addEventListener('click', () => openExercise(list[0].t.id, list[0].exs[0][0]));
   tools.append(start);
   wrap.append(tools);
+  /* stacked when the button is pushed off the chips' row: measured without the class, then the class is put back if needed */
+  new ResizeObserver(() => {
+    tools.classList.remove('mistakes__tools--stacked');
+    tools.classList.toggle('mistakes__tools--stacked', !!tools.firstChild && start.offsetTop > tools.firstChild.offsetTop + 4);
+  }).observe(tools);
   const ol = el('ol', 'mistakes');
-  list.forEach(({ t, exs }) => {
+  /* MISTAKES_PAGE topics per page; the page is kept while the site is open, so «К работе над ошибками» comes back to it */
+  const pageCount = Math.ceil(list.length / MISTAKES_PAGE);
+  mistakesPage = Math.min(mistakesPage, Math.max(0, pageCount - 1));
+  list.slice(mistakesPage * MISTAKES_PAGE, (mistakesPage + 1) * MISTAKES_PAGE).forEach(({ t, exs }) => {
     const li = el('li', 'mistakes__item');
     const head = el('div', 'mistakes__head');
     const title = el('button', 'mistakes__title', t.title); title.type = 'button';
+    title.insertAdjacentHTML('beforeend', `<span class="lvl-tag" title="${LEVELS[t.level]}">${t.level}</span>`);
     title.addEventListener('click', () => go(t.id));
     head.append(el('span', 'mistakes__num', t.num), title);
-    head.insertAdjacentHTML('beforeend', `<span class="lvl-tag" title="${LEVELS[t.level]}">${t.level}</span><span class="mistakes__chapter">Раздел ${t.ch.n} · ${esc(t.ch.title)}</span>`);
+    head.insertAdjacentHTML('beforeend', `<span class="mistakes__chapter">Раздел ${t.ch.n} · ${esc(t.ch.title)}</span>`);
     const chips = el('div', 'mistakes__exs');
     exs.forEach(([i, r]) => {
       const b = el('button', 'mistakes__ex'); b.type = 'button';
@@ -2353,7 +2494,9 @@ function renderMistakesPage(wrap) {
     });
     li.append(head, chips); ol.append(li);
   });
-  wrap.append(ol);
+  const pages = el('nav', 'paging'); pages.setAttribute('aria-label', 'Страницы списка');
+  fillPaging(pages, mistakesPage, pageCount, k => { mistakesPage = k; go('mistakes', false); $('.mistakes__tools').scrollIntoView({ block: 'start' }); });
+  wrap.append(ol, pages);
 }
 
 /* «Мои заметки»: all notes, newest first. A note is read-only until «Редактировать»; the edited text is saved
@@ -2374,7 +2517,7 @@ function renderNotesPage(wrap) {
   const ol = el('ol', 'notes-list');
   const none = el('p', 'notes-list__none', 'Ничего не нашлось. Попробуйте другое слово.');
   /* more than NOTES_PAGE notes (found ones while searching) are split into pages */
-  const pages = el('nav', 'notes-pages'); pages.setAttribute('aria-label', 'Страницы заметок');
+  const pages = el('nav', 'paging'); pages.setAttribute('aria-label', 'Страницы заметок');
   wrap.append(tools, ol, none, pages);
   let page = 0;
   const filter = () => {
@@ -2384,29 +2527,7 @@ function renderNotesPage(wrap) {
     page = Math.min(page, Math.max(0, count - 1));
     [...ol.children].forEach(li => { const i = shown.indexOf(li); li.hidden = i < 0 || Math.floor(i / NOTES_PAGE) !== page; });
     none.hidden = !q || shown.length > 0;
-    pages.replaceChildren();
-    pages.hidden = count < 2;
-    if (count < 2) return;
-    const pageBtn = (k, html, label) => {
-      const b = el('button', 'notes-pages__btn'); b.type = 'button'; b.innerHTML = html;
-      if (label) b.setAttribute('aria-label', label);
-      if (k === page && !label) b.setAttribute('aria-current', 'page');
-      b.addEventListener('click', () => { page = k; filter(); tools.scrollIntoView({ block: 'start' }); });
-      pages.append(b);
-    };
-    /* the arrows only where there is somewhere to go; with many pages: the first, the last, the current with its neighbours
-       and «…» for the gaps (1 … 4 5 6 … 100), near an edge five in a row (1 2 3 4 5 … 100) */
-    if (page > 0) pageBtn(page - 1, arrowHtml('prev'), 'Предыдущая страница');
-    const nums = new Set(count <= 7 ? [...Array(count).keys()] : [0, count - 1, page - 1, page, page + 1]);
-    if (count > 7 && page <= 3) [1, 2, 3, 4].forEach(k => nums.add(k));
-    if (count > 7 && page >= count - 4) [2, 3, 4, 5].forEach(k => nums.add(count - k));
-    let prev = -1;
-    [...nums].filter(k => k >= 0 && k < count).sort((x, y) => x - y).forEach(k => {
-      if (k - prev === 2) pageBtn(prev + 1, String(prev + 2)); /* a gap of one page shows that page, not «…» */
-      else if (k - prev > 2) pages.append(el('span', 'notes-pages__gap', '…'));
-      pageBtn(k, String(k + 1)); prev = k;
-    });
-    if (page < count - 1) pageBtn(page + 1, arrowHtml('next'), 'Следующая страница');
+    fillPaging(pages, page, count, k => { page = k; filter(); tools.scrollIntoView({ block: 'start' }); });
   };
   search.addEventListener('input', () => { page = 0; filter(); });
   const syncAdd = () => {
@@ -2971,7 +3092,7 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   renderOverall();
   setDrawer(false);
   if (scroll) window.scrollTo(0, 0);
-  syncToTop();
+  // syncToTop(); — scroll-to-top is off for now (backlog)
 }
 
 $('#tocContents').addEventListener('click', () => go('contents'));
@@ -2992,19 +3113,20 @@ function setSide(collapsed, focus) {
 $('#sideHide').addEventListener('click', () => setSide(true, true));
 
 /* ---------- Scroll to top ---------- */
-function syncToTop() {
-  const max = document.documentElement.scrollHeight - innerHeight;
-  const show = max > 0 && scrollY / max >= .3;
-  const b = $('#toTop');
-  b.classList.toggle('to-top--visible', show);
-  b.tabIndex = show ? 0 : -1;
-}
-addEventListener('scroll', syncToTop, { passive: true });
-addEventListener('resize', syncToTop);
-$('#toTop').addEventListener('click', () => {
-  const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-  scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
-});
+// scroll-to-top is off for now (backlog): it covers the page navigation at the end of a page
+// function syncToTop() {
+//   const max = document.documentElement.scrollHeight - innerHeight;
+//   const show = max > 0 && scrollY / max >= .3;
+//   const b = $('#toTop');
+//   b.classList.toggle('to-top--visible', show);
+//   b.tabIndex = show ? 0 : -1;
+// }
+// addEventListener('scroll', syncToTop, { passive: true });
+// addEventListener('resize', syncToTop);
+// $('#toTop').addEventListener('click', () => {
+//   const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+//   scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+// });
 
 /* ---------- Theme ---------- */
 let themeTimer;
@@ -3058,6 +3180,8 @@ function setDrawer(open, focus) {
   $('#drawerBackdrop').classList.toggle('drawer-backdrop--open', open);
   document.documentElement.style.overflow = open ? 'hidden' : '';
   $('#menuBtn').setAttribute('aria-expanded', String(open));
+  /* the close button is as wide as «Меню» in the top bar, which it replaces under the finger */
+  if (open) $('#drawerClose').style.width = $('#menuBtn').getBoundingClientRect().width + 'px'; /* exact, not rounded like offsetWidth */
   if (focus) (open ? $('#drawerClose') : $('#menuBtn')).focus();
 }
 $('#menuBtn').addEventListener('click', () => setDrawer(true, true));
