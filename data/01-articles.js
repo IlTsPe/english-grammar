@@ -42,7 +42,13 @@ ${N("Если перед существительным стоит притяж�
       ["Она студентка.", "She is a student."],
       ["Я пью кофе три раза в день.", "I drink coffee three times a day."]
     ]}
-  ]},
+  ],
+  /* фразы на слух: n — номер среди упражнений темы */
+  listen: { n: 2, task: 'Прослушайте фразы и повторите их вслух. Обратите внимание, где звучит <i>a</i>, а где <i>an</i>.', items: [
+    ["She is a doctor, and he is an engineer.", "Она врач, а он инженер."],
+    ["I eat an apple and a banana every day.", "Каждый день я съедаю яблоко и банан."],
+    ["He is an honest man and a useful friend.", "Он честный человек и полезный друг."]
+  ]}},
 
 { id: 'art-the', level: 'A1', title: 'Определенный артикль the', sub: 'the sun, the book on the table',
   rule: `
