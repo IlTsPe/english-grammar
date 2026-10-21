@@ -42,6 +42,11 @@ ${N("Русское «свой» переводится по лицу: «Я вз
       ["Я сделал это сам.", "I did it myself."],
       ["Они взяли свои книги.", "They took their books."],
       ["Мы их не знаем.", "We don't know them.|We do not know them."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["She told me that the red bag was hers.", "Она сказала мне, что красная сумка ее."],
+      ["We painted our kitchen ourselves last summer.", "Прошлым летом мы сами покрасили свою кухню."],
+      ["Is this your umbrella or is it mine?", "Это твой зонт или мой?"]
     ]}
   ]},
 
@@ -77,6 +82,11 @@ ${N("В английском предложении только одно отр
       ["У меня нет времени.", "I have no time.|I don't have any time.|I haven't got any time.|I've got no time."],
       ["Хотите чаю?", "Would you like some tea?|Do you want some tea?|Would you like tea?|Do you want tea?|Would you like a cup of tea?"],
       ["Возьми любую книгу.", "Take any book.|Take any book you like.|Take any book you want."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Would you like some milk in your coffee?", "Хотите молока в кофе?"],
+      ["There's no bread, but there are some biscuits in the cupboard.", "Хлеба нет, но в шкафу есть печенье."],
+      ["You can phone me at any time.", "Можешь звонить мне в любое время."]
     ]}
   ]},
 
@@ -117,6 +127,11 @@ ${N("Производные от <i>every-</i> и <i>no-</i> согласуют�
       ["Все знают об этом.", "Everybody knows about it.|Everyone knows about it.|Everybody knows about this.|Everyone knows about this."],
       ["Дома кто-нибудь есть?", "Is there anybody at home?|Is anybody at home?|Is anyone at home?|Is there anyone at home?|Is anybody home?|Is anyone home?"],
       ["Я нигде не могу найти ключи.", "I can't find my keys anywhere.|I cannot find my keys anywhere.|I can't find the keys anywhere.|I cannot find the keys anywhere."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Somebody left a message, but nobody knows who.", "Кто-то оставил сообщение, но никто не знает кто."],
+      ["Is there anything interesting on TV tonight?", "Сегодня вечером по телевизору есть что-нибудь интересное?"],
+      ["I looked everywhere, but I couldn't find my keys anywhere.", "Я искал везде, но нигде не мог найти ключи."]
     ]}
   ]},
 
@@ -158,6 +173,11 @@ ${N("<i>every</i> не употребляется с <i>of</i>: <i><b>each</b> o
       ["Ни один из двух ответов не верен.", "Neither answer is correct.|Neither of the answers is correct.|Neither answer is right.|Neither of the answers is right."],
       ["Ты можешь сесть на любой из двух автобусов.", "You can take either bus.|You can take either of the buses.|You can take either of the two buses."],
       ["Он работал весь день.", "He worked all day.|He worked all day long.|He was working all day.|He worked the whole day."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Both of my brothers live in London.", "Оба моих брата живут в Лондоне."],
+      ["Each student got a book, and all of them were happy.", "Каждый ученик получил книгу, и все они были довольны."],
+      ["Neither of the answers was correct.", "Ни один из ответов не был верным."]
     ]}
   ]}
 ]});

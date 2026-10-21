@@ -36,6 +36,11 @@ ${N("Форма инфинитива показывает время: Simple —
       ["Я случайно увидел его вчера.", "I happened to see him yesterday."],
       ["Он обязательно придет.", "He is sure to come.|He's sure to come.|He is certain to come."],
       ["Вероятно, пойдет снег.", "It is likely to snow.|It's likely to snow."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Your brother seems to know a lot about cars.", "Твой брат, кажется, много знает о машинах."],
+      ["It is likely to rain later in the afternoon.", "Скорее всего, ближе к вечеру пойдет дождь."],
+      ["I happened to meet our old teacher at the station.", "Я случайно встретил нашего старого учителя на вокзале."]
     ]}
   ]},
 
@@ -69,6 +74,11 @@ ${N("Если сообщение о прошлом, а говорят о нем 
       ["Говорят, он очень богат.", "He is said to be very rich.|It is said that he is very rich."],
       ["Считается, что этот дом построили в XVIII веке.", "This house is believed to have been built in the 18th century.|This house is thought to have been built in the 18th century.|It is believed that this house was built in the 18th century."],
       ["Сообщают, что поезд опаздывает.", "The train is reported to be late.|It is reported that the train is late.|The train is reported to be running late.|It is reported that the train is running late."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["This restaurant is said to be the best in the city.", "Говорят, этот ресторан лучший в городе."],
+      ["The thieves are believed to have left the country.", "Считается, что воры уже уехали из страны."],
+      ["It is reported that several people were injured in the accident.", "Сообщается, что в аварии пострадали несколько человек."]
     ]}
   ]}
 ]});

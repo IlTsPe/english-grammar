@@ -102,6 +102,11 @@ ${N("Не путайте: <i>the boy's toys</i> — игрушки одного 
       ["Где игрушки детей?", "Where are the children's toys?"],
       ["Я был у врача.", "I was at the doctor's.|I have been to the doctor's.|I've been to the doctor's."],
       ["Мне нравится конец этой книги.", "I like the end of this book."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["My sister's husband works at the children's hospital.", "Муж моей сестры работает в детской больнице."],
+      ["We spent a week's holiday at my parents' house.", "Мы провели недельный отпуск в доме моих родителей."],
+      ["Tom and Ann's flat is at the end of the street.", "Квартира Тома и Анны в конце улицы."]
     ]}
   ]},
 
@@ -142,6 +147,11 @@ ${N("Некоторые слова бывают и теми и другими с
       ["Дай мне совет.", "Give me some advice.|Give me a piece of advice.|Give me advice."],
       ["Где мои очки?", "Where are my glasses?"],
       ["Купи буханку хлеба, пожалуйста.", "Buy a loaf of bread, please.|Please buy a loaf of bread."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The news is good, but the weather was terrible.", "Новости хорошие, а погода была ужасная."],
+      ["Can you give me a piece of advice about the course?", "Можете дать мне совет насчет курса?"],
+      ["I bought a loaf of bread and two bottles of milk.", "Я купил буханку хлеба и две бутылки молока."]
     ]}
   ]}
 ]});

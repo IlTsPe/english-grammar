@@ -51,6 +51,11 @@ ${E([
       ["Mother was against ___ (they) going out so late.", "their|them"],
       ["I'm sure of ___ (you) passing the exam.", "your|you"],
       ["I remember ___ (my sister) crying when she was little.", "my sister's|my sister"]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["My little sister is very good at drawing animals.", "Моя младшая сестра очень хорошо рисует животных."],
+      ["Would you mind opening the window? It's too hot in here.", "Ты не против открыть окно? Здесь слишком жарко."],
+      ["Thank you for helping me with my homework.", "Спасибо, что помог мне с домашним заданием."]
     ]}
   ]},
 
@@ -90,6 +95,11 @@ ${N("После <i>would like / would love / would prefer</i> — только �
       ["Не забудь запереть дверь.", "Don't forget to lock the door.|Remember to lock the door."],
       ["Я помню, как встретил ее в Париже.", "I remember meeting her in Paris."],
       ["Мы остановились, чтобы отдохнуть.", "We stopped to rest.|We stopped to have a rest.|We stopped to take a rest."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["My father stopped smoking a few years ago.", "Папа бросил курить несколько лет назад."],
+      ["On the way home I stopped to buy some flowers.", "По дороге домой я остановился, чтобы купить цветов."],
+      ["Remember to lock the door when you leave the house.", "Не забудь запереть дверь, когда будешь уходить из дома."]
     ]}
   ]}
 ]});

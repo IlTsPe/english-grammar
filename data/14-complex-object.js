@@ -34,6 +34,11 @@ ${N("После <i>want</i> нельзя ставить <i>that</i>: <i>I want <
       ["Я не ожидал, что он позвонит.", "I didn't expect him to call.|I did not expect him to call.|I didn't expect him to phone.|I didn't expect him to ring."],
       ["Учитель попросил нас закрыть окна.", "The teacher asked us to close the windows."],
       ["Я бы хотел, чтобы вы мне помогли.", "I would like you to help me.|I'd like you to help me."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I want you to tell me the whole truth.", "Я хочу, чтобы ты рассказал мне всю правду."],
+      ["The teacher expects all the students to come on time.", "Учитель ждет, что все ученики придут вовремя."],
+      ["My parents would like me to study in Germany.", "Родители хотели бы, чтобы я учился в Германии."]
     ]}
   ]},
 
@@ -69,6 +74,11 @@ ${N("В пассиве частица <i>to</i> появляется: <i>He was 
       ["Я видел, как он вошел в дом.", "I saw him enter the house.|I saw him come into the house.|I saw him go into the house."],
       ["Мы слышали, как она поет.", "We heard her singing.|We heard her sing."],
       ["Я почувствовал, как кто-то коснулся моей руки.", "I felt somebody touch my hand.|I felt someone touch my hand.|I felt somebody touch my arm.|I felt someone touch my arm."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I saw a little boy cross the road at a red light.", "Я видел, как маленький мальчик перешел дорогу на красный свет."],
+      ["We heard somebody singing in the flat upstairs.", "Мы слышали, как кто-то поет в квартире наверху."],
+      ["She watched the children playing in the snow.", "Она смотрела, как дети играют в снегу."]
     ]}
   ]},
 
@@ -95,6 +105,11 @@ ${N("<i>let</i> в пассиве не употребляется — вмест
       ["Позволь мне помочь тебе.", "Let me help you."],
       ["Родители не разрешают мне гулять поздно.", "My parents don't let me go out late.|My parents do not let me go out late.|My parents don't let me walk late."],
       ["Этот фильм заставил меня задуматься.", "This film made me think.|This movie made me think.|The film made me think."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The sad ending of the film made my mother cry.", "Из-за грустного конца фильма мама заплакала."],
+      ["Will your parents let you go to the party?", "Родители отпустят тебя на вечеринку?"],
+      ["I'll have the porter carry your bags to your room.", "Я попрошу носильщика отнести ваши сумки в номер."]
     ]}
   ]}
 ]});

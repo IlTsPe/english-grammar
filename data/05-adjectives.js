@@ -45,6 +45,11 @@ ${N("Нельзя сочетать оба способа: <i>more bigger</i>, <i
       ["Сегодня холоднее, чем вчера.", "It is colder today than yesterday.|Today is colder than yesterday.|It's colder today than yesterday.|It's colder today than it was yesterday.|It is colder today than it was yesterday."],
       ["Эта задача труднее.", "This task is more difficult.|This task is harder.|This problem is more difficult.|This problem is harder."],
       ["Это самое дешевое кафе в городе.", "This is the cheapest cafe in town.|This is the cheapest café in town.|This is the cheapest cafe in the city.|It's the cheapest cafe in town."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["This is the best film I have ever seen.", "Это лучший фильм, который я когда-либо видел."],
+      ["My brother is taller and stronger than me.", "Мой брат выше и сильнее меня."],
+      ["Today is hotter than yesterday, but tomorrow will be worse.", "Сегодня жарче, чем вчера, но завтра будет хуже."]
     ]}
   ]},
 
@@ -86,6 +91,11 @@ ${N("<i>very</i> не ставится перед сравнительной с�
       ["Чем больше ты читаешь, тем больше знаешь.", "The more you read, the more you know."],
       ["Становится все темнее и темнее.", "It's getting darker and darker.|It is getting darker and darker."],
       ["Эта машина намного быстрее.", "This car is much faster.|This car is far faster.|This car is a lot faster."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The more you practise, the better you speak.", "Чем больше практикуешься, тем лучше говоришь."],
+      ["My new flat isn't as big as my old one.", "Моя новая квартира не такая большая, как старая."],
+      ["It's getting colder and colder every day.", "С каждым днем становится все холоднее."]
     ]}
   ]},
 
@@ -126,6 +136,11 @@ ${N("<i>friendly, lovely, lonely, silly</i> — прилагательные, х
       ["Суп пахнет вкусно.", "The soup smells good.|The soup smells delicious.|The soup smells nice."],
       ["Он много работает.", "He works hard.|He works a lot."],
       ["Я тебя почти не слышу.", "I can hardly hear you."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["She speaks English very well and quite fast.", "Она говорит по-английски очень хорошо и довольно быстро."],
+      ["He works hard, but he hardly ever gets tired.", "Он много работает, но почти никогда не устает."],
+      ["The soup smells good, and it tastes delicious.", "Суп хорошо пахнет и очень вкусный."]
     ]}
   ]}
 ]});

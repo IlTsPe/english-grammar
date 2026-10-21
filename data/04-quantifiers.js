@@ -39,6 +39,11 @@ ${N("В утвердительных предложениях <i>much</i> зву
       ["У нас не так много времени.", "We don't have much time.|We haven't got much time.|We do not have much time."],
       ["У нее много друзей.", "She has a lot of friends.|She has many friends.|She has got a lot of friends.|She has lots of friends."],
       ["Ты ешь слишком много сахара.", "You eat too much sugar."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["How many people came to the party last night?", "Сколько человек пришло на вечеринку вчера?"],
+      ["We haven't got much time, so let's hurry.", "У нас мало времени, так что давай поторопимся."],
+      ["She has a lot of friends in this town.", "У нее много друзей в этом городе."]
     ]}
   ]},
 
@@ -77,6 +82,11 @@ ${N("<i>little</i> как прилагательное значит «мален
       ["Подожди несколько минут.", "Wait a few minutes.|Wait for a few minutes."],
       ["У нас мало времени.", "We have little time.|We have very little time."],
       ["Я немного говорю по-немецки.", "I speak a little German.|I speak German a little."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I have a few friends who can help us.", "У меня есть несколько друзей, которые могут нам помочь."],
+      ["There is very little time left before the train.", "До поезда осталось совсем мало времени."],
+      ["Few people know about this little shop.", "Мало кто знает об этом маленьком магазине."]
     ]}
   ]}
 ]});

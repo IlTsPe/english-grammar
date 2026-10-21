@@ -33,6 +33,11 @@ ${N("Согласование не нужно, если в придаточно�
       ["Я думал, что ты спишь.", "I thought that you were sleeping.|I thought you were sleeping.|I thought you were asleep."],
       ["Она надеялась, что сдаст экзамен.", "She hoped that she would pass the exam.|She hoped she would pass the exam."],
       ["Мы не знали, что они уже уехали.", "We didn't know that they had already left.|We didn't know they had already left."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I knew that my sister was living in the north of England.", "Я знал, что сестра живет на севере Англии."],
+      ["We didn't know that our neighbours had moved a few weeks earlier.", "Мы не знали, что соседи переехали за несколько недель до этого."],
+      ["She thought that nobody would notice her new haircut.", "Она думала, что никто не заметит ее новую стрижку."]
     ]}
   ]},
 
@@ -78,6 +83,11 @@ ${N("<i>tell</i> требует дополнения (кому?): <i>He <b>told 
       ["Он сказал мне, что живет в Москве.", "He told me that he lived in Moscow.|He told me he lived in Moscow."],
       ["Они сказали, что придут завтра. (Пересказываете через несколько дней.)", "They said that they would come the next day.|They said they would come the next day.|They said they would come the following day."],
       ["Я знал, что она потеряла ключи.", "I knew that she had lost her keys.|I knew she had lost her keys."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["He said that he had already seen both films.", "Он сказал, что уже видел оба фильма."],
+      ["Ann told me that her children were afraid of the dark.", "Анна сказала мне, что ее дети боятся темноты."],
+      ["The guide said that the castle had been built in the twelfth century.", "Экскурсовод сказал, что замок был построен в двенадцатом веке."]
     ]}
   ]},
 
@@ -114,6 +124,11 @@ ${N("Типичная ошибка: <i>She asked me where <s>did I live</s></i>.
       ["Она спросила, люблю ли я кофе.", "She asked if I liked coffee.|She asked me if I liked coffee.|She asked whether I liked coffee.|She asked me whether I liked coffee."],
       ["Она спросила меня, сколько мне лет.", "She asked me how old I was.|She asked how old I was."],
       ["Учитель спросил, закончили ли мы.", "The teacher asked if we had finished.|The teacher asked whether we had finished.|The teacher asked us if we had finished.|The teacher asked us whether we had finished."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["She asked me where I had bought such a nice umbrella.", "Она спросила, где я купил такой хороший зонт."],
+      ["The teacher asked us if we had any questions.", "Учитель спросил, есть ли у нас вопросы."],
+      ["He wanted to know how much the tickets to Paris cost.", "Он хотел знать, сколько стоят билеты в Париж."]
     ]}
   ]},
 
@@ -149,6 +164,11 @@ ${N("Отрицание ставится перед <i>to</i>: <i>told us <b>not
       ["Мама попросила меня не опаздывать.", "Mum asked me not to be late.|Mother asked me not to be late.|My mother asked me not to be late.|My mum asked me not to be late."],
       ["Врач посоветовал мне остаться в постели.", "The doctor advised me to stay in bed."],
       ["Он велел мне не трогать его вещи.", "He told me not to touch his things."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The doctor told me not to eat too much sugar.", "Врач велел мне не есть слишком много сахара."],
+      ["Mum asked us to take off our shoes in the hall.", "Мама попросила нас снять обувь в прихожей."],
+      ["Our coach told us to run across the field twice.", "Тренер велел нам дважды пробежать через поле."]
     ]}
   ]},
 
@@ -176,6 +196,11 @@ ${N("В косвенной речи будущее после прошедшег
       ["Мы уже собирались уходить, когда зазвонил телефон.", "We were about to leave when the phone rang.|We were going to leave when the phone rang."],
       ["Я знал, что тебе понравится.", "I knew you would like it.|I knew that you would like it."],
       ["Она сказала, что придет позже.", "She said she would come later.|She said that she would come later."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I was sure that the weather would be better than the day before.", "Я был уверен, что погода будет лучше, чем накануне."],
+      ["We were going to leave, but then it started to snow.", "Мы собирались уходить, но тут пошел снег."],
+      ["The film was about to begin when somebody's phone rang.", "Фильм вот-вот должен был начаться, когда у кого-то зазвонил телефон."]
     ]}
   ]}
 ]});

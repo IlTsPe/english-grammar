@@ -58,7 +58,7 @@ def read_index():
 def write_index(index):
     body = json.dumps(dict(sorted(index.items(), key=lambda kv: kv[1])), ensure_ascii=False, indent=1)
     INDEX.write_text('/* создается tools/make_audio.py: текст предложения «На слух» → mp3 в этой папке */\n'
-                     f'window.AUDIO = {body};\n', encoding='utf-8')
+                     f'window.AUDIO = {body};\n', encoding='utf-8', newline='\n')  # LF, как во всем репозитории
 
 
 def mp3_frames(data):
@@ -102,7 +102,8 @@ async def main(args):
     index = read_index()
     for tid in ids:
         # записи темы удаляются целиком: тексты могли поменяться
-        index = {k: v for k, v in index.items() if not v.startswith(tid + '-')}
+        # (по точному шаблону «id-номер»: у t-future и t-future-perfect общее начало)
+        index = {k: v for k, v in index.items() if not re.fullmatch(re.escape(tid) + r'-\d+', v)}
         for n, text in enumerate(items[tid], 1):
             name = f'{tid}-{n}'
             sec = await synth(text, AUDIO / f'{name}.mp3')

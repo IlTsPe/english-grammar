@@ -33,6 +33,11 @@ ${N("<i>can</i> не бывает в будущем и перфекте: не <i
       ["Вы не могли бы мне помочь?", "Could you help me?|Could you help me, please?|Can you help me?"],
       ["В детстве я умел рисовать.", "When I was a child I could draw.|I could draw when I was a child.|As a child I could draw."],
       ["Завтра я смогу прийти.", "I will be able to come tomorrow.|I'll be able to come tomorrow.|Tomorrow I will be able to come."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["When I was five, I could already read and write.", "В пять лет я уже умел читать и писать."],
+      ["Will you be able to come to my birthday party on Saturday?", "Ты сможешь прийти на мой день рождения в субботу?"],
+      ["Can you tell me the way to the nearest bank?", "Не подскажете, как пройти к ближайшему банку?"]
     ]}
   ]},
 
@@ -62,6 +67,11 @@ ${N("Для вопроса-предположения <i>might</i> обычно 
       ["Может быть, вечером пойдет снег.", "It may snow in the evening.|It might snow in the evening.|It may snow tonight.|It might snow tonight."],
       ["Вы можете идти.", "You may go.|You can go.|You may go now.|You can go now."],
       ["Нам разрешили остаться.", "We were allowed to stay."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["May I borrow your dictionary for a few minutes?", "Можно взять твой словарь на несколько минут?"],
+      ["Take a warm coat. It might snow in the mountains.", "Возьми теплое пальто: в горах может пойти снег."],
+      ["Tom isn't answering. He may be in the shower.", "Том не отвечает. Возможно, он в душе."]
     ]}
   ]},
 
@@ -95,6 +105,11 @@ ${N("<i>mustn't</i> ≠ <i>don't have to</i>. «Тебе нельзя идти»
       ["Тебе не обязательно приходить.", "You don't have to come.|You do not have to come.|You needn't come."],
       ["Вчера мне пришлось работать до вечера.", "Yesterday I had to work till evening.|I had to work until the evening yesterday.|I had to work till the evening yesterday.|Yesterday I had to work until the evening."],
       ["Я должен идти.", "I must go.|I have to go.|I've got to go."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["You mustn't take photos in the museum.", "В музее нельзя фотографировать."],
+      ["We don't have to get up early on Sundays.", "По воскресеньям нам не нужно рано вставать."],
+      ["I had to wait for the bus for half an hour.", "Мне пришлось ждать автобус полчаса."]
     ]}
   ]},
 
@@ -126,6 +141,11 @@ ${N("После <i>ought</i> всегда <i>to</i>: <i>You ought <b>to</b> go</
       ["Не нужно беспокоиться.", "You needn't worry.|You don't need to worry.|There is no need to worry.|No need to worry."],
       ["Мне нужно купить хлеба.", "I need to buy some bread.|I need to buy bread."],
       ["Тебе не следует так много работать.", "You shouldn't work so much.|You should not work so much.|You shouldn't work so hard."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["You look tired. You should go to bed earlier.", "Ты выглядишь усталым. Тебе стоит раньше ложиться спать."],
+      ["You needn't bring any food, we have plenty.", "Еду можешь не приносить, у нас ее много."],
+      ["We ought to thank our neighbours for their help.", "Нам следует поблагодарить соседей за помощь."]
     ]}
   ]},
 
@@ -164,6 +184,11 @@ ${N("Противоположность <i>must</i> в значении выво
       ["Не может быть, чтобы она это сказала.", "She can't have said that.|She cannot have said that.|She couldn't have said that.|She can't have said it."],
       ["Тебе следовало позвонить мне.", "You should have called me.|You should have phoned me.|You ought to have called me."],
       ["Возможно, он забыл о встрече.", "He may have forgotten about the meeting.|He might have forgotten about the meeting."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The streets are wet. It must have rained at night.", "Улицы мокрые. Наверное, ночью шел дождь."],
+      ["She can't have forgotten about the meeting.", "Не может быть, чтобы она забыла о встрече."],
+      ["You should have told me about it earlier.", "Тебе следовало сказать мне об этом раньше."]
     ]}
   ]},
 
@@ -192,6 +217,11 @@ ${N("<i>You <b>needn't have</b> bought me a present</i> — вежливое «�
       ["Машина не заводится.", "The car won't start."],
       ["Наверняка пойдет дождь.", "It is bound to rain."],
       ["Мы можем с тем же успехом пойти пешком.", "We might as well walk.|We may as well walk.|We might as well go on foot."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["We needn't have taken so much money, everything was cheap.", "Зря мы взяли столько денег: все было дешево."],
+      ["The old door won't open, however hard I push it.", "Старая дверь никак не открывается, как сильно я ни толкаю."],
+      ["The last bus has gone, so we might as well walk.", "Последний автобус ушел, так что можно и пешком."]
     ]}
   ]}
 ]});

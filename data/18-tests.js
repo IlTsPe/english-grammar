@@ -28,6 +28,11 @@ ${T(["Тема", "Главное правило"], [
       ["У меня мало времени.", "I have little time.|I don't have much time.|I haven't got much time."],
       ["Это самая интересная книга, которую я читал.", "This is the most interesting book I have read.|This is the most interesting book I have ever read.|It's the most interesting book I've ever read.|This is the most interesting book that I have ever read."],
       ["Кто-то оставил сумку на скамейке.", "Somebody has left a bag on the bench.|Someone has left a bag on the bench.|Somebody left a bag on the bench.|Someone left a bag on the bench."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["We need a little sugar and a few eggs for the cake.", "Для торта нам нужно немного сахара и несколько яиц."],
+      ["Both of my sister's children are good at maths.", "Оба ребенка моей сестры хорошо знают математику."],
+      ["The Thames is longer than any other river in England.", "Темза длиннее любой другой реки в Англии."]
     ]}
   ]},
 
@@ -60,6 +65,11 @@ ${T(["Подсказка в предложении", "Время"], [
       ["Когда я вошел, они смотрели телевизор.", "When I came in, they were watching TV.|When I entered, they were watching TV.|They were watching TV when I came in."],
       ["Этот дом построили в прошлом году.", "This house was built last year."],
       ["Завтра я буду работать весь день.", "Tomorrow I will be working all day.|I will be working all day tomorrow.|I'll be working all day tomorrow."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The house was being built when we moved to this town.", "Когда мы переехали в этот город, дом еще строился."],
+      ["I have been learning French since I was ten.", "Я учу французский с десяти лет."],
+      ["By the time we got to the cinema, the film had already started.", "К тому времени, как мы добрались до кинотеатра, фильм уже начался."]
     ]}
   ]},
 
@@ -93,6 +103,11 @@ ${T(["Тема", "Проверьте себя"], [
       ["Если бы я знал, я бы пришел.", "If I had known, I would have come.|If I'd known, I'd have come."],
       ["Жаль, что я не умею рисовать.", "I wish I could draw.|I wish I could paint."],
       ["Должно быть, он забыл.", "He must have forgotten."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["She asked me if I would mind waiting a few minutes.", "Она спросила, не против ли я подождать несколько минут."],
+      ["If I had known about the party, I would have come.", "Если бы я знал о вечеринке, я бы пришел."],
+      ["I heard him say that he was too tired to work.", "Я слышал, как он сказал, что слишком устал, чтобы работать."]
     ]}
   ]}
 ]});

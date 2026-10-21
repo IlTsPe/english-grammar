@@ -31,6 +31,11 @@ ${N("Быстрая проверка: если перед словом на <i>-
       ["___ reading of this poem was beautiful.", "the"], ["The singing ___ birds woke me up.", "of"],
       ["___ smoking is bad for your health.", "-|0"], ["I enjoy ___ cooking.", "-|0"],
       ["The opening ___ the new school was on Monday.", "of"], ["___ swimming in cold water is healthy.", "-|0"]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Swimming in the sea is good for your health.", "Плавать в море полезно для здоровья."],
+      ["Don't wake the sleeping baby in the next room.", "Не разбуди спящего малыша в соседней комнате."],
+      ["The opening of the new museum took place in May.", "Открытие нового музея состоялось в мае."]
     ]}
   ]}
 ]});

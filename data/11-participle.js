@@ -38,6 +38,11 @@ ${N("Одиночное причастие обычно стоит перед с
       ["Мне было скучно.", "I was bored."],
       ["Мальчик, читающий книгу, — мой брат.", "The boy reading a book is my brother.|The boy reading the book is my brother."],
       ["У меня разбитый телефон.", "I have a broken phone.|My phone is broken.|I've got a broken phone."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Be careful, there is a broken glass on the floor.", "Осторожно, на полу разбитый стакан."],
+      ["Who is the man standing at the window?", "Кто этот мужчина, который стоит у окна?"],
+      ["The lecture was so boring that half of the students fell asleep.", "Лекция была такой скучной, что половина студентов уснула."]
     ]}
   ]},
 
@@ -95,6 +100,11 @@ ${N("Это не та ошибка, о которой сказано выше: �
       ["If the weather permits, we'll start tomorrow. → Weather ___, we'll start tomorrow.", "permitting"],
       ["As the door was locked, I couldn't get in. → The door ___ locked, I couldn't get in.", "being"],
       ["After the guests had left, we washed up. → The guests ___, we washed up.", "having left"]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Having finished the report, she went home.", "Закончив отчет, она пошла домой."],
+      ["Built in 1890, the bridge is still the longest in the city.", "Построенный в 1890 году, мост до сих пор самый длинный в городе."],
+      ["Walking along the river, we saw a lot of fishermen.", "Гуляя вдоль реки, мы видели много рыбаков."]
     ]}
   ]}
 ]});

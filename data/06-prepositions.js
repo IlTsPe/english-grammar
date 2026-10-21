@@ -44,6 +44,11 @@ ${N("Русское «на» не всегда <i>on</i>: «на картине�
       ["Мы живем на втором этаже.", "We live on the first floor.|We live on the second floor."],
       ["Он ждет тебя на остановке.", "He is waiting for you at the bus stop.|He's waiting for you at the bus stop."],
       ["Магазин находится напротив школы.", "The shop is opposite the school.|The shop is across from the school."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The cat is sleeping under the table in the kitchen.", "Кошка спит под столом на кухне."],
+      ["We met at the bus stop between the bank and the post office.", "Мы встретились на остановке между банком и почтой."],
+      ["There is a picture on the wall above my bed.", "На стене над моей кроватью висит картина."]
     ]}
   ]},
 
@@ -83,6 +88,11 @@ ${N("Перед <i>this, next, last, every</i> предлог не ставит�
       ["Увидимся в понедельник.", "See you on Monday."],
       ["Я живу здесь с 2010 года.", "I have lived here since 2010.|I've lived here since 2010.|I have been living here since 2010.|I've been living here since 2010."],
       ["Я вернусь через час.", "I will be back in an hour.|I'll be back in an hour.|I will come back in an hour.|I'll come back in an hour."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The lesson starts at nine o'clock on Monday.", "Урок начинается в девять часов в понедельник."],
+      ["I have lived here since 2015.", "Я живу здесь с 2015 года."],
+      ["We are going to the sea in July for two weeks.", "В июле мы едем на море на две недели."]
     ]}
   ]},
 
@@ -121,6 +131,11 @@ ${N("С <i>home</i> предлог <i>to</i> не ставится: <i>go <b>hom
       ["Она переплыла реку.", "She swam across the river."],
       ["Мы приехали в Москву вечером.", "We arrived in Moscow in the evening.|We came to Moscow in the evening.|In the evening we arrived in Moscow."],
       ["Пойдем домой.", "Let's go home."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["She ran out of the house and across the road.", "Она выбежала из дома и перебежала через дорогу."],
+      ["We walked through the park to the river.", "Мы прошли через парк к реке."],
+      ["He jumped into the water from the bridge.", "Он прыгнул в воду с моста."]
     ]}
   ]},
 
@@ -176,6 +191,11 @@ ${T(["Предлог", "Значение", "Пример"], [
       ["Give the book ___ your sister.", "to"], ["Moscow is the capital ___ Russia.", "of"],
       ["I'd like a cup ___ coffee.", "of"], ["Explain the rule ___ me, please.", "to"],
       ["The town was destroyed ___ an earthquake.", "by"], ["The top ___ the mountain was covered ___ snow.", ["of", "with"]]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["My sister is afraid of dogs, but she is good at swimming.", "Моя сестра боится собак, но хорошо плавает."],
+      ["It depends on the weather tomorrow.", "Это зависит от завтрашней погоды."],
+      ["Are you interested in music or art?", "Тебе интересна музыка или искусство?"]
     ]}
   ]}
 ]});

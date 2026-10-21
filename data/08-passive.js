@@ -56,6 +56,11 @@ ${E([
       ["They took care of the old dog. → The old dog ___.", "was taken care of"],
       ["People often talk about this film. → This film ___ a lot.", "is talked about"],
       ["Somebody switched off the light. → The light ___.", "was switched off"]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The bridge across the river will be finished next year.", "Мост через реку достроят в следующем году."],
+      ["Both letters were sent to my parents' old address.", "Оба письма были отправлены на старый адрес моих родителей."],
+      ["A lot of tea is grown in India and China.", "Много чая выращивают в Индии и Китае."]
     ]}
   ]},
 
@@ -99,6 +104,11 @@ ${N("Future Continuous и Perfect Continuous в пассиве практиче�
       ["Письмо уже отправлено.", "The letter has already been sent.|The letter has been sent already."],
       ["Эту работу нужно сделать к пятнице.", "This work must be done by Friday.|This work has to be done by Friday.|This work needs to be done by Friday.|The work must be done by Friday."],
       ["Когда мы пришли, все билеты уже были проданы.", "When we arrived, all the tickets had already been sold.|When we came, all the tickets had already been sold.|When we arrived, all the tickets had been sold."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Our kitchen is being painted, so we're eating in the living room.", "Нашу кухню красят, поэтому мы едим в гостиной."],
+      ["Nothing has been decided yet, so don't worry.", "Пока ничего не решено, так что не волнуйся."],
+      ["This medicine must be kept in a cool, dark place.", "Это лекарство нужно хранить в прохладном темном месте."]
     ]}
   ]},
 
@@ -130,6 +140,11 @@ ${N("<i>I cut my hair</i> — «я сам себя подстриг». Если 
       ["Нам починили телевизор.", "We had our TV repaired.|We had our TV set repaired.|We got our TV repaired.|We had the TV repaired."],
       ["Тебе нужно проверить зрение.", "You need to have your eyes tested.|You should have your eyes tested.|You need to have your eyes checked.|You should have your eyes checked."],
       ["У него украли телефон.", "He had his phone stolen.|His phone was stolen."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I had my hair cut yesterday, and now it's much shorter.", "Вчера я подстригся, и теперь волосы намного короче."],
+      ["We are going to have our windows cleaned next week.", "На следующей неделе нам помоют окна."],
+      ["My brother had his bike stolen while he was shopping.", "У брата украли велосипед, пока он ходил по магазинам."]
     ]}
   ]}
 ]});

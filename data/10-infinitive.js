@@ -59,6 +59,11 @@ ${T(["Оборот", "Перевод"], [
       ["He isn't very polite, ___.", ["to put it mildly", "to begin with", "to make matters worse"]],
       ["He speaks French and German, ___ English.", ["to say nothing of", "to tell the truth", "to begin with"]],
       ["___, he passed the exam without studying at all.", ["Strange to say", "To put it mildly", "To say nothing of"]]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["My parents made me practise the piano every day.", "Родители заставляли меня каждый день заниматься на пианино."],
+      ["I would like to visit the Maldives one day.", "Я бы хотел когда-нибудь побывать на Мальдивах."],
+      ["You had better take a taxi, it's too late for the bus.", "Тебе лучше взять такси: для автобуса уже слишком поздно."]
     ]}
   ]},
 
@@ -93,6 +98,11 @@ ${N("<i>enough</i> стоит <b>после</b> прилагательного, 
       ["Он слишком устал, чтобы работать.", "He is too tired to work.|He's too tired to work.|He was too tired to work."],
       ["Она достаточно взрослая, чтобы понять это.", "She is old enough to understand it.|She's old enough to understand it.|She is old enough to understand this.|She's old enough to understand this."],
       ["У нас достаточно денег, чтобы купить машину.", "We have enough money to buy a car.|We've got enough money to buy a car."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["She went to the market to buy some fresh fish.", "Она пошла на рынок купить свежей рыбы."],
+      ["My brother is still too young to drive.", "Мой брат еще слишком молод, чтобы водить машину."],
+      ["The room wasn't warm enough to sit without a jacket.", "В комнате было недостаточно тепло, чтобы сидеть без куртки."]
     ]}
   ]},
 
@@ -130,6 +140,11 @@ ${N("Перфектный инфинитив после модальных гл�
       ["Рад, что повидал тебя.", "I am glad to have seen you.|I'm glad to have seen you."],
       ["Это письмо нужно отправить сегодня.", "This letter must be sent today.|This letter has to be sent today.|This letter needs to be sent today."],
       ["Кажется, она спит.", "She seems to be sleeping.|She seems to be asleep."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I'm glad to have met your parents at last.", "Я рад, что наконец познакомился с твоими родителями."],
+      ["This letter needs to be answered by Friday.", "На это письмо нужно ответить до пятницы."],
+      ["She pretended to be reading when I came in.", "Когда я вошел, она сделала вид, что читает."]
     ]}
   ]}
 ]});

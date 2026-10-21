@@ -34,6 +34,11 @@ ${N("В части с <i>if</i> будущее время не ставится:
       ["Если ты устал, иди спать.", "If you are tired, go to bed.|If you're tired, go to bed."],
       ["Я позвоню тебе, когда приеду.", "I will call you when I arrive.|I'll call you when I arrive.|I'll call you when I get there.|I'll phone you when I arrive."],
       ["Если не поторопишься, опоздаешь.", "If you don't hurry, you will be late.|If you don't hurry, you'll be late.|Unless you hurry, you will be late.|Unless you hurry, you'll be late."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["If you mix red and yellow, you get orange.", "Если смешать красный и желтый, получится оранжевый."],
+      ["If you are free on Saturday, we will go to the theatre.", "Если в субботу ты свободен, мы пойдем в театр."],
+      ["I won't go unless you come with me.", "Я не пойду, если ты не пойдешь со мной."]
     ]}
   ]},
 
@@ -70,6 +75,11 @@ ${N("Для всех лиц можно использовать <i>were</i>: <i>
       ["На твоем месте я бы не стал этого делать.", "If I were you, I wouldn't do that.|If I were you, I would not do that.|If I were you, I wouldn't do it.|If I was you, I wouldn't do that."],
       ["Что бы ты сделал, если бы был президентом?", "What would you do if you were president?|What would you do if you were the president?"],
       ["Если бы он знал английский, он бы нашел работу.", "If he knew English, he would find a job.|If he knew English, he'd find a job.|If he spoke English, he would find a job."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["If I had more free time, I would learn Japanese.", "Будь у меня больше свободного времени, я бы учил японский."],
+      ["What would you do if you found a wallet in the street?", "Что бы ты сделал, если бы нашел на улице кошелек?"],
+      ["If I were you, I wouldn't trust anybody.", "На твоем месте я бы никому не доверял."]
     ]}
   ]},
 
@@ -104,6 +114,11 @@ ${N("В русском все три нереальных типа перево�
       ["Если бы ты пришел вчера, ты бы увидел его.", "If you had come yesterday, you would have seen him.|If you'd come yesterday, you'd have seen him."],
       ["Если бы я знал, я бы тебе тогда сказал.", "If I had known, I would have told you.|If I'd known, I'd have told you."],
       ["Если бы мы не опоздали на поезд, мы бы уже были дома.", "If we hadn't missed the train, we would be at home now.|If we had not missed the train, we would be home now.|If we hadn't missed the train, we'd be home now.|If we hadn't missed the train, we would already be at home."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["If we had left earlier, we wouldn't have missed the train.", "Если бы мы вышли раньше, мы бы не опоздали на поезд."],
+      ["If she had studied harder, she would have passed the exam.", "Если бы она лучше занималась, она бы сдала экзамен."],
+      ["If I had taken your advice, I wouldn't be in trouble now.", "Если бы я тогда послушал твоего совета, у меня сейчас не было бы проблем."]
     ]}
   ]},
 
@@ -132,6 +147,11 @@ ${N("Утвердительное английское предложение п
       ["Жаль, что я не пошел с тобой.", "I wish I had gone with you.|I wish I'd gone with you."],
       ["Жаль, что сейчас не лето.", "I wish it were summer now.|I wish it was summer now.|I wish it were summer.|I wish it was summer."],
       ["Хоть бы он перестал кричать!", "I wish he would stop shouting!|If only he would stop shouting!|I wish he would stop screaming!"]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I wish I could speak Spanish as well as you.", "Жаль, что я не говорю по-испански так же хорошо, как ты."],
+      ["If only we had bought the tickets earlier!", "Если бы только мы купили билеты раньше!"],
+      ["She wishes she lived closer to the sea.", "Ей хотелось бы жить ближе к морю."]
     ]}
   ]}
 ]});

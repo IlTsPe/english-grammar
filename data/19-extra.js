@@ -32,6 +32,11 @@ ${N("В описательных придаточных (с запятыми) <i
       ["Это дом, где я родился.", "This is the house where I was born.|This is the house in which I was born."],
       ["Это человек, у которого украли машину.", "This is the man whose car was stolen.|That is the man whose car was stolen."],
       ["Книга, которую ты мне дал, очень интересная.", "The book you gave me is very interesting.|The book that you gave me is very interesting.|The book which you gave me is very interesting."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The woman who lives next door is a famous singer.", "Женщина, которая живет по соседству, известная певица."],
+      ["This is the town where my grandparents were born.", "Это город, где родились мои бабушка и дедушка."],
+      ["I have a friend whose father works at the zoo.", "У меня есть друг, чей отец работает в зоопарке."]
     ]}
   ]},
 
@@ -59,6 +64,11 @@ ${N("Если глагол в Present или Past Simple, появляется <
     { type: 'choice', task: 'Выберите правильный вариант.', items: [
       ["Not until the next morning ___ the truth.", ["did he learn", "he learned", "he did learn"]], ["Seldom ___ such talent in one so young.", ["have I seen", "I have seen", "I saw"]],
       ["Scarcely ___ the house when it began to snow.", ["had we left", "we had left", "did we leave"]], ["Only after the meeting ___ how serious the problem was.", ["did they understand", "they understood", "understood they"]]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Never have I seen such a beautiful sunset.", "Никогда я не видел такого красивого заката."],
+      ["Not only did he forget my birthday, but he was also late.", "Он не только забыл о моем дне рождения, но еще и опоздал."],
+      ["Hardly had we sat down when the phone rang.", "Едва мы сели, как зазвонил телефон."]
     ]}
   ]},
 
@@ -89,6 +99,11 @@ ${E([
       ["Тебе давно пора найти работу.", "It is high time you found a job.|It is time you found a job."],
       ["Я бы предпочел, чтобы ты здесь не курил.", "I would rather you didn't smoke here.|I would rather you did not smoke here."],
       ["Он говорит так, будто все знает.", "He talks as if he knew everything.|He speaks as if he knew everything.|He talks as though he knew everything.|He speaks as though he knew everything."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["It's time we went home, it's getting dark.", "Нам пора домой: темнеет."],
+      ["I'd rather you didn't tell anyone about it.", "Я бы предпочел, чтобы ты никому об этом не рассказывал."],
+      ["He talks as if he knew everything about everything.", "Он говорит так, будто знает обо всем на свете."]
     ]}
   ]},
 
@@ -115,6 +130,11 @@ ${N("Глагол после <i>What…</i> обычно в единственн
       ["Что мне нужно, так это отпуск.", "What I need is a holiday.|What I need is a vacation."],
       ["Все, чего я хочу, — это чашка чая.", "All I want is a cup of tea."],
       ["Мы познакомились именно в 2010 году.", "It was in 2010 that we met.|It was in 2010 that we first met."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["It was my brother who broke the window, not me.", "Это мой брат разбил окно, а не я."],
+      ["What I need now is a cup of hot tea.", "Что мне сейчас нужно, так это чашка горячего чая."],
+      ["It was in Rome that they first met.", "Именно в Риме они впервые встретились."]
     ]}
   ]},
 
@@ -144,6 +164,11 @@ ${N("При инверсии отрицание не сокращается: <i>
     { type: 'choice', task: 'Выберите правильный вариант.', items: [
       ["___ you change your mind, let me know.", ["Should", "Would", "Had"]], ["Had I ___ earlier, I would have caught the train.", ["left", "leave", "been left"]],
       ["___ for the storm, the plane would have landed on time.", ["Had it not been", "Were it not", "Should it not"]], ["I'll lend you the money ___ you pay it back next month.", ["provided", "unless", "otherwise"]]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Had I known about the traffic, I would have left earlier.", "Знай я о пробках, выехал бы раньше."],
+      ["Should you need any help, just call me.", "Если вам понадобится помощь, просто позвоните мне."],
+      ["Were I in your place, I would accept the offer.", "Будь я на вашем месте, я бы принял предложение."]
     ]}
   ]},
 
@@ -171,6 +196,11 @@ ${N("После <i>hope, think, expect, suppose</i> отрицательный �
       ["— Я устал. — Я тоже.", "I am tired. — So am I."],
       ["Мне не нравится эта сумка. Покажите красную.", "I don't like this bag. Show me the red one.|I don't like this bag. Can I see the red one?"],
       ["Она обещала позвонить, но не позвонила.", "She promised to call, but she didn't.|She promised to phone, but she didn't."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Is the shop still open? I'm afraid not.", "Магазин еще открыт? Боюсь, что нет."],
+      ["She can swim very fast, and so can her brother.", "Она умеет очень быстро плавать, и ее брат тоже."],
+      ["I don't like the red dress, but I like the blue one.", "Мне не нравится красное платье, а синее нравится."]
     ]}
   ]}
 ]});

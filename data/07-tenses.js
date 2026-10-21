@@ -41,6 +41,11 @@ ${N("Возраст, погода, время и цена выражаются �
       ["Сегодня холодно.", "It is cold today.|It's cold today.|Today it is cold."],
       ["Они не были дома.", "They were not at home.|They weren't at home.|They were not home.|They weren't home."],
       ["Завтра я буду в школе.", "I will be at school tomorrow.|I'll be at school tomorrow.|Tomorrow I will be at school.|Tomorrow I'll be at school."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["My uncle is an engineer, and his wife was a nurse.", "Мой дядя инженер, а его жена была медсестрой."],
+      ["The new film isn't as good as the book.", "Новый фильм не так хорош, как книга."],
+      ["Your glasses were on the shelf between the books.", "Твои очки были на полке между книгами."]
     ]}
   ]},
 
@@ -86,6 +91,11 @@ ${N("Наречия частотности стоят <b>перед</b> смыс
       ["Где работает твой папа?", "Where does your father work?|Where does your dad work?"],
       ["Он никогда не опаздывает.", "He is never late.|He's never late."],
       ["Солнце встает на востоке.", "The sun rises in the east."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["My grandmother grows a few vegetables in her garden.", "Бабушка выращивает немного овощей у себя в саду."],
+      ["He drives carefully and never goes too fast.", "Он водит осторожно и никогда не ездит слишком быстро."],
+      ["Each of my friends has a dog or a cat.", "У каждого из моих друзей есть собака или кошка."]
     ]}
   ]},
 
@@ -130,6 +140,11 @@ ${E([
       ["Дети играют в саду.", "The children are playing in the garden."],
       ["Я сейчас не работаю.", "I am not working now.|I'm not working now.|I am not working at the moment.|I'm not working at the moment."],
       ["Завтра мы встречаемся с друзьями.", "We are meeting our friends tomorrow.|We're meeting our friends tomorrow.|We are meeting friends tomorrow.|We're meeting friends tomorrow.|Tomorrow we are meeting our friends."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Look! The boys are climbing the tree in the garden.", "Смотри! Мальчики лезут на дерево в саду."],
+      ["The children are running out of the school into the park.", "Дети выбегают из школы в парк."],
+      ["Two women are looking after the sheep in the field.", "Две женщины присматривают за овцами в поле."]
     ]}
   ]},
 
@@ -171,7 +186,12 @@ ${E([
       ["Don't disturb me. I ___ (think).", "am thinking"]
     ]},
     { type: 'text', task: 'Поставьте глаголы из скобок в Present Simple или Present Continuous.', text: "Hi Mum! I ___ (write) to you from the hotel. We ___ (have) a great time here. Every morning we ___ (go) to the beach, and in the afternoon we ___ (visit) museums. Right now Dad ___ (sleep) and Anna ___ (read) a book. The food here ___ (taste) wonderful. I ___ (want) to stay here forever!",
-      answers: ["am writing", "are having", "go", "visit", "is sleeping|'s sleeping", "is reading|'s reading", "tastes", "want"] }
+      answers: ["am writing", "are having", "go", "visit", "is sleeping|'s sleeping", "is reading|'s reading", "tastes", "want"] },
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Water boils at a hundred degrees, and the kettle is boiling now.", "Вода кипит при ста градусах, и чайник сейчас кипит."],
+      ["She usually drinks tea, but today she's having a cup of coffee.", "Обычно она пьет чай, но сегодня пьет кофе."],
+      ["We go to the gym on Mondays, but this week we're going on Tuesday.", "Мы ходим в спортзал по понедельникам, но на этой неделе идем во вторник."]
+    ]}
   ]},
 
 { id: 't-past-simple', level: 'A2', title: 'Past Simple', sub: 'I worked, I went, did you go?',
@@ -223,6 +243,11 @@ ${N("После <i>did / didn't</i> глагол стоит в начально�
       ["Мы не ходили в кино.", "We didn't go to the cinema.|We did not go to the cinema.|We didn't go to the movies."],
       ["Она приехала два дня назад.", "She arrived two days ago.|She came two days ago."],
       ["Тебе понравился фильм?", "Did you like the film?|Did you like the movie?|Did you enjoy the film?"]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Last summer we went to the Alps and climbed a mountain.", "Прошлым летом мы ездили в Альпы и поднялись на гору."],
+      ["I didn't buy any bread because the shop was closed.", "Я не купил хлеба, потому что магазин был закрыт."],
+      ["Yesterday was the coldest day of the year.", "Вчера был самый холодный день в году."]
     ]}
   ]},
 
@@ -257,6 +282,11 @@ ${N("Короткое законченное действие передаетс
       ["Когда я пришел, она спала.", "When I came, she was sleeping.|When I arrived, she was sleeping.|She was sleeping when I came.|She was sleeping when I arrived."],
       ["Что ты делал, когда я позвонил?", "What were you doing when I called?|What were you doing when I phoned?|What were you doing when I rang?"],
       ["Шел дождь, и мы остались дома.", "It was raining and we stayed at home.|It was raining, so we stayed at home.|It was raining and we stayed home."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I was reading a book when somebody knocked at the door.", "Я читал книгу, когда кто-то постучал в дверь."],
+      ["While we were walking through the park, it started to rain.", "Пока мы гуляли по парку, начался дождь."],
+      ["When I saw them, Tom's parents were sitting in the garden.", "Когда я их увидел, родители Тома сидели в саду."]
     ]}
   ]},
 
@@ -293,6 +323,11 @@ ${N("После <i>if, when, before, after, until, as soon as</i> в прида�
       ["Смотри, сейчас пойдет дождь.", "Look, it is going to rain.|Look, it's going to rain."],
       ["Я позвоню тебе, когда приду домой.", "I will call you when I come home.|I'll call you when I get home.|I'll call you when I come home.|I will call you when I get home.|I'll phone you when I get home."],
       ["Думаю, она не придет.", "I don't think she will come.|I don't think she'll come.|I think she won't come.|I think she will not come."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["There will be a lot of people at the concert tonight.", "Сегодня вечером на концерте будет много народу."],
+      ["I'm going to give them my old bike. I don't need it.", "Я собираюсь отдать им свой старый велосипед. Он мне не нужен."],
+      ["Don't worry, I'll take care of your cat.", "Не волнуйся, я позабочусь о твоей кошке."]
     ]}
   ]},
 
@@ -342,6 +377,11 @@ ${N("<i>has been to</i> значит «был и вернулся», <i>has gone
       ["Она только что ушла.", "She has just left.|She's just left.|She has just gone.|She's just gone."],
       ["Я знаю его десять лет.", "I have known him for ten years.|I've known him for ten years."],
       ["Мы еще не обедали.", "We haven't had lunch yet.|We have not had lunch yet.|We haven't had dinner yet."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Be quiet! Dad has just gone to bed.", "Тише! Папа только что лег спать."],
+      ["She has already read both of these books.", "Она уже прочитала обе эти книги."],
+      ["How many countries have you visited?", "Сколько стран ты посетил?"]
     ]}
   ]},
 
@@ -373,7 +413,12 @@ ${N("Вопрос <i>When…?</i> всегда требует Past Simple: <i>Wh
       ["We ___ three tests this week.", ["have had", "had"]], ["My grandfather ___ in a factory all his life. He retired in 2010.", ["worked", "has worked"]]
     ]},
     { type: 'text', task: 'Поставьте глаголы в Present Perfect или Past Simple.', text: "— ___ (you / ever / be) to Spain? — Yes, I ___ (go) there last summer. — Really? What ___ (you / see)? — I ___ (visit) Madrid and Barcelona. — I ___ (never / be) abroad. — Oh, you should go! I ___ (already / book) a trip for next year.",
-      answers: ["have you ever been", "went", "did you see", "visited", "have never been|'ve never been", "have already booked|'ve already booked"] }
+      answers: ["have you ever been", "went", "did you see", "visited", "have never been|'ve never been", "have already booked|'ve already booked"] },
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I have lost my keys. I think I left them at the office yesterday.", "Я потерял ключи. Кажется, вчера оставил их в офисе."],
+      ["We have known each other for ten years. We met at university.", "Мы знаем друг друга десять лет. Познакомились в университете."],
+      ["This is the best pizza I have ever eaten. Where did you buy it?", "Это лучшая пицца, которую я когда-либо ел. Где ты ее купил?"]
+    ]}
   ]},
 
 { id: 't-present-perfect-continuous', level: 'B2', title: 'Present Perfect Continuous', sub: "I've been waiting for an hour",
@@ -411,6 +456,11 @@ ${N("Глаголы состояния в Continuous не ставятся: <i>I
       ["Как долго ты учишь английский?", "How long have you been learning English?|How long have you been studying English?"],
       ["Весь день идет снег.", "It has been snowing all day.|It's been snowing all day."],
       ["Она работает здесь с 2019 года.", "She has been working here since 2019.|She's been working here since 2019.|She has worked here since 2019.|She's worked here since 2019."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I have been waiting for you at the bus stop for an hour.", "Я жду тебя на остановке уже час."],
+      ["She has been working hard all day, so she's very tired.", "Она весь день много работала, поэтому очень устала."],
+      ["How long have you been learning English?", "Как долго ты учишь английский?"]
     ]}
   ]},
 
@@ -450,6 +500,11 @@ ${N("Если порядок действий ясен из <i>before / after</i
       ["Он сказал, что потерял ключи.", "He said that he had lost his keys.|He said he had lost his keys.|He said he'd lost his keys."],
       ["К семи часам мы закончили работу.", "By seven o'clock we had finished the work.|By seven we had finished the work.|We had finished the work by seven o'clock.|We had finished work by seven."],
       ["Я никогда раньше не видел такого красивого города.", "I had never seen such a beautiful city before.|I'd never seen such a beautiful city before."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["When we arrived at the station, the train had already left.", "Когда мы приехали на вокзал, поезд уже ушел."],
+      ["She had never seen the Pacific Ocean before that trip.", "До той поездки она никогда не видела Тихий океан."],
+      ["There was little food left because the guests had eaten everything.", "Еды осталось мало: гости все съели."]
     ]}
   ]},
 
@@ -480,6 +535,11 @@ ${N("После <i>by the time</i> в придаточном стоит Present 
       ["К пятнице я закончу проект.", "I will have finished the project by Friday.|By Friday I will have finished the project."],
       ["Не звони в восемь — мы будем ужинать.", "Don't call at eight — we will be having dinner.|Don't phone at eight — we will be having dinner.|Don't call at eight — we will be having supper."],
       ["К лету она проработает здесь пять лет.", "By the summer she will have been working here for five years.|By summer she will have been working here for five years.|By the summer she will have worked here for five years."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["This time tomorrow I will be lying on the beach.", "Завтра в это время я буду лежать на пляже."],
+      ["By the end of the year we will have built two new schools.", "К концу года мы построим две новые школы."],
+      ["Don't call at eight. We will be having dinner.", "Не звони в восемь: мы будем ужинать."]
     ]}
   ]},
 
@@ -509,6 +569,11 @@ ${N("В вопросе и отрицании пишется <i>use to</i> без
       ["Я привык рано вставать.", "I am used to getting up early.|I'm used to getting up early."],
       ["Раньше он не любил рыбу.", "He didn't use to like fish.|He did not use to like fish.|He used not to like fish."],
       ["Ты скоро привыкнешь к новой школе.", "You will soon get used to the new school.|You'll soon get used to the new school.|You will get used to the new school soon.|You'll get used to your new school soon."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["There used to be a cinema opposite our house.", "Раньше напротив нашего дома был кинотеатр."],
+      ["My grandfather would tell us stories every evening.", "Дедушка каждый вечер рассказывал нам истории."],
+      ["I'm used to getting up early, but my brother isn't.", "Я привык рано вставать, а мой брат нет."]
     ]}
   ]},
 
@@ -542,6 +607,11 @@ ${T(["Вопрос к себе", "Время"], [
       ["I ___ English for five years.", ["have been learning", "am learning", "learn"]], ["She ___ when I came in.", ["was cooking", "cooked", "has cooked"]],
       ["They ___ married in 2015.", ["got", "have got", "had got"]], ["I ___ my keys. Can you help me look for them?", ["have lost", "lost", "had lost"]],
       ["By next summer he ___ school.", ["will have finished", "will finish", "finishes"]], ["He said he ___ the film before.", ["had seen", "has seen", "saw"]]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I have lived in this city for five years, but I still don't know many people here.", "Я живу в этом городе пять лет, но до сих пор знаю здесь мало людей."],
+      ["When I came home, the children were sleeping and my husband had washed the dishes.", "Когда я пришла домой, дети спали, а муж уже помыл посуду."],
+      ["Next year my brother will be studying at the same university as me.", "В следующем году мой брат будет учиться в том же университете, что и я."]
     ]}
   ]}
 ]});
