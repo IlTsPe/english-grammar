@@ -150,6 +150,7 @@ function syncThemeBtn() {
 <script charset="utf-8" src="data/17-modals.js"></script>
 <script charset="utf-8" src="data/18-tests.js"></script>
 <script charset="utf-8" src="data/19-extra.js"></script>
+<script charset="utf-8" src="audio/index.js"></script>
 <script>
 /* ================= Приложение ================= */
 const LEVELS = { A1: 'Начальный', A2: 'Элементарный', B1: 'Средний', B2: 'Выше среднего', C1: 'Продвинутый', C2: 'Свободное владение' };
@@ -1630,8 +1631,9 @@ function fillGaps(container, text, answers, idBase, label) {
   return inputs;
 }
 
-/* «На слух»: озвучка браузером (Web Speech API), британский голос, если он есть. Каждое предложение — свой плеер:
-   кнопка и полоса прогресса */
+/* «На слух»: запись mp3 из audio/ (tools/make_audio.py), а если ее нет — озвучка браузером (Web Speech API), британский
+   голос, если он есть. Каждое предложение — свой плеер: кнопка и полоса прогресса */
+const AUDIO = window.AUDIO || {}; /* текст предложения → имя mp3, audio/index.js */
 const speech = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
 const SPEECH_RATE = 1; /* обычная скорость голоса */
 let speaking = null; /* плеер, который сейчас звучит */
@@ -1644,9 +1646,8 @@ function enVoice() {
   return vs.find(v => /^en[-_]GB/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
 }
 function stopSpeech() {
-  if (!speech) return;
   const p = speaking; speaking = null;
-  speechSynthesis.cancel();
+  if (speech) speechSynthesis.cancel();
   if (p) p.idle();
 }
 /* буквы фразы: звучат только они, пробелы и знаки препинания времени почти не занимают */
@@ -1670,6 +1671,38 @@ function makePlayer(text, label) {
   /* utter — текущий запуск: события запусков, которые уже остановлены или закончились, ни на что не влияют */
   let frame = 0, hold = null, t0 = 0, last = 0, share = 0, dur = 0, heard = 0, ended = false, utter = null;
   const paint = () => fill.style.setProperty('--p', share);
+  /* запись: файл загружается при первом нажатии. Полоса идет просто по часам: с момента, когда звук пошел, ровно столько,
+     сколько длится файл, — равномерно, без подстройки под время проигрывания (тишина до и после голоса из файлов
+     вырезана при генерации) */
+  const file = AUDIO[text];
+  let audio = null;
+  const finishAudio = () => {
+    if (ended) return;
+    if (speaking === player) speaking = null;
+    cancelAnimationFrame(frame); frame = 0;
+    audio.pause(); share = 1; paint(); ended = true;
+    hold = setTimeout(player.idle, 300);
+  };
+  const stepAudio = now => {
+    const sec = (now - t0) / 1000;
+    if (sec >= audio.duration) return finishAudio();
+    share = sec / audio.duration; paint();
+    frame = requestAnimationFrame(stepAudio);
+  };
+  const playAudio = () => {
+    if (!audio) {
+      audio = new Audio(`audio/${file}.mp3`);
+      /* отсчет — с момента, когда звук действительно начался (после загрузки и перемотки к началу) */
+      audio.addEventListener('playing', () => {
+        if (speaking !== player || t0) return;
+        t0 = performance.now(); frame = requestAnimationFrame(stepAudio);
+      });
+      /* файл не загрузился (нет сети) — плеер возвращается в покой */
+      audio.addEventListener('error', () => { if (speaking === player) speaking = null; player.idle(); });
+    }
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  };
   const step = now => {
     const dt = (now - last) / 1000, sec = (now - t0) / 1000; last = now;
     /* звук по последнему слову уже кончился — плеер завершается, не дожидаясь запоздалого события конца
@@ -1691,6 +1724,7 @@ function makePlayer(text, label) {
     idle() {
       cancelAnimationFrame(frame); clearTimeout(hold); frame = 0; hold = null;
       share = t0 = heard = 0; ended = false; utter = null; paint();
+      if (audio) audio.pause();
       btn.innerHTML = PLAY_ICON; btn.setAttribute('aria-label', `Прослушать ${label}`);
       box.classList.remove('listen__player--on');
     },
@@ -1700,6 +1734,7 @@ function makePlayer(text, label) {
       speaking = player;
       btn.innerHTML = STOP_ICON; btn.setAttribute('aria-label', `Остановить ${label}`);
       box.classList.add('listen__player--on');
+      if (file) return playAudio();
       const u = new SpeechSynthesisUtterance(text), voice = enVoice();
       utter = u;
       u.lang = voice ? voice.lang : 'en-GB'; if (voice) u.voice = voice; u.rate = SPEECH_RATE;
@@ -1730,7 +1765,7 @@ function makePlayer(text, label) {
   /* остановить можно и во время дотягивания полосы после конца речи */
   const toggle = () => { if (speaking === player || ended) { stopSpeech(); player.idle(); } else player.play(); };
   btn.addEventListener('click', toggle);
-  if (!speech) { btn.disabled = true; btn.title = 'Этот браузер не умеет озвучивать текст'; }
+  if (!file && !speech) { btn.disabled = true; btn.title = 'Этот браузер не умеет озвучивать текст'; }
   player.idle();
   box.append(btn, track);
   return box;
@@ -1853,7 +1888,7 @@ function renderEx(t, ex, ei) {
   const bReset = el('button', 'btn ex__btn', 'Заново'); bReset.type = 'button';
   const score = el('span', 'ex__score'); score.setAttribute('aria-live', 'polite');
   foot.append(bCheck, bShow, bReset, score);
-  if (ex.type === 'listen' && !speech) foot.append(el('span', 'listen__note', 'Озвучка недоступна в этом браузере'));
+  if (ex.type === 'listen' && !speech && ex.items.some(it => !AUDIO[it[0]])) foot.append(el('span', 'listen__note', 'Озвучка недоступна в этом браузере'));
   box.append(foot);
 
   const answerOf = (row, k) => ex.type === 'text' ? ex.answers[k] : ex.type === 'gap' ? gapAnswers(row.it)[k] : row.it[1];
