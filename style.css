@@ -690,7 +690,7 @@ button { font: inherit; transition: linear 0.15s; }
 }
 /* Светлая: тот же прожектор в светлых чистых оттенках семейства акцента (сам темный акцент выглядел грязью на
    сером листе): белое ядро, барвинковый конус с небесно-голубым слева и фиолетовым справа; вместо
-   пятна — уменьшенная копия света, поднимающаяся снизу, вдвое слабее; бока не затемнены.
+   пятна — уменьшенная копия света, поднимающаяся снизу, примерно на треть слабее верхнего; бока не затемнены.
    Темное зерно под верхним светом */
 :root[data-theme="light"].page--glow :is(body, .sheet), :root[data-theme="light"].page--glow :is(.side, .float-tools)::before {
   background-image:
@@ -699,10 +699,10 @@ button { font: inherit; transition: linear 0.15s; }
     radial-gradient(46% 62% at 55% -10%, rgb(112 140 255 / 38%), transparent 78%),
     radial-gradient(34% 50% at 32% -10%, rgb(96 204 255 / 30%), transparent 78%),
     radial-gradient(34% 50% at 78% -10%, rgb(160 120 255 / 30%), transparent 78%),
-    radial-gradient(20% 22% at 55% 106%, rgb(255 255 255 / 35%), transparent 80%),
-    radial-gradient(30% 40% at 55% 110%, rgb(112 140 255 / 19%), transparent 78%),
-    radial-gradient(22% 32% at 40% 110%, rgb(96 204 255 / 15%), transparent 78%),
-    radial-gradient(22% 32% at 70% 110%, rgb(160 120 255 / 15%), transparent 78%);
+    radial-gradient(20% 22% at 55% 106%, rgb(255 255 255 / 40%), transparent 80%),
+    radial-gradient(30% 40% at 55% 110%, rgb(112 140 255 / 25%), transparent 78%),
+    radial-gradient(22% 32% at 40% 110%, rgb(96 204 255 / 20%), transparent 78%),
+    radial-gradient(22% 32% at 70% 110%, rgb(160 120 255 / 20%), transparent 78%);
 }
 .sheet__title { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 4.4vw, 40px); line-height: 1.12; letter-spacing: -.02em; margin: 12px 0 0; text-wrap: balance; } /* без нижнего отступа: промежуток задает элемент после заголовка, поэтому отступы никогда не накладываются */
 .sheet__title:first-child { margin-top: 0; } /* страница без хлебных крошек: заголовок начинается от собственного отступа листа */
@@ -752,7 +752,10 @@ button { font: inherit; transition: linear 0.15s; }
   :where(:root:not(.pointer-still)) .contents__row:hover .contents__title { color: var(--accent); }
 }
 .contents__num { grid-row: 1 / span 2; align-self: center; justify-self: center; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px;
-  background: color-mix(in srgb, var(--muted) 4%, transparent); font-family: var(--f-mono); font-size: 13px; color: var(--muted); } /* номер на едва заметной серой плашке, по центру под заголовком и строкой под ним */
+  padding-top: 2px; /* цифры моноширинного шрифта сидят на 1px выше середины строки — опускаем к центру плашки */
+  background: color-mix(in srgb, var(--accent) 9%, transparent); font-family: var(--f-mono); font-size: 13px; color: color-mix(in srgb, var(--accent) 60%, var(--muted)); } /* номер на легкой плашке с оттенком акцента, по центру под заголовком и строкой под ним */
+:root[data-theme="light"] .contents__num { background: color-mix(in srgb, var(--accent) 4%, color-mix(in srgb, var(--muted) 5%, transparent));
+  color: color-mix(in srgb, var(--accent) 30%, var(--muted)); } /* светлая: синий акцент на сером листе слишком яркий — ближе к серому */
 .contents--about { margin-top: 0; } /* промежуток задает заголовок выше */
 .contents__title { min-width: 0; font-size: 17px; font-weight: 600; }
 @media (max-width: 458px) { .contents__title { font-size: 16px; } }
@@ -825,6 +828,7 @@ button { font: inherit; transition: linear 0.15s; }
 .mistakes__start:disabled { opacity: .45; cursor: default; }
 /* чипы и кнопка не помещаются в один ряд: кнопка уходит под чипы на всю ширину (ставит скрипт) */
 .mistakes__tools--stacked .mistakes__start { flex: 1 1 100%; justify-content: center; margin-left: 0; }
+.not-found__go { margin-left: 0; } /* «Страница не найдена»: кнопка под текстом слева, а не у правого края */
 .mistakes__start:disabled .arrow--next { transform: none; }
 .mistakes__level { display: inline-flex; align-items: center; column-gap: 8px; padding: 4px 4px 4px 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 99px;
   background: var(--sheet); color: var(--accent); font-family: var(--f-mono); font-size: 13px; font-weight: 600; cursor: pointer; }

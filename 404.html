@@ -5,6 +5,8 @@
 <!-- корень тренажера: относительные адреса (стили, скрипты, данные, mp3) считаются от него. В копиях страниц, которые
      создает make_pages.py (папка tools рядом с сайтом), здесь путь к этой папке (../) — поэтому копии лежат в подпапках, а файлы общие -->
 <base href="/english-grammar/">
+<script>/* не на сайте (например, с диска): корень — папка этого файла */ if (!location.pathname.startsWith('/english-grammar/')) document.querySelector('base').href = './';</script>
+<meta name="route" content="not-found">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Страница не найдена — Грамматика онлайн</title>
 <meta name="description" content="Тренажер грамматики английского языка A1–C2 по разделам сборника Ю. Голицынского: правила и упражнения с проверкой.">

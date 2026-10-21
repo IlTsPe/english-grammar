@@ -288,6 +288,20 @@ function renderAboutTopic(page, wrap) {
   wrap.append(nav);
 }
 
+/* «Страница не найдена»: неизвестный адрес на сайте (на GitHub Pages его отдает 404.html). Адрес в строке не меняется,
+   чтобы опечатку было видно */
+function renderNotFound(wrap) {
+  wrap.append(crumbs(['Ошибка 404']));
+  wrap.append(el('h1', 'sheet__title', 'Страница не найдена'));
+  wrap.append(el('p', 'sheet__intro', 'По этому адресу ничего нет: возможно, в нем опечатка или страница переехала. Все разделы и темы собраны в содержании тренажера.'));
+  const tools = el('div', 'mistakes__tools');
+  const b = el('button', 'mistakes__start not-found__go'); b.type = 'button';
+  b.innerHTML = `<span>Содержание тренажера</span>${arrowHtml('next')}`;
+  b.addEventListener('click', () => go('contents'));
+  tools.append(b);
+  wrap.append(tools);
+}
+
 function renderMistakesPage(wrap) {
   /* без хлебных крошек: страница открывается из «Прогресса», а не из «Содержания» */
   wrap.append(el('h1', 'sheet__title', 'Работа над ошибками'));

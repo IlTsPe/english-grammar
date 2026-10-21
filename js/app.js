@@ -5,6 +5,7 @@ const PAGES = ['contents', 'mistakes', 'notes', 'about',...ABOUT.map(p => 'about
    …/about/bookmarks, …/notes; файлы по этим путям создает make_pages.py из папки tools рядом с сайтом (копии index.html). Корень — <base href>
    страницы: в каждой копии он указывает на папку тренажера. index.html, открытый с диска (file://), живет на адресах #id */
 const PATH_URLS = location.protocol !== 'file:';
+const NOT_FOUND = 'not-found'; /* неизвестный адрес: своя страница, адрес не меняется (renderNotFound) */
 const ROOT = new URL('./', document.baseURI);
 function pathOf(id) {
   if (topicById[id]) return `${topicById[id].ch.id}/${id}`;
@@ -30,7 +31,7 @@ const plainText = html => html.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').r
 function pageMeta(id) {
   const t = topicById[id], ch = chapById[id], p = aboutPage(id);
   const title = t ? `${t.num} ${t.title}` : ch ? `${ch.n}. ${ch.title}` : p ? p.title
-    : { mistakes: 'Работа над ошибками', notes: 'Мои заметки', about: 'Информация' }[id];
+    : { mistakes: 'Работа над ошибками', notes: 'Мои заметки', about: 'Информация', [NOT_FOUND]: 'Страница не найдена' }[id];
   const description = t ? `${plainText(t.title)} (${plainText(t.sub)}): правило и упражнения с проверкой. Уровень ${t.level}.`
     : ch ? plainText(ch.intro) : p ? `${p.title}: ${p.sub}.`
     : { mistakes: 'Упражнения, в которых были ошибки, — чтобы к ним вернуться.', notes: 'Личные заметки по грамматике.', about: 'Как устроен тренажер: разделы, упражнения, прогресс, данные.' }[id]
@@ -38,7 +39,7 @@ function pageMeta(id) {
   return { title: title ? `${plainText(title)} — ${SITE_TITLE}` : SITE_TITLE, description };
 }
 function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
-  if (!(PAGES.includes(id) || topicById[id] || chapById[id])) id = 'contents';
+  if (!(PAGES.includes(id) || topicById[id] || chapById[id] || id === NOT_FOUND)) id = 'contents';
   route = id;
   stopSpeech();
   viaBookmarks = fromBookmarks;
@@ -59,18 +60,20 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   else if (id === 'notes') renderNotesPage(wrap);
   else if (id === 'about') renderAboutPage(wrap);
   else if (aboutPage(id)) renderAboutTopic(aboutPage(id), wrap);
+  else if (id === NOT_FOUND) renderNotFound(wrap);
   else renderContents(wrap);
   main.append(wrap);
-  document.documentElement.classList.toggle('page--glow', isAbout(id));
+  /* цветной фон-зарево — у «Информации» и «Моих заметок» */
+  document.documentElement.classList.toggle('page--glow', isAbout(id) || id === 'notes');
   /* переход на другую страницу добавляет запись в историю, поэтому работают «Назад» / «Вперед» браузера; первая отрисовка и перерисовки той же страницы только заменяют ее */
   try {
-    const url = new URL(PATH_URLS ? pathOf(id) : '#' + id, PATH_URLS ? ROOT : location.href).href;
+    const url = id === NOT_FOUND ? location.href : new URL(PATH_URLS ? pathOf(id) : '#' + id, PATH_URLS ? ROOT : location.href).href;
     if (booted && location.href !== url) history.pushState(null, '', url); else history.replaceState(null, '', url);
   } catch (e) {}
   const meta = pageMeta(id);
   document.title = meta.title;
   $('meta[name=description]')?.setAttribute('content', meta.description);
-  store.set('gk2-last', id);
+  if (id !== NOT_FOUND) store.set('gk2-last', id);
   renderToc();
   renderOverall();
   setDrawer(false);
@@ -159,7 +162,7 @@ addEventListener('keydown', e => {
 matchMedia('(max-width: 880px)').addEventListener('change', () => setDrawer(false));
 /* «Назад» / «Вперед» (popstate) и hash, набранный в адресной строке (hashchange), открывают эту страницу.
    Старые адреса #id (закладки, ссылки) тоже открывают свою страницу, а адрес меняется на ее путь */
-const urlId = () => location.hash.slice(1) || (PATH_URLS ? idFromPath() : null);
+const urlId = () => location.hash.slice(1) || (PATH_URLS ? (idFromPath() === '' ? NOT_FOUND : idFromPath()) : null);
 const followHash = () => {
   const id = urlId() || 'contents';
   if (id !== route) go(id);
@@ -168,9 +171,10 @@ window.addEventListener('popstate', followHash);
 window.addEventListener('hashchange', followHash);
 let booted = false;
 renderLevels();
-/* страница при открытии: из адреса, у копии с диска — из <meta name="route">; корень открывает последнюю страницу */
+/* страница при открытии: из адреса, у копии с диска — из <meta name="route">; корень открывает последнюю страницу,
+   неизвестный адрес — «Страница не найдена» */
 const startId = urlId() || $('meta[name=route]')?.content || '';
-go(startId && (PAGES.includes(startId) || topicById[startId] || chapById[startId]) ? startId : store.get('gk2-last', 'contents'), false, false);
+go(startId && (PAGES.includes(startId) || topicById[startId] || chapById[startId] || startId === NOT_FOUND) ? startId : store.get('gk2-last', 'contents'), false, false);
 booted = true;
 renderOverall();
 $('#tocToggle').insertAdjacentHTML('beforeend', FOLD_ARROW);
