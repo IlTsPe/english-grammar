@@ -196,7 +196,7 @@ function renderBookmarks() {
 }
 
 /* «Мои заметки»: свободные заметки, не привязанные к темам, — [{ id, text, c: создана, at: последняя правка }], новые первыми;
-   хранятся в gk2-notes, поэтому попадают в резервные копии и ссылки */
+   хранятся в gk2-notes, поэтому попадают в резервную копию */
 const searchIcon = () => `<svg class="search-icon" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4L14 14"/></svg>`;
 const notesIcon = (cls = '') => `<svg class="notes-icon${cls ? ' ' + cls : ''}" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.8 2.7a1.5 1.5 0 0 1 2.1 2.1L5.6 12.1 2.5 13l.9-3.1z"/><path d="M9.6 3.9l2.1 2.1"/></svg>`;
 const noteDate = at => new Date(at).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
@@ -211,7 +211,8 @@ function renderNotes() {
     h.setAttribute('aria-label', `Мои заметки: ${notes.length}`);
   });
 }
-const NOTE_FOLD = 255; /* более длинная заметка на своей странице сворачивается */
+const NOTE_MAX = 255; /* предел длины заметки */
+const NOTE_FOLD = 255; /* более длинная заметка (сохраненная до появления предела или из старой копии) сворачивается */
 const NOTES_PAGE = 7; /* заметок на странице «Моих заметок» */
 const MISTAKES_PAGE = 7; /* тем на странице «Работы над ошибками» */
 /* номера страниц в `nav` (скрыт, если страница одна); `pick(k)` открывает страницу k. Стрелки — только где есть куда идти;

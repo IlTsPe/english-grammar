@@ -116,11 +116,9 @@ addEventListener('keydown', e => {
 });
 matchMedia('(max-width: 880px)').addEventListener('change', () => setDrawer(false));
 /* «Назад» / «Вперед» (popstate) и hash, набранный в адресной строке (hashchange), открывают эту страницу */
-/* ссылка «restore», вставленная в открытую вкладку: вернуть собственный адрес страницы и предложить импорт */
 const followHash = () => {
   const id = location.hash.slice(1);
-  if (id.startsWith(LINK_KEY)) { history.replaceState(null, '', '#' + route); openLink(id); }
-  else if (id && id !== route) go(id);
+  if (id && id !== route) go(id);
 };
 window.addEventListener('popstate', followHash);
 window.addEventListener('hashchange', followHash);
@@ -129,8 +127,6 @@ renderLevels();
 const startId = location.hash.slice(1);
 go(startId && (PAGES.includes(startId) || topicById[startId] || chapById[startId]) ? startId : store.get('gk2-last', 'contents'), false, false);
 booted = true;
-/* открыто по ссылке «restore»: go() уже заменила адрес на собственный адрес страницы */
-if (startId.startsWith(LINK_KEY)) openLink(startId);
 renderOverall();
 $('#tocToggle').insertAdjacentHTML('beforeend', FOLD_ARROW);
 

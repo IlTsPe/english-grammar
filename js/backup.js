@@ -113,119 +113,25 @@ function readBackup(file) {
     reader.readAsText(file);
   });
 }
-/* «Отправить ссылкой»: та же копия, упакованная в сам адрес (#restore=…, deflate + base64url), поэтому файл не нужен.
-   Открытие такой ссылки показывает окно импорта с этим прогрессом; данные сразу убираются из адресной строки. */
-const LINK_KEY = 'restore=';
-async function packLink(text) {
-  const bytes = new Uint8Array(await new Response(new Blob([text]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer());
-  let s = '';
-  bytes.forEach(c => { s += String.fromCharCode(c); });
-  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-async function unpackLink(code) {
-  const bytes = Uint8Array.from(atob(code.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
-  return new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text();
-}
-async function shareLink() {
-  let url;
-  try { url = location.href.split('#')[0] + '#' + LINK_KEY + await packLink(JSON.stringify(backupObject(new Date()))) + '&theme=' + document.documentElement.dataset.theme; }
-  catch (e) { return showFileMsg('bad', 'Этот браузер не умеет создавать ссылку. Сохраните прогресс в файл.'); }
-  showLinkBox(url);
-}
-/* ссылка спрятана за словами «Прогресс по грамматике» (длинный адрес никогда не показывается); «Копировать» кладет ее
-   в буфер обмена ссылкой с этим текстом плюс голый адрес для мест, которые принимают только простой текст */
-const LINK_TEXT = 'Прогресс по грамматике';
-function showLinkBox(url) {
-  /* системное меню «Поделиться»; с локального файла не показываем: Яндекс Браузер на file:// роняет вкладку */
-  const canShare = !!navigator.share && location.protocol !== 'file:';
-  const d = el('dialog', 'modal');
-  d.setAttribute('aria-labelledby', 'linkTitle');
-  d.innerHTML = `<div class="modal__body">
-    <h2 class="modal__title" id="linkTitle">Ссылка на ваш прогресс</h2>
-    <p class="modal__text">Отправьте ссылку куда удобно: мессенджер, почта, заметки. Откройте ее на другом устройстве, чтобы загрузить текущий прогресс.</p>
-    <div class="modal__share-box">
-      <span class="modal__share">${LINK_TEXT}</span>
-      <div class="modal__copied" role="status"><div class="modal__copied-clip"><span class="modal__copied-text"></span></div></div>
-    </div>
-    <div class="modal__foot${canShare ? ' modal__foot--three' : ''}">
-      <button class="btn btn--primary" type="button" data-act="copy">Копировать</button>
-      ${canShare ? '<button class="btn" type="button" data-act="share">Поделиться</button>' : ''}
-      <button class="btn modal__close" type="button" data-act="cancel">Закрыть</button>
-    </div>
-  </div>`;
-  const close = () => { clearTimeout(doneTimer); d.close(); d.remove(); };
-  async function copy() {
-    const html = `<a href="${esc(url)}">${LINK_TEXT}</a>`;
-    try {
-      /* браузер, который не разрешает и не запрещает (нет ответа на запрос разрешения), через секунду получает запасной способ */
-      await Promise.race([
-        navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([url], { type: 'text/plain' }) })]),
-        new Promise((_, fail) => setTimeout(fail, 1000))]);
-      return true;
-    } catch (e) {}
-    /* старые браузеры: команда копирования, а нашу ссылку кладет в буфер событие copy */
-    const put = e => { e.clipboardData.setData('text/html', html); e.clipboardData.setData('text/plain', url); e.preventDefault(); };
-    document.addEventListener('copy', put);
-    try { return document.execCommand('copy'); } catch (e) { return false; } finally { document.removeEventListener('copy', put); }
-  }
-  /* «Ссылка скопирована» выезжает, и карточка на 3 секунды становится зеленой. Пока сообщение еще видно, новый клик только
-     перезапускает 3 секунды — выезд играет, только когда сообщения нет */
-  let doneTimer;
-  function say(text, ok) {
-    const box = $('.modal__copied', d), share = $('.modal__share', d);
-    clearTimeout(doneTimer);
-    $('.modal__copied-text', d).textContent = text;
-    box.classList.toggle('modal__copied--bad', !ok);
-    box.classList.add('modal__copied--show');
-    share.classList.toggle('modal__share--copied', ok);
-    if (ok) doneTimer = setTimeout(() => { box.classList.remove('modal__copied--show'); share.classList.remove('modal__share--copied'); }, 3000);
-  }
-  d.addEventListener('click', async e => {
-    if (e.target === d) return close();
-    const act = e.target.closest('[data-act]')?.dataset.act;
-    if (act === 'cancel') close();
-    else if (act === 'copy') {
-      if (await copy()) say('Ссылка скопирована', true);
-      else say('Не получилось скопировать: браузер не дал доступ к буферу обмена. Разрешите его и попробуйте еще раз.', false);
-    } else if (act === 'share') {
-      /* AbortError — пользователь сам закрыл меню, это не ошибка */
-      try { await navigator.share({ title: LINK_TEXT, url }); }
-      catch (err) { if (err.name !== 'AbortError') say('Не получилось открыть меню «Поделиться». Скопируйте ссылку кнопкой «Копировать».', false); }
-    }
-  });
-  d.addEventListener('cancel', e => { e.preventDefault(); close(); });
-  document.body.append(d);
-  d.showModal();
-  $('[data-act=copy]', d).focus();
-}
-async function openLink(hash) {
-  /* ссылка, вставленная в открытую вкладку: скрипт в head уже отработал, поэтому тема ссылки ставится здесь */
-  const theme = /&theme=(light|dark)/.exec(hash);
-  if (theme && document.documentElement.dataset.theme !== theme[1]) { document.documentElement.dataset.theme = theme[1]; syncThemeBtn(); }
-  let b = null;
-  try { b = JSON.parse(await unpackLink(hash.slice(LINK_KEY.length).split('&')[0])); } catch (e) {}
-  openImport({ backup: isBackup(b) ? b : null });
-}
 /* «Загрузить» сразу открывает это окно: сначала красное предупреждение о перезаписи,
    затем файл — выбранный кнопкой или брошенный на блок — и что в нем. «Перезаписать» выключена, пока
    не выбран подходящий файл; она заменяет все ключи gk2-* ключами из файла и перезагружает страницу. Закрывают Esc, «Отмена» или фон. */
-/* fromLink: {backup}, прочитанная из ссылки «restore» (null, если ссылка битая), — показывается сразу вместо файла */
-function openImport(fromLink) {
+function openImport() {
   let backup = null;
   const d = el('dialog', 'modal');
   d.setAttribute('aria-labelledby', 'modalTitle');
   d.setAttribute('aria-describedby', 'modalWarn');
   d.innerHTML = `<div class="modal__body">
-    <h2 class="modal__title" id="modalTitle">Загрузить прогресс ${fromLink ? 'по ссылке' : 'из файла'}</h2>
+    <h2 class="modal__title" id="modalTitle">Загрузить прогресс из файла</h2>
     <div class="modal__warn" id="modalWarn">
-      <p>При импорте все данные о прогрессе, а также содержимое раздела «Избранное» в этом браузере на текущем устройстве будут <b class="modal__warn-title">перезаписаны</b> данными ${fromLink ? 'из ссылки' : 'из файла'}. Объединить их нельзя — произойдет полная перезапись.</p>
+      <p>При импорте все данные о прогрессе, а также содержимое раздела «Избранное» в этом браузере на текущем устройстве будут <b class="modal__warn-title">перезаписаны</b> данными из файла. Объединить их нельзя — произойдет полная перезапись.</p>
       <p>Заранее убедитесь, что все необходимые данные сохранены.</p>
     </div>
-    ${fromLink ? '<div class="modal__file" aria-live="polite"></div>' : `<div class="modal__drop">
+    <div class="modal__drop">
       <div class="modal__file" aria-live="polite"></div>
       <button class="modal__pick" type="button" data-act="pick">Выбрать файл</button>
       <p class="modal__hint">или перетащите файл .json сюда</p>
-    </div>`}
+    </div>
     <div class="modal__foot">
       <button class="btn modal__ok" type="button" data-act="ok" disabled>Перезаписать</button>
       <button class="btn modal__close" type="button" data-act="cancel">Закрыть</button>
@@ -236,28 +142,28 @@ function openImport(fromLink) {
   const close = () => { clearTimeout(errorTimer); d.close(); d.remove(); };
   const row = (label, value) => `<div class="overall__row"><span>${label}</span><b class="overall__value">${value}</b></div>`;
   /* ошибка исчезает через 15 секунд, как сообщение после сохранения; новая ошибка за это время только
-     заменяет текст и снова начинает 15 секунд. Из ссылки она остается: больше показывать нечего */
+     заменяет текст и снова начинает 15 секунд */
   let errorTimer;
   function showError(html) {
     const box = $('.modal__file', d);
     clearTimeout(errorTimer);
     box.innerHTML = `<p class="modal__error">${html}</p>`;
-    if (!fromLink) errorTimer = setTimeout(() => { if ($('.modal__error', box)) box.innerHTML = ''; }, 15000);
+    errorTimer = setTimeout(() => { if ($('.modal__error', box)) box.innerHTML = ''; }, 15000);
   }
-  /* name: имя файла или null для ссылки */
+  /* name: имя выбранного файла */
   function show(b, name) {
     backup = b;
     const box = $('.modal__file', d);
     clearTimeout(errorTimer);
     $('[data-act=ok]', d).disabled = !backup;
-    if (!fromLink) $('[data-act=pick]', d).textContent = 'Выбрать другой файл';
+    $('[data-act=pick]', d).textContent = 'Выбрать другой файл';
     if (!backup) {
-      showError(name === null ? 'Ссылка повреждена или скопирована не полностью.' : `${esc(name)} — это не файл прогресса «Грамматика онлайн».`);
+      showError(`${esc(name)} — это не файл прогресса «Грамматика онлайн».`);
       return;
     }
     const when = backup.saved && !isNaN(new Date(backup.saved)) ? new Date(backup.saved).toLocaleString('ru-RU', { dateStyle: 'long', timeStyle: 'short' }) : '';
     const sum = backupSummary(backup.data);
-    box.innerHTML = `<p class="modal__name"><b>${name === null ? 'Прогресс из ссылки' : esc(name)}</b>${when ? `<span>сохранен ${esc(when)}</span>` : ''}</p>
+    box.innerHTML = `<p class="modal__name"><b>${esc(name)}</b>${when ? `<span>сохранен ${esc(when)}</span>` : ''}</p>
       <div class="modal__stats">${row('Правил изучено', `${sum.studied} из ${TOPICS.length}`)}${row('Выполнено упражнений', `${sum.ex} из ${EX_TOTAL}`)}${sum.ex ? row('Без ошибок', sum.perfect) : ''}${sum.wrong ? row('С ошибками', sum.wrong) : ''}${row('«Избранное»', sum.bm)}${row('Заметки', sum.notes)}</div>`;
   }
   async function choose(file) { if (file) show(await readBackup(file), file.name); }
@@ -277,21 +183,17 @@ function openImport(fromLink) {
     }
   });
   d.addEventListener('cancel', e => { e.preventDefault(); close(); });
-  /* ссылка приносит свои данные: выбора и перетаскивания файла там нет — у файлов свое окно («Загрузить») */
   const drop = $('.modal__drop', d);
-  if (drop) {
-    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('modal__drop--over'); });
-    drop.addEventListener('dragleave', e => { if (!drop.contains(e.relatedTarget)) drop.classList.remove('modal__drop--over'); });
-    drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('modal__drop--over'); choose(e.dataTransfer.files[0]); });
-  }
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('modal__drop--over'); });
+  drop.addEventListener('dragleave', e => { if (!drop.contains(e.relatedTarget)) drop.classList.remove('modal__drop--over'); });
+  drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('modal__drop--over'); choose(e.dataTransfer.files[0]); });
   document.body.append(d);
   d.showModal();
-  if (fromLink) show(fromLink.backup, null);
-  $(fromLink ? (fromLink.backup ? '[data-act=ok]' : '[data-act=cancel]') : '[data-act=pick]', d).focus();
+  $('[data-act=pick]', d).focus();
 }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-file]');
   if (!b) return;
   const act = b.dataset.file;
-  if (act === 'export') saveClicked(); else if (act === 'link') shareLink(); else openImport();
+  if (act === 'export') saveClicked(); else openImport();
 });

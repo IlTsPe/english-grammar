@@ -20,7 +20,7 @@
   --hl: rgb(37 71 208 / 45%); /* подсветка под ключевыми словами в правилах */
   --ok: #0a7a24; /* достаточно темный, чтобы читаться на светлом листе (4.9:1) */
   --ok-soft: #DDF2E1;
-  --ok-ink: #05601A; /* мелкий зеленый текст (сообщения о сохранении / копировании): --ok дает 4.4:1 на бумаге и 3.8:1 на зеленой карточке, этот — от 5.2:1 */
+  --ok-ink: #05601A; /* мелкий зеленый текст (сообщения о сохранении): --ok дает 4.4:1 на бумаге, этот — от 5.2:1 */
   --bad: #BE3A2F;
   --bad-soft: #F3DFDA;
   --bad-ink: #A3001A; /* мелкий красный текст (предупреждения под кнопками): --bad дает 4.35:1 на бумаге, этот — 6.5:1 */
@@ -366,9 +366,11 @@ button { font: inherit; transition: linear 0.15s; }
 .overall__book { display: grid; row-gap: 6px; margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--border); }
 .overall__note { margin: 0; font-size: 11px; line-height: 1.4; color: var(--muted); }
 /* «Резервная копия»: прогресс сохраняется в JSON-файл и загружается обратно, например на другом устройстве или после очистки браузера */
+/* у кнопок отступ сверху на 2px меньше, чем снизу: при равных отступах строчные буквы стоят ниже середины рамки
+   (шрифт оставляет место под хвосты букв внизу строки); со сдвигом строчные по центру, а заглавные ниже середины всего на 0,5px */
 .overall__file { display: grid; row-gap: 6px; margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--border); }
 .overall__file-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.overall__file-btn { padding: 6px 8px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
+.overall__file-btn { padding: 5px 8px 7px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
   background: none; color: var(--accent); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: border-color .15s, background-color .15s; }
 .overall__file-btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
 @media (hover: hover) {
@@ -376,7 +378,6 @@ button { font: inherit; transition: linear 0.15s; }
 }
 .overall__file-btn:disabled { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: none; opacity: .4; cursor: default; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .overall__file-btn:disabled:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: none; opacity: .4; cursor: default; } }
-.overall__file-btn--wide { grid-column: 1 / -1; }
 .overall__note--ok { color: var(--ok-ink); }
 /* свернутая подсказка: ее последние слова угасают в «Показать еще»; они остаются на одной строке, чтобы угасание не разрывалось */
 .overall__fade-row { white-space: nowrap; }
@@ -413,26 +414,6 @@ button { font: inherit; transition: linear 0.15s; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .modal__pick:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .modal__hint { margin: 0; font-size: 12px; color: var(--muted); }
 @media (max-width: 1023px) { .modal__hint { display: none; } } /* планшеты и телефоны: перетаскивать файл там обычно неоткуда */
-.modal__text { margin: 0; font-size: 13px; line-height: 1.45; }
-/* ссылка для отправки: карточка со словами «Прогресс по грамматике», сам адрес скрыт;
-   не кликабельна — открыть ее здесь значило бы загрузить тот же прогресс в тот же браузер */
-.modal__share { display: flex; align-items: center; column-gap: 8px; padding: 9px 12px 11px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
-  background: var(--well); color: var(--accent); font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere;
-  position: relative; z-index: 1; -webkit-user-select: none; user-select: none; transition: color .3s, border-color .3s, background-color .3s; }
-/* скопировано: карточка на 3 секунды становится зеленой цвета темы */
-.modal__share--copied { border-color: var(--ok-ink); background: color-mix(in srgb, var(--ok) 12%, var(--well)); color: var(--ok-ink); }
-/* подчеркивание утяжеляет текст снизу: на 1px меньше сверху — и текст с подчеркиванием по центру, значок возвращается через margin-top */
-.modal__share::before { content: ''; flex: none; width: 18px; height: 18px; margin-top: 2px; background: currentColor;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1'/%3E%3Cpath d='M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1'/%3E%3C/svg%3E") center / contain no-repeat; }
-/* «Ссылка скопирована» выезжает из-под карточки: карточка и строка в одном блоке без промежутка, строка раскрывается (0fr → 1fr),
-   а текст опускается из-за нижнего края карточки и встает в 5px под ней */
-.modal__share-box { display: grid; }
-.modal__copied { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease-out; }
-.modal__copied--show { grid-template-rows: 1fr; }
-.modal__copied-clip { min-height: 0; overflow: hidden; }
-.modal__copied-text { display: block; padding-top: 5px; font-size: 12px; font-weight: 600; color: var(--ok-ink); transform: translateY(-100%); transition: transform .25s ease-out; }
-.modal__copied--show .modal__copied-text { transform: none; }
-.modal__copied--bad .modal__copied-text { color: var(--bad-ink); }
 /* «Закрыть» в окнах краснеет при наведении */
 .modal__close { transition: border-color .15s, background-color .15s, color .15s; }
 .modal__close:is(:focus-visible) { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
@@ -908,10 +889,13 @@ button { font: inherit; transition: linear 0.15s; }
 .notes-list__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-height: 41.5px; padding: 5px 7.5px 6.5px 15.5px; border-top: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent); font-size: 12.5px; color: var(--muted); }
 .notes-list__date { margin-right: auto; }
 .notes-list__ask { margin-right: auto; color: var(--bad-ink); font-weight: 600; }
+.notes-list__count { font-variant-numeric: tabular-nums; } /* счетчик символов в редактируемой заметке */
+.notes-list__count--over { color: var(--bad-ink); font-weight: 600; }
 .notes-list__btn { padding: 4px 10px; border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px; background: none; color: var(--accent); font-size: 12.5px; font-weight: 600; cursor: pointer; }
 .notes-list__btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .notes-list__btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
 /* «Удалить»: красный текст без рамки; рамка и заливка появляются при наведении */
+.notes-list__btn:disabled { opacity: .5; cursor: default; } /* «Сохранить», пока заметка длиннее предела */
 .notes-list__btn--del { border-color: transparent; color: var(--bad-ink); }
 /* красный темной темы яркий: в покое смешан с приглушенным серым, при наведении — полный */
 :root[data-theme="dark"] .notes-list__btn--del:not(:where(:root:not(.pointer-still)) :hover, :focus-visible) { color: color-mix(in srgb, var(--bad) 85%, var(--muted)); }
@@ -1225,10 +1209,6 @@ button { font: inherit; transition: linear 0.15s; }
 }
 @media (max-width: 560px) {
   .modal__foot .btn { flex: 1 1 0; }
-  /* три кнопки в ряд не помещаются: «Копировать» и «Поделиться» парой, «Закрыть» строкой ниже на всю ширину */
-  .modal__foot--three { flex-wrap: wrap; row-gap: 8px; }
-  .modal__foot--three .btn { flex-basis: calc(50% - 4px); }
-  .modal__foot--three .modal__close { flex-basis: 100%; }
   .sheet__title { font-size: 26px; }
   .sheet__lead { font-size: 17px; }
   .examples__item { grid-template-columns: minmax(0, 1fr); gap: 0; }

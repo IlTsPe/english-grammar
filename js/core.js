@@ -130,7 +130,6 @@ function overallBox() {
       <div class="overall__file-btns">
         <button class="overall__file-btn" type="button" data-file="export" title="Сохранить прогресс в файл"${saveLocked() ? ' disabled' : ''}>Сохранить</button>
         <button class="overall__file-btn" type="button" data-file="import" title="Загрузить прогресс из файла">Загрузить</button>
-        <button class="overall__file-btn overall__file-btn--wide" type="button" data-file="link" title="Получить ссылку с прогрессом, чтобы отправить ее куда удобно">Отправить ссылкой</button>
       </div>
       <p class="overall__note${fileMsg ? ' overall__note--' + fileMsg[0] : ''}" role="status">${fileMsg ? esc(fileMsg[1]) : foldNote('backup')}</p>
     </div>`;
@@ -142,8 +141,8 @@ function overallBox() {
    (перерисовки сохраняют, перезагрузка начинает свернутым). Каждая заметка: [видимый текст, угасающие слова, остальное] */
 const FOLD_NOTES = {
   book: ['', 'Учитываются изученные', ' правила и верные ответы в упражнениях. 100% — все изучено и решено без ошибок.'],
-  backup: ['Прогресс хранится только в этом браузере. ', 'Сохраните его в файл',
-    ' по кнопке «Сохранить» или отправьте ссылкой — «Отправить ссылкой», чтобы перенести прогресс в другой браузер/устройство.'],
+  backup: ['Прогресс хранится только в этом браузере. ', 'Чтобы перенести прогресс',
+    ' в другой браузер или на другое устройство, сохраните данные в файл — для этого нажмите кнопку «Сохранить». На новом устройстве нажмите «Загрузить» и выберите сохраненный файл.'],
 };
 const notesOpen = {};
 function foldNote(key) {
