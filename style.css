@@ -1065,20 +1065,31 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__score { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
 .ex__score--good { color: var(--ok); }
 .ex__score--low { color: var(--bad); }
-/* «Фразы на слух»: кнопка воспроизведения в строке, текст под ней — по кнопке «Показать текст» */
-.listen__item::before { align-self: center; padding-top: 0; }
-.listen__item--on::before { color: var(--accent); font-weight: 700; }
-.listen__play { grid-column: 2; justify-self: start; display: inline-flex; align-items: center; column-gap: 8px; }
-.listen__play[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
-.listen__all { display: inline-flex; align-items: center; column-gap: 8px; }
-.listen__all[aria-pressed="true"] { opacity: 1; }
-.listen__icon { width: 1em; font-size: 11px; text-align: center; }
-.listen__text { grid-column: 2; padding-top: 2px; }
-.listen__en { line-height: 1.6; }
-.listen__ru { margin-top: 2px; font-size: 15px; color: var(--muted); }
+/* «На слух»: плеер (кнопка и полоса прогресса), под ним строка ответа и набор слов */
+.ex--listen .ex__item::before { padding-top: 9px; }
+.listen__player { grid-column: 2; display: flex; align-items: center; column-gap: 10px; min-width: 0; }
+.listen__play { flex: none; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: 50%; background: var(--sheet); color: var(--accent); cursor: pointer; transition: background-color .15s linear, border-color .15s linear, color .15s linear; }
+.listen__play svg { width: 16px; height: 16px; }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .listen__play:hover { border-color: var(--accent); background: var(--accent-soft); } }
+.listen__player--on .listen__play, .listen__player--on .listen__play:hover { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.listen__play:disabled { opacity: .4; cursor: default; }
+.listen__track { flex: 1 1 auto; max-width: 260px; min-width: 60px; }
+/* полоса обновляется каждый кадр, поэтому без перехода; scaleX вместо ширины — без пересчета раскладки */
+.listen__fill { display: block; height: 100%; background: var(--accent); transform: scaleX(var(--p, 0)); transform-origin: left; }
+.listen__line { grid-column: 2; display: flex; align-items: center; min-height: 44px; padding-block: 6px; border-bottom: 1.5px dashed color-mix(in srgb, var(--accent) 45%, transparent); }
+.listen__picked { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; } /* отметка ✓/✗ остается справа от слов, а не уходит на новую строку */
+.listen__line--empty .listen__picked::before { content: 'Нажимайте на слова по порядку'; font-size: 14px; color: var(--muted); opacity: .7; }
+.listen__line--ok { border-bottom: 1.5px solid var(--ok); }
+.listen__line--bad { border-bottom: 1.5px solid var(--bad); }
+.listen__line--miss { border-bottom-color: var(--bad); }
+.listen__bank { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; padding-top: 4px; }
+.listen__word--used { opacity: .3; pointer-events: none; }
+.listen__ru { display: block; margin-top: 2px; font-family: var(--f-body); font-style: normal; font-size: 15px; font-weight: 400; color: var(--muted); }
 .listen__note { font-size: 13px; color: var(--muted); }
 .ex__redo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 10px;
   background: color-mix(in srgb, var(--accent) 4%, transparent); transition: border-color .3s, background-color .3s; }
+.ex__redo[hidden] { display: none; }
 .ex__redo--done { border-style: solid; border-color: color-mix(in srgb, var(--ok) 55%, transparent); background: color-mix(in srgb, var(--ok) 8%, transparent); }
 .ex__redo-status { flex-basis: 100%; margin: 0; color: var(--ok); font-size: 14px; font-weight: 600; }
 .ex__redo-link { display: inline-flex; align-items: center; column-gap: 6px; padding: 6px 12px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
@@ -1126,19 +1137,10 @@ button { font: inherit; transition: linear 0.15s; }
 .pager-level__link--prev { grid-column: 1; }
 .pager-level__link--next { grid-column: 2; }
 
-/* кнопка «Наверх»: появляется, когда прокручено 30% страницы. Пока ВЫКЛЮЧЕНА (бэклог: она закрывает навигацию по страницам)
-.to-top { position: fixed; z-index: 6; right: 24px; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); display: grid; place-items: center; width: 54px; height: 54px; padding: 0;
-  border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 12px; background: var(--sheet); color: var(--accent); cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, .14); opacity: 0; visibility: hidden; transform: translateY(8px);
-  transition: opacity .15s linear, transform .15s linear, visibility .15s linear, background-color .15s linear, border-color .15s linear; }
-.to-top--visible { opacity: 1; visibility: visible; transform: none; }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .to-top:hover { border-color: var(--accent); background: var(--accent-soft); } } */
-
 @media (max-width: 880px) {
   .side__hide, .float-tools { display: none; }
   /* шапка начинается от края окна: в отступе body 8px над ней была видна страница (и прожектор «Информации») */
   body { margin-top: 0; }
-  /* .to-top { right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); } — кнопка «Наверх» выключена, см. выше */
   .app { grid-template-columns: minmax(0, 1fr); gap: 0; padding-inline: 0; }
 
   /* шапка: название и кнопки Меню / Содержание / Заметки / Инфо / Тема; остается на экране при прокрутке */
@@ -1223,6 +1225,10 @@ button { font: inherit; transition: linear 0.15s; }
 }
 @media (max-width: 560px) {
   .modal__foot .btn { flex: 1 1 0; }
+  /* три кнопки в ряд не помещаются: «Копировать» и «Поделиться» парой, «Закрыть» строкой ниже на всю ширину */
+  .modal__foot--three { flex-wrap: wrap; row-gap: 8px; }
+  .modal__foot--three .btn { flex-basis: calc(50% - 4px); }
+  .modal__foot--three .modal__close { flex-basis: 100%; }
   .sheet__title { font-size: 26px; }
   .sheet__lead { font-size: 17px; }
   .examples__item { grid-template-columns: minmax(0, 1fr); gap: 0; }

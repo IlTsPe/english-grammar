@@ -5,8 +5,10 @@
 <title>Грамматика онлайн</title>
 <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
-<link rel="manifest" href="manifest.webmanifest">
 <script>
+/* манифест (установка на домашний экран) подключается только по http/https: с диска (file://) браузер не дает его прочитать
+   и пишет в консоль ошибку CORS */
+if (location.protocol !== 'file:') document.head.insertAdjacentHTML('beforeend', '<link rel="manifest" href="manifest.webmanifest">');
 /* тема: сохраненный выбор, по умолчанию темная; ставится до первой отрисовки. Ссылка «restore» несет тему, в которой ее скопировали
    (…&theme=light): страница открывается в ней без сохранения — после импорта прогресс приносит свою тему */
 (function () {
@@ -88,11 +90,6 @@
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
   <main class="sheet app__sheet" id="main"></main>
-  <!-- кнопка «Наверх» пока выключена (бэклог)
-  <button class="to-top" id="toTop" type="button" title="Наверх" aria-label="Прокрутить наверх" tabindex="-1">
-    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
-  -->
 </div>
 
 <script>
@@ -207,8 +204,18 @@ function units(ex) {
   if (ex.type === 'gap') return ex.items.reduce((n, it) => n + gapAnswers(it).length, 0);
   return ex.items.length;
 }
-/* номер упражнения на экране: фразы на слух (t.listen) стоят среди упражнений, но в t.ex и прогрессе их нет */
-const exNo = (t, ei) => ei + 1 + (t.listen && ei + 1 >= t.listen.n ? 1 : 0);
+/* порядок упражнений на экране: индексы t.ex (по ним хранится прогресс) без поля at идут по порядку, упражнение с at
+   встает на это место (номер на экране); новые упражнения дописываются в конец массива, и прогресс старых не сдвигается */
+const exOrders = new Map();
+function exOrder(t) {
+  if (!exOrders.has(t)) {
+    const order = t.ex.map((ex, i) => i).filter(i => !t.ex[i].at);
+    t.ex.map((ex, i) => i).filter(i => t.ex[i].at).sort((a, b) => t.ex[a].at - t.ex[b].at).forEach(i => order.splice(t.ex[i].at - 1, 0, i));
+    exOrders.set(t, order);
+  }
+  return exOrders.get(t);
+}
+const exNo = (t, ei) => exOrder(t).indexOf(ei) + 1;
 
 let progress = store.get('gk2-progress', {});
 let studied = store.get('gk2-studied', {});
@@ -318,14 +325,14 @@ function renderOverall() {
 }
 
 /* порядок «Работы над ошибками»: по уровню A1 → C2, внутри уровня по номеру темы, затем по упражнению */
-const mistakeOrder = (t, i = 0) => Object.keys(LEVELS).indexOf(t.level) * 1e6 + TOPICS.indexOf(t) * 1000 + i;
+const mistakeOrder = (t, i) => Object.keys(LEVELS).indexOf(t.level) * 1e6 + TOPICS.indexOf(t) * 1000 + (i == null ? 0 : exNo(t, i));
 
 /* упражнения, у которых последняя проверка ниже полного счета (ошибки или пустые ответы), в порядке mistakeOrder;
    «Заново» сбрасывает проверку, поэтому упражнение уходит из списка, пока его не проверят снова */
 function mistakes() {
   const out = [];
   TOPICS.forEach(t => {
-    const exs = t.ex.map((ex, i) => [i, progress[t.id] && progress[t.id][i]]).filter(([, r]) => r && r[0] < r[1]);
+    const exs = exOrder(t).map(i => [i, progress[t.id] && progress[t.id][i]]).filter(([, r]) => r && r[0] < r[1]);
     if (exs.length) out.push({ t, exs });
   });
   return out.sort((a, b) => mistakeOrder(a.t) - mistakeOrder(b.t));
@@ -355,7 +362,7 @@ let mistakeFocus = null, pendingFocus = null;
 function openExercise(topicId, ei) {
   pendingFocus = { t: topicId, ei };
   go(topicId);
-  const box = document.querySelectorAll('#main .ex:not(.ex--listen)')[ei];
+  const box = $(`#main .ex[data-ei="${ei}"]`);
   if (!box) return;
   /* прыжок, а не плавная прокрутка: новая страница все равно открывается, а мигание показывает, куда смотреть */
   box.scrollIntoView({ block: 'start' });
@@ -744,6 +751,8 @@ async function shareLink() {
    в буфер обмена ссылкой с этим текстом плюс голый адрес для мест, которые принимают только простой текст */
 const LINK_TEXT = 'Прогресс по грамматике';
 function showLinkBox(url) {
+  /* системное меню «Поделиться»; с локального файла не показываем: Яндекс Браузер на file:// роняет вкладку */
+  const canShare = !!navigator.share && location.protocol !== 'file:';
   const d = el('dialog', 'modal');
   d.setAttribute('aria-labelledby', 'linkTitle');
   d.innerHTML = `<div class="modal__body">
@@ -753,8 +762,9 @@ function showLinkBox(url) {
       <span class="modal__share">${LINK_TEXT}</span>
       <div class="modal__copied" role="status"><div class="modal__copied-clip"><span class="modal__copied-text"></span></div></div>
     </div>
-    <div class="modal__foot">
+    <div class="modal__foot${canShare ? ' modal__foot--three' : ''}">
       <button class="btn btn--primary" type="button" data-act="copy">Копировать</button>
+      ${canShare ? '<button class="btn" type="button" data-act="share">Поделиться</button>' : ''}
       <button class="btn modal__close" type="button" data-act="cancel">Закрыть</button>
     </div>
   </div>`;
@@ -792,6 +802,10 @@ function showLinkBox(url) {
     else if (act === 'copy') {
       if (await copy()) say('Ссылка скопирована', true);
       else say('Не получилось скопировать: браузер не дал доступ к буферу обмена. Разрешите его и попробуйте еще раз.', false);
+    } else if (act === 'share') {
+      /* AbortError — пользователь сам закрыл меню, это не ошибка */
+      try { await navigator.share({ title: LINK_TEXT, url }); }
+      catch (err) { if (err.name !== 'AbortError') say('Не получилось открыть меню «Поделиться». Скопируйте ссылку кнопкой «Копировать».', false); }
     }
   });
   d.addEventListener('cancel', e => { e.preventDefault(); close(); });
@@ -1013,12 +1027,13 @@ const ABOUT = [
       <h3>Разделы</h3>
       <p>Первые ${CHAPTERS.length - 2} разделов выстроены в той же последовательности, что и в сборнике Ю. Б. Голицынского. В ${tests.n}-м разделе «${esc(tests.title)}» собраны задания, охватывающие сразу несколько тем. ${extra.n}-й раздел «${esc(extra.title)}» включает грамматические конструкции уровней B2–C2, которые в оригинальном сборнике отсутствуют.</p>
       <h3>Упражнения</h3>
-      <p>В тренажере представлены четыре типа упражнений:</p>
+      <p>В тренажере представлены пять типов упражнений:</p>
       <ul>
         <li>«Впишите пропущенное» (${nEx(byType('gap'))}) — нужно ввести с клавиатуры нужное слово или грамматическую форму.</li>
         <li>«Выберите вариант» (${nEx(byType('choice'))}) — требуется выбрать один правильный ответ из нескольких предложенных.</li>
         <li>«Текст с пропусками» (${nEx(byType('text'))}) — дается связный текст, в котором нужно заполнить несколько пропусков.</li>
         <li>«Перевод» (${nEx(byType('translate'))}) — необходимо полностью перевести предложение на английский язык.</li>
+        <li>«На слух» (${nEx(byType('listen'))}) — нужно прослушать предложение и собрать его из слов в правильном порядке.</li>
       </ul>
       <p>Распределение тем по уровням сложности представлено на странице «Уровни сложности».</p>`;
   } },
@@ -1072,7 +1087,7 @@ const ABOUT = [
       <ul>
         <li><b>Сохранить</b> — скачивает файл с прогрессом в папку загрузок.</li>
         <li><b>Загрузить</b> — восстанавливает прогресс из сохраненного файла. Перед загрузкой показывается сводка по файлу. Текущий прогресс при этом полностью перезаписывается, а не объединяется с загруженным.</li>
-        <li><b>Отправить ссылкой</b> — создается ссылка с прогрессом. Отправьте ее себе любым способом и откройте на другом устройстве: тренажер предложит загрузить прогресс. Ссылка довольно длинная, если мессенджер ее обрежет, лучше воспользуйтесь сохранением файла.</li>
+        <li><b>Отправить ссылкой</b> — создается ссылка с прогрессом. Отправьте ее себе любым способом и откройте на другом устройстве: тренажер предложит загрузить прогресс. В окне со ссылкой размещена кнопка «Копировать». Там, где это поддерживается браузером, дополнительно доступна кнопка «Поделиться» — она вызывает системное меню для отправки ссылки.</li>
       </ul>` },
   { id: 'sections', title: 'Разделы и темы', sub: 'Как устроены страницы разделов и тем', body: () => `
       <p>Тренажер разбит по разделам, а каждый раздел в свою очередь по темам. Внутри темы сначала приводится правило с примерами, а затем упражнения для закрепления этого правила.</p>
@@ -1093,7 +1108,7 @@ const ABOUT = [
       <p>В блоке меню «Уровни сложности» выберите «Все» или конкретный уровень. После этого в списке разделов, а также при поиске останутся темы выбранного уровня. Процент прохождения раздела будет рассчитываться только по нему.</p>` },
   { id: 'exercises', title: 'Упражнения и проверка', sub: 'Как проверяются ответы', body: () => `
       <h3>Проверка</h3>
-      <p>Кнопка «Проверить» активируется, как только вы введете хотя бы один ответ. Неверные ответы выделяются красным цветом, а также незаполненные поля.</p>
+      <p>Кнопка «Проверить» активируется, как только вы введете хотя бы один ответ. После проверки она блокируется, пока вы не измените хотя бы один ответ. Неверные ответы выделяются красным цветом, а также незаполненные поля.</p>
       <ul>
         <li>Регистр букв и знаки препинания не учитываются.</li>
         <li>Сокращения засчитываются наравне с полными формами: <i>I'm</i> и <i>I am</i>, <i>don't</i> и <i>do not</i>, <i>it's</i> и <i>it is</i>.</li>
@@ -1531,12 +1546,8 @@ function renderTopic(t, wrap) {
   });
   bmSync(); study.append(bb);
   wrap.append(study);
-  wrap.append(el('div', 'sheet__section', `Упражнения · ${t.ex.length + (t.listen ? 1 : 0)}`));
-  t.ex.forEach((ex, ei) => {
-    if (t.listen && t.listen.n === ei + 1) wrap.append(renderListen(t));
-    wrap.append(renderEx(t, ex, ei));
-  });
-  if (t.listen && t.listen.n > t.ex.length) wrap.append(renderListen(t));
+  wrap.append(el('div', 'sheet__section', `Упражнения · ${t.ex.length}`));
+  exOrder(t).forEach(ei => wrap.append(renderEx(t, t.ex[ei], ei)));
   wrap.append(pager(TOPICS.indexOf(t), TOPICS, x => x.id, x => `${x.num} ${x.title}`, 'тема'));
 }
 
@@ -1595,6 +1606,7 @@ function levelPager(idx, arr, idOf, titleOf) {
 /* ---------- Упражнения ---------- */
 const FIELD_MARKS = ['ex__field--ok', 'ex__field--bad', 'ex__field--miss'];
 const OPT_MARKS = ['ex__opt--ok', 'ex__opt--bad'];
+const LINE_MARKS = ['listen__line--ok', 'listen__line--bad', 'listen__line--miss'];
 
 function makeGap(answers, id, label) {
   const inp = el('input', 'ex__field ex__gap');
@@ -1618,77 +1630,115 @@ function fillGaps(container, text, answers, idBase, label) {
   return inputs;
 }
 
-/* «Фразы на слух»: озвучка браузером (Web Speech API), текст — только по кнопке; в прогрессе не учитывается */
+/* «На слух»: озвучка браузером (Web Speech API), британский голос, если он есть. Каждое предложение — свой плеер:
+   кнопка и полоса прогресса */
 const speech = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
-let speaking = null; /* кнопка, чья фраза (или «Прослушать все») сейчас звучит */
+const SPEECH_RATE = 1; /* обычная скорость голоса */
+let speaking = null; /* плеер, который сейчас звучит */
+const spokenSec = new Map(); /* текст → длительность, измеренная при прослушивании */
+/* из нескольких измерений берется наименьшее: событие конца речи браузер присылает с задержкой, и у некоторых голосов
+   она растет от раза к разу — если запоминать последнее измерение, полоса с каждым прослушиванием ехала бы медленнее */
+const rememberSec = (text, sec) => spokenSec.set(text, Math.min(spokenSec.get(text) ?? Infinity, sec));
 function enVoice() {
   const vs = speechSynthesis.getVoices();
-  return vs.find(v => /^en[-_]GB/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
+  return vs.find(v => /^en[-_]GB/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
 }
 function stopSpeech() {
   if (!speech) return;
-  const b = speaking; speaking = null;
+  const p = speaking; speaking = null;
   speechSynthesis.cancel();
-  if (b) b.setPlaying(false);
+  if (p) p.idle();
 }
-function speak(texts, btn, onPhrase) {
-  stopSpeech();
-  speaking = btn; btn.setPlaying(true);
-  const voice = enVoice();
-  texts.forEach((text, k) => {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = voice ? voice.lang : 'en-GB'; if (voice) u.voice = voice; u.rate = .9;
-    if (onPhrase) u.onstart = () => { if (speaking === btn) onPhrase(k); };
-    if (k === texts.length - 1) u.onend = u.onerror = () => { if (speaking !== btn) return; speaking = null; btn.setPlaying(false); if (onPhrase) onPhrase(-1); };
-    speechSynthesis.speak(u);
-  });
-}
-function renderListen(t) {
-  const L = t.listen;
-  const box = el('section', 'ex ex--listen');
-  box.innerHTML = `<div class="ex__head"><span class="ex__num">Упражнение ${L.n}</span><p class="ex__task">${L.task}</p></div>`;
-  const ol = el('ol', 'ex__items');
-  /* кнопка воспроизведения: подпись и значок меняются на «Стоп», пока звучит */
-  const playBtn = (label, cls) => {
-    const b = el('button', cls); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
-    b.setPlaying = on => {
-      b.setAttribute('aria-pressed', String(on));
-      b.innerHTML = `<span class="listen__icon" aria-hidden="true">${on ? '■' : '▶'}</span>${on ? 'Остановить' : label}`;
-    };
-    b.setPlaying(false);
-    if (!speech) { b.disabled = true; b.title = 'Этот браузер не умеет озвучивать текст'; }
-    return b;
+/* буквы фразы: звучат только они, пробелы и знаки препинания времени почти не занимают */
+const letters = s => (s.match(/[a-z0-9']/gi) || []).length;
+/* длительность оценивается по буквам — около 0,07 с на букву при обычной скорости (так говорят голоса Windows и Android) */
+/* измерение по событию конца речи включает задержку браузера, поэтому длиннее оценки оно не берется: полосе лучше
+   дойти до конца чуть раньше звука, чем отставать от него */
+const speechSec = text => Math.min(.2 + letters(text) * .07 / SPEECH_RATE, spokenSec.get(text) ?? Infinity);
+const PLAY_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6c0 .5.5.8.9.5l7.2-4.8a.6.6 0 0 0 0-1L5.9 2.7c-.4-.3-.9 0-.9.5Z" fill="currentColor"/></svg>';
+const STOP_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="4" width="8" height="8" rx="1.5" fill="currentColor"/></svg>';
+function makePlayer(text, label) {
+  const box = el('div', 'listen__player');
+  const btn = el('button', 'listen__play'); btn.type = 'button';
+  const track = el('span', 'bar listen__track'); track.setAttribute('aria-hidden', 'true');
+  const fill = el('i', 'listen__fill'); track.append(fill);
+  /* полоса едет непрерывно: каждый кадр со скоростью, при которой она подойдет к концу как раз к ожидаемому концу звука.
+     dur — ожидаемая длительность (измеренная раньше или оценка); события «началось слово» уточняют ее, поэтому полоса
+     может ускориться или замедлиться, но не встает и не прыгает. Событие конца речи браузер присылает с задержкой
+     после того, как звук стих, поэтому полоса его не ждет: к концу звука она уже полная. heard — когда, по последнему
+     слову, звук кончился; это время запоминается как длительность фразы для следующего прослушивания */
+  /* utter — текущий запуск: события запусков, которые уже остановлены или закончились, ни на что не влияют */
+  let frame = 0, hold = null, t0 = 0, last = 0, share = 0, dur = 0, heard = 0, ended = false, utter = null;
+  const paint = () => fill.style.setProperty('--p', share);
+  const step = now => {
+    const dt = (now - last) / 1000, sec = (now - t0) / 1000; last = now;
+    /* звук по последнему слову уже кончился — плеер завершается, не дожидаясь запоздалого события конца
+       (speaking = null, чтобы оно потом ничего не делало) */
+    if (!ended && heard && sec > heard + .15) { if (speaking === player) speaking = null; ended = true; utter = null; rememberSec(text, heard); }
+    if (ended) share += (1 - share) * Math.min(1, dt * 12);
+    else share += (1 - share) * Math.min(1, dt / Math.max(.05, dur - sec));
+    if (ended && share > .995) {
+      share = 1; paint(); frame = 0;
+      /* полная полоса держится мгновение, затем плеер возвращается в покой */
+      hold = setTimeout(player.idle, 300);
+      return;
+    }
+    paint();
+    frame = requestAnimationFrame(step);
   };
-  const items = L.items.map(([en, ru], ii) => {
-    const li = el('li', 'ex__item listen__item');
-    const play = playBtn('Прослушать', 'btn ex__btn listen__play');
-    play.setAttribute('aria-label', `Прослушать фразу ${ii + 1}`);
-    play.addEventListener('click', () => { if (speaking === play) stopSpeech(); else speak([en], play); });
-    const text = el('div', 'listen__text'); text.hidden = true;
-    text.append(el('div', 'ex__q listen__en', en), el('div', 'listen__ru', ru));
-    li.append(play, text); ol.append(li);
-    return { li, play, text };
-  });
-  box.append(ol);
-
-  const foot = el('div', 'ex__foot');
-  const bAll = playBtn('Прослушать все', 'btn btn--primary ex__btn listen__all');
-  const mark = k => items.forEach((it, i) => it.li.classList.toggle('listen__item--on', i === k));
-  bAll.addEventListener('click', () => { if (speaking === bAll) { stopSpeech(); mark(-1); } else speak(L.items.map(it => it[0]), bAll, mark); });
-  const bText = el('button', 'btn ex__btn', 'Показать текст'); bText.type = 'button'; bText.setAttribute('aria-pressed', 'false');
-  bText.addEventListener('click', () => {
-    const on = bText.getAttribute('aria-pressed') !== 'true';
-    bText.setAttribute('aria-pressed', String(on)); bText.textContent = on ? 'Скрыть текст' : 'Показать текст';
-    items.forEach(it => { it.text.hidden = !on; });
-  });
-  foot.append(bAll, bText);
-  if (!speech) foot.append(el('span', 'listen__note', 'Озвучка недоступна в этом браузере'));
-  box.append(foot);
+  const player = {
+    /* покой: полоса пустая */
+    idle() {
+      cancelAnimationFrame(frame); clearTimeout(hold); frame = 0; hold = null;
+      share = t0 = heard = 0; ended = false; utter = null; paint();
+      btn.innerHTML = PLAY_ICON; btn.setAttribute('aria-label', `Прослушать ${label}`);
+      box.classList.remove('listen__player--on');
+    },
+    play() {
+      stopSpeech();
+      player.idle();
+      speaking = player;
+      btn.innerHTML = STOP_ICON; btn.setAttribute('aria-label', `Остановить ${label}`);
+      box.classList.add('listen__player--on');
+      const u = new SpeechSynthesisUtterance(text), voice = enVoice();
+      utter = u;
+      u.lang = voice ? voice.lang : 'en-GB'; if (voice) u.voice = voice; u.rate = SPEECH_RATE;
+      u.onstart = () => {
+        if (utter !== u) return;
+        t0 = last = performance.now(); dur = speechSec(text); frame = requestAnimationFrame(step);
+      };
+      /* темп — секунд на букву уже сказанного (знаки препинания и пробелы не звучат); оставшиеся буквы в этом темпе дают
+         конец звука. Оценка смешивается с прежней, чтобы скорость менялась мягко; на последнем слове берется как есть */
+      u.onboundary = e => {
+        if (utter !== u || e.name !== 'word' || !t0) return;
+        const sec = (performance.now() - t0) / 1000, said = letters(text.slice(0, e.charIndex)), rest = text.slice(e.charIndex);
+        if (sec < .3 || !said) return;
+        const end = sec + letters(rest) * sec / said;
+        if (/\s\S/.test(rest.trim())) dur = (dur + end) / 2; else dur = heard = end;
+      };
+      u.onend = () => {
+        if (utter !== u) return;
+        if (t0) rememberSec(text, heard || (performance.now() - t0) / 1000);
+        if (speaking === player) speaking = null;
+        ended = true; utter = null;
+        if (!frame) { last = performance.now(); frame = requestAnimationFrame(step); }
+      };
+      u.onerror = () => { if (utter !== u) return; if (speaking === player) speaking = null; player.idle(); };
+      speechSynthesis.speak(u);
+    }
+  };
+  /* остановить можно и во время дотягивания полосы после конца речи */
+  const toggle = () => { if (speaking === player || ended) { stopSpeech(); player.idle(); } else player.play(); };
+  btn.addEventListener('click', toggle);
+  if (!speech) { btn.disabled = true; btn.title = 'Этот браузер не умеет озвучивать текст'; }
+  player.idle();
+  box.append(btn, track);
   return box;
 }
 
 function renderEx(t, ex, ei) {
-  const box = el('section', 'ex');
+  const box = el('section', 'ex' + (ex.type === 'listen' ? ' ex--listen' : ''));
+  box.dataset.ei = ei;
   box.innerHTML = `<div class="ex__head"><span class="ex__num">Упражнение ${exNo(t, ei)}</span><p class="ex__task">${ex.task}</p></div>`;
   const rows = [];
   const idBase = `x-${t.id}-${ei}`;
@@ -1721,6 +1771,7 @@ function renderEx(t, ex, ei) {
         shuffled(it[1], it[0]).forEach(o => {
           const b = el('button', 'ex__opt', o); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
           b.addEventListener('click', () => {
+            if (row.sel === o) return; /* тот же вариант — ответ не изменился */
             opts.querySelectorAll('.ex__opt').forEach(x => { x.setAttribute('aria-pressed', String(x === b)); x.classList.remove(...OPT_MARKS); });
             row.sel = o; blank.textContent = o; blank.classList.remove('ex__blank--miss'); clearRow(row); if (keysShown) showKey(row); unlock(); save();
           });
@@ -1737,9 +1788,42 @@ function renderEx(t, ex, ei) {
         const selfBtn = el('button', 'ex__self-ok', 'Мой вариант тоже верен'); selfBtn.type = 'button'; selfBtn.hidden = true;
         Object.assign(row, { q, inputs: [inp], selfBtn });
         li.append(q, inp);
+      } else if (ex.type === 'listen') {
+        /* предложение собирается из слов-плиток: слово из набора встает в конец строки, слово из строки возвращается
+           в набор; знаки препинания не нужны — проверка их не учитывает */
+        const words = it[0].split(/\s+/).map(w => w.replace(/^[^\w']+|[^\w']+$/g, '')).filter(Boolean);
+        let order = shuffled(words.map((w, k) => k), it[0]);
+        if (order.every((k, i) => k === i)) order = order.reverse();
+        const line = el('div', 'listen__line'), picked = el('span', 'listen__picked');
+        line.append(picked);
+        const bank = el('div', 'listen__bank'); bank.setAttribute('role', 'group'); bank.setAttribute('aria-label', `Слова предложения ${ii + 1}`);
+        const tiles = order.map(k => { const b = el('button', 'ex__opt listen__word', words[k]); b.type = 'button'; bank.append(b); return b; });
+        const changed = () => { line.classList.remove(...LINE_MARKS); clearRow(row); row.draw(); if (keysShown) showKey(row); unlock(); save(); };
+        tiles.forEach(b => b.addEventListener('click', () => {
+          if (row.pick.includes(b)) return;
+          row.pick.push(b); changed();
+          /* нажатое слово становится неактивным — фокус переходит к следующему свободному */
+          (tiles.find(x => !row.pick.includes(x)) || bCheck).focus();
+        }));
+        Object.assign(row, {
+          q: line, line, tiles, pick: [],
+          value: () => row.pick.map(b => b.textContent).join(' '),
+          draw() {
+            picked.replaceChildren(...row.pick.map(b => {
+              const c = el('button', 'ex__opt listen__word', b.textContent); c.type = 'button';
+              c.setAttribute('aria-label', `Убрать «${b.textContent}»`);
+              c.addEventListener('click', () => { row.pick.splice(row.pick.indexOf(b), 1); changed(); });
+              return c;
+            }));
+            tiles.forEach(b => { const used = row.pick.includes(b); b.disabled = used; b.classList.toggle('listen__word--used', used); });
+            line.classList.toggle('listen__line--empty', !row.pick.length);
+          }
+        });
+        row.draw();
+        li.append(makePlayer(it[0], `предложение ${ii + 1}`), line, bank);
       }
-      /* строка «Ответ: …»: есть только у перевода; выбор показывает свой ответ на самом варианте */
-      if (ex.type === 'translate') { row.key = el('div', 'ex__key'); row.key.hidden = true; li.append(row.key); }
+      /* строка «Ответ: …»: есть у перевода и «На слух»; выбор показывает свой ответ на самом варианте */
+      if (ex.type === 'translate' || ex.type === 'listen') { row.key = el('div', 'ex__key'); row.key.hidden = true; li.append(row.key); }
       if (row.selfBtn) li.append(row.selfBtn);
       ol.append(li); rows.push(row);
     });
@@ -1762,13 +1846,14 @@ function renderEx(t, ex, ei) {
   const bCheck = el('button', 'btn btn--primary ex__btn', 'Проверить'); bCheck.type = 'button';
   const bShow = el('button', 'btn ex__btn', 'Показать ответы'); bShow.type = 'button'; bShow.setAttribute('aria-pressed', 'false');
   /* проверять нечего, пока не дан хотя бы один ответ */
-  const blank = () => rows.every(r => ex.type === 'choice' ? !r.sel : r.inputs.every(i => !i.value.trim()));
+  const blank = () => rows.every(r => ex.type === 'choice' ? !r.sel : ex.type === 'listen' ? !r.pick.length : r.inputs.every(i => !i.value.trim()));
   const syncBlank = () => { const b = blank(); bCheck.disabled = b; bCheck.title = b ? 'Сначала введите хотя бы один ответ' : ''; };
   /* любое изменение ответа снова делает доступными «Проверить» и «Показать ответы» */
   const unlock = () => { syncBlank(); bShow.hidden = false; };
   const bReset = el('button', 'btn ex__btn', 'Заново'); bReset.type = 'button';
   const score = el('span', 'ex__score'); score.setAttribute('aria-live', 'polite');
   foot.append(bCheck, bShow, bReset, score);
+  if (ex.type === 'listen' && !speech) foot.append(el('span', 'listen__note', 'Озвучка недоступна в этом браузере'));
   box.append(foot);
 
   const answerOf = (row, k) => ex.type === 'text' ? ex.answers[k] : ex.type === 'gap' ? gapAnswers(row.it)[k] : row.it[1];
@@ -1787,6 +1872,7 @@ function renderEx(t, ex, ei) {
     rows.forEach((row, ri) => {
       if (ex.type === 'choice') { mark(ri + 1, !row.sel ? 'blank' : row.sel === row.it[1][0] ? 'ok' : 'wrong'); return; }
       if (ex.type === 'translate') { const v = row.inputs[0].value; mark(ri + 1, stateOf(row.credited || accepts(row.it[1], v), v)); return; }
+      if (ex.type === 'listen') { const v = row.value(); mark(ri + 1, stateOf(accepts(row.it[0], v), v)); return; }
       const res = row.inputs.map((inp, k) => stateOf(accepts(answerOf(row, k), inp.value), inp.value));
       if (ex.type === 'text') res.forEach((r, k) => mark(k + 1, r));
       else mark(ri + 1, res.includes('wrong') ? 'wrong' : res.includes('blank') ? 'blank' : 'ok');
@@ -1796,7 +1882,7 @@ function renderEx(t, ex, ei) {
 
   /* ответы хранятся в localStorage: gk2-answers[тема][упражнение] = { v: значения по строкам, c: засчитанные строки, k: проверено, m: отметки } */
   function save() {
-    const v = rows.map(r => ex.type === 'choice' ? (r.sel ?? null) : r.inputs.map(i => i.value));
+    const v = rows.map(r => ex.type === 'choice' ? (r.sel ?? null) : ex.type === 'listen' ? r.pick.map(b => b.textContent) : r.inputs.map(i => i.value));
     const empty = v.every(x => x == null || (Array.isArray(x) && x.every(s => !s)));
     answers[t.id] = answers[t.id] || {};
     if (empty) { delete answers[t.id][ei]; if (!Object.keys(answers[t.id]).length) delete answers[t.id]; }
@@ -1807,12 +1893,16 @@ function renderEx(t, ex, ei) {
   function rowScore(row) {
     if (ex.type === 'choice') return row.sel === row.it[1][0] ? 1 : 0;
     if (ex.type === 'translate') return row.credited || accepts(row.it[1], row.inputs[0].value) ? 1 : 0;
+    if (ex.type === 'listen') return accepts(row.it[0], row.value()) ? 1 : 0;
     return row.inputs.reduce((n, inp, k) => n + (accepts(answerOf(row, k), inp.value) ? 1 : 0), 0);
   }
 
   function showScore() {
     const ok = rows.reduce((n, r) => n + rowScore(r), 0);
-    bCheck.disabled = ok === total;
+    /* после проверки «Проверить» ждет изменения ответа: повторная проверка тех же ответов ничего не даст.
+       Любая правка снова включает кнопку (unlock) */
+    bCheck.disabled = true;
+    bCheck.title = ok === total ? '' : 'Измените ответ, чтобы проверить снова';
     bShow.hidden = ok === total && !hasAlternatives && !rows.some(r => r.credited);
     if (bShow.hidden && keysShown) hideKeys();
     score.textContent = `${ok} из ${total}` + (ok === total ? ' · без ошибок' : '');
@@ -1837,6 +1927,10 @@ function renderEx(t, ex, ei) {
         good = row.sel === row.it[1][0];
         row.opts.querySelectorAll('.ex__opt').forEach(b => { b.classList.remove(...OPT_MARKS); if (b.textContent === row.sel) b.classList.add(good ? 'ex__opt--ok' : 'ex__opt--bad'); });
         if (!row.sel) row.blank.classList.add('ex__blank--miss');
+      } else if (ex.type === 'listen') {
+        good = accepts(row.it[0], row.value());
+        row.line.classList.remove(...LINE_MARKS);
+        row.line.classList.add(good ? 'listen__line--ok' : row.pick.length ? 'listen__line--bad' : 'listen__line--miss');
       } else {
         good = true;
         row.inputs.forEach((inp, k) => {
@@ -1885,6 +1979,9 @@ function renderEx(t, ex, ei) {
       const alts = row.it[1].split('|');
       row.key.textContent = 'Ответ: ' + alts[0] + (alts.length > 1 ? '  (или: ' + alts.slice(1, 3).join('; ') + ')' : '');
       row.key.hidden = false;
+    } else if (ex.type === 'listen') {
+      row.key.innerHTML = `Ответ: ${esc(row.it[0])}<span class="listen__ru">${esc(row.it[1])}</span>`;
+      row.key.hidden = false;
     } else {
       row.li.querySelectorAll('.ex__inline-key').forEach(k => k.remove());
       row.inputs.forEach((inp, k) => {
@@ -1915,6 +2012,7 @@ function renderEx(t, ex, ei) {
         row.sel = undefined; row.blank.textContent = ' '; row.blank.classList.remove('ex__blank--miss');
         row.opts.querySelectorAll('.ex__opt').forEach(b => { b.setAttribute('aria-pressed', 'false'); b.classList.remove(...OPT_MARKS); });
       }
+      if (row.line) { row.pick = []; row.line.classList.remove(...LINE_MARKS); row.draw(); }
       if (keysShown) showKey(row);
     });
     score.textContent = ''; score.className = 'ex__score';
@@ -1925,7 +2023,7 @@ function renderEx(t, ex, ei) {
       delete progress[t.id][ei];
       if (!Object.keys(progress[t.id]).length) delete progress[t.id];
       store.set('gk2-progress', progress);
-      renderToc(); renderOverall();
+      renderToc(); renderOverall(); renderRedoBar();
       const pp = $('#pageProg'); if (pp) fillProgress(pp);
     }
   });
@@ -1941,6 +2039,11 @@ function renderEx(t, ex, ei) {
     redoBar.classList.toggle('ex__redo--done', fixed);
     redoBar.innerHTML = '';
     if (fixed) redoBar.append(el('p', 'ex__redo-status', next ? '✓ Исправлено — упражнение убрано из «Работы над ошибками»' : '✓ Исправлено — это было последнее упражнение с ошибками'));
+    /* список «Работы над ошибками» пуст (исправлено последнее упражнение или оно сброшено «Заново») — возвращаться
+       незачем: остается только отметка «Исправлено», а без нее плашка скрывается целиком */
+    const empty = !mistakeCount();
+    redoBar.hidden = empty && !fixed;
+    if (empty) return;
     const back = el('button', 'ex__redo-link'); back.type = 'button';
     back.innerHTML = `${arrowHtml('prev')} К работе над ошибками`;
     back.addEventListener('click', () => go('mistakes'));
@@ -1965,6 +2068,10 @@ function renderEx(t, ex, ei) {
       if (ex.type === 'choice') {
         const b = val != null && [...row.opts.querySelectorAll('.ex__opt')].find(x => x.textContent === val);
         if (b) { row.sel = val; row.blank.textContent = val; b.setAttribute('aria-pressed', 'true'); }
+      } else if (ex.type === 'listen') {
+        /* слова строки возвращаются на свои плитки; повторяющееся слово берет первую еще свободную */
+        (val || []).forEach(w => { const b = row.tiles.find(x => x.textContent === w && !row.pick.includes(x)); if (b) row.pick.push(b); });
+        row.draw();
       } else if (Array.isArray(val)) row.inputs.forEach((inp, k) => { inp.value = val[k] || ''; });
     });
     (saved.c || []).forEach(i => { if (rows[i]) rows[i].credited = true; });
@@ -2012,7 +2119,6 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   renderOverall();
   setDrawer(false);
   if (scroll) window.scrollTo(0, 0);
-  // syncToTop(); — кнопка «Наверх» пока выключена (бэклог)
 }
 
 $('#tocContents').addEventListener('click', () => go('contents'));
@@ -2030,22 +2136,6 @@ function setSide(collapsed, focus) {
   if (focus) (collapsed ? $('#sideShow') : $('#sideHide')).focus();
 }
 $('#sideHide').addEventListener('click', () => setSide(true, true));
-
-/* ---------- Кнопка «Наверх» ---------- */
-// кнопка «Наверх» пока выключена (бэклог): она закрывает навигацию по страницам в конце страницы
-// function syncToTop() {
-//   const max = document.documentElement.scrollHeight - innerHeight;
-//   const show = max > 0 && scrollY / max >= .3;
-//   const b = $('#toTop');
-//   b.classList.toggle('to-top--visible', show);
-//   b.tabIndex = show ? 0 : -1;
-// }
-// addEventListener('scroll', syncToTop, { passive: true });
-// addEventListener('resize', syncToTop);
-// $('#toTop').addEventListener('click', () => {
-//   const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-//   scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
-// });
 
 /* ---------- Тема ---------- */
 let themeTimer;

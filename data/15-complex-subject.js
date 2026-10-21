@@ -68,7 +68,7 @@ ${N("Если сообщение о прошлом, а говорят о нем 
     { type: 'translate', task: 'Переведите на английский.', items: [
       ["Говорят, он очень богат.", "He is said to be very rich.|It is said that he is very rich."],
       ["Считается, что этот дом построили в XVIII веке.", "This house is believed to have been built in the 18th century.|This house is thought to have been built in the 18th century.|It is believed that this house was built in the 18th century."],
-      ["Сообщают, что погибших нет.", "It is reported that there are no victims.|There are reported to be no victims.|It is reported that nobody was killed."]
+      ["Сообщают, что поезд опаздывает.", "The train is reported to be late.|It is reported that the train is late.|The train is reported to be running late.|It is reported that the train is running late."]
     ]}
   ]}
 ]});

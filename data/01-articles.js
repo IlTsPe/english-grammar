@@ -41,18 +41,19 @@ ${N("Если перед существительным стоит притяж�
       ["Какой интересный фильм!", "What an interesting film!|What an interesting movie!"],
       ["Она студентка.", "She is a student."],
       ["Я пью кофе три раза в день.", "I drink coffee three times a day."]
+    ]},
+    /* на слух: стоит в конце массива, чтобы не сдвигать сохраненный прогресс остальных упражнений; at — место на экране */
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов. Обратите внимание, где звучит <i>a</i>, а где <i>an</i>.', items: [
+      ["She is a doctor, and he is an engineer.", "Она врач, а он инженер."],
+      ["I eat an apple and a banana every day.", "Каждый день я съедаю яблоко и банан."],
+      ["He is an honest man and a useful friend.", "Он честный человек и полезный друг."]
     ]}
-  ],
-  /* фразы на слух: n — номер среди упражнений темы */
-  listen: { n: 2, task: 'Прослушайте фразы и повторите их вслух. Обратите внимание, где звучит <i>a</i>, а где <i>an</i>.', items: [
-    ["She is a doctor, and he is an engineer.", "Она врач, а он инженер."],
-    ["I eat an apple and a banana every day.", "Каждый день я съедаю яблоко и банан."],
-    ["He is an honest man and a useful friend.", "Он честный человек и полезный друг."]
-  ]}},
+  ]},
 
 { id: 'art-the', level: 'A1', title: 'Определенный артикль the', sub: 'the sun, the book on the table',
   rule: `
 <p>Определенный артикль <i>the</i> произошел от указательного местоимения <i>that</i> и значит «тот самый, понятно какой». Он ставится перед существительными в единственном и множественном числе, а также перед неисчисляемыми.</p>
+<p>Произношение зависит от первого звука следующего слова: [ðə] перед согласным звуком (<i><b>the</b> sun, <b>the</b> book</i>) и [ði] перед гласным (<i><b>the</b> apple, <b>the</b> evening</i>). Важен звук, а не буква: <i><b>the</b> university</i> [ðə], <i><b>the</b> hour</i> [ði].</p>
 ${T(["Когда", "Пример"], [
   ["предмет уже упоминался", "<i>I have a cat. <b>The</b> cat is black.</i>"],
   ["из ситуации ясно, о чем речь", "<i>Close <b>the</b> door, please. Where is <b>the</b> teacher?</i>"],
@@ -92,6 +93,11 @@ ${N("Сравните: <i>I want <b>an</b> apple</i> (любое) и <i>I want <
       ["Моя сестра играет на пианино.", "My sister plays the piano."],
       ["Это самая высокая гора в мире.", "This is the highest mountain in the world.|It is the highest mountain in the world.|It's the highest mountain in the world."],
       ["У меня есть книга. Книга интересная.", "I have a book. The book is interesting.|I have got a book. The book is interesting.|I've got a book. The book is interesting."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["I have an apple, and the apple is red.", "У меня есть яблоко, и это яблоко красное."],
+      ["The sun is shining, and the sky is blue.", "Светит солнце, и небо голубое."],
+      ["My brother plays the guitar in the evening.", "Мой брат играет на гитаре по вечерам."]
     ]}
   ]},
 
@@ -138,6 +144,11 @@ ${N("Перед неисчисляемым существительным обы
       ["Он говорит по-английски.", "He speaks English."],
       ["Вода в стакане холодная.", "The water in the glass is cold."],
       ["Анна живет в Москве.", "Anna lives in Moscow."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Cats like milk, but my cat drinks only water.", "Кошки любят молоко, но моя кошка пьет только воду."],
+      ["We have lunch at one and play football after school.", "Мы обедаем в час и играем в футбол после уроков."],
+      ["I love coffee, but the coffee in this cafe is bad.", "Я люблю кофе, но кофе в этом кафе невкусный."]
     ]}
   ]},
 
@@ -178,6 +189,11 @@ ${N("При перечислении глагол согласуется с <b>�
       ["Здесь есть банкомат?", "Is there a cash machine here?|Is there an ATM here?|Is there a cash machine near here?|Is there an ATM near here?"],
       ["Вчера в парке было много людей.", "There were many people in the park yesterday.|There were a lot of people in the park yesterday.|Yesterday there were many people in the park.|Yesterday there were a lot of people in the park."],
       ["Где моя ручка? — Она на столе.", "Where is my pen? — It is on the table.|Where is my pen? — It is on the desk."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["There is a small park and two cafes near my house.", "Рядом с моим домом есть небольшой парк и два кафе."],
+      ["There aren't any eggs, but there is some milk.", "Яиц нет, но есть немного молока."],
+      ["There were a lot of people at the station yesterday.", "Вчера на вокзале было много людей."]
     ]}
   ]},
 
@@ -221,6 +237,11 @@ ${N("Озеро без слова <i>lake</i> употребляется с <i>t
       ["Мой брат живет в США.", "My brother lives in the USA.|My brother lives in the US.|My brother lives in the United States."],
       ["Альпы — красивые горы.", "The Alps are beautiful mountains."],
       ["Эрмитаж находится в Санкт-Петербурге.", "The Hermitage is in St Petersburg.|The Hermitage is in Saint Petersburg.|The Hermitage is situated in St Petersburg.|The Hermitage is located in St Petersburg."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["Last summer we travelled from London to the Netherlands.", "Прошлым летом мы ездили из Лондона в Нидерланды."],
+      ["The Thames flows through London into the North Sea.", "Темза течет через Лондон в Северное море."],
+      ["My parents live in Russia, near Lake Baikal.", "Мои родители живут в России, недалеко от озера Байкал."]
     ]}
   ]},
 
@@ -256,6 +277,11 @@ ${N("<i>go to school / hospital / church</i> без артикля — когд�
       ["Мой папа сейчас на работе.", "My father is at work now.|My dad is at work now."],
       ["Я ложусь спать в одиннадцать.", "I go to bed at eleven.|I go to bed at 11.|I go to bed at eleven o'clock."],
       ["Она ездит на работу на автобусе.", "She goes to work by bus.|She takes the bus to work."]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["In the morning I go to work by bus.", "Утром я езжу на работу на автобусе."],
+      ["At the weekend we often go to the cinema.", "По выходным мы часто ходим в кино."],
+      ["He usually stays at home and goes to bed at midnight.", "Обычно он сидит дома и ложится спать в полночь."]
     ]}
   ]}
 ]});

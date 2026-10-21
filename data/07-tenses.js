@@ -364,7 +364,7 @@ ${N("Вопрос <i>When…?</i> всегда требует Past Simple: <i>Wh
       ["I ___ (break) my phone. Can I use yours?", "have broken"], ["He ___ (finish) school in 2018.", "finished"],
       ["I ___ (see) this film last week.", "saw"], ["She ___ (be) to London twice.", "has been|'s been"],
       ["When ___ you ___ (buy) this car?", ["did", "buy"]], ["We ___ (not / have) a holiday this year.", "have not had"],
-      ["Tolstoy ___ (write) 'War and Peace'.", "wrote"], ["I ___ (just / meet) your brother.", "have just met"],
+      ["Tolstoy ___ (write) 'Anna Karenina'.", "wrote"], ["I ___ (just / meet) your brother.", "have just met"],
       ["They ___ (move) to Moscow two years ago.", "moved"], ["___ you ever ___ (try) Chinese food?", ["have", "tried"]]
     ]},
     { type: 'choice', task: 'Выберите правильный вариант.', items: [

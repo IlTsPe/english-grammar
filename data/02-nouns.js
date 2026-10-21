@@ -59,6 +59,11 @@ ${N("Сейчас многие профессии называют одним с
       ["actor → ___", "actress"], ["waiter → ___", "waitress"], ["host → ___", "hostess"], ["prince → ___", "princess"],
       ["lion → ___", "lioness"], ["hero → ___", "heroine"], ["emperor → ___", "empress"], ["tiger → ___", "tigress"],
       ["king → ___", "queen"], ["husband → ___", "wife"], ["nephew → ___", "niece"], ["uncle → ___", "aunt"]
+    ]},
+    { type: 'listen', at: 2, task: 'Прослушайте предложение и соберите его из слов.', items: [
+      ["The children are playing with two little puppies.", "Дети играют с двумя маленькими щенками."],
+      ["These women bought some tomatoes and three knives.", "Эти женщины купили помидоры и три ножа."],
+      ["There are five sheep and a lot of geese on the farm.", "На ферме пять овец и много гусей."]
     ]}
   ]},
 
