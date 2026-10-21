@@ -369,7 +369,7 @@ button { font: inherit; transition: linear 0.15s; }
 /* у кнопок отступ сверху на 2px меньше, чем снизу: при равных отступах строчные буквы стоят ниже середины рамки
    (шрифт оставляет место под хвосты букв внизу строки); со сдвигом строчные по центру, а заглавные ниже середины всего на 0,5px */
 .overall__file { display: grid; row-gap: 6px; margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--border); }
-.overall__file-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.overall__file-btns { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6px; } /* две кнопки в один ряд */
 .overall__file-btn { padding: 5px 8px 7px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
   background: none; color: var(--accent); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: border-color .15s, background-color .15s; }
 .overall__file-btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }

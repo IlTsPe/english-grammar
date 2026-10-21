@@ -1,4 +1,4 @@
-/* «На слух»: запись mp3 из audio/ (tools/make_audio.py), а если ее нет — озвучка браузером (Web Speech API), британский
+/* «На слух»: запись mp3 из audio/ (make_audio.py из папки tools рядом с сайтом), а если ее нет — озвучка браузером (Web Speech API), британский
    голос, если он есть. Каждое предложение — свой плеер: кнопка и полоса прогресса */
 const AUDIO = window.AUDIO || {}; /* текст предложения → имя mp3, audio/index.js */
 const speech = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;

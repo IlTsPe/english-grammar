@@ -1,6 +1,42 @@
 /* ---------- Маршрутизация ---------- */
 /* syncToc = false при загрузке страницы: аккордеон сохраняет свое сохраненное состояние, а не следует за маршрутом */
 const PAGES = ['contents', 'mistakes', 'notes', 'about',...ABOUT.map(p => 'about-' + p.id)];
+/* адреса страниц: на сайте (http/https) у каждой страницы свой путь от корня тренажера — …/articles/, …/articles/art-a-an,
+   …/about/bookmarks, …/notes; файлы по этим путям создает make_pages.py из папки tools рядом с сайтом (копии index.html). Корень — <base href>
+   страницы: в каждой копии он указывает на папку тренажера. index.html, открытый с диска (file://), живет на адресах #id */
+const PATH_URLS = location.protocol !== 'file:';
+const ROOT = new URL('./', document.baseURI);
+function pathOf(id) {
+  if (topicById[id]) return `${topicById[id].ch.id}/${id}`;
+  if (chapById[id]) return `${chapById[id].id}/`;
+  if (id === 'about') return 'about/';
+  if (aboutPage(id)) return `about/${id.slice('about-'.length)}`;
+  return id === 'contents' ? '' : id;
+}
+/* страница по пути адреса: null — корень (открывается последняя страница), '' — неизвестный путь */
+function idFromPath() {
+  if (!location.pathname.startsWith(ROOT.pathname)) return '';
+  const parts = decodeURIComponent(location.pathname.slice(ROOT.pathname.length)).replace(/\.html$/, '').replace(/(^|\/)index$/, '').split('/').filter(Boolean);
+  const [a, b] = parts;
+  if (!parts.length) return null;
+  if (parts.length === 1) return chapById['ch-' + a] ? 'ch-' + a : PAGES.includes(a) && a !== 'contents' ? a : '';
+  if (parts.length === 2 && a === 'about' && aboutPage('about-' + b)) return 'about-' + b;
+  if (parts.length === 2 && topicById[b] && topicById[b].ch.id === a) return b;
+  return '';
+}
+/* заголовок вкладки и описание страницы; те же тексты make_pages.py пишет в файлы страниц (их видят поисковики и превью ссылок) */
+const SITE_TITLE = 'Грамматика онлайн';
+const plainText = html => html.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+function pageMeta(id) {
+  const t = topicById[id], ch = chapById[id], p = aboutPage(id);
+  const title = t ? `${t.num} ${t.title}` : ch ? `${ch.n}. ${ch.title}` : p ? p.title
+    : { mistakes: 'Работа над ошибками', notes: 'Мои заметки', about: 'Информация' }[id];
+  const description = t ? `${plainText(t.title)} (${plainText(t.sub)}): правило и упражнения с проверкой. Уровень ${t.level}.`
+    : ch ? plainText(ch.intro) : p ? `${p.title}: ${p.sub}.`
+    : { mistakes: 'Упражнения, в которых были ошибки, — чтобы к ним вернуться.', notes: 'Личные заметки по грамматике.', about: 'Как устроен тренажер: разделы, упражнения, прогресс, данные.' }[id]
+    || 'Тренажер грамматики английского языка A1–C2 по разделам сборника Ю. Голицынского: правила и упражнения с проверкой.';
+  return { title: title ? `${plainText(title)} — ${SITE_TITLE}` : SITE_TITLE, description };
+}
 function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   if (!(PAGES.includes(id) || topicById[id] || chapById[id])) id = 'contents';
   route = id;
@@ -27,7 +63,13 @@ function go(id, scroll = true, syncToc = true, fromBookmarks = false) {
   main.append(wrap);
   document.documentElement.classList.toggle('page--glow', isAbout(id));
   /* переход на другую страницу добавляет запись в историю, поэтому работают «Назад» / «Вперед» браузера; первая отрисовка и перерисовки той же страницы только заменяют ее */
-  try { if (booted && location.hash.slice(1) !== id) history.pushState(null, '', '#' + id); else history.replaceState(null, '', '#' + id); } catch (e) {}
+  try {
+    const url = new URL(PATH_URLS ? pathOf(id) : '#' + id, PATH_URLS ? ROOT : location.href).href;
+    if (booted && location.href !== url) history.pushState(null, '', url); else history.replaceState(null, '', url);
+  } catch (e) {}
+  const meta = pageMeta(id);
+  document.title = meta.title;
+  $('meta[name=description]')?.setAttribute('content', meta.description);
   store.set('gk2-last', id);
   renderToc();
   renderOverall();
@@ -115,16 +157,19 @@ addEventListener('keydown', e => {
   if ($('#drawer').classList.contains('drawer--open')) setDrawer(false, true);
 });
 matchMedia('(max-width: 880px)').addEventListener('change', () => setDrawer(false));
-/* «Назад» / «Вперед» (popstate) и hash, набранный в адресной строке (hashchange), открывают эту страницу */
+/* «Назад» / «Вперед» (popstate) и hash, набранный в адресной строке (hashchange), открывают эту страницу.
+   Старые адреса #id (закладки, ссылки) тоже открывают свою страницу, а адрес меняется на ее путь */
+const urlId = () => location.hash.slice(1) || (PATH_URLS ? idFromPath() : null);
 const followHash = () => {
-  const id = location.hash.slice(1);
-  if (id && id !== route) go(id);
+  const id = urlId() || 'contents';
+  if (id !== route) go(id);
 };
 window.addEventListener('popstate', followHash);
 window.addEventListener('hashchange', followHash);
 let booted = false;
 renderLevels();
-const startId = location.hash.slice(1);
+/* страница при открытии: из адреса, у копии с диска — из <meta name="route">; корень открывает последнюю страницу */
+const startId = urlId() || $('meta[name=route]')?.content || '';
 go(startId && (PAGES.includes(startId) || topicById[startId] || chapById[startId]) ? startId : store.get('gk2-last', 'contents'), false, false);
 booted = true;
 renderOverall();

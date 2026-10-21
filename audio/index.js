@@ -1,4 +1,4 @@
-/* создается tools/make_audio.py: текст предложения «На слух» → mp3 в этой папке */
+/* создается make_audio.py (папка tools рядом с сайтом): текст предложения «На слух» → mp3 в этой папке */
 window.AUDIO = {
  "She speaks English very well and quite fast.": "adj-adverbs-1",
  "He works hard, but he hardly ever gets tired.": "adj-adverbs-2",
