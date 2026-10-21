@@ -12,9 +12,7 @@
 <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
 <script charset="utf-8" src="js/head.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Unbounded:wght@600;700&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css"> <!-- шрифты лежат в папке сайта (get_fonts.py), не на Google -->
 <link rel="stylesheet" href="style.css">
 
 <div class="app" id="app">
@@ -82,7 +80,19 @@
     </div>
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
-  <main class="sheet app__sheet" id="main"></main>
+  <main class="sheet app__sheet" id="main"><div class="sheet__inner"><div class="crumbs"><button class="crumbs__link" type="button">Информация</button><span class="crumbs__sep" aria-hidden="true">→</span><span>Тренажер в цифрах</span></div><h1 class="sheet__title">Тренажер в цифрах</h1><div class="rule info"><ul class="info__stats"><li class="info__stat"><b>19</b><span>разделов</span></li><li class="info__stat"><b>76</b><span>тем</span></li><li class="info__stat"><b>6</b><span>уровней сложности</span></li><li class="info__stat"><b>299</b><span>упражнений</span></li><li class="info__stat"><b>1859</b><span>заданий</span></li></ul>
+      <h3>Разделы</h3>
+      <p>Первые 17 разделов выстроены в той же последовательности, что и в сборнике Ю. Б. Голицынского. В 18-м разделе «Контрольные упражнения» собраны задания, охватывающие сразу несколько тем. 19-й раздел «Дополнительно: темы сверх сборника» включает грамматические конструкции уровней B2–C2, которые в оригинальном сборнике отсутствуют.</p>
+      <h3>Упражнения</h3>
+      <p>В тренажере представлены пять типов упражнений:</p>
+      <ul>
+        <li>«Впишите пропущенное» (79 упражнений) — нужно ввести с клавиатуры нужное слово или грамматическую форму.</li>
+        <li>«На слух» (76 упражнений) — нужно прослушать предложение и собрать его из слов в правильном порядке.</li>
+        <li>«Перевод» (70 упражнений) — необходимо полностью перевести предложение на английский язык.</li>
+        <li>«Выберите вариант» (65 упражнений) — требуется выбрать один правильный ответ из нескольких предложенных.</li>
+        <li>«Текст с пропусками» (9 упражнений) — дается связный текст, в котором нужно заполнить несколько пропусков.</li>
+      </ul>
+      <p>Распределение тем по уровням сложности представлено на странице «Уровни сложности».</p></div><nav class="pager" aria-label="Соседние страницы"><button class="pager__btn pager__btn--next" type="button"><small class="pager__label"><span>Следующая страница <span class="arrow arrow--next" aria-hidden="true">→</span></span></small><span>Меню</span></button></nav></div></main>
 </div>
 
 <script charset="utf-8" src="js/helpers.js"></script>

@@ -12,9 +12,7 @@
 <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
 <script charset="utf-8" src="js/head.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Unbounded:wght@600;700&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css"> <!-- шрифты лежат в папке сайта (get_fonts.py), не на Google -->
 <link rel="stylesheet" href="style.css">
 
 <div class="app" id="app">
@@ -82,7 +80,21 @@
     </div>
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
-  <main class="sheet app__sheet" id="main"></main>
+  <main class="sheet app__sheet" id="main"><div class="sheet__inner"><div class="crumbs"><button class="crumbs__link" type="button">Содержание</button><span class="crumbs__sep" aria-hidden="true">→</span><span>Раздел 1</span></div><h1 class="sheet__title">Артикль</h1><p class="sheet__intro">Самый большой раздел сборника. Сначала разберите, когда нужен <b>a / an</b>, когда <b>the</b>, а когда артикль не ставится; затем — оборот <i>there is</i>, географические названия и устойчивые выражения.</p><div class="page-prog" id="pageProg" data-scope="articles" data-level=""><div class="page-prog__row"><span>Раздел 1 пройден на</span><b class="pct page-prog__value">0%</b></div>
+    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i class="bar__fill" style="width:0%"></i></div>
+    <div class="page-prog__row"><span>Упражнений выполнено</span><b class="page-prog__value">0 из 25</b></div><div class="page-prog__levels" aria-label="Прогресс по уровням"><div class="page-prog__level" title="Начальный"><span class="lvl-tag page-prog__tag">A1</span><span class="bar bar--thin"><i class="bar__fill" style="width:0%"></i></span><b class="pct page-prog__value">0%</b></div><div class="page-prog__level" title="Элементарный"><span class="lvl-tag page-prog__tag">A2</span><span class="bar bar--thin"><i class="bar__fill" style="width:0%"></i></span><b class="pct page-prog__value">0%</b></div><div class="page-prog__level" title="Средний"><span class="lvl-tag page-prog__tag">B1</span><span class="bar bar--thin"><i class="bar__fill" style="width:0%"></i></span><b class="pct page-prog__value">0%</b></div></div></div><div class="topic-cards"><button class="topic-card" type="button"><span class="topic-card__num">1.1 · <span class="lvl-tag">A1</span></span><span class="topic-card__title">Неопределенный артикль a / an</span><span class="topic-card__sub">a book, an apple</span>
+      <span class="topic-card__foot"><span>4 упр.</span><span class="bar topic-card__bar"><i class="bar__fill" style="width:0%"></i></span><span>—</span></span>
+      </button><button class="topic-card" type="button"><span class="topic-card__num">1.2 · <span class="lvl-tag">A1</span></span><span class="topic-card__title">Определенный артикль the</span><span class="topic-card__sub">the sun, the book on the table</span>
+      <span class="topic-card__foot"><span>5 упр.</span><span class="bar topic-card__bar"><i class="bar__fill" style="width:0%"></i></span><span>—</span></span>
+      </button><button class="topic-card" type="button"><span class="topic-card__num">1.3 · <span class="lvl-tag">A2</span></span><span class="topic-card__title">Нулевой артикль</span><span class="topic-card__sub">I like music. Cats are clever.</span>
+      <span class="topic-card__foot"><span>4 упр.</span><span class="bar topic-card__bar"><i class="bar__fill" style="width:0%"></i></span><span>—</span></span>
+      </button><button class="topic-card" type="button"><span class="topic-card__num">1.4 · <span class="lvl-tag">A1</span></span><span class="topic-card__title">Оборот there is / there are</span><span class="topic-card__sub">There is a book on the table</span>
+      <span class="topic-card__foot"><span>4 упр.</span><span class="bar topic-card__bar"><i class="bar__fill" style="width:0%"></i></span><span>—</span></span>
+      </button><button class="topic-card" type="button"><span class="topic-card__num">1.5 · <span class="lvl-tag">B1</span></span><span class="topic-card__title">Артикль с географическими названиями</span><span class="topic-card__sub">the Volga, Russia, the Alps</span>
+      <span class="topic-card__foot"><span>4 упр.</span><span class="bar topic-card__bar"><i class="bar__fill" style="width:0%"></i></span><span>—</span></span>
+      </button><button class="topic-card" type="button"><span class="topic-card__num">1.6 · <span class="lvl-tag">A2</span></span><span class="topic-card__title">Устойчивые выражения с артиклями</span><span class="topic-card__sub">at home, go to bed, in the morning</span>
+      <span class="topic-card__foot"><span>4 упр.</span><span class="bar topic-card__bar"><i class="bar__fill" style="width:0%"></i></span><span>—</span></span>
+      </button></div><div class="pager-current"><span>Текущий раздел</span><span class="pager-current__title">1. Артикль</span><span class="pager-current__levels"><span>· уровни</span><span class="lvl-tag" title="Начальный">A1</span><span class="lvl-tag" title="Элементарный">A2</span><span class="lvl-tag" title="Средний">B1</span></span></div><nav class="pager" aria-label="Соседние страницы"><button class="pager__btn pager__btn--next" type="button"><small class="pager__label"><span class="pager__levels"><span class="lvl-tag lvl-tag--sm" title="Начальный">A1</span><span class="lvl-tag lvl-tag--sm" title="Элементарный">A2</span></span><span>Следующий раздел <span class="arrow arrow--next" aria-hidden="true">→</span></span></small><span>Существительное</span></button></nav></div></main>
 </div>
 
 <script charset="utf-8" src="js/helpers.js"></script>

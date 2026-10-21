@@ -9,12 +9,9 @@ function showFileMsg(kind, text) {
   clearTimeout(fileMsgTimer);
   if (kind === 'ok') fileMsgTimer = setTimeout(() => { fileMsg = null; renderFold('prog'); }, 15000);
 }
-/* ключи удаленных функций: убираются из этого браузера, из новых копий и при загрузке старых */
-const OLD_KEYS = ['gk2-redo', 'gk2-toc-follow'];
-try { OLD_KEYS.forEach(k => localStorage.removeItem(k)); } catch (e) {}
 function backupKeys() {
   const keys = [];
-  try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('gk2-') && !OLD_KEYS.includes(k)) keys.push(k); } } catch (e) {}
+  try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('gk2-')) keys.push(k); } } catch (e) {}
   return keys.sort();
 }
 function backupObject(now) {
@@ -177,7 +174,7 @@ function openImport() {
     else if (act === 'ok' && backup) {
       try {
         backupKeys().forEach(k => localStorage.removeItem(k));
-        Object.entries(backup.data).forEach(([k, v]) => { if (v !== null && !OLD_KEYS.includes(k)) localStorage.setItem(k, JSON.stringify(v)); });
+        Object.entries(backup.data).forEach(([k, v]) => { if (v !== null) localStorage.setItem(k, JSON.stringify(v)); });
       } catch (err) { showError('Браузер не дал сохранить данные.'); return; }
       location.reload();
     }

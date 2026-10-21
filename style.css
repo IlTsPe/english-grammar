@@ -894,12 +894,10 @@ button { font: inherit; transition: linear 0.15s; }
 .notes-list__date { margin-right: auto; }
 .notes-list__ask { margin-right: auto; color: var(--bad-ink); font-weight: 600; }
 .notes-list__count { font-variant-numeric: tabular-nums; } /* счетчик символов в редактируемой заметке */
-.notes-list__count--over { color: var(--bad-ink); font-weight: 600; }
 .notes-list__btn { padding: 4px 10px; border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px; background: none; color: var(--accent); font-size: 12.5px; font-weight: 600; cursor: pointer; }
 .notes-list__btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .notes-list__btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
 /* «Удалить»: красный текст без рамки; рамка и заливка появляются при наведении */
-.notes-list__btn:disabled { opacity: .5; cursor: default; } /* «Сохранить», пока заметка длиннее предела */
 .notes-list__btn--del { border-color: transparent; color: var(--bad-ink); }
 /* красный темной темы яркий: в покое смешан с приглушенным серым, при наведении — полный */
 :root[data-theme="dark"] .notes-list__btn--del:not(:where(:root:not(.pointer-still)) :hover, :focus-visible) { color: color-mix(in srgb, var(--bad) 85%, var(--muted)); }

@@ -12,9 +12,7 @@
 <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
 <script charset="utf-8" src="js/head.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Unbounded:wght@600;700&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css"> <!-- шрифты лежат в папке сайта (get_fonts.py), не на Google -->
 <link rel="stylesheet" href="style.css">
 
 <div class="app" id="app">
@@ -82,7 +80,21 @@
     </div>
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
-  <main class="sheet app__sheet" id="main"></main>
+  <main class="sheet app__sheet" id="main"><div class="sheet__inner"><div class="crumbs"><button class="crumbs__link" type="button">Информация</button><span class="crumbs__sep" aria-hidden="true">→</span><span>Где хранятся данные</span></div><h1 class="sheet__title">Где хранятся данные</h1><div class="rule info">
+      <div class="note"><div>
+        <p>Прогресс, ответы, «Избранное», заметки и другие данные сохраняются локально, то есть <b>только в этом браузере и только на этом устройстве</b>. У тренажера нет серверного хранения данных.</p>
+        <p>Данные будут утеряны, если:</p>
+        <ul>
+          <li>очистить файлы cookie и данные сайтов;</li>
+          <li>работать в режиме инкогнито — в этом случае все исчезнет после закрытия окна.</li>
+        </ul>
+      </div></div>
+      <p>Время от времени следует делать резервную копию данных. Сделать это можно в блоке «Прогресс» → «Резервная копия»:</p>
+      <ul>
+        <li><b>Сохранить</b> — скачивает файл с прогрессом в папку загрузок.</li>
+        <li><b>Загрузить</b> — восстанавливает прогресс из сохраненного файла. Перед загрузкой показывается сводка по файлу. Текущий прогресс при этом полностью перезаписывается, а не объединяется с загруженным.</li>
+      </ul>
+      <p>Чтобы перенести прогресс в другой браузер или на другое устройство, сохраните файл, передайте его туда любым удобным способом и нажмите там «Загрузить».</p></div><nav class="pager" aria-label="Соседние страницы"><button class="pager__btn pager__btn--prev" type="button"><small class="pager__label"><span><span class="arrow arrow--prev" aria-hidden="true">←</span> Предыдущая страница</span></small><span>Меню</span></button><button class="pager__btn pager__btn--next" type="button"><small class="pager__label"><span>Следующая страница <span class="arrow arrow--next" aria-hidden="true">→</span></span></small><span>Разделы и темы</span></button></nav></div></main>
 </div>
 
 <script charset="utf-8" src="js/helpers.js"></script>

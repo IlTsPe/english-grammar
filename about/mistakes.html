@@ -12,9 +12,7 @@
 <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
 <script charset="utf-8" src="js/head.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Unbounded:wght@600;700&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css"> <!-- шрифты лежат в папке сайта (get_fonts.py), не на Google -->
 <link rel="stylesheet" href="style.css">
 
 <div class="app" id="app">
@@ -82,7 +80,21 @@
     </div>
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
-  <main class="sheet app__sheet" id="main"></main>
+  <main class="sheet app__sheet" id="main"><div class="sheet__inner"><div class="crumbs"><button class="crumbs__link" type="button">Информация</button><span class="crumbs__sep" aria-hidden="true">→</span><span>Работа над ошибками</span></div><h1 class="sheet__title">Работа над ошибками</h1><div class="rule info">
+      <p>Для перехода на страницу нажмите на текст <b>«С ошибками»</b> в блоке меню <b>«Прогресс»</b>.</p>
+      <p>На странице собраны упражнения, в которых при последней проверке были выявлены ошибки или остались незаполненные упражнения. Если таких упражнений нет, на странице отобразится надпись: «Сейчас таких упражнений нет».</p>
+      <h3>Список упражнений</h3>
+      <p>Упражнения сгруппированы по темам и расположены в порядке уровней от A1 до C2, а внутри каждого уровня — по номерам тем. Для каждой темы указаны номер, название, уровень и раздел. Нажатие по названию открывает тему.</p>
+      <p>Под названием темы приведен список ее упражнений с ошибками. Например: «Упр. 2 · ошибки в № 3, 5 · не заполнены № 8–10». Если нажать на такую запись, тема откроется сразу на нужном упражнении.</p>
+      <h3>Кнопка «Начать по порядку»</h3>
+      <p>Открывает первое упражнение из списка с учетом выбранного уровня. Под упражнением появляются дополнительные кнопки:</p>
+      <ul>
+        <li><b>К работе над ошибками</b> — возвращает к списку.</li>
+        <li><b>Следующее</b> — открывает следующее упражнение с ошибками. Если оно относится к другому уровню, на кнопке будет указан соответствующий уровень.</li>
+      </ul>
+      <p>Если упражнение выполнено без ошибок, панель окрашивается в зеленый цвет и на ней появляется отметка «Исправлено».</p>
+      <h3>Когда упражнение исчезает из списка</h3>
+      <p>Упражнение пропадает из списка, если вы выполнили его без ошибок или нажали кнопку «Заново». Оно вновь отобразится в списке, если при следующей проверке в нем обнаружатся ошибки или незаполненные строки.</p></div><nav class="pager" aria-label="Соседние страницы"><button class="pager__btn pager__btn--prev" type="button"><small class="pager__label"><span><span class="arrow arrow--prev" aria-hidden="true">←</span> Предыдущая страница</span></small><span>Упражнения и проверка</span></button><button class="pager__btn pager__btn--next" type="button"><small class="pager__label"><span>Следующая страница <span class="arrow arrow--next" aria-hidden="true">→</span></span></small><span>Избранное и заметки</span></button></nav></div></main>
 </div>
 
 <script charset="utf-8" src="js/helpers.js"></script>

@@ -13,7 +13,7 @@ function crumbs(parts) {
 function mistakeSummary(t, i, r) {
   const score = `<span class="mistakes__score">${r[0]} из ${r[1]}</span>`;
   const m = answers[t.id] && answers[t.id][i] && answers[t.id][i].m;
-  if (!m) return score; /* проверено до того, как стали хранить номера пунктов */
+  if (!m) return score; /* нет отметок последней проверки — только счет */
   /* «ошибки в № 3, 5, 7», «не заполнены № 8–10»; в упражнении с текстом пункты — это пропуски */
   const gaps = t.ex[i].type === 'text';
   const [w, b] = m, parts = [];
@@ -185,6 +185,8 @@ const isAbout = id => id === 'about' || !!aboutPage(id);
 const ABOUT_FOLD = 347, FADE_WORDS = 3, aboutNarrow = matchMedia('(max-width: 998px)');
 let aboutOpen = false; /* хранится только пока открыта страница */
 aboutNarrow.addEventListener('change', () => { if (route === 'about') go('about', false, false); });
+/* обрыв вступления считается по ширине строк: шрифт, догрузившийся после отрисовки, меняет ширину — считаем заново */
+document.fonts?.ready.then(() => { if (route === 'about') go('about', false, false); });
 function renderAboutPage(wrap) {
   wrap.append(el('h1', 'sheet__title', 'Информация'));
   const mail = el('a', 'sheet__link', 'pegasusgamesru@gmail.com');
@@ -437,22 +439,8 @@ function renderNotesPage(wrap) {
     const li = el('li', 'notes-list__item'); li.note = n;
     const foot = el('div', 'notes-list__foot');
     const date = () => el('span', 'notes-list__date', notes.includes(n) ? 'Изменена ' + noteDate(n.at) : 'Новая заметка');
-    let open = false; /* длинная заметка показывается свернутой до «Показать еще» */
-    const fillText = p => {
-      if (n.text.length <= NOTE_FOLD) { p.textContent = n.text; return; }
-      const more = el('button', 'overall__more-btn', open ? 'Скрыть' : 'Показать еще'); more.type = 'button';
-      more.setAttribute('aria-expanded', String(open));
-      more.addEventListener('click', () => { open = !open; fillText(p); $('.overall__more-btn', p).focus(); });
-      if (open) { p.replaceChildren(n.text, ' ', more); return; }
-      /* свернута, как заметки в «Прогрессе»: текст до предела, его последние слова угасают, затем кнопка */
-      const head = n.text.slice(0, NOTE_FOLD).replace(/\s+\S*$/, '');
-      const words = head.split(/(\s+)/), k = Math.max(0, words.length - 5);
-      const row = el('span', 'overall__fade-row');
-      row.append(el('span', 'overall__fade', words.slice(k).join('')), ' ', more);
-      p.replaceChildren(words.slice(0, k).join(''), row);
-    };
     const view = () => {
-      const text = el('p', 'notes-list__text'); fillText(text);
+      const text = el('p', 'notes-list__text', n.text);
       const edit = btn('Редактировать'), del = btn('Удалить', 'del');
       edit.addEventListener('click', () => { render(true); $('textarea', li).focus(); });
       del.addEventListener('click', ask);
@@ -465,16 +453,9 @@ function renderNotesPage(wrap) {
       area.placeholder = 'Текст заметки…';
       area.value = n.text; area.maxLength = NOTE_MAX;
       const save = btn('Сохранить');
-      /* счетчик символов; заметка длиннее предела (сохранена до его появления) не обрезается сама —
-         пока ее не сократить, «Сохранить» недоступна */
+      /* счетчик символов; больше NOTE_MAX поле набрать не дает */
       const count = el('span', 'notes-list__count');
-      const syncCount = () => {
-        const over = area.value.length > NOTE_MAX;
-        count.textContent = `${area.value.length} / ${NOTE_MAX}`;
-        count.classList.toggle('notes-list__count--over', over);
-        save.disabled = over;
-        save.title = over ? `Сократите заметку до ${NOTE_MAX} символов, чтобы сохранить.` : '';
-      };
+      const syncCount = () => { count.textContent = `${area.value.length} / ${NOTE_MAX}`; };
       area.addEventListener('input', syncCount); syncCount();
       save.addEventListener('click', () => {
         /* очищенная заметка сохраняет последний текст: заметка уходит только через «Удалить»; новая без текста не сохраняется */

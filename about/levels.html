@@ -12,9 +12,7 @@
 <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
 <script charset="utf-8" src="js/head.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Unbounded:wght@600;700&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css"> <!-- шрифты лежат в папке сайта (get_fonts.py), не на Google -->
 <link rel="stylesheet" href="style.css">
 
 <div class="app" id="app">
@@ -82,7 +80,10 @@
     </div>
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
-  <main class="sheet app__sheet" id="main"></main>
+  <main class="sheet app__sheet" id="main"><div class="sheet__inner"><div class="crumbs"><button class="crumbs__link" type="button">Информация</button><span class="crumbs__sep" aria-hidden="true">→</span><span>Уровни сложности</span></div><h1 class="sheet__title">Уровни сложности</h1><div class="rule info">
+      <ul class="info__levels"><li><span class="lvl-tag">A1</span><span class="info__level-name">Начальный</span><span class="info__count">9 тем</span></li><li><span class="lvl-tag">A2</span><span class="info__level-name">Элементарный</span><span class="info__count">18 тем</span></li><li><span class="lvl-tag">B1</span><span class="info__level-name">Средний</span><span class="info__count">25 тем</span></li><li><span class="lvl-tag">B2</span><span class="info__level-name">Выше среднего</span><span class="info__count">16 тем</span></li><li><span class="lvl-tag">C1</span><span class="info__level-name">Продвинутый</span><span class="info__count">5 тем</span></li><li><span class="lvl-tag">C2</span><span class="info__level-name">Свободное владение</span><span class="info__count">3 темы</span></li></ul>
+      <h3>Фильтр в меню</h3>
+      <p>В блоке меню «Уровни сложности» выберите «Все» или конкретный уровень. После этого в списке разделов, а также при поиске останутся темы выбранного уровня. Процент прохождения раздела будет рассчитываться только по нему.</p></div><nav class="pager" aria-label="Соседние страницы"><button class="pager__btn pager__btn--prev" type="button"><small class="pager__label"><span><span class="arrow arrow--prev" aria-hidden="true">←</span> Предыдущая страница</span></small><span>Разделы и темы</span></button><button class="pager__btn pager__btn--next" type="button"><small class="pager__label"><span>Следующая страница <span class="arrow arrow--next" aria-hidden="true">→</span></span></small><span>Упражнения и проверка</span></button></nav></div></main>
 </div>
 
 <script charset="utf-8" src="js/helpers.js"></script>

@@ -12,9 +12,7 @@
 <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
 <script charset="utf-8" src="js/head.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Unbounded:wght@600;700&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css"> <!-- шрифты лежат в папке сайта (get_fonts.py), не на Google -->
 <link rel="stylesheet" href="style.css">
 
 <div class="app" id="app">
@@ -82,7 +80,13 @@
     </div>
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
-  <main class="sheet app__sheet" id="main"></main>
+  <main class="sheet app__sheet" id="main"><div class="sheet__inner"><div class="crumbs"><button class="crumbs__link" type="button">Содержание</button><span class="crumbs__sep" aria-hidden="true">→</span><span>Раздел 4</span></div><h1 class="sheet__title">Much, many, (a) little, (a) few</h1><p class="sheet__intro">Слова количества выбираются по тому, исчисляемое ли существительное. Повторите тему 2.3, если сомневаетесь, к какой группе относится слово.</p><div class="page-prog" id="pageProg" data-scope="quantifiers" data-level=""><div class="page-prog__row"><span>Раздел 4 пройден на</span><b class="pct page-prog__value">0%</b></div>
+    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i class="bar__fill" style="width:0%"></i></div>
+    <div class="page-prog__row"><span>Упражнений выполнено</span><b class="page-prog__value">0 из 8</b></div></div><div class="topic-cards"><button class="topic-card" type="button"><span class="topic-card__num">4.1 · <span class="lvl-tag">A2</span></span><span class="topic-card__title">Much, many, a lot of</span><span class="topic-card__sub">How much money? How many people?</span>
+      <span class="topic-card__foot"><span>4 упр.</span><span class="bar topic-card__bar"><i class="bar__fill" style="width:0%"></i></span><span>—</span></span>
+      </button><button class="topic-card" type="button"><span class="topic-card__num">4.2 · <span class="lvl-tag">A2</span></span><span class="topic-card__title">A few, few, a little, little</span><span class="topic-card__sub">a few friends, little time</span>
+      <span class="topic-card__foot"><span>4 упр.</span><span class="bar topic-card__bar"><i class="bar__fill" style="width:0%"></i></span><span>—</span></span>
+      </button></div><div class="pager-current"><span>Текущий раздел</span><span class="pager-current__title">4. Much, many, (a) little, (a) few</span><span class="pager-current__levels"><span>· уровни</span><span class="lvl-tag" title="Элементарный">A2</span></span></div><nav class="pager" aria-label="Соседние страницы"><button class="pager__btn pager__btn--prev" type="button"><small class="pager__label"><span><span class="arrow arrow--prev" aria-hidden="true">←</span> Предыдущий раздел</span><span class="pager__levels"><span class="lvl-tag lvl-tag--sm lvl-tag--filled" title="Начальный">A1</span><span class="lvl-tag lvl-tag--sm" title="Элементарный">A2</span><span class="lvl-tag lvl-tag--sm lvl-tag--filled" title="Средний">B1</span></span></small><span>Местоимения some, any, no, every и их производные</span></button><button class="pager__btn pager__btn--next" type="button"><small class="pager__label"><span class="pager__levels"><span class="lvl-tag lvl-tag--sm" title="Элементарный">A2</span><span class="lvl-tag lvl-tag--sm lvl-tag--filled" title="Средний">B1</span></span><span>Следующий раздел <span class="arrow arrow--next" aria-hidden="true">→</span></span></small><span>Степени сравнения прилагательных</span></button></nav></div></main>
 </div>
 
 <script charset="utf-8" src="js/helpers.js"></script>

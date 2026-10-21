@@ -12,9 +12,7 @@
 <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
 <script charset="utf-8" src="js/head.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Unbounded:wght@600;700&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css"> <!-- шрифты лежат в папке сайта (get_fonts.py), не на Google -->
 <link rel="stylesheet" href="style.css">
 
 <div class="app" id="app">
@@ -82,7 +80,20 @@
     </div>
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
   </aside>
-  <main class="sheet app__sheet" id="main"></main>
+  <main class="sheet app__sheet" id="main"><div class="sheet__inner"><div class="crumbs"><button class="crumbs__link" type="button">Информация</button><span class="crumbs__sep" aria-hidden="true">→</span><span>Упражнения и проверка</span></div><h1 class="sheet__title">Упражнения и проверка</h1><div class="rule info">
+      <h3>Проверка</h3>
+      <p>Кнопка «Проверить» активируется, как только вы введете хотя бы один ответ. После проверки она блокируется, пока вы не измените хотя бы один ответ. Неверные ответы и незаполненные поля выделяются красным цветом.</p>
+      <ul>
+        <li>Регистр букв и знаки препинания не учитываются.</li>
+        <li>Сокращения засчитываются наравне с полными формами: <i>I'm</i> и <i>I am</i>, <i>don't</i> и <i>do not</i>, <i>it's</i> и <i>it is</i>.</li>
+        <li>В заданиях на перевод сравнивается ваш ответ с эталонным и допустимыми вариантами. Поскольку мысль можно выразить по-разному, имеется кнопка «Мой вариант тоже верен» — нажмите ее, если уверены, что перевод правильный.</li>
+      </ul>
+      <h3>Ответы и повтор</h3>
+      <ul>
+        <li><b>Показать ответы</b> — выводит верные ответы или подсвечивает их. Для того чтобы скрыть ответы, нажмите кнопку «Скрыть ответы».</li>
+        <li><b>Заново</b> — очищает упражнение и его результат, чтобы решить его с чистого листа.</li>
+      </ul>
+      <p>Ответы сохраняются в упражнениях. Если вы покинете тему и позже вернетесь к ней, ответы и результаты проверки останутся.</p></div><nav class="pager" aria-label="Соседние страницы"><button class="pager__btn pager__btn--prev" type="button"><small class="pager__label"><span><span class="arrow arrow--prev" aria-hidden="true">←</span> Предыдущая страница</span></small><span>Уровни сложности</span></button><button class="pager__btn pager__btn--next" type="button"><small class="pager__label"><span>Следующая страница <span class="arrow arrow--next" aria-hidden="true">→</span></span></small><span>Работа над ошибками</span></button></nav></div></main>
 </div>
 
 <script charset="utf-8" src="js/helpers.js"></script>
