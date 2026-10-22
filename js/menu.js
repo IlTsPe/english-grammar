@@ -200,10 +200,10 @@ function renderBookmarks() {
 const searchIcon = () => `<svg class="search-icon" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4L14 14"/></svg>`;
 const notesIcon = (cls = '') => `<svg class="notes-icon${cls ? ' ' + cls : ''}" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.8 2.7a1.5 1.5 0 0 1 2.1 2.1L5.6 12.1 2.5 13l.9-3.1z"/><path d="M9.6 3.9l2.1 2.1"/></svg>`;
 const noteDate = at => new Date(at).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
-/* кнопка меню только ведет на страницу: число и стрелка, подсвечена, пока страница открыта */
+/* кнопка меню только ведет на страницу: число и стрелка «→» (не шеврон аккордеона), подсвечена, пока страница открыта */
 function renderNotes() {
   const b = $('#notesBtn');
-  b.innerHTML = `${notesIcon()}<span>Мои заметки</span><b class="side__count">${notes.length || ''}</b>` + FOLD_ARROW;
+  b.innerHTML = `${notesIcon()}<span>Мои заметки</span><b class="side__count">${notes.length || ''}</b>` + arrowHtml('next', 'topic-btn__arrow side__go');
   b.setAttribute('aria-label', `Мои заметки: ${notes.length}`);
   if (route === 'notes') b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
   document.querySelectorAll('.page-link[data-go="notes"]').forEach(h => {

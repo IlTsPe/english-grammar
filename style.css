@@ -242,6 +242,9 @@ button { font: inherit; transition: linear 0.15s; }
 .side__actions .action-btn, .side__summary > div, .side__donate, .toc, .brand__info { box-shadow: var(--raise); }
 .side__summary > div { border-radius: 10px; }
 .side__summary > .side__info { display: none; } /* только в узком drawer: в остальных случаях «Инфо» — под названием или в шапке */
+/* «Мои заметки» и «Инфо» в drawer — ссылки на страницы, поэтому стрелка «→», как у «Содержания тренажера», а не шеврон аккордеона */
+.side__go { margin-left: auto; }
+.side__count:not(:empty) + .side__go { margin-left: 0; }
 .side__stat { width: 100%; justify-content: flex-start; column-gap: 10px; padding-inline: 12px; transition: border-radius .15s linear, border-color .15s linear, background-color .15s linear; }
 .side__fold-arrow { flex: none; width: 12px; height: 12px; margin-left: auto; color: var(--accent); transition: transform .15s linear; }
 .side__count:not(:empty) + .side__fold-arrow { margin-left: 0; }
@@ -317,6 +320,7 @@ button { font: inherit; transition: linear 0.15s; }
 .side__bm .bm-icon { margin: 0; color: currentColor; }
 /* «Избранное» становится золотым при наведении, пока открыто и пока открытая тема пришла из его списка */
 .side__bm:is(:focus-visible, [aria-expanded="true"]), .side__bm--active { border-color: var(--gold-ink); color: var(--gold-ink); }
+.side__bm:is([aria-expanded="true"], .side__bm--active) .side__fold-arrow { color: inherit; } /* стрелка золотая вместе с блоком, а не цвета акцента */
 @media (hover: hover) { :where(:root:not(.pointer-still)) .side__bm:hover { border-color: var(--gold-ink); color: var(--gold-ink); } }
 /* рамка открытого «Прогресса»: полный акцент в светлой теме; в темной акцент почти белый, поэтому приглушен, как остальные рамки */
 .side__summary { --fold-bc: var(--accent); }
@@ -330,7 +334,9 @@ button { font: inherit; transition: linear 0.15s; }
 .side__fold .overall, .side__fold .bookmarks { margin: 0; }
 /* открытая кнопка и ее блок — одна рамка: кнопка теряет нижние углы, блок — верхний край и углы;
    блок сохраняет цвет рамки кнопки (акцент у «Прогресса», золото у «Избранного») и тонкую линию под кнопкой */
-.side__stat[aria-expanded="true"] { border-bottom-color: transparent; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+/* нижней границы у открытой кнопки нет совсем (ее 1.5px ушли в отступ — высота та же): прозрачная граница срезала боковые
+   по диагонали, и на стыке с блоком в рамке были зазубрины */
+.side__stat[aria-expanded="true"] { border-bottom-width: 0; padding-bottom: 7.5px; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .side__fold :is(.overall, .bookmarks) { border: 1.5px solid var(--fold-bc); border-top-width: 0; border-radius: 0 0 10px 10px; box-shadow: inset 0 1px var(--border); }
 .side__fold .bookmarks { border-color: var(--gold-ink); }
 /* у «Избранного» свое золото: мягче общего в темной теме, глубже и насыщеннее в светлой
@@ -345,7 +351,6 @@ button { font: inherit; transition: linear 0.15s; }
 .side__fold .bookmarks__empty { padding-top: 8px; }
 /* «Мои заметки»: не раскрывающийся блок, а просто переход на свою страницу; залита акцентом, пока эта страница открыта, как «Инфо» */
 .side__notes[aria-current="page"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
-:is(.side__notes, .side__info .page-link)[aria-current] .side__fold-arrow { color: inherit; }
 .notes-icon { flex: none; width: 15px; height: 15px; }
 .overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; row-gap: 8px; }
 :root[data-theme="light"] .overall { background: none; } /* лежит на подкрашенном меню, как другие рамки там */
@@ -603,8 +608,8 @@ button { font: inherit; transition: linear 0.15s; }
 .topic-btn__arrow { font-size: 17.5px; font-weight: 700; line-height: 1; }
 /* стрелка в кнопке-ссылке сдвигается в свою сторону, пока на кнопку наведено или она в фокусе */
 .arrow { display: inline-block; transition: transform .15s ease; }
-:is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start):is(:focus-visible) .arrow--next { transform: translateX(3px); }
-@media (hover: hover) { :where(:root:not(.pointer-still)) :is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start):hover .arrow--next { transform: translateX(3px); } }
+:is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start, .side__notes, .side__info .page-link):is(:focus-visible) .arrow--next { transform: translateX(3px); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) :is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start, .side__notes, .side__info .page-link):hover .arrow--next { transform: translateX(3px); } }
 :is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):is(:focus-visible) .arrow--prev { transform: translateX(-3px); }
 @media (hover: hover) { :where(:root:not(.pointer-still)) :is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):hover .arrow--prev { transform: translateX(-3px); } }
 /* «Содержание тренажера» занимает свою секцию от края до края, текст на одной линии с подписями; объявлено после .topic-btn, чтобы перевесить */
@@ -678,22 +683,33 @@ button { font: inherit; transition: linear 0.15s; }
    слабое пятно акцента у низа и более темные бока; свет складывается (screen). Мягче референса,
    чтобы заголовок под ним оставался читаемым */
 .page--glow .pager__btn { background-color: color-mix(in srgb, var(--sheet) 50%, transparent); } /* непрозрачная карточка цвета листа выделялась на зареве */
-.page--glow :is(body, .sheet), .page--glow :is(.side, .float-tools)::before { background-size: 100% 100%; background-attachment: fixed; }
-:root[data-theme="dark"].page--glow :is(body, .sheet), :root[data-theme="dark"].page--glow :is(.side, .float-tools)::before {
-  background-image:
+/* Свет — переменная --glow; рисуют ее неподвижные слои размером с окно: у страницы (body::before) и у листа (.sheet::before,
+   обрезан по листу его clip-path). Раньше это был фон с background-attachment: fixed — он перерисовывался на каждом кадре
+   прокрутки (с SVG-зерном на телефоне — сильные тормоза); слой position: fixed рисуется один раз и только сдвигается.
+   Слои непрозрачные (цвет страницы / листа под светом), иначе screen темной темы смешивался бы не с тем цветом */
+.page--glow body::before, .page--glow .sheet::before { content: ""; position: fixed; z-index: -1; inset: 0 0 auto; height: 100vh; pointer-events: none;
+  background-color: var(--paper); background-image: var(--glow); background-size: 100% 100%; background-blend-mode: var(--glow-blend, normal); }
+.page--glow .sheet { position: relative; isolation: isolate; clip-path: border-box; } /* border-box — по рамке листа вместе со скруглением, каким бы оно ни было */
+.page--glow .sheet::before { background-color: var(--sheet); }
+/* слой листа закрывает его левую рамку — рамка рисуется поверх копией (цвет и его анимация — от листа) */
+.page--glow .sheet::after { content: ""; position: absolute; inset: 0 auto 0 -1px; border-left: 1px solid; border-left-color: inherit; pointer-events: none; }
+/* углы шапок: шапка прилипает к верху окна, поэтому у полосы обычный фон размером с окно, по центру шапки — свет совпадает со страницей */
+.page--glow :is(.side, .float-tools)::before { background-image: var(--glow); background-size: 100vw 100vh; background-position: center top; background-blend-mode: var(--glow-blend, normal); }
+:root[data-theme="dark"].page--glow {
+  --glow:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .2 0'/%3E%3C/filter%3E%3CradialGradient id='g' cx='.55' cy='-.1' r='.7'%3E%3Cstop offset='0' stop-color='white'/%3E%3Cstop offset='1' stop-color='black'/%3E%3C/radialGradient%3E%3Cmask id='m'%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3C/mask%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' mask='url(%23m)'/%3E%3C/svg%3E"),
     radial-gradient(34% 40% at 55% -8%, rgb(226 222 255 / 22%), transparent 80%),
     radial-gradient(55% 80% at 55% -5%, rgb(173 162 255 / 15%), transparent 80%),
     radial-gradient(28% 16% at 55% 86%, rgb(173 162 255 / 8%), transparent 80%),
     radial-gradient(120% 100% at 55% 35%, transparent 55%, rgb(4 4 12 / 40%));
-  background-blend-mode: normal, screen, screen, screen, normal;
+  --glow-blend: normal, screen, screen, screen, normal;
 }
 /* Светлая: тот же прожектор в светлых чистых оттенках семейства акцента (сам темный акцент выглядел грязью на
    сером листе): белое ядро, барвинковый конус с небесно-голубым слева и фиолетовым справа; вместо
    пятна — уменьшенная копия света, поднимающаяся снизу, примерно на треть слабее верхнего; бока не затемнены.
    Темное зерно под верхним светом */
-:root[data-theme="light"].page--glow :is(body, .sheet), :root[data-theme="light"].page--glow :is(.side, .float-tools)::before {
-  background-image:
+:root[data-theme="light"].page--glow {
+  --glow:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .08 0 0 0 0 .1 0 0 0 0 .23 0 0 0 .32 0'/%3E%3C/filter%3E%3CradialGradient id='g' cx='.55' cy='-.1' r='.7'%3E%3Cstop offset='0' stop-color='white'/%3E%3Cstop offset='1' stop-color='black'/%3E%3C/radialGradient%3E%3Cmask id='m'%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3C/mask%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' mask='url(%23m)'/%3E%3C/svg%3E"),
     radial-gradient(30% 34% at 55% -6%, rgb(255 255 255 / 70%), transparent 80%),
     radial-gradient(46% 62% at 55% -10%, rgb(112 140 255 / 38%), transparent 78%),
@@ -1154,6 +1170,10 @@ button { font: inherit; transition: linear 0.15s; }
     padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px calc(env(safe-area-inset-bottom, 0px) + 24px); background: var(--paper); border-right: 1px solid var(--border);
     box-shadow: 10px 0 32px rgba(0, 0, 0, .25); transform: translateX(-105%); visibility: hidden; transition: transform .2s ease, visibility .2s linear; }
   .drawer--open { transform: none; visibility: visible; }
+  /* при раскрытии «Прогресса» и «Избранного» все ниже сдвигается; в одном слое с меню это перерисовка на каждом кадре
+     (длинный список разделов с тенями — на телефоне аккордеон раскрывался рывками). В своих слоях блоки только сдвигаются,
+     а содержимое аккордеона только открывается обрезкой. Только здесь: на десктопе слои сделали бы текст меню без субпиксельного сглаживания */
+  .side__summary > div, .side__nav, .side__donate, .side__fold-clip > * { will-change: transform; }
   .drawer__head { display: flex; align-items: center; justify-content: space-between; column-gap: 12px; font-family: var(--f-display); font-weight: 700; font-size: 17px; }
   /* кнопка закрытия: кнопка «Меню» шапки (высота 35px, ее значок, рамка и тень); ширину ставит setDrawer по «Меню» */
   .drawer__close { width: 35px; min-height: 35px; padding: 0; box-shadow: var(--raise);
