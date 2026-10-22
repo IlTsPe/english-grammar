@@ -211,15 +211,18 @@ button { font: inherit; transition: linear 0.15s; }
 .brand__title { display: flex; align-items: center; column-gap: 7px; font-family: var(--f-display); font-weight: 700; font-size: 21px; line-height: 1.15; letter-spacing: -.01em; color: inherit; text-decoration: none; }
 /* название — ссылка на «Содержание тренажера» */
 .brand__title:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
-/* рисунок значка встроен в страницу, чтобы следовать теме (на 2px ниже центра строки — видимый текст сидит ниже): синяя пластина с бледной шапочкой в светлой теме, фиолетовая пластина с темной шапочкой в темной */
-/* кисточка: золотая в обеих темах (#F0C048 в темной, #E0A800 в светлой) */
-.brand__logo { flex: none; position: relative; top: 2px; width: 42px; height: 42px; --logo-plate: #ADA2FF; --logo-ink: #16132E; --logo-tassel: #F0C048; }
-:root[data-theme="light"] .brand__logo { --logo-plate: #2547D0; --logo-ink: #E2DDFF; --logo-tassel: #E0A800; }
-.brand__logo-plate { fill: var(--logo-plate); }
-.brand__logo-ink { fill: var(--logo-ink); }
+/* логотип — как значок A5: панель со срезанными углами, светящаяся рамка, шапка с кисточкой. Рисунок встроен в страницу, чтобы следовать теме
+   (на 2px ниже центра строк — видимый текст сидит ниже середины его строки). Темная: темная панель, неоновая рамка лаванда → синий, белая шапка;
+   светлая — палитра прежнего логотипа: синяя панель, светлая шапка, кисточка #E0A800 */
+.brand__logo { flex: none; position: relative; top: 2px; width: 42px; height: 42px;
+  --logo-panel: #16133A; --logo-frame-a: #ADA2FF; --logo-frame-b: #4E6BFF; --logo-cap: #FFFFFF; --logo-tassel: #F0C048; }
+:root[data-theme="light"] .brand__logo { --logo-panel: #2547D0; --logo-frame-a: #E2DDFF; --logo-frame-b: #ADA2FF; --logo-cap: #E2DDFF; --logo-tassel: #E0A800; }
+.brand__logo-panel { fill: var(--logo-panel); }
+.brand__logo-frame-a { stop-color: var(--logo-frame-a); }
+.brand__logo-frame-b { stop-color: var(--logo-frame-b); }
+.brand__logo-cap { fill: var(--logo-cap); }
 .brand__logo-tassel { stroke: var(--logo-tassel); }
 .brand__logo-pad { fill: var(--logo-tassel); }
-.brand__logo-marks { stroke: var(--logo-ink); stroke-width: 1.6; }
 .brand__mark {
   padding: 0 4px; border-radius: 4px; color: var(--accent);
   background-color: var(--sheet);
