@@ -327,10 +327,10 @@ button { font: inherit; transition: linear 0.15s; }
 :root:not([data-theme="light"]) .side__summary { --fold-bc: color-mix(in srgb, var(--accent) 55%, transparent); }
 .side__stat[aria-expanded="true"]:not(.side__bm) { border-color: var(--fold-bc); border-bottom-color: transparent; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .side__stat[aria-expanded="true"]:not(.side__bm):hover { border-color: var(--fold-bc); border-bottom-color: transparent; } }
-/* блок под своей кнопкой; строки сетки анимируют его раскрытие и закрытие */
-.side__fold { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .15s linear, opacity .15s linear; }
+/* блок под своей кнопкой; открыт — строка сетки во всю высоту содержимого */
+/* без перехода: раскрытие анимирует slide (accordions.js) — сдвигами, без анимации высоты */
+.side__fold { display: grid; grid-template-rows: 0fr; opacity: 0; }
 .side__fold--open { grid-template-rows: 1fr; opacity: 1; }
-.side__summary .side__fold { transition: none; } /* «Прогресс» и «Избранное» анимирует slideFold — сдвигами, без анимации высоты */
 .side__fold-clip { min-height: 0; overflow: hidden; }
 .side__fold .overall, .side__fold .bookmarks { margin: 0; }
 /* открытая кнопка и ее блок — одна рамка: кнопка теряет нижние углы, блок — верхний край и углы;
@@ -594,7 +594,8 @@ button { font: inherit; transition: linear 0.15s; }
 .chap__arrow { display: grid; place-items: center; width: 16px; height: 16px; color: var(--accent); }
 .chap__arrow-icon { transition: transform .15s linear; }
 .chap--open .chap__arrow-icon { transform: rotate(90deg); }
-.chap__body { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .15s linear, opacity .15s linear; }
+.chap--closing .chap__arrow-icon { transform: none; } /* закрывающийся раздел еще открыт, а стрелка уже поворачивается */
+.chap__body { display: grid; grid-template-rows: 0fr; opacity: 0; } /* раскрытие анимирует slideChap */
 .chap--open .chap__body { grid-template-rows: 1fr; opacity: 1; }
 .chap__clip { min-height: 0; overflow: hidden; }
 .chap__topics { display: grid; row-gap: 6px; margin: 2px 0 6px 22px; padding-left: 8px; border-left: 1px solid var(--border); }

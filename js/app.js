@@ -205,10 +205,17 @@ $('#tocToggle').insertAdjacentHTML('beforeend', FOLD_ARROW);
   box.addEventListener('animationiteration', e => { if (e.animationName === 'bill-fall') shuffle(e.target); });
 })();
 $('#tocToggle').addEventListener('click', () => {
+  finishSlide('toc');
+  const wasOpen = tocOpen();
   /* во время поиска список принудительно открыт; переключатель тогда очищает поиск и сворачивает список */
   if ($('#search').value.trim()) { $('#search').value = ''; tocFolded = true; }
   else tocFolded = !tocFolded;
   store.set('gk2-toc-folded', tocFolded);
-  renderToc();
+  const open = tocOpen();
+  if (open === wasOpen || reducedMotion()) { renderToc(); return; }
+  /* закрытие: список уезжает как есть (с найденными при поиске разделами), а перерисовывается уже свернутым в конце;
+     кнопка переходит в новое состояние сразу */
+  if (open) { renderToc(); slideToc(true); }
+  else { $('#tocToggle').setAttribute('aria-expanded', 'false'); slideToc(false); }
 });
 Object.keys(FOLD).forEach(k => { $(FOLD[k][0]).addEventListener('click', () => setFold(k, !folds[k], true)); setFold(k, !!folds[k]); });

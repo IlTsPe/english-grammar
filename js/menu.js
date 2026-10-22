@@ -64,6 +64,14 @@ function setChapOpen(box, open) {
   box.querySelector('.chap__btn').setAttribute('aria-expanded', String(open));
   box.querySelector('.chap__body').inert = !open;
 }
+/* раскрытие и закрытие раздела сдвигом (slide): раздел уже открыт, темы выезжают из-под заголовка, разделы ниже съезжают;
+   подкраска карточки (::before) растет вместе с ними. Закрывается раздел (done) в конце, стрелка поворачивается сразу */
+function slideChap(box, open, done = null) {
+  const h = box.querySelector('.chap__body').offsetHeight;
+  if (!open) box.classList.add('chap--closing');
+  slide('chap', box.querySelector('.chap__topics'), box, h, open, done && (() => { box.classList.remove('chap--closing'); done(); }),
+    [[box, { clipPath: [`inset(0 0 ${h}px 0 round 8px)`, 'inset(0 round 8px)'] }, { pseudoElement: '::before' }]]);
+}
 
 /* наведению нужно настоящее движение мыши: перерисовка или прокрутка ставят под неподвижный курсор новые пункты, и браузер подсвечивал их,
    будто на них навели. Пока у <html> есть .pointer-still, правила наведения выключены (они ограничены :where(:root:not(.pointer-still)));
@@ -79,6 +87,7 @@ document.addEventListener('pointermove', e => {
 });
 
 function renderToc() {
+  finishSlide('chap');
   holdHover();
   const q = $('#search').value.trim().toLowerCase();
   const filtering = !!(q || levelFilter);
@@ -88,14 +97,14 @@ function renderToc() {
   renderLevelProgress();
   fillLevelChips();
   const list = $('#tocList'); list.innerHTML = '';
-  let shown = 0;
+  let shown = 0, animBox = null;
   CHAPTERS.forEach(ch => {
     const match = ch.topics.filter(t => (!levelFilter || t.level === levelFilter) &&
       (!q || (t.title + ' ' + t.sub + ' ' + ch.title).toLowerCase().includes(q)));
     if (filtering && !match.length) return;
     const open = q ? true : ch.id === openChap;
-    /* раздел, открытый переходом, сначала рисуется закрытым, затем раскрывается в следующем кадре */
-    const animateIn = open && justToggled === ch.id;
+    /* раздел, открытый кликом или переходом, раскрывается анимацией, когда весь список нарисован */
+    const animateIn = open && justToggled === ch.id && !reducedMotion();
     /* раздел открытой страницы (сам раздел или одна из его тем); тема, открытая из «Избранного», отмечается только в том списке */
     const current = !viaBookmarks && (route === 'ch-' + ch.id || (topicById[route] && topicById[route].ch === ch));
     const box = el('div', current ? 'chap chap--current' : 'chap');
@@ -111,9 +120,17 @@ function renderToc() {
       '<span class="chap__arrow" aria-hidden="true"><svg class="chap__arrow-icon" viewBox="0 0 12 12" width="12" height="12"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>';
     /* название раздела только раскрывает и сворачивает его; страница раздела открывается из «Обзора всего раздела» внутри */
     cb.addEventListener('click', () => {
-      if (box.classList.contains('chap--open')) { setChapOpen(box, false); if (!q) setOpenChap(null); }
-      else if (q) setChapOpen(box, true);
-      else { justToggled = ch.id; setOpenChap(ch.id); renderToc(); }
+      finishSlide('chap');
+      if (box.classList.contains('chap--open')) {
+        if (!q) setOpenChap(null);
+        if (reducedMotion()) setChapOpen(box, false); else slideChap(box, false, () => setChapOpen(box, false));
+      } else if (q) { setChapOpen(box, true); if (!reducedMotion()) slideChap(box, true); }
+      else {
+        /* без перерисовки всего оглавления (на телефоне она задерживала начало анимации): прежний раздел закрывается сразу, этот раскрывается */
+        setOpenChap(ch.id);
+        const prev = list.querySelector('.chap--open'); if (prev) setChapOpen(prev, false);
+        setChapOpen(box, true); if (!reducedMotion()) slideChap(box, true);
+      }
     });
     box.append(cb);
     if (levelFilter && !q && match.length < ch.topics.length) {
@@ -131,12 +148,13 @@ function renderToc() {
     sub.append(ov);
     (filtering ? match : ch.topics).forEach(t => { const b = topicButton(t); b.classList.add('chap__topic'); sub.append(b); });
     clip.append(sub); body.append(clip); box.append(body);
-    setChapOpen(box, open && !animateIn);
-    if (animateIn) requestAnimationFrame(() => requestAnimationFrame(() => setChapOpen(box, true)));
+    setChapOpen(box, open);
+    if (animateIn) animBox = box;
     shown++;
     list.append(box);
   });
   justToggled = null;
+  if (animBox) slideChap(animBox, true);
   $('#tocToggle .toc__label').textContent = levelFilter ? `Разделы уровня ${levelFilter}` : 'Разделы тренажера';
   $('#tocCount').textContent = shown || '';
   syncTocFold();

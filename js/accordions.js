@@ -1,4 +1,4 @@
-/* ---------- Аккордеоны: «Прогресс» и «Избранное» ---------- */
+/* ---------- Аккордеоны: «Прогресс» и «Избранное», общая анимация аккордеонов меню (slide) ---------- */
 /* каждый открывается сам по себе; какие открыты, запоминается (gk2-folds) */
 const FOLD_ARROW = '<svg class="side__fold-arrow" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 let folds = store.get('gk2-folds', {});
@@ -11,44 +11,57 @@ function renderFold(kind) {
 function setFold(kind, open, animate = false) {
   folds[kind] = open; store.set('gk2-folds', folds);
   const [btn, box] = FOLD[kind];
-  const apply = () => {
-    $(box).classList.toggle('side__fold--open', open);
-    $(box).inert = !open;
-    $(btn).setAttribute('aria-expanded', String(open));
-  };
-  if (foldAnim[kind]) foldAnim[kind]();
+  const apply = () => { $(box).classList.toggle('side__fold--open', open); $(box).inert = !open; };
+  finishSlide(kind);
   if (open) renderFold(kind);
-  if (!animate || matchMedia('(prefers-reduced-motion: reduce)').matches) { apply(); return; }
+  /* кнопка (рамка, углы, стрелка) переходит в новое состояние сразу и меняется вместе со сдвигом,
+     а не после него: иначе закрытый блок еще мгновение выглядел открытым */
+  $(btn).setAttribute('aria-expanded', String(open));
+  if (!animate || reducedMotion()) { apply(); return; }
   if (open) apply();
-  slideFold(kind, $(box), open, open ? null : apply);
+  slide(kind, $(box).querySelector('.side__fold-clip > *'), $(box), $(box).offsetHeight, open, open ? null : apply);
 }
-/* раскрытие без анимации раскладки (на телефоне она шла рывками): блок сразу получает свою высоту, а дальше только сдвиги —
-   содержимое выезжает из-под кнопки (его обрезает .side__fold-clip), все ниже в меню съезжает вместе с ним.
-   Закрытие — то же в обратную сторону, высота меняется в конце (done). foldAnim[kind] — досрочно завершить прошлую анимацию */
-const foldAnim = {};
-function slideFold(kind, fold, open, done) {
-  const content = fold.querySelector('.side__fold-clip > *');
-  const h = fold.offsetHeight;
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* Раскрытие аккордеонов меню без анимации раскладки (на телефоне она шла рывками): блок сразу получает свою высоту,
+   а дальше только сдвиги — content выезжает из-под заголовка (его обрезает родитель с overflow: hidden), а все, что в меню
+   ниже элемента after, съезжает вместе с ним на h. Закрытие — то же в обратную сторону; высоту меняет done в конце.
+   extra — свои кадры [элемент, кадры раскрытия, параметры] (для закрытия они идут обратно).
+   key — чья анимация: finishSlide(key) досрочно завершает ее; вызывать до любого изменения раскладки этого блока */
+const slides = {};
+function slide(key, content, after, h, open, done, extra = []) {
   if (!content || !h) { if (done) done(); return; }
-  /* все, что ниже блока: следующие соседи его обертки и ее предков до самого меню */
+  /* все, что ниже: следующие соседи after и его предков до самого меню */
   const below = [];
-  for (let n = fold.parentElement; n && !n.matches('.side'); n = n.parentElement)
+  for (let n = after; n && !n.matches('.side'); n = n.parentElement)
     for (let sib = n.nextElementSibling; sib; sib = sib.nextElementSibling) below.push(sib);
   const shut = `translateY(${-h}px)`, opts = { duration: 180, easing: 'cubic-bezier(.25, .7, .35, 1)' };
   const frames = open ? [shut, 'none'] : ['none', shut];
+  const back = kf => Object.fromEntries(Object.entries(kf).map(([k, v]) => [k, [...v].reverse()]));
   const anims = [content.animate({ transform: frames, opacity: open ? [0, 1] : [1, 0] }, opts),
-    ...below.map(b => b.animate({ transform: frames }, opts))];
-  const finish = () => { delete foldAnim[kind]; anims.forEach(a => a.cancel()); if (done) done(); };
-  foldAnim[kind] = finish;
-  anims[0].onfinish = () => { if (foldAnim[kind] === finish) finish(); };
+    ...below.map(b => b.animate({ transform: frames }, opts)),
+    ...extra.map(([elm, kf, o]) => elm.animate(open ? kf : back(kf), { ...opts, ...o }))];
+  const finish = () => { delete slides[key]; anims.forEach(a => a.cancel()); if (done) done(); };
+  slides[key] = finish;
+  anims[0].onfinish = () => { if (slides[key] === finish) finish(); };
 }
+function finishSlide(key) { if (slides[key]) slides[key](); }
 /* весь список разделов сворачивается под «Разделы тренажера» (gk2-toc-folded); при поиске он виден всегда */
 let tocFolded = store.get('gk2-toc-folded', false);
+const tocOpen = () => !tocFolded || !!$('#search').value.trim();
 function syncTocFold() {
-  const open = !tocFolded || !!$('#search').value.trim();
+  if (slides.toc) return; /* список закрывается — закроет slide в конце */
+  const open = tocOpen();
   $('#tocFold').classList.toggle('side__fold--open', open);
   $('#tocFold').inert = !open;
   $('#tocToggle').setAttribute('aria-expanded', String(open));
+}
+/* «Разделы тренажера»: весь список выезжает и уезжает сдвигом (slide); рамка .toc растет и сжимается вместе с ним —
+   ее обрезка (снаружи с запасом 12px под тень) отстает от низа на еще не открытую часть */
+function slideToc(open) {
+  const fold = $('#tocFold'), h = fold.offsetHeight;
+  const clip = `inset(-12px -12px ${h}px -12px round 10px)`, full = 'inset(-12px -12px -12px -12px round 10px)';
+  slide('toc', $('#tocList'), fold, h, open, open ? null : renderToc,
+    [[$('.toc'), { clipPath: [clip, full] }]]);
 }
 /* кнопки с data-go: ссылки на страницы в меню и шапке и ссылки из разметки (блок прогресса) */
 document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) go(g.dataset.go); });
