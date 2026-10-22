@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-<!-- значок вкладки: каркасная шапка-голограмма в луче с размытыми краями — без книги, без размытия контура и строк развертки, контур толще, чтобы читалась на 16px. Иконки установленного приложения — отдельные PNG с книгой (favicon-192/512, apple-touch-icon), в манифесте только они -->
+<!-- значок вкладки: каркасная шапка-голограмма в луче с размытыми краями — без книги, без размытия контура и строк развертки, контур толще, чтобы читалась на 16px. Иконки установленного приложения — отдельные PNG с панелью A5: неоновая рамка и белая шапка (favicon-192/512, apple-touch-icon), в манифесте только они -->
 <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1C1650"/><stop offset="1" stop-color="#0B1030"/></linearGradient>
 <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7B6CFF" stop-opacity=".55"/><stop offset="1" stop-color="#7B6CFF" stop-opacity="0"/></radialGradient>
 <linearGradient id="holo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ADA2FF" stop-opacity=".45"/><stop offset="1" stop-color="#ADA2FF" stop-opacity=".12"/></linearGradient>
