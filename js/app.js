@@ -159,7 +159,7 @@ addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if ($('#drawer').classList.contains('drawer--open')) setDrawer(false, true);
 });
-matchMedia('(max-width: 880px)').addEventListener('change', () => setDrawer(false));
+matchMedia('(max-width: 959px)').addEventListener('change', () => setDrawer(false));
 /* «Назад» / «Вперед» (popstate) и hash, набранный в адресной строке (hashchange), открывают эту страницу.
    Старые адреса #id (закладки, ссылки) тоже открывают свою страницу, а адрес меняется на ее путь */
 const urlId = () => location.hash.slice(1) || (PATH_URLS ? (idFromPath() === '' ? NOT_FOUND : idFromPath()) : null);

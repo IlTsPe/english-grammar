@@ -30,9 +30,10 @@ const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').match
 const slides = {};
 function slide(key, content, after, h, open, done, extra = []) {
   if (!content || !h) { if (done) done(); return; }
-  /* все, что ниже: следующие соседи after и его предков до самого меню */
+  /* все, что ниже: следующие соседи after и его предков до самого меню; не выше .drawer — за ним в .side лежит
+     подложка .drawer-backdrop (на весь экран), она сдвигалась бы вместе со списком */
   const below = [];
-  for (let n = after; n && !n.matches('.side'); n = n.parentElement)
+  for (let n = after; n && !n.matches('.side, .drawer'); n = n.parentElement)
     for (let sib = n.nextElementSibling; sib; sib = sib.nextElementSibling) below.push(sib);
   const shut = `translateY(${-h}px)`, opts = { duration: 180, easing: 'cubic-bezier(.25, .7, .35, 1)' };
   const frames = open ? [shut, 'none'] : ['none', shut];

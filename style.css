@@ -161,7 +161,7 @@ button { font: inherit; transition: linear 0.15s; }
 .side__bar .page-link--icon { width: 35px; }
 .page-link__count { font-family: var(--f-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
 .page-link__count:empty { display: none; }
-@media (min-width: 881px) {
+@media (min-width: 960px) {
   /* при сворачивании колонка меню анимируется до нуля, а панель тает и уезжает */
   .app { transition: grid-template-columns .15s linear, gap .15s linear; }
   .app__side { transition: opacity .15s linear, transform .15s linear, visibility .15s linear; }
@@ -176,7 +176,7 @@ button { font: inherit; transition: linear 0.15s; }
 }
 /* уже 1300px текст заходил бы под плавающие кнопки, поэтому они становятся шапкой над листом, как на мобильном:
    кнопка меню слева, тема справа; шапка занимает всю строку сетки и остается на экране при прокрутке */
-@media (min-width: 881px) and (max-width: 1299px) {
+@media (min-width: 960px) and (max-width: 1299px) {
   /* z-index мобильной шапки, чтобы ничто с листа не рисовалось поверх нее */
   .float-tools { position: sticky; top: 0; z-index: 20; grid-column: 1 / -1; display: flex; align-items: center; column-gap: 8px;
     padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px; background: var(--paper); border-radius: 10px 10px 0 0; box-shadow: var(--raise-down); }
@@ -192,19 +192,19 @@ button { font: inherit; transition: linear 0.15s; }
   .app--side-collapsed :is(.ex, .notes-tools) { scroll-margin-top: 76px; } /* отступ под прилипшую шапку */
 }
 /* уже 1190px меню в 310px занимает слишком много экрана: колонка уже, заголовок меньше */
-@media (min-width: 881px) and (max-width: 1189px) {
+@media (min-width: 960px) and (max-width: 1189px) {
   .app:not(.app--side-collapsed) { grid-template-columns: 272px minmax(0, 1fr); column-gap: 10px; }
   .app .brand__title { font-size: 19px; }
-  .app .brand__logo { width: 38px; height: 38px; }
+  .app .brand__logo { width: 44px; height: 44px; top: 1px; }
   .app .brand__sub { font-size: 12px; }
   .side .action-btn { font-size: 12.5px; }
   .side__actions .action-btn { column-gap: 5px; padding-inline: 8px; }
 }
 /* уже 1010px — еще одна ступень вниз */
-@media (min-width: 881px) and (max-width: 1009px) {
+@media (min-width: 960px) and (max-width: 1009px) {
   .app:not(.app--side-collapsed) { grid-template-columns: 260px minmax(0, 1fr); }
   .app .brand__title { font-size: 18px; }
-  .app .brand__logo { width: 36px; height: 36px; }
+  .app .brand__logo { width: 41px; height: 41px; top: 2px; }
   .side .action-btn { font-size: 12px; }
   .side__actions { column-gap: 6px; }
 }
@@ -213,15 +213,18 @@ button { font: inherit; transition: linear 0.15s; }
 .brand__title { display: flex; align-items: center; column-gap: 7px; font-family: var(--f-display); font-weight: 700; font-size: 21px; line-height: 1.15; letter-spacing: -.01em; color: inherit; text-decoration: none; }
 /* название — ссылка на «Содержание тренажера» */
 .brand__title:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
-/* рисунок значка встроен в страницу, чтобы следовать теме (на 2px ниже центра строки — видимый текст сидит ниже): синяя пластина с бледной шапочкой в светлой теме, фиолетовая пластина с темной шапочкой в темной */
-/* кисточка: золотая в обеих темах (#F0C048 в темной, #E0A800 в светлой) */
-.brand__logo { flex: none; position: relative; top: 2px; width: 42px; height: 42px; --logo-plate: #ADA2FF; --logo-ink: #16132E; --logo-tassel: #F0C048; }
-:root[data-theme="light"] .brand__logo { --logo-plate: #2547D0; --logo-ink: #E2DDFF; --logo-tassel: #E0A800; }
-.brand__logo-plate { fill: var(--logo-plate); }
-.brand__logo-ink { fill: var(--logo-ink); }
+/* логотип — как иконка приложения A5: панель со скругленными срезами углов, светящаяся рамка, шапка с кисточкой; заливка только внутри рамки, снаружи фон шапки. Рисунок из спрайта (#i-logo) следует теме.
+   Размер и сдвиг на всех ширинах подобраны так, чтобы рамка шла от верха «Г» до низа плашки «онлайн» (видимый текст сидит ниже середины строк). Темная: темная панель, неоновая рамка лаванда → синий, белая шапка; светлая — наоборот, как темная:
+   светлая панель чуть светлее шапки, рамка фиолетовый → синий, синяя шапка, кисточка #E0A800. Переменные заданы и на .sprite: градиент рамки берет цвета там, где он описан, а не у <use> */
+.brand__logo { flex: none; position: relative; top: 2px; width: 49px; height: 49px; }
+.sprite, .brand__logo { --logo-panel: #16133A; --logo-frame-a: #ADA2FF; --logo-frame-b: #4E6BFF; --logo-cap: #FFFFFF; --logo-tassel: #F0C048; }
+:root[data-theme="light"] :is(.sprite, .brand__logo) { --logo-panel: #EEEDFB; --logo-frame-a: #8A7BF5; --logo-frame-b: #3D5BDB; --logo-cap: #2547D0; --logo-tassel: #E0A800; }
+.brand__logo-panel { fill: var(--logo-panel); }
+.brand__logo-frame-a { stop-color: var(--logo-frame-a); }
+.brand__logo-frame-b { stop-color: var(--logo-frame-b); }
+.brand__logo-cap { fill: var(--logo-cap); }
 .brand__logo-tassel { stroke: var(--logo-tassel); }
 .brand__logo-pad { fill: var(--logo-tassel); }
-.brand__logo-marks { stroke: var(--logo-ink); stroke-width: 1.6; }
 .brand__mark {
   padding: 0 4px; border-radius: 4px; color: var(--accent);
   background-color: var(--sheet);
@@ -357,7 +360,9 @@ button { font: inherit; transition: linear 0.15s; }
 /* «Мои заметки»: не раскрывающийся блок, а просто переход на свою страницу; залита акцентом, пока эта страница открыта, как «Инфо» */
 .side__notes[aria-current="page"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 .notes-icon { flex: none; width: 15px; height: 15px; }
-.overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; row-gap: 8px; }
+/* колонка не шире блока: иначе ее растягивала неразрывная строка (свернутое пояснение с «Показать еще»), и в узком
+   меню (960–1100px) строки выходили за рамку */
+.overall { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
 :root[data-theme="light"] .overall { background: none; } /* лежит на подкрашенном меню, как другие рамки там */
 /* то же для контролов в меню: без серой заливки листа на подкрашенной бумаге; accent-soft почти цвета бумаги,
    поэтому при наведении используется более сильный --hover из списка содержания */
@@ -370,16 +375,16 @@ button { font: inherit; transition: linear 0.15s; }
 :root:not([data-theme="light"]) .theme-toggle:is(:focus-visible) { border-color: color-mix(in srgb, #2547D0 55%, transparent); background: #FFFFFF; color: #2547D0; }
 @media (hover: hover) { :root:not([data-theme="light"]):where(:root:not(.pointer-still)) .theme-toggle:hover { border-color: color-mix(in srgb, #2547D0 55%, transparent); background: #FFFFFF; color: #2547D0; } }
 :root[data-theme="light"] .side .level-chip:not([aria-pressed="true"]) { --face: var(--paper); }
-.overall__row { display: flex; justify-content: space-between; column-gap: 8px; font-size: 13px; color: var(--muted); }
-.overall__value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
+.overall__row { display: flex; justify-content: space-between; align-items: center; column-gap: 8px; font-size: 13px; color: var(--muted); }
+.overall__value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; } /* «0 из 299» не разрывается: переносится подпись */
 /* прогресс книги внизу блока: заголовок, полоса с процентом и как он считается */
 .overall__book { display: grid; row-gap: 6px; margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--border); }
 .overall__note { margin: 0; font-size: 11px; line-height: 1.4; color: var(--muted); }
 /* «Резервная копия»: прогресс сохраняется в JSON-файл и загружается обратно, например на другом устройстве или после очистки браузера */
 /* у кнопок отступ сверху на 2px меньше, чем снизу: при равных отступах строчные буквы стоят ниже середины рамки
    (шрифт оставляет место под хвосты букв внизу строки); со сдвигом строчные по центру, а заглавные ниже середины всего на 0,5px */
-.overall__file { display: grid; row-gap: 6px; margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--border); }
-.overall__file-btns { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6px; } /* две кнопки в один ряд */
+.overall__file { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 6px; margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--border); }
+.overall__file-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 6px; } /* две кнопки в один ряд */
 .overall__file-btn { padding: 5px 8px 7px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 8px;
   background: none; color: var(--accent); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: border-color .15s, background-color .15s; }
 .overall__file-btn:is(:focus-visible) { border-color: var(--accent); background: var(--accent-soft); }
@@ -391,6 +396,10 @@ button { font: inherit; transition: linear 0.15s; }
 .overall__note--ok { color: var(--ok-ink); }
 /* свернутая подсказка: ее последние слова угасают в «Показать еще»; они остаются на одной строке, чтобы угасание не разрывалось */
 .overall__fade-row { white-space: nowrap; }
+/* в узком меню угасающие слова не помещаются в строку: они обрезаются, а «Показать еще» остается видна целиком */
+.overall .overall__fade-row { display: inline-flex; max-width: 100%; column-gap: .3em; vertical-align: bottom; }
+.overall .overall__fade { min-width: 0; overflow: hidden; }
+.overall .overall__more-btn { flex: none; }
 .overall__fade { background: linear-gradient(to right, var(--muted) 15%, transparent); -webkit-background-clip: text; background-clip: text; color: transparent; }
 /* «Показать еще» / «Скрыть» после текста подсказки: маленькая кнопка в виде ссылки */
 .overall__more-btn { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; font-weight: 600; text-decoration: underline dotted; text-underline-offset: 2px; cursor: pointer; }
@@ -1076,6 +1085,28 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__score { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
 .ex__score--good { color: var(--ok); }
 .ex__score--low { color: var(--bad); }
+/* Упражнения вкладками (EX_TABS в pages.js): вкладки и переход к соседним — только до 959px, на широком экране
+   упражнения идут подряд */
+.ex-tabs__bar, .ex-tabs__steps { display: none; }
+@media (max-width: 959px) {
+  /* вкладки делят ширину поровну; если их больше, чем помещается, ряд листается вбок */
+  .ex-tabs__bar { display: flex; column-gap: 6px; margin: 0 0 12px; overflow-x: auto; scrollbar-width: none; scroll-margin-top: 76px; } /* отступ под прилипшую шапку */
+  .ex-tabs__bar::-webkit-scrollbar { display: none; }
+  .ex-tabs__tab { flex: 1 0 auto; min-width: 68px; display: flex; flex-direction: column; align-items: center; row-gap: 1px; padding: 7px 8px;
+    border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); color: var(--muted); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;
+    transition: background-color .15s linear, border-color .15s linear, color .15s linear; }
+  .ex-tabs__tab[aria-selected="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .ex-tabs__score { font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .ex-tabs__tab--done .ex-tabs__score { color: var(--ok); font-weight: 600; }
+  .ex-tabs__tab--part .ex-tabs__score { color: var(--bad); font-weight: 600; }
+  .ex-tabs > .ex:not(.ex--current) { display: none; }
+  .ex-tabs > .ex { margin-bottom: 0; }
+  /* «Упр. N» к соседним: назад слева, дальше справа (и справа, когда кнопка одна) */
+  .ex-tabs__steps { display: flex; column-gap: 8px; margin-top: 12px; }
+  .ex-tabs__step { display: inline-flex; align-items: center; column-gap: 8px; }
+  .ex-tabs__step--next { margin-left: auto; }
+}
+@media (hover: hover) { :where(:root:not(.pointer-still)) :is(.ex-tabs__tab:not([aria-selected="true"]), .ex-tabs__step):hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); } }
 /* «На слух»: плеер (кнопка и полоса прогресса), под ним строка ответа и набор слов */
 .ex--listen .ex__item::before { padding-top: 9px; }
 .listen__player { grid-column: 2; display: flex; align-items: center; column-gap: 10px; min-width: 0; }
@@ -1148,7 +1179,7 @@ button { font: inherit; transition: linear 0.15s; }
 .pager-level__link--prev { grid-column: 1; }
 .pager-level__link--next { grid-column: 2; }
 
-@media (max-width: 880px) {
+@media (max-width: 959px) {
   .side__hide, .float-tools { display: none; }
   /* шапка начинается от края окна: в отступе body 8px над ней была видна страница (и прожектор «Информации») */
   body { margin-top: 0; }
@@ -1163,9 +1194,11 @@ button { font: inherit; transition: linear 0.15s; }
   .side__head { align-items: center; flex-wrap: wrap; gap: 8px; }
   .brand__title { font-size: 18px; column-gap: 6px; }
   .brand__title > span { display: none; } /* только логотип: «Грамматика онлайн» теснила бы кнопки */
-  .brand__logo { width: 33px; height: 33px; top: 0; } /* по центру шапки, как кнопки */
+  /* по центру шапки, рамка вровень с краями кнопок (35px): рамка отступает от края рисунка, поэтому он 38px,
+     а отрицательные отступы оставляют ему место 35px — высота шапки и положение названия прежние */
+  .brand__logo { width: 38px; height: 38px; margin: -1.5px; top: 0; }
   .brand__row { display: none; }
-  /* кнопки с тенью меню, одного размера на всех ширинах до 880px; тема здесь, поэтому в drawer нет ряда действий */
+  /* кнопки с тенью меню, одного размера на всех ширинах до 959px; тема здесь, поэтому в drawer нет ряда действий */
   /* кнопки начинаются сразу после названия и держатся слева; только «Тема» уходит к правому краю */
   .brand { flex: none; }
   .side__bar { display: flex; flex: 1 1 0; column-gap: 8px; }
@@ -1200,7 +1233,7 @@ button { font: inherit; transition: linear 0.15s; }
 }
 /* «Содержание тренажера» и «Мои заметки» здесь в шапке, поэтому в drawer своих нет; подпись уровней
    тогда открывает блок содержания, без линии, отделявшей ее от «Содержания» */
-@media (min-width: 650px) and (max-width: 880px) {
+@media (min-width: 650px) and (max-width: 959px) {
   .toc__contents, .side__summary > div:has(> .side__notes) { display: none; }
   .toc__contents + .toc__label { border-top: 0; }
 }
@@ -1208,7 +1241,8 @@ button { font: inherit; transition: linear 0.15s; }
    «Содержание», «Заметки», «Инфо» — в drawer */
 @media (max-width: 649px) {
   .brand { flex: 1; min-width: 0; }
-  .brand__title > span { display: inline; }
+  /* логотип стоит по центру кнопок на всех ширинах; по нему выравнивается название: строка с плашкой «онлайн» на 1px ниже */
+  .brand__title > span { display: inline; position: relative; top: 1px; }
   .side__bar { flex: none; } /* название занимает свободную ширину, поэтому остается в одну строку */
   .side__bar .page-link { display: none; }
   .side__summary > .side__info { display: block; } /* «Инфо» в drawer, под «Моими заметками» */
@@ -1225,7 +1259,8 @@ button { font: inherit; transition: linear 0.15s; }
   .pager__label { font-size: 10.5px; }
   .pager-level__link { font-size: 13px; }
   .pager-level__dir { font-size: 10px; }
-  .brand__title > span { display: flex; flex-direction: column; align-items: flex-start; font-size: 15px; line-height: 1.15; }
+  .brand__title > span { display: flex; flex-direction: column; align-items: flex-start; font-size: 15px; line-height: 1.15; top: -1px; }
+  /* top: -1px — от верха «Г» до низа плашки «онлайн» вровень с рамкой логотипа */
 }
 /* уже 529px меню занимает всю ширину окна */
 @media (max-width: 528px) {

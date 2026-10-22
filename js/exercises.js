@@ -204,7 +204,7 @@ function renderEx(t, ex, ei) {
     /* считается последняя проверка, а не лучшая: счет под упражнением, прогресс и «С ошибками» всегда согласованы */
     progress[t.id] = progress[t.id] || {};
     progress[t.id][ei] = [ok, total]; store.set('gk2-progress', progress);
-    renderToc(); renderOverall(); renderRedoBar();
+    renderToc(); renderOverall(); renderRedoBar(); syncExTabs();
     const pp = $('#pageProg'); if (pp) fillProgress(pp);
   }
 
@@ -312,7 +312,7 @@ function renderEx(t, ex, ei) {
       delete progress[t.id][ei];
       if (!Object.keys(progress[t.id]).length) delete progress[t.id];
       store.set('gk2-progress', progress);
-      renderToc(); renderOverall(); renderRedoBar();
+      renderToc(); renderOverall(); renderRedoBar(); syncExTabs();
       const pp = $('#pageProg'); if (pp) fillProgress(pp);
     }
   });

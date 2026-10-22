@@ -115,7 +115,7 @@ function overallBox() {
   const wrong = mistakeCount();
   const book = bookProgress();
   const box = el('div', 'overall');
-  box.innerHTML = `<div class="overall__row"><span>Правил изучено</span><b class="overall__value">${TOPICS.filter(t => studied[t.id]).length} из ${TOPICS.length}</b></div>
+  box.innerHTML = `<div class="overall__row"><span>Изучено правил</span><b class="overall__value">${TOPICS.filter(t => studied[t.id]).length} из ${TOPICS.length}</b></div>
     <div class="overall__row"><span>Выполнено упражнений</span><b class="overall__value">${perfect + wrong} из ${total}</b></div>
     <div class="overall__row"><span>Без ошибок</span><b class="overall__value">${perfect}</b></div>
     <button class="overall__row overall__mistakes" type="button" data-go="mistakes"${route === 'mistakes' ? ' aria-current="page"' : ''}>
@@ -210,6 +210,7 @@ function openExercise(topicId, ei) {
   go(topicId);
   const box = $(`#main .ex[data-ei="${ei}"]`);
   if (!box) return;
+  showExTab(box); /* в теме с вкладками упражнение могло быть на закрытой вкладке */
   /* прыжок, а не плавная прокрутка: новая страница все равно открывается, а мигание показывает, куда смотреть */
   box.scrollIntoView({ block: 'start' });
   box.classList.remove('ex--flash'); void box.offsetWidth; box.classList.add('ex--flash');

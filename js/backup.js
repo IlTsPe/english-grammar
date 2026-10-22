@@ -161,7 +161,7 @@ function openImport() {
     const when = backup.saved && !isNaN(new Date(backup.saved)) ? new Date(backup.saved).toLocaleString('ru-RU', { dateStyle: 'long', timeStyle: 'short' }) : '';
     const sum = backupSummary(backup.data);
     box.innerHTML = `<p class="modal__name"><b>${esc(name)}</b>${when ? `<span>сохранен ${esc(when)}</span>` : ''}</p>
-      <div class="modal__stats">${row('Правил изучено', `${sum.studied} из ${TOPICS.length}`)}${row('Выполнено упражнений', `${sum.ex} из ${EX_TOTAL}`)}${sum.ex ? row('Без ошибок', sum.perfect) : ''}${sum.wrong ? row('С ошибками', sum.wrong) : ''}${row('«Избранное»', sum.bm)}${row('Заметки', sum.notes)}</div>`;
+      <div class="modal__stats">${row('Изучено правил', `${sum.studied} из ${TOPICS.length}`)}${row('Выполнено упражнений', `${sum.ex} из ${EX_TOTAL}`)}${sum.ex ? row('Без ошибок', sum.perfect) : ''}${sum.wrong ? row('С ошибками', sum.wrong) : ''}${row('«Избранное»', sum.bm)}${row('Заметки', sum.notes)}</div>`;
   }
   async function choose(file) { if (file) show(await readBackup(file), file.name); }
   input.addEventListener('change', () => { const f = input.files[0]; input.value = ''; choose(f); });
