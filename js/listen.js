@@ -23,8 +23,8 @@ const letters = s => (s.match(/[a-z0-9']/gi) || []).length;
 /* измерение по событию конца речи включает задержку браузера, поэтому длиннее оценки оно не берется: полосе лучше
    дойти до конца чуть раньше звука, чем отставать от него */
 const speechSec = text => Math.min(.2 + letters(text) * .07 / SPEECH_RATE, spokenSec.get(text) ?? Infinity);
-const PLAY_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6c0 .5.5.8.9.5l7.2-4.8a.6.6 0 0 0 0-1L5.9 2.7c-.4-.3-.9 0-.9.5Z" fill="currentColor"/></svg>';
-const STOP_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="4" width="8" height="8" rx="1.5" fill="currentColor"/></svg>';
+const PLAY_ICON = '<svg aria-hidden="true"><use href="#i-play"/></svg>';
+const STOP_ICON = '<svg aria-hidden="true"><use href="#i-stop"/></svg>';
 function makePlayer(text, label) {
   const box = el('div', 'listen__player');
   const btn = el('button', 'listen__play'); btn.type = 'button';

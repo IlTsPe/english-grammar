@@ -394,7 +394,7 @@ function renderNotesPage(wrap) {
   const search = el('input', 'notes-tools__search'); search.type = 'search';
   search.placeholder = 'Поиск по заметкам'; search.setAttribute('aria-label', 'Поиск по заметкам'); search.autocomplete = 'off';
   const searchClose = el('button', 'notes-search__close'); searchClose.type = 'button'; searchClose.setAttribute('aria-label', 'Закрыть поиск');
-  searchClose.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
+  searchClose.innerHTML = '<svg aria-hidden="true"><use href="#i-cross"/></svg>';
   searchBox.append(search, searchClose);
   searchWrap.append(searchOpen, searchBox);
   tools.append(add, searchWrap);

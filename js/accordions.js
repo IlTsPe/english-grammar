@@ -1,6 +1,6 @@
 /* ---------- Аккордеоны: «Прогресс» и «Избранное», общая анимация аккордеонов меню (slide) ---------- */
 /* каждый открывается сам по себе; какие открыты, запоминается (gk2-folds) */
-const FOLD_ARROW = '<svg class="side__fold-arrow" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const FOLD_ARROW = '<svg class="side__fold-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>';
 let folds = store.get('gk2-folds', {});
 const FOLD = { prog: ['#progBtn', '#progFold', '#progBody'], bm: ['#bmBtn', '#bmFold', '#bmBody'] };
 /* содержимое рисуется, пока блок открыт, и обновляется при каждом изменении прогресса и избранного */

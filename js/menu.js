@@ -50,7 +50,7 @@ const BM_SPARKS = [[13, -9, .15, 0], [-8, -13, .25, 1], [12, 8, .35, 1], [-1, -1
 const SLOT_REEL = ['★', '✗', '?', '♦', '✓', '•', '✗', '★', '?', '✓'];
 /* стрелка, которая сдвигается в свою сторону, пока на ее кнопку наведено (см. .arrow). Рисунок, а не символ «→»: в шрифтах сайта
    его нет, и на Android стрелка из системного шрифта стояла ниже середины строки; «←» — та же, отраженная */
-const ARROW_SVG = '<svg class="arrow__icon" viewBox="0 0 14 10"><path d="M1 5h12M9.5 2 12.5 5 9.5 8"/></svg>';
+const ARROW_SVG = '<svg class="arrow__icon" aria-hidden="true"><use href="#i-arrow"/></svg>';
 const arrowHtml = (dir, cls = '') => `<span class="arrow arrow--${dir}${cls ? ' ' + cls : ''}" aria-hidden="true">${ARROW_SVG}</span>`;
 /* плашка прогресса: на 100% зеленая обводка, ниже — заливка цветом по диапазону; cls добавляет класс элемента родителя */
 const pill = (pct, cls = '') => `<span class="pill pill--${pct >= 100 ? 'good' : pct > 60 ? 'high' : pct > 30 ? 'mid' : 'low'}${cls ? ' ' + cls : ''}" style="--p:${pct}%">${pct}%</span>`;
@@ -117,7 +117,7 @@ function renderToc() {
     cb.innerHTML = `<span class="chap__num">${ch.n}</span><span>${esc(ch.title)}<small class="chap__meta">${ch.topics.length} ${plural(ch.topics.length, 'тема', 'темы', 'тем')}</small>` +
       `<span class="chap__levels" aria-label="Уровни">${lv.map(l => `<span class="lvl-tag lvl-tag--sm" title="${LEVELS[l]}">${l}</span>`).join('')}</span></span>` +
       `<span class="chap__end">${cs.tried ? pill(cs.pct) : ''}` +
-      '<span class="chap__arrow" aria-hidden="true"><svg class="chap__arrow-icon" viewBox="0 0 12 12" width="12" height="12"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>';
+      '<span class="chap__arrow" aria-hidden="true"><svg class="chap__arrow-icon" width="12" height="12" aria-hidden="true"><use href="#i-chevron"/></svg></span></span>';
     /* название раздела только раскрывает и сворачивает его; страница раздела открывается из «Обзора всего раздела» внутри */
     cb.addEventListener('click', () => {
       finishSlide('chap');
@@ -164,7 +164,7 @@ function renderToc() {
 }
 
 /* ленточка избранного; cls добавляет класс элемента того места, где она стоит */
-const bmIcon = (cls = '') => `<svg class="bm-icon${cls ? ' ' + cls : ''}" viewBox="0 0 11 14" aria-hidden="true"><path d="M1 1.5A1 1 0 0 1 2 .5h7a1 1 0 0 1 1 1V13L5.5 10 1 13z" fill="currentColor"/></svg>`;
+const bmIcon = (cls = '') => `<svg class="bm-icon${cls ? ' ' + cls : ''}" aria-hidden="true"><use href="#i-bookmark"/></svg>`;
 
 function topicButton(t, fromBookmarks = false) {
   const b = el('button', fromBookmarks ? 'topic-btn bookmarks__topic' : 'topic-btn'); b.type = 'button';
@@ -217,8 +217,8 @@ function renderBookmarks() {
 
 /* «Мои заметки»: свободные заметки, не привязанные к темам, — [{ id, text, c: создана, at: последняя правка }], новые первыми;
    хранятся в gk2-notes, поэтому попадают в резервную копию */
-const searchIcon = () => `<svg class="search-icon" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4L14 14"/></svg>`;
-const notesIcon = (cls = '') => `<svg class="notes-icon${cls ? ' ' + cls : ''}" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.8 2.7a1.5 1.5 0 0 1 2.1 2.1L5.6 12.1 2.5 13l.9-3.1z"/><path d="M9.6 3.9l2.1 2.1"/></svg>`;
+const searchIcon = () => `<svg class="search-icon" aria-hidden="true"><use href="#i-search"/></svg>`;
+const notesIcon = (cls = '') => `<svg class="notes-icon${cls ? ' ' + cls : ''}" aria-hidden="true"><use href="#i-pencil"/></svg>`;
 const noteDate = at => new Date(at).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 /* кнопка меню только ведет на страницу: число и стрелка «→» (не шеврон аккордеона), подсвечена, пока страница открыта */
 function renderNotes() {
