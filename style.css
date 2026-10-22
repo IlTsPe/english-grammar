@@ -47,6 +47,8 @@
   --scroll-thumb: #5F5A8E; --scroll-thumb-hover: #7E77BB; /* акцент на 50% и 70% по бумаге: полный акцент здесь выглядит белым */
   color-scheme: dark;
 }
+/* светлая — «only»: браузеры с ночным режимом (Xiaomi, «темные сайты» в Chrome) иначе принудительно затемняли ее сами */
+:root[data-theme="light"] { color-scheme: only light; }
 
 * { box-sizing: border-box; }
 /* полосы прокрутки в цветах темы: webkit-псевдоэлементы для Chrome и Safari (скругленный ползунок, подсвечивается при наведении);
