@@ -214,9 +214,10 @@ button { font: inherit; transition: linear 0.15s; }
 /* логотип — как значок A5: панель со срезанными углами, светящаяся рамка, шапка с кисточкой. Рисунок встроен в страницу, чтобы следовать теме
    (на 2px ниже центра строк — видимый текст сидит ниже середины его строки). Темная: темная панель, неоновая рамка лаванда → синий, белая шапка;
    светлая — палитра прежнего логотипа: синяя панель, светлая шапка, кисточка #E0A800 */
-.brand__logo { flex: none; position: relative; top: 2px; width: 42px; height: 42px;
-  --logo-panel: #16133A; --logo-frame-a: #ADA2FF; --logo-frame-b: #4E6BFF; --logo-cap: #FFFFFF; --logo-tassel: #F0C048; }
-:root[data-theme="light"] .brand__logo { --logo-panel: #2547D0; --logo-frame-a: #E2DDFF; --logo-frame-b: #ADA2FF; --logo-cap: #E2DDFF; --logo-tassel: #E0A800; }
+/* подложка — неоновое свечение по контуру панели (drop-shadow повторяет срезанные углы) */
+.brand__logo { flex: none; position: relative; top: 2px; width: 42px; height: 42px; filter: drop-shadow(0 0 5px var(--logo-glow));
+  --logo-panel: #16133A; --logo-frame-a: #ADA2FF; --logo-frame-b: #4E6BFF; --logo-cap: #FFFFFF; --logo-tassel: #F0C048; --logo-glow: rgb(123 108 255 / 75%); }
+:root[data-theme="light"] .brand__logo { --logo-panel: #2547D0; --logo-frame-a: #E2DDFF; --logo-frame-b: #ADA2FF; --logo-cap: #E2DDFF; --logo-tassel: #E0A800; --logo-glow: rgb(37 71 208 / 50%); }
 .brand__logo-panel { fill: var(--logo-panel); }
 .brand__logo-frame-a { stop-color: var(--logo-frame-a); }
 .brand__logo-frame-b { stop-color: var(--logo-frame-b); }
