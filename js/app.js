@@ -211,4 +211,4 @@ $('#tocToggle').addEventListener('click', () => {
   store.set('gk2-toc-folded', tocFolded);
   renderToc();
 });
-Object.keys(FOLD).forEach(k => { $(FOLD[k][0]).addEventListener('click', () => setFold(k, !folds[k])); setFold(k, !!folds[k]); });
+Object.keys(FOLD).forEach(k => { $(FOLD[k][0]).addEventListener('click', () => setFold(k, !folds[k], true)); setFold(k, !!folds[k]); });

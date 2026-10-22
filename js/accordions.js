@@ -7,13 +7,40 @@ const FOLD = { prog: ['#progBtn', '#progFold', '#progBody'], bm: ['#bmBtn', '#bm
 function renderFold(kind) {
   if (folds[kind]) $(FOLD[kind][2]).replaceChildren(kind === 'prog' ? overallBox() : bookmarksBox());
 }
-function setFold(kind, open) {
+/* animate — клик по кнопке (при загрузке блок сразу в своем состоянии) */
+function setFold(kind, open, animate = false) {
   folds[kind] = open; store.set('gk2-folds', folds);
   const [btn, box] = FOLD[kind];
-  renderFold(kind);
-  $(box).classList.toggle('side__fold--open', open);
-  $(box).inert = !open;
-  $(btn).setAttribute('aria-expanded', String(open));
+  const apply = () => {
+    $(box).classList.toggle('side__fold--open', open);
+    $(box).inert = !open;
+    $(btn).setAttribute('aria-expanded', String(open));
+  };
+  if (foldAnim[kind]) foldAnim[kind]();
+  if (open) renderFold(kind);
+  if (!animate || matchMedia('(prefers-reduced-motion: reduce)').matches) { apply(); return; }
+  if (open) apply();
+  slideFold(kind, $(box), open, open ? null : apply);
+}
+/* раскрытие без анимации раскладки (на телефоне она шла рывками): блок сразу получает свою высоту, а дальше только сдвиги —
+   содержимое выезжает из-под кнопки (его обрезает .side__fold-clip), все ниже в меню съезжает вместе с ним.
+   Закрытие — то же в обратную сторону, высота меняется в конце (done). foldAnim[kind] — досрочно завершить прошлую анимацию */
+const foldAnim = {};
+function slideFold(kind, fold, open, done) {
+  const content = fold.querySelector('.side__fold-clip > *');
+  const h = fold.offsetHeight;
+  if (!content || !h) { if (done) done(); return; }
+  /* все, что ниже блока: следующие соседи его обертки и ее предков до самого меню */
+  const below = [];
+  for (let n = fold.parentElement; n && !n.matches('.side'); n = n.parentElement)
+    for (let sib = n.nextElementSibling; sib; sib = sib.nextElementSibling) below.push(sib);
+  const shut = `translateY(${-h}px)`, opts = { duration: 180, easing: 'cubic-bezier(.25, .7, .35, 1)' };
+  const frames = open ? [shut, 'none'] : ['none', shut];
+  const anims = [content.animate({ transform: frames, opacity: open ? [0, 1] : [1, 0] }, opts),
+    ...below.map(b => b.animate({ transform: frames }, opts))];
+  const finish = () => { delete foldAnim[kind]; anims.forEach(a => a.cancel()); if (done) done(); };
+  foldAnim[kind] = finish;
+  anims[0].onfinish = () => { if (foldAnim[kind] === finish) finish(); };
 }
 /* весь список разделов сворачивается под «Разделы тренажера» (gk2-toc-folded); при поиске он виден всегда */
 let tocFolded = store.get('gk2-toc-folded', false);

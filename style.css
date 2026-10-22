@@ -330,6 +330,7 @@ button { font: inherit; transition: linear 0.15s; }
 /* блок под своей кнопкой; строки сетки анимируют его раскрытие и закрытие */
 .side__fold { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .15s linear, opacity .15s linear; }
 .side__fold--open { grid-template-rows: 1fr; opacity: 1; }
+.side__summary .side__fold { transition: none; } /* «Прогресс» и «Избранное» анимирует slideFold — сдвигами, без анимации высоты */
 .side__fold-clip { min-height: 0; overflow: hidden; }
 .side__fold .overall, .side__fold .bookmarks { margin: 0; }
 /* открытая кнопка и ее блок — одна рамка: кнопка теряет нижние углы, блок — верхний край и углы;
@@ -605,9 +606,12 @@ button { font: inherit; transition: linear 0.15s; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .topic-btn:hover { background: var(--hover); } }
 /* ссылка-обзор: «Содержание тренажера →» вверху блока содержания, «Обзор всего раздела →» первой в раскрытом разделе */
 .topic-btn--overview { font-size: 13px; font-weight: 600; color: var(--accent); }
-.topic-btn__arrow { font-size: 17.5px; font-weight: 700; line-height: 1; }
+.topic-btn__arrow { font-size: 17.5px; }
 /* стрелка в кнопке-ссылке сдвигается в свою сторону, пока на кнопку наведено или она в фокусе */
-.arrow { display: inline-block; transition: transform .15s ease; }
+.arrow { display: inline-flex; align-items: center; vertical-align: middle; transition: transform .15s ease; } /* middle — середина строчных, где стоял символ «→» */
+/* рисунок стрелки (ARROW_SVG): размер от font-size родителя, толщина — --arrow-w; «←» — отражение */
+.arrow__icon { width: .78em; height: .56em; overflow: visible; fill: none; stroke: currentColor; stroke-width: var(--arrow-w, 1.3); stroke-linecap: round; stroke-linejoin: round; }
+.arrow--prev .arrow__icon { transform: scaleX(-1); }
 :is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start, .side__notes, .side__info .page-link):is(:focus-visible) .arrow--next { transform: translateX(3px); }
 @media (hover: hover) { :where(:root:not(.pointer-still)) :is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start, .side__notes, .side__info .page-link):hover .arrow--next { transform: translateX(3px); } }
 :is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):is(:focus-visible) .arrow--prev { transform: translateX(-3px); }
@@ -745,7 +749,7 @@ button { font: inherit; transition: linear 0.15s; }
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .crumbs__link { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .crumbs__link:hover { text-decoration: underline; } }
-.crumbs__sep { opacity: .6; }
+.crumbs__sep { display: inline-flex; font-size: 14px; opacity: .6; }
 .lvl-tag { display: inline-block; padding: 0 6px; border: 1px solid currentColor; border-radius: 4px; font-family: var(--f-mono); font-size: 11px; letter-spacing: .04em; color: var(--accent); }
 .lvl-tag--sm { font-size: 10px; line-height: 1.5; }
 .lvl-tag--filled { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
@@ -980,10 +984,10 @@ button { font: inherit; transition: linear 0.15s; }
 .study__btn + .study__btn { margin-top: 8px; }
 .study__btn--bookmark[aria-pressed="true"] { border-color: var(--gold-ink); background: var(--gold-soft); color: var(--gold-ink); }
 /* опущено на 2px: подпись в основном из строчных, и ленточка по центру строки смотрелась высоко */
-.study__icon { margin: 0 6px 0 0; color: inherit; vertical-align: -3px; }
+.study__icon { margin: 0 0 0 6px; color: inherit; vertical-align: -3px; }
 /* «В избранном» при нажатии (по клипу-референсу): ленточка качается от верхнего края, как маятник, и успокаивается,
    а вокруг вспыхивают маленькие плюсы и точки */
-.bm-pop { position: relative; display: inline-block; margin-right: 6px; }
+.bm-pop { position: relative; display: inline-block; margin-left: 6px; }
 .bm-pop .study__icon { margin: 0; transform-origin: 50% 0; animation: bm-swing 1.5s ease-in-out both; }
 @keyframes bm-swing { 12% { transform: rotate(-6deg); } 28% { transform: rotate(12deg); } 45% { transform: rotate(-9deg); }
   62% { transform: rotate(6deg); } 78% { transform: rotate(-3deg); } 90% { transform: rotate(1deg); } 100% { transform: none; } }
@@ -1125,7 +1129,7 @@ button { font: inherit; transition: linear 0.15s; }
 /* стрелки направления во всех навигациях — крупнее и толще подписи, цветом подписи */
 /* подпись со стрелкой — inline-flex: крупная стрелка по центру высоты строки, а не на базовой линии */
 .pager__label > span:has(.arrow), .pager-level__dir { display: inline-flex; align-items: center; justify-content: center; column-gap: .45em; }
-:is(.pager__label, .pager-level__dir) .arrow { font-family: var(--f-body); font-size: 1.5em; font-weight: 700; line-height: 1; -webkit-text-stroke: .9px currentColor; position: relative; top: -1.5px; } /* у знака нет жирного начертания — утолщаем обводкой */
+:is(.pager__label, .pager-level__dir) .arrow { font-size: 1.5em; --arrow-w: 2.1; }
 :root[data-theme="light"] :is(.pager__label, .pager-level__dir) .arrow { color: rgb(105 105 105); }
 /* «Перейти к теме того же уровня»: тихий ряд из двух ссылок под навигацией */
 /* отделен от основной навигации более широким промежутком и легким оттенком акцента */

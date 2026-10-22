@@ -2,7 +2,7 @@
 function crumbs(parts) {
   const c = el('div', 'crumbs');
   parts.forEach((p, i) => {
-    if (i) { const s = el('span', 'crumbs__sep', '→'); s.setAttribute('aria-hidden', 'true'); c.append(s); }
+    if (i) { const s = el('span', 'crumbs__sep'); s.innerHTML = ARROW_SVG; s.setAttribute('aria-hidden', 'true'); c.append(s); }
     if (typeof p === 'string') c.append(el('span', null, p));
     else { const b = el('button', 'crumbs__link', p.label); b.type = 'button'; b.addEventListener('click', () => go(p.to)); c.append(b); }
   });
@@ -569,7 +569,7 @@ function renderTopic(t, wrap) {
     bb.setAttribute('aria-pressed', String(on));
     const icon = animate ? `<span class="bm-pop" aria-hidden="true">${bmIcon('study__icon')}${BM_SPARKS.map(([x, y, d, dot]) =>
       `<i class="bm-pop__spark${dot ? ' bm-pop__spark--dot' : ''}" style="--x:${x}px;--y:${y}px;--d:${d}s"></i>`).join('')}</span>` : bmIcon('study__icon');
-    bb.innerHTML = on ? `${icon}<span>В избранном</span>` : '<span>Добавить в избранное</span>';
+    bb.innerHTML = on ? `<span>В избранном</span>${icon}` : '<span>Добавить в избранное</span>';
   };
   bb.addEventListener('click', () => {
     if (bookmarks[t.id]) delete bookmarks[t.id]; else bookmarks[t.id] = Date.now();
