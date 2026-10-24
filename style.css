@@ -837,6 +837,18 @@ button { font: inherit; transition: linear 0.15s; }
   .info__level-name { column-gap: 6px; white-space: nowrap; }
 }
 .info__count { font-size: 14px; color: var(--ink); white-space: nowrap; }
+/* «Работа без интернета»: состояние основы сайта и записей «На слух» с кнопками (js/offline.js) — рамка как у .info__levels */
+.offline { display: grid; row-gap: 10px; margin: 0 0 14px; padding: 12px 14px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }
+.offline:empty { display: none; }
+.info .offline p { margin: 0; }
+.offline__row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-gap: 12px; }
+.offline__name { font-weight: 600; }
+.offline__state { color: var(--muted); font-variant-numeric: tabular-nums; }
+.offline__state--ok { color: var(--ok-ink); }
+.offline__tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.offline__tools:empty { display: none; }
+.offline__usage { font-size: 14px; color: var(--muted); }
+.offline__error { font-size: 14px; color: var(--bad-ink); }
 
 /* «Работа над ошибками»: та же рамка, что у содержания, по строке на тему с кнопкой на каждое упражнение */
 .mistakes { list-style: none; margin: 24px 0 0; padding: 4px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; }

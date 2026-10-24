@@ -229,3 +229,4 @@ window.AUDIO = {
  "I'd rather you didn't tell anyone about it.": "x-unreal-past-2",
  "He talks as if he knew everything about everything.": "x-unreal-past-3"
 };
+window.AUDIO_BYTES = 3879216;
