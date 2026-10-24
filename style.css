@@ -59,6 +59,9 @@
    Firefox получает стандартное свойство — Chrome отбросил бы псевдоэлементы, если задан scrollbar-color */
 @supports (-moz-appearance: none) { :root { scrollbar-color: var(--scroll-thumb) transparent; } }
 ::-webkit-scrollbar { width: 11px; height: 11px; }
+/* место под полосу прокрутки страницы занято всегда: при открытом drawer прокрутка страницы снята (setDrawer), и без резерва
+   страница под затемнением сдвигалась вправо на ширину полосы */
+:root { scrollbar-gutter: stable; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 99px; background: var(--scroll-thumb) padding-box; }
 @media (hover: hover) { ::-webkit-scrollbar-thumb:hover { background-color: var(--scroll-thumb-hover); } }
@@ -253,7 +256,6 @@ button { font: inherit; transition: linear 0.15s; }
    Тень умещается в боковой отступ 5px, поэтому прокручиваемое меню ее не обрезает */
 .side__actions .action-btn, .side__summary > div, .side__donate, .toc, .brand__info { box-shadow: var(--raise); }
 .side__summary > div { border-radius: 10px; }
-.side__summary > .side__info { display: none; } /* только в узком drawer: в остальных случаях «Инфо» — под названием или в шапке */
 /* «Мои заметки» и «Инфо» в drawer — ссылки на страницы, поэтому стрелка «→», как у «Содержания тренажера», а не шеврон аккордеона */
 .side__go { margin-left: auto; }
 .side__count:not(:empty) + .side__go { margin-left: 0; }
@@ -492,7 +494,7 @@ button { font: inherit; transition: linear 0.15s; }
 
 /* на десктопе drawer — просто часть меню; на мобильном он выезжает поверх страницы */
 .drawer { display: contents; }
-.drawer__head, .side__bar, .drawer-backdrop { display: none; }
+.drawer__head, .side__bar, .drawer-backdrop, .drawer__info { display: none; } /* «Инфо» в шапке drawer — только до 599px, где его нет в шапке сайта */
 
 
 .level-chips { display: flex; flex-wrap: wrap; gap: 5px; } /* достаточно места, чтобы попасть по чипу пальцем; в узком меню переносятся на вторую строку */
@@ -630,8 +632,8 @@ button { font: inherit; transition: linear 0.15s; }
 /* рисунок стрелки (ARROW_SVG): размер от font-size родителя, толщина — --arrow-w; «←» — отражение */
 .arrow__icon { width: .78em; height: .56em; overflow: visible; fill: none; stroke: currentColor; stroke-width: var(--arrow-w, 1.3); stroke-linecap: round; stroke-linejoin: round; }
 .arrow--prev .arrow__icon { transform: scaleX(-1); }
-:is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start, .side__notes, .side__info .page-link):is(:focus-visible) .arrow--next { transform: translateX(3px); }
-@media (hover: hover) { :where(:root:not(.pointer-still)) :is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start, .side__notes, .side__info .page-link):hover .arrow--next { transform: translateX(3px); } }
+:is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start, .side__notes):is(:focus-visible) .arrow--next { transform: translateX(3px); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) :is(.topic-btn, .pager__btn, .pager-level__link, .overall__mistakes, .ex__redo-link, .mistakes__start, .side__notes):hover .arrow--next { transform: translateX(3px); } }
 :is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):is(:focus-visible) .arrow--prev { transform: translateX(-3px); }
 @media (hover: hover) { :where(:root:not(.pointer-still)) :is(.topic-btn, .pager__btn, .pager-level__link, .ex__redo-link):hover .arrow--prev { transform: translateX(-3px); } }
 /* «Содержание тренажера» занимает свою секцию от края до края, текст на одной линии с подписями; объявлено после .topic-btn, чтобы перевесить */
@@ -1068,7 +1070,8 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__text { font-family: var(--f-en); font-size: 18px; line-height: 2.15; overflow-wrap: anywhere; }
 .ex__hint { font-family: var(--f-body); font-size: 14px; color: var(--muted); }
 /* поля ответов: .ex__gap внутри предложения, .ex__tr для перевода целиком, .ex__blank показывает выбранный вариант */
-.ex__gap { max-width: 100%; margin: 0 3px; padding: 0 4px; border: 0; border-bottom: 2px solid var(--muted); border-radius: 0; background: transparent; color: var(--accent); font: inherit; font-family: var(--f-en); text-align: center; }
+.ex__gap { max-width: 100%; margin: 0 3px; padding: 0 4px; border: 0; border-bottom: 2px solid var(--muted); border-radius: 0; background: transparent; color: var(--accent); font: inherit; font-family: var(--f-en); text-align: center; -webkit-appearance: none; appearance: none; } /* appearance — пропуск это поле поиска (см. makeGap), без системного оформления Safari */
+.ex__gap::-webkit-search-cancel-button, .ex__gap::-webkit-search-decoration { display: none; }
 .ex__tr { grid-column: 2; display: block; width: 100%; padding: 4px 4px; border: 0; border-bottom: 2px solid var(--muted); border-radius: 0; background: transparent; color: var(--accent); font-family: var(--f-en); font-size: 17px;
   line-height: 1.45; resize: none; overflow: hidden; field-sizing: content; } /* textarea: длинный перевод переносится на новые строки, а не уезжает вбок */
 .ex__blank { display: inline-block; min-width: 3.5em; margin: 0 3px; padding: 0 4px; border-bottom: 2px solid var(--muted); color: var(--accent); text-align: center; line-height: 1.5; }
@@ -1223,7 +1226,7 @@ button { font: inherit; transition: linear 0.15s; }
     border-radius: 10px 10px 0 0; box-shadow: var(--raise-down); }
   /* цвет страницы за скругленными верхними углами, чтобы содержимое, прокручиваемое под прилипшей шапкой, не просвечивало в них */
   .side::before { content: ""; position: absolute; z-index: -1; inset: 0 0 auto; height: 10px; } /* см. «углы шапок» */
-  .side__head { align-items: center; flex-wrap: wrap; gap: 8px; }
+  .side__head { align-items: center; flex-wrap: wrap; gap: 8px 10px; } /* от логотипа до кнопок 10px */
   .brand__title { font-size: 18px; column-gap: 6px; }
   .brand__title > span { display: none; } /* только логотип: «Грамматика онлайн» теснила бы кнопки */
   /* по центру шапки, рамка вровень с краями кнопок (35px): рамка отступает от края рисунка, поэтому он 38px,
@@ -1240,10 +1243,12 @@ button { font: inherit; transition: linear 0.15s; }
   .side__actions { display: none; }
 
   /* drawer: прогресс, избранное и содержание (уровни, поиск, разделы) */
-  .drawer { display: block; position: fixed; z-index: 30; top: 0; bottom: 0; left: 0; width: min(360px, 88vw); overflow-y: auto; overscroll-behavior: contain;
+  .drawer { display: block; position: fixed; z-index: 30; top: 0; bottom: 0; left: 0; width: min(360px, 88vw); overflow-y: auto; scrollbar-gutter: stable; overscroll-behavior: contain;
     padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px calc(env(safe-area-inset-bottom, 0px) + 24px); background: var(--paper); border-right: 1px solid var(--border);
+    /* --sb — ширина места под полосу прокрутки (ставит setDrawer; на телефоне полоса поверх, 0): справа отступ вместе с ней, как слева — содержимое по центру */
+    padding-inline: calc(14px + var(--sb, 0px) / 2) calc(14px - var(--sb, 0px) / 2);
     box-shadow: 10px 0 32px rgba(0, 0, 0, .25); transform: translateX(-105%); visibility: hidden; transition: transform .2s ease, visibility .2s linear; }
-  .drawer--open { transform: none; visibility: visible; }
+  .drawer--open { transform: none; visibility: visible; } /* scrollbar-gutter у drawer: когда меню перестает помещаться по высоте (раскрыли «Прогресс», очистили поиск), появившаяся полоса не сужает кнопки */
   /* при раскрытии «Прогресса» и «Избранного» все ниже сдвигается; в одном слое с меню это перерисовка на каждом кадре
      (длинный список разделов с тенями — на телефоне аккордеон раскрывался рывками). В своих слоях блоки только сдвигаются,
      а содержимое аккордеона только открывается обрезкой. Только здесь: на десктопе слои сделали бы текст меню без субпиксельного сглаживания */
@@ -1252,6 +1257,8 @@ button { font: inherit; transition: linear 0.15s; }
   /* кнопка закрытия: кнопка «Меню» шапки (высота 35px, ее значок, рамка и тень); ширину ставит setDrawer по «Меню» */
   .drawer__close { width: 35px; min-height: 35px; padding: 0; box-shadow: var(--raise);
     transition-property: background-color, border-color, color; } /* без перехода ширины: она росла бы при каждом открытии */
+  .drawer__tools { display: flex; column-gap: 10px; }
+  .drawer__info { width: 35px; min-height: 35px; box-shadow: var(--raise); }
   .side__summary { margin-top: 12px; }
   /* матовое стекло поверх страницы, пока drawer открыт: страница размывается за затемнением */
   .drawer-backdrop { display: block; position: fixed; z-index: 25; inset: 0; background: rgba(8, 10, 20, .45); -webkit-backdrop-filter: blur(6px) saturate(1.3); backdrop-filter: blur(6px) saturate(1.3);
@@ -1261,6 +1268,7 @@ button { font: inherit; transition: linear 0.15s; }
   .search__input { font-size: 16px; } /* от 16px iOS не увеличивает масштаб при фокусе */
 
   .ex, .notes-tools { scroll-margin-top: 76px; } /* отступ под прилипшую шапку */
+  .ex__field { scroll-margin-block: 76px 16px; } /* поле в фокусе браузер прокручивает в видимую часть: не под шапку и не вплотную к клавиатуре */
   .sheet { padding-inline: 16px; padding-block: 24px 14px; border-inline: 0; border-radius: 0; min-height: 0; }
 }
 /* «Содержание тренажера» и «Мои заметки» здесь в шапке, поэтому в drawer своих нет; подпись уровней
@@ -1269,12 +1277,14 @@ button { font: inherit; transition: linear 0.15s; }
   .toc__contents, .side__summary > div:has(> .side__notes) { display: none; }
   .toc__contents + .toc__label { border-top: 0; }
 }
-/* 449–599px: «Заметки» и «Инфо» не помещаются в шапку — они в drawer, под «Избранным» */
+/* 449–599px: «Заметки» и «Инфо» не помещаются в шапку — они в drawer: «Заметки» под «Избранным», «Инфо» значком у крестика */
 @media (min-width: 449px) and (max-width: 599px) {
   .side__bar .page-link:is([data-go="notes"], [data-go="about"]) { display: none; }
-  .side__summary > div:has(> .side__notes), .side__summary > .side__info { display: block; }
+  .side__summary > div:has(> .side__notes) { display: block; }
+  .drawer__tools { column-gap: 15px; }
+  .drawer__info { display: flex; }
 }
-/* уже 449px в шапке логотип с названием в две строки, справа «Тема» значком и «Меню»; «Содержание», «Заметки», «Инфо» — в drawer */
+/* уже 449px в шапке логотип с названием в две строки, справа «Тема» значком и «Меню»; «Содержание», «Заметки», «Инфо» — в drawer («Инфо» значком у крестика) */
 @media (max-width: 448px) {
   .brand { flex: 1; min-width: 0; }
   /* top: -1px — от верха «Г» до низа плашки «онлайн» вровень с рамкой логотипа */
@@ -1286,7 +1296,9 @@ button { font: inherit; transition: linear 0.15s; }
   .side__theme .action-btn__icon { width: 16px; height: 16px; }
   .toc__contents { display: grid; }
   .toc__contents + .toc__label { border-top: 1px solid var(--border); }
-  .side__summary > div:has(> .side__notes), .side__summary > .side__info { display: block; }
+  .side__summary > div:has(> .side__notes) { display: block; }
+  .drawer__tools { column-gap: 20px; }
+  .drawer__info { display: flex; }
 }
 /* уже 349px название даже в две строки наезжает на кнопки: остается только логотип */
 @media (max-width: 348px) {

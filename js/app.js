@@ -150,6 +150,8 @@ function setDrawer(open, focus) {
   $('#menuBtn').setAttribute('aria-expanded', String(open));
   /* кнопка закрытия шириной с «Меню» в шапке, которую она заменяет под пальцем */
   if (open) $('#drawerClose').style.width = $('#menuBtn').getBoundingClientRect().width + 'px'; /* точно, без округления, как у offsetWidth */
+  /* место под полосу прокрутки drawer: отступы делят его поровну (style.css, .drawer) */
+  if (open) { const d = $('#drawer'); d.style.setProperty('--sb', d.offsetWidth - d.clientWidth - d.clientLeft - parseFloat(getComputedStyle(d).borderRightWidth) + 'px'); }
   if (focus) (open ? $('#drawerClose') : $('#menuBtn')).focus();
 }
 $('#menuBtn').addEventListener('click', () => setDrawer(true, true));

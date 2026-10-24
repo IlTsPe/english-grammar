@@ -13,9 +13,12 @@ function fitTr(inp) {
 }
 if (!fieldSizing) addEventListener('resize', () => document.querySelectorAll('textarea.ex__tr').forEach(fitTr));
 
+/* пропуск — type="search": у text Chromium на Android (Chrome, Яндекс) держит над клавиатурой панель автозаполнения
+   (пароли, карты, адреса) даже при autocomplete="off", у search и textarea ее нет. Крестик очистки скрыт в style.css,
+   стирание по Esc отменено в обработчике клавиш, Enter на клавиатуре — «далее» (enterkeyhint) */
 function makeGap(answers, id, label) {
   const inp = el('input', 'ex__field ex__gap');
-  inp.type = 'text'; inp.id = id; inp.autocomplete = 'off'; inp.spellcheck = false;
+  inp.type = 'search'; inp.id = id; inp.autocomplete = 'off'; inp.spellcheck = false; inp.enterKeyHint = 'next';
   inp.setAttribute('autocapitalize', 'off'); inp.setAttribute('aria-label', label);
   const longest = Math.max(...answers.split('|').map(s => s.length));
   inp.style.width = Math.max(4, Math.min(longest + 2, 24)) + 'ch';
@@ -99,11 +102,12 @@ function renderEx(t, ex, ei) {
         const bank = el('div', 'listen__bank'); bank.setAttribute('role', 'group'); bank.setAttribute('aria-label', `Слова предложения ${ii + 1}`);
         const tiles = order.map(k => { const b = el('button', 'ex__opt listen__word', words[k]); b.type = 'button'; bank.append(b); return b; });
         const changed = () => { line.classList.remove(...LINE_MARKS); clearRow(row); row.draw(); if (keysShown) showKey(row); unlock(); save(); };
-        tiles.forEach(b => b.addEventListener('click', () => {
+        tiles.forEach(b => b.addEventListener('click', e => {
           if (row.pick.includes(b)) return;
           row.pick.push(b); changed();
-          /* нажатое слово становится неактивным — фокус переходит к следующему свободному */
-          (tiles.find(x => !row.pick.includes(x)) || bCheck).focus();
+          /* нажатое слово становится неактивным — с клавиатуры (detail 0) фокус переходит к следующему свободному, после
+             последнего к «Проверить». При касании и мыши фокус не переносится: браузер прокрутил бы страницу к кнопке */
+          if (!e.detail) (tiles.find(x => !row.pick.includes(x)) || bCheck).focus();
         }));
         Object.assign(row, {
           q: line, line, tiles, pick: [],
@@ -137,6 +141,7 @@ function renderEx(t, ex, ei) {
       fitTr(inp); inp.classList.remove(...FIELD_MARKS); row.credited = false; clearRow(row); unlock(); save();
     });
     inp.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && inp.type === 'search') e.preventDefault(); /* поле поиска стерло бы ответ */
       if (e.key !== 'Enter') return;
       e.preventDefault();
       const all = [...box.querySelectorAll('input, textarea')];

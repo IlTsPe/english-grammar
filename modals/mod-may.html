@@ -6,7 +6,8 @@
      создает make_pages.py (папка tools рядом с сайтом), здесь путь к этой папке (../) — поэтому копии лежат в подпапках, а файлы общие -->
 <base href="../">
 <meta name="route" content="mod-may">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- interactive-widget: экранная клавиатура сжимает страницу, а не сдвигает видимую область — прилипшая шапка не съезжает при фокусе в поле (Chromium на Android) -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="color-scheme" content="dark light"> <!-- у сайта свои темная и светлая темы: браузер не должен затемнять страницу сам -->
 <title>17.2 May и might — Грамматика онлайн</title>
 <meta name="description" content="May и might (May I come in? · It might rain): правило и упражнения с проверкой. Уровень A2.">
@@ -45,7 +46,7 @@
       </div>
     </div>
     <div class="drawer" id="drawer">
-    <div class="drawer__head"><span>Меню</span><button class="action-btn drawer__close" id="drawerClose" type="button" title="Закрыть" aria-label="Закрыть меню"><svg class="action-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <div class="drawer__head"><span>Меню</span><div class="drawer__tools"><button class="action-btn page-link page-link--icon drawer__info" data-go="about" type="button" title="Инфо" aria-label="Инфо"><svg class="action-btn__icon" aria-hidden="true"><use href="#i-info"/></svg><span>Инфо</span></button><button class="action-btn drawer__close" id="drawerClose" type="button" title="Закрыть" aria-label="Закрыть меню"><svg class="action-btn__icon" aria-hidden="true"><use href="#i-close"/></svg></button></div></div>
     <div class="side__actions">
       <button class="action-btn theme-toggle" type="button"></button>
       <button class="action-btn side__hide" id="sideHide" type="button" aria-controls="side" aria-expanded="true"><svg class="action-btn__icon" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="side__hide-chev side__hide-chev--lead" d="M8.5 4.5 4 9l4.5 4.5"/><path class="side__hide-chev" d="M14 4.5 9.5 9l4.5 4.5"/></svg><span>Скрыть меню</span></button>
@@ -61,9 +62,6 @@
       </div>
       <div>
         <button class="action-btn side__stat side__notes" id="notesBtn" type="button"></button>
-      </div>
-      <div class="side__info">
-        <button class="action-btn side__stat page-link" data-go="about" type="button"><svg class="notes-icon" aria-hidden="true"><use href="#i-info"/></svg><span>Инфо</span><span class="arrow arrow--next topic-btn__arrow side__go" aria-hidden="true"><svg class="arrow__icon" aria-hidden="true"><use href="#i-arrow"/></svg></span></button>
       </div>
     </div>
     <nav class="side__nav" aria-label="Разделы тренажера">
