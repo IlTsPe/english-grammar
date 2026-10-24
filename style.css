@@ -12,12 +12,13 @@
   --line: #C9D1E2;
   --border: #a7bae2; /* только рамки; --line по-прежнему рисует разделители, дорожки и заливки полос */
   --well: #E6E7EA; /* вставные блоки внутри листа: прогресс, шапки таблиц, варианты ответов */
+  --lift: 0 2px 6px rgb(10 14 30 / 12%); /* тень карточек предложений, вкладок и кнопок упражнений, пагинации */
   --grid: rgba(37, 71, 208, .07);
   --accent: #2547D0; /* спокойный синий; текст этим цветом держит от 4.7:1 на любом светлом фоне */
   --accent-soft: #DFE4F8;
   --hover: #CBD3F3; /* наведение в списке содержания: должно выделяться на фоне бумаги */
   --on-accent: #FFFFFF;
-  --hl: rgb(37 71 208 / 45%); /* подсветка под ключевыми словами в правилах */
+  --hl: rgb(37 71 208 / 35%); /* подсветка под ключевыми словами в правилах */
   --ok: #0a7a24; /* достаточно темный, чтобы читаться на светлом листе (4.9:1) */
   --ok-soft: #DDF2E1;
   --ok-ink: #05601A; /* мелкий зеленый текст (сообщения о сохранении): --ok дает 4.4:1 на бумаге, этот — от 5.2:1 */
@@ -38,10 +39,11 @@
   --f-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
 }
 :root[data-theme="dark"] {
-  --paper: #11131D; --border: #373e63; --well: #11131D; --hover: #352C6E; --sheet: #191C29; --hl: rgb(170 98 255 / 71%); --ink: #E7E9F2; --muted: #9AA1B8; --line: #2D3145;
+  --paper: #11131D; --border: #373e63; --well: #11131D; --hover: #352C6E; --sheet: #191C29; --hl: rgb(170 98 255 / 60%); --ink: #E7E9F2; --muted: #9AA1B8; --line: #2D3145;
   --grid: rgba(169, 156, 255, .07); --accent: #ADA2FF; --accent-soft: #29254A; --on-accent: #16132E;
   --ok: #5CD192; --ok-ink: #5CD192; --ok-soft: #16301F; --bad: #FF7F73; --bad-ink: #FF7F73; --bad-soft: #3A1E1D; --mid: #F0C048;
   --gold-soft: #352B12; --gold-ink: #F0C048;
+  --lift: 0 2px 8px rgb(0 0 0 / 35%); /* на темном листе тени нужно больше, чтобы ее было видно */
   --raise: 0 1px 1px rgb(52 49 79 / 40%), 0 2px 5px rgb(52 49 79 / 45%);
   --raise-down: 0 6px 8px -4px rgb(52 49 79 / 95%); /* тень светлой темы — темно-фиолетовая: черная не видна на почти черной бумаге */
   --scroll-thumb: #5F5A8E; --scroll-thumb-hover: #7E77BB; /* акцент на 50% и 70% по бумаге: полный акцент здесь выглядит белым */
@@ -136,8 +138,9 @@ button { font: inherit; transition: linear 0.15s; }
 .side__hide-chev--lead { transition-duration: .16s; }
 .side__hide:is(:focus-visible) .side__hide-chev { transform: translateX(-3px); }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .side__hide:hover .side__hide-chev { transform: translateX(-3px); } }
-/* видна, пока меню свернуто: кнопка меню и под ней переключатель темы, обе одной ширины */
-.float-tools { position: fixed; z-index: 5; top: calc(env(safe-area-inset-top, 0px) + 16px); left: 35px; display: grid; row-gap: 6px; }
+/* видна, пока меню свернуто: кнопка меню и под ней переключатель темы, обе одной ширины. Верх — вровень с хлебными
+   крошками: они начинаются на 44px (отступ body 8px + верх листа 36px) */
+.float-tools { position: fixed; z-index: 5; top: calc(env(safe-area-inset-top, 0px) + 44px); left: 35px; display: grid; row-gap: 6px; }
 .float-tools[hidden] { display: none; }
 .float-tools__btn { justify-content: flex-start; padding-inline: 12px 14px; box-shadow: var(--raise); }
 /* углы шапок (мобильная .side и панель .float-tools уже 1300px): полоса 10px за верхним краем шапки,
@@ -184,6 +187,8 @@ button { font: inherit; transition: linear 0.15s; }
   /* шапку открывает логотип из меню, размером как в мобильной; .app перевешивает ступени .app .brand__logo для меньших экранов */
   .app .float-tools__logo.brand__logo { display: block; top: 0; width: 36px; height: 36px; margin-right: 4px; }
   .float-tools .theme-toggle { margin-left: auto; }
+  /* кнопки как в мобильной шапке: в светлой теме без заливки, наведение — цветом наведения меню (см. .side) */
+  :root[data-theme="light"] .float-tools { --control-fill: none; --control-hover: var(--hover); }
   /* у листа обычный верхний отступ и нет верхних углов под шапкой; 60px — шапка */
   .float-tools::before { content: ""; position: absolute; z-index: -1; inset: 0 0 auto; height: 10px; } /* см. «углы шапок» */
   /* шапка начинается от края окна, без отступа body 8px над ней; 60px — шапка */
@@ -469,14 +474,13 @@ button { font: inherit; transition: linear 0.15s; }
   color: color-mix(in srgb, var(--bad) 70%, var(--muted)); font: inherit; font-size: 13px; text-align: left; cursor: pointer;
   transition: --solid .3s ease-out, border-color .3s ease-out; }
 /* обводка видна только при наведении (и фокусе с клавиатуры) и пока открыта «Работа над ошибками» */
-.overall__mistakes:is(:focus-visible, [aria-current="page"]) { border-color: color-mix(in srgb, var(--bad) 35%, transparent); }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .overall__mistakes:hover { border-color: color-mix(in srgb, var(--bad) 35%, transparent); } }
+.overall__mistakes:is(:focus-visible, [aria-current="page"]) { --solid: 100%; border-color: color-mix(in srgb, var(--bad) 35%, transparent); }
+@media (hover: hover) { :where(:root:not(.pointer-still)) .overall__mistakes:hover { --solid: 100%; border-color: color-mix(in srgb, var(--bad) 35%, transparent); } }
 .overall__mistakes .overall__value { color: inherit; }
 /* бледной светлой теме нужно чуть больше красного, чтобы его заметили */
 :root[data-theme="light"] .overall__mistakes { --tint: 16%; color: color-mix(in srgb, var(--bad) 88%, var(--muted)); }
-.overall__mistakes:focus-visible, .overall__mistakes[aria-current="page"] { --solid: 100%; }
-@media (hover: hover) { :where(:root:not(.pointer-still)) .overall__mistakes:hover { --solid: 100%; } }
-.overall__mistakes-end { display: flex; align-items: center; column-gap: 6px; }.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.overall__mistakes-end { display: flex; align-items: center; column-gap: 6px; }
+.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
 .bar--thin { height: 4px; border-radius: 2px; }
 :root[data-theme="light"] .bar { background: #bac3d6; } /* светлая дорожка: в --line пустая часть была слишком бледной, ее не было видно */
 .bar__fill { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s ease, background-color .4s ease; }
@@ -873,7 +877,7 @@ button { font: inherit; transition: linear 0.15s; }
 .mistakes__level[aria-pressed="true"] .mistakes__level-count { background: color-mix(in srgb, var(--on-accent) 22%, transparent); }
 /* «Мои заметки»: свободные заметки, не привязанные к темам, — каждая карточкой: текст (при редактировании — поле, растет вместе с текстом),
    затем дата и кнопки; «Удалить» превращает нижнюю строку в вопрос */
-.notes-tools { position: relative; display: flex; align-items: center; column-gap: 12px; margin-top: 20px; }
+.notes-tools { position: relative; display: flex; align-items: center; column-gap: 12px; margin-top: 20px; scroll-margin-top: 16px; }
 .notes-tools__add { margin-left: 0; }
 /* поиск: кнопка-лупа справа; открытое поле выезжает влево поверх ряда (на узком экране — на всю ширину, поверх «Новой заметки») */
 .notes-search { flex: none; margin-left: auto; }
@@ -902,7 +906,6 @@ button { font: inherit; transition: linear 0.15s; }
 :is(.search__input, .notes-tools__search):focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .notes-list__none { margin: 16px 0 0; padding: 16px; border: 1.5px dashed color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; color: var(--muted); }
 .notes-list__none[hidden], .notes-list__item[hidden], .paging[hidden] { display: none; }
-.notes-tools { scroll-margin-top: 16px; }
 .paging { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 20px; }
 .paging__btn { display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
   background: var(--sheet); color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer; }
@@ -971,13 +974,18 @@ button { font: inherit; transition: linear 0.15s; }
 .rule i b, .examples__en b { font-weight: 600; background: linear-gradient(transparent -10%, var(--hl) 160%); }
 .formula { margin: 0 0 14px; padding: 10px 14px; border-radius: 8px; background: var(--accent-soft); font-family: var(--f-en); font-size: 17px; }
 .formula b { color: var(--accent); font-weight: 600; }
-.rule-table { overflow-x: auto; margin: 0 0 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); }
+.rule-table { --head-bg: color-mix(in srgb, var(--accent-soft) 40%, transparent); /* фон шапки, на телефоне — первой ячейки карточки */
+  overflow-x: auto; margin: 0 0 16px; border: 1px solid var(--accent); border-top-width: 4px; border-radius: 10px; background: var(--sheet); }
+:root[data-theme="light"] .rule-table { --head-bg: color-mix(in srgb, #D6DEFF 62%, transparent); } /* в светлой теме — свой оттенок синего */
 .rule :is(p, ul:not(.examples), ol) + .rule-table { margin-top: 10px; } /* текст правила не наезжает на таблицу примеров */
 .rule-table__table { width: 100%; border-collapse: collapse; font-size: 15px; }
-.rule-table__th { padding: 9px 12px; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--well); border-bottom: 1px solid var(--border); white-space: nowrap; }
+/* акцентная полоса сверху у рамки (как у карточек на телефоне), шапка под ней спокойная: мягкий акцентный фон, текст цветом текста */
+.rule-table__th { padding: 9px 12px; text-align: left; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink);
+  background: var(--head-bg); border-bottom: 1px solid var(--border); white-space: nowrap; }
 .rule-table__cell { padding: 8px 12px; vertical-align: top; border-bottom: 1px solid var(--border); }
 .rule-table__row:last-child .rule-table__cell { border-bottom: 0; }
-.rule-table__th + .rule-table__th, .rule-table__cell + .rule-table__cell { border-left: 1px solid var(--border); }
+.rule-table__cell + .rule-table__cell { border-left: 1px solid var(--border); }
+.rule-table__th + .rule-table__th { border-left: 1px solid var(--border); }
 .examples { list-style: none; margin: 0 0 16px; padding: 0; }
 .examples__item { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); column-gap: 16px; padding: 7px 0; border-bottom: 1px dashed var(--border); }
 .examples__en { font-family: var(--f-en); font-size: 17px; }
@@ -991,11 +999,14 @@ button { font: inherit; transition: linear 0.15s; }
 
 /* «Правило изучено» и «Добавить в избранное» под правилом */
 .study { margin-top: 20px; }
+/* промежуток до кнопок задает .study: нижний отступ последнего блока правила (заметка, таблица, примеры) схлопывался
+   с ним и не работал */
+.rule > :last-child { margin-bottom: 0; }
 .study__btn { display: block; width: 100%; }
 .study__btn[aria-pressed="false"] { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); color: var(--accent); }
 @media (hover: hover) { :where(:root:not(.pointer-still)) .study__btn[aria-pressed="false"]:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .study__btn[aria-pressed="true"] { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
-.study__btn + .study__btn { margin-top: 8px; }
+.study__btn + .study__btn { margin-top: 12px; }
 .study__btn--bookmark[aria-pressed="true"] { border-color: var(--gold-ink); background: var(--gold-soft); color: var(--gold-ink); }
 /* опущено на 2px: подпись в основном из строчных, и ленточка по центру строки смотрелась высоко */
 .study__icon { margin: 0 0 0 6px; color: inherit; vertical-align: -3px; }
@@ -1032,17 +1043,34 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 8px; }
 .ex__num { font-family: var(--f-display); font-weight: 700; font-size: 14px; color: var(--accent); }
 .ex__task { margin: 0; font-weight: 600; }
-.ex__items { list-style: none; margin: 0; padding: 0; counter-reset: it; }
-.ex__item { counter-increment: it; display: grid; grid-template-columns: 2em minmax(0, 1fr); gap: 4px 6px; padding: 10px 0; border-bottom: 1px dashed var(--border); }
-.ex__item:last-child { border-bottom: 0; }
-.ex__item::before { content: counter(it) "."; grid-row: 1; padding-top: 6px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+/* каждое предложение — своя карточка с акцентной полосой слева (как полоса сверху у карточек таблиц на телефоне); номер — мелкий моноширинный «01», после проверки он окрашивается результатом
+   строки (ex__item--ok / --bad из check в exercises.js). Карточка, в которой сейчас идет ответ (фокус внутри), подсвечивается рамкой и номером */
+.ex__items { display: grid; row-gap: 15px; list-style: none; margin: 0; padding: 0; counter-reset: it; }
+.ex__item { counter-increment: it; display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 4px 8px; padding: 10px 14px 12px 10px;
+  border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 10px; box-shadow: var(--lift);
+  transition: border-color .15s linear, box-shadow .15s linear; }
+:root[data-theme="light"] .ex__item:not(:focus-within) { box-shadow: 0 2px 4px rgb(10 14 30 / 12%); } /* у карточки тень короче, чем --lift у кнопок */
+.ex__item:focus-within { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); border-left-color: var(--accent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 12%, transparent); }
+:root[data-theme="dark"] .ex__item:focus-within { box-shadow: 0 1px 4px color-mix(in srgb, var(--accent) 3%, transparent); } /* светлый акцент на темном листе светится сильнее */
+/* после проверки полоса слева — цвет результата строки; у строки без ответа (ex__item--miss) остается акцентной */
+.ex__item.ex__item--ok { border-left-color: var(--ok); }
+:root[data-theme="light"] .ex__item.ex__item--ok { border-left-color: #139D33; } /* --ok и --bad в светлой теме темные для полосы */
+:root[data-theme="light"] .ex__item.ex__item--bad { border-left-color: #D8554A; }
+.ex__item.ex__item--bad { border-left-color: var(--bad); }
+.ex__item:focus-within::before { color: var(--accent); }
+.ex__item::before { content: counter(it, decimal-leading-zero); grid-row: 1; align-self: start; padding-top: 9px; font-family: var(--f-mono); font-size: 12px;
+  color: color-mix(in srgb, var(--muted) 75%, transparent); font-variant-numeric: tabular-nums; transition: color .15s linear; }
+.ex__item--ok::before { color: var(--ok-ink); }
+:is(.ex__item--bad, .ex__item--miss)::before { color: var(--bad-ink); }
 .ex__q { grid-column: 2; font-family: var(--f-en); font-size: 18px; line-height: 1.9; overflow-wrap: anywhere; }
 .ex__q--ru { font-family: var(--f-body); font-size: 16.5px; line-height: 1.6; padding-top: 3px; }
 .ex__text { font-family: var(--f-en); font-size: 18px; line-height: 2.15; overflow-wrap: anywhere; }
 .ex__hint { font-family: var(--f-body); font-size: 14px; color: var(--muted); }
 /* поля ответов: .ex__gap внутри предложения, .ex__tr для перевода целиком, .ex__blank показывает выбранный вариант */
 .ex__gap { max-width: 100%; margin: 0 3px; padding: 0 4px; border: 0; border-bottom: 2px solid var(--muted); border-radius: 0; background: transparent; color: var(--accent); font: inherit; font-family: var(--f-en); text-align: center; }
-.ex__tr { grid-column: 2; width: 100%; padding: 4px 4px; border: 0; border-bottom: 2px solid var(--muted); border-radius: 0; background: transparent; color: var(--accent); font-family: var(--f-en); font-size: 17px; }
+.ex__tr { grid-column: 2; display: block; width: 100%; padding: 4px 4px; border: 0; border-bottom: 2px solid var(--muted); border-radius: 0; background: transparent; color: var(--accent); font-family: var(--f-en); font-size: 17px;
+  line-height: 1.45; resize: none; overflow: hidden; field-sizing: content; } /* textarea: длинный перевод переносится на новые строки, а не уезжает вбок */
 .ex__blank { display: inline-block; min-width: 3.5em; margin: 0 3px; padding: 0 4px; border-bottom: 2px solid var(--muted); color: var(--accent); text-align: center; line-height: 1.5; }
 .ex__field:focus { outline: none; border-bottom-color: var(--accent); background: var(--accent-soft); }
 .ex__field--ok, .ex__field--ok:focus { color: var(--ok); border-bottom-color: var(--ok); }
@@ -1085,17 +1113,19 @@ button { font: inherit; transition: linear 0.15s; }
 .ex__score { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
 .ex__score--good { color: var(--ok); }
 .ex__score--low { color: var(--bad); }
-/* Упражнения вкладками (EX_TABS в pages.js): вкладки и переход к соседним — только до 959px, на широком экране
+/* Упражнения вкладками (exTabs в pages.js): вкладки и переход к соседним — только до 1023px, на широком экране
    упражнения идут подряд */
 .ex-tabs__bar, .ex-tabs__steps { display: none; }
-@media (max-width: 959px) {
+@media (max-width: 1023px) {
   /* вкладки делят ширину поровну; если их больше, чем помещается, ряд листается вбок */
   .ex-tabs__bar { display: flex; column-gap: 6px; margin: 0 0 12px; overflow-x: auto; scrollbar-width: none; scroll-margin-top: 76px; } /* отступ под прилипшую шапку */
   .ex-tabs__bar::-webkit-scrollbar { display: none; }
   .ex-tabs__tab { flex: 1 0 auto; min-width: 68px; display: flex; flex-direction: column; align-items: center; row-gap: 1px; padding: 7px 8px;
-    border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); color: var(--muted); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;
-    transition: background-color .15s linear, border-color .15s linear, color .15s linear; }
-  .ex-tabs__tab[aria-selected="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; background: var(--sheet); color: var(--accent); font: inherit; font-size: 13.5px; font-weight: 600;
+    box-shadow: var(--lift); cursor: pointer; transition: background-color .15s linear, border-color .15s linear, color .15s linear; }
+  /* открытая вкладка залита акцентом, счет на ней — цветом текста заливки */
+  .ex-tabs__tab[aria-selected="true"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+  .ex-tabs__tab[aria-selected="true"] .ex-tabs__score { color: color-mix(in srgb, var(--on-accent) 85%, transparent); }
   .ex-tabs__score { font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--muted); }
   .ex-tabs__tab--done .ex-tabs__score { color: var(--ok); font-weight: 600; }
   .ex-tabs__tab--part .ex-tabs__score { color: var(--bad); font-weight: 600; }
@@ -1103,12 +1133,13 @@ button { font: inherit; transition: linear 0.15s; }
   .ex-tabs > .ex { margin-bottom: 0; }
   /* «Упр. N» к соседним: назад слева, дальше справа (и справа, когда кнопка одна) */
   .ex-tabs__steps { display: flex; column-gap: 8px; margin-top: 12px; }
-  .ex-tabs__step { display: inline-flex; align-items: center; column-gap: 8px; }
+  .ex-tabs__step { display: inline-flex; align-items: center; column-gap: 8px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
+    color: var(--accent); box-shadow: var(--lift); } /* как кнопки шапки: акцентная рамка и текст */
   .ex-tabs__step--next { margin-left: auto; }
 }
 @media (hover: hover) { :where(:root:not(.pointer-still)) :is(.ex-tabs__tab:not([aria-selected="true"]), .ex-tabs__step):hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); } }
 /* «На слух»: плеер (кнопка и полоса прогресса), под ним строка ответа и набор слов */
-.ex--listen .ex__item::before { padding-top: 9px; }
+.ex--listen .ex__item::before { padding-top: 11px; } /* по центру кнопки плеера */
 .listen__player { grid-column: 2; display: flex; align-items: center; column-gap: 10px; min-width: 0; }
 .listen__play { flex: none; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent);
   border-radius: 50%; background: var(--sheet); color: var(--accent); cursor: pointer; transition: background-color .15s linear, border-color .15s linear, color .15s linear; }
@@ -1151,6 +1182,7 @@ button { font: inherit; transition: linear 0.15s; }
 .pager-current__title { font-family: var(--f-body); font-size: 14px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink); }
 .pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
 .pager__btn { display: grid; row-gap: 2px; padding: 12px 16px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px; background: var(--sheet); color: var(--accent); font-weight: 600; text-align: center; cursor: pointer; }
+:is(.pager__btn, .pager-level__link, .paging__btn, .ex__btn, .study__btn) { box-shadow: var(--lift); } /* тень как у вкладок упражнений; .ex__btn — кнопки под упражнением, .study__btn — «изучено» и «в избранное» */
 @media (hover: hover) { :where(:root:not(.pointer-still)) .pager__btn:hover { border-color: var(--accent); background: var(--accent-soft); } }
 /* «Предыдущая» слева, «Следующая» справа; на узком экране «Следующая» сверху (см. @media 560) */
 .pager__btn--next { grid-column: 2; }
@@ -1159,9 +1191,9 @@ button { font: inherit; transition: linear 0.15s; }
 /* уровни цветом подписи «Следующий/Предыдущий …»; новый для текущей страницы уровень — заливкой того же цвета */
 .pager__levels .lvl-tag { padding: 1px 5px 0; font-size: 9.5px; line-height: 13.25px; color: var(--muted); } /* +1px сверху: в моноширинном шрифте цифры сидят выше центра */
 .pager__levels .lvl-tag--filled { border-color: var(--muted); background: var(--muted); color: var(--sheet); }
-/* светлая тема: серым, как стрелки; новый уровень — легкой серой заливкой, а не темной */
+/* светлая тема: серым, как стрелки; новый уровень — серой заливкой со светлым текстом */
 :root[data-theme="light"] .pager__levels .lvl-tag { color: rgb(105 105 105); }
-:root[data-theme="light"] .pager__levels .lvl-tag--filled { border-color: rgb(105 105 105); background: rgb(105 105 105 / 16%); color: rgb(70 70 70); }
+:root[data-theme="light"] .pager__levels .lvl-tag--filled { border-color: rgb(105 105 105 / 82%); background: rgb(105 105 105 / 82%); color: rgb(235 235 235); }
 /* стрелки направления во всех навигациях — крупнее и толще подписи, цветом подписи */
 /* подпись со стрелкой — inline-flex: крупная стрелка по центру высоты строки, а не на базовой линии */
 .pager__label > span:has(.arrow), .pager-level__dir { display: inline-flex; align-items: center; justify-content: center; column-gap: .45em; }
@@ -1233,23 +1265,32 @@ button { font: inherit; transition: linear 0.15s; }
 }
 /* «Содержание тренажера» и «Мои заметки» здесь в шапке, поэтому в drawer своих нет; подпись уровней
    тогда открывает блок содержания, без линии, отделявшей ее от «Содержания» */
-@media (min-width: 650px) and (max-width: 959px) {
+@media (max-width: 959px) {
   .toc__contents, .side__summary > div:has(> .side__notes) { display: none; }
   .toc__contents + .toc__label { border-top: 0; }
 }
-/* уже 650px пять кнопок не помещаются: снова название, кнопка темы только значком и «Меню» справа,
-   «Содержание», «Заметки», «Инфо» — в drawer */
-@media (max-width: 649px) {
+/* 449–599px: «Заметки» и «Инфо» не помещаются в шапку — они в drawer, под «Избранным» */
+@media (min-width: 449px) and (max-width: 599px) {
+  .side__bar .page-link:is([data-go="notes"], [data-go="about"]) { display: none; }
+  .side__summary > div:has(> .side__notes), .side__summary > .side__info { display: block; }
+}
+/* уже 449px в шапке логотип с названием в две строки, справа «Тема» значком и «Меню»; «Содержание», «Заметки», «Инфо» — в drawer */
+@media (max-width: 448px) {
   .brand { flex: 1; min-width: 0; }
-  /* логотип стоит по центру кнопок на всех ширинах; по нему выравнивается название: строка с плашкой «онлайн» на 1px ниже */
-  .brand__title > span { display: inline; position: relative; top: 1px; }
-  .side__bar { flex: none; } /* название занимает свободную ширину, поэтому остается в одну строку */
+  /* top: -1px — от верха «Г» до низа плашки «онлайн» вровень с рамкой логотипа */
+  .brand__title > span { display: flex; flex-direction: column; align-items: flex-start; position: relative; top: -1px; font-size: 15px; line-height: 1.15; }
+  .side__bar { flex: none; }
   .side__bar .page-link { display: none; }
-  .side__summary > .side__info { display: block; } /* «Инфо» в drawer, под «Моими заметками» */
-  /* тема идет первой, и ее автоотступ сдвигает обе кнопки вправо */
   .side__bar .side__theme { order: -1; width: 35px; padding: 0; }
   .side__theme .theme-toggle__label { display: none; }
   .side__theme .action-btn__icon { width: 16px; height: 16px; }
+  .toc__contents { display: grid; }
+  .toc__contents + .toc__label { border-top: 1px solid var(--border); }
+  .side__summary > div:has(> .side__notes), .side__summary > .side__info { display: block; }
+}
+/* уже 349px название даже в две строки наезжает на кнопки: остается только логотип */
+@media (max-width: 348px) {
+  .brand__title > span { display: none; }
 }
 /* уже 499px название в две строки, «Грамматика» над «онлайн», 15px, чтобы две строки (34.5px) были не выше
    кнопок и шапка сохраняла высоту */
@@ -1259,8 +1300,6 @@ button { font: inherit; transition: linear 0.15s; }
   .pager__label { font-size: 10.5px; }
   .pager-level__link { font-size: 13px; }
   .pager-level__dir { font-size: 10px; }
-  .brand__title > span { display: flex; flex-direction: column; align-items: flex-start; font-size: 15px; line-height: 1.15; top: -1px; }
-  /* top: -1px — от верха «Г» до низа плашки «онлайн» вровень с рамкой логотипа */
 }
 /* уже 529px меню занимает всю ширину окна */
 @media (max-width: 528px) {
@@ -1269,25 +1308,30 @@ button { font: inherit; transition: linear 0.15s; }
   .notes-list__date, .notes-list__ask { flex: 1 1 100%; }
   .notes-list__foot { padding-block: 8px 9.5px; }
 }
-/* уже 360px название не помещается рядом с кнопками даже в две строки: остается только логотип */
-@media (max-width: 359px) {
-  .brand__title > span { display: none; }
+/* с 616px и уже счет не помещается в ряд с кнопками: он встает на свою строку сверху, кнопки делят ряд под ним */
+@media (max-width: 616px) {
+  .ex__foot { gap: 6px; }
+  .ex__btn { flex: 1 1 auto; white-space: nowrap; }
+  .ex__score { order: -1; width: 100%; margin-left: 0; text-align: right; }
+  .ex__score:empty { display: none; }
 }
 @media (max-width: 560px) {
   .modal__foot .btn { flex: 1 1 0; }
   .sheet__title { font-size: 26px; }
   .sheet__lead { font-size: 17px; }
+  .sheet__section { margin: 30px 0 10px; }
   .examples__item { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .note { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
-  .note::before { align-self: start; }
-  .info .note::before { text-align: center; }
+  .note::before { align-self: start; text-align: center; }
   .ex { padding: 16px 14px; }
   .ex__q:not(.ex__q--ru), .ex__text { font-size: 17px; }
-  /* низ упражнения: счет на своей строке сверху, три кнопки делят один ряд */
-  .ex__foot { gap: 6px; }
-  .ex__btn { flex: 1 1 auto; padding: 9px 8px; font-size: 13.5px; white-space: nowrap; }
-  .ex__score { order: -1; width: 100%; margin-left: 0; text-align: right; }
-  .ex__score:empty { display: none; }
+  .ex__item { column-gap: 4px; padding: 12px 7px; }
+  /* номер по центру первой строки: его строка той же высоты, что строка предложения (17px × 1.9), у перевода — русского
+     текста (отступ 3px + 16.5px × 1.6), у «На слух» — кнопки плеера 36px */
+  .ex__item::before { padding-top: 2px; font-size: 10px; line-height: calc(17px * 1.9); } /* +2px: Literata сидит в строке ниже центра */
+  .ex__item:has(> .ex__q--ru)::before { padding-top: 3px; line-height: calc(16.5px * 1.6); }
+  .ex--listen .ex__item::before { padding-top: 0; line-height: 36px; }
+  .ex__btn { padding: 9px 8px; font-size: 13.5px; }
   .ex__redo-link, .mistakes__start { flex: 1 1 100%; justify-content: center; margin-left: 0; }
   .notes-tools__add { flex: 1 1 auto; } /* в одном ряду с лупой */
   .notes-search--open .notes-search__box { width: 100%; }
@@ -1303,10 +1347,11 @@ button { font: inherit; transition: linear 0.15s; }
   .rule-table { overflow: visible; border: 0; background: none; }
   .rule-table__table, .rule-table__body, .rule-table__row, .rule-table__cell { display: block; }
   .rule-table__head { display: none; }
-  .rule-table__row { margin-bottom: 8px; border: 1px solid var(--border); border-radius: 10px; background: var(--sheet); overflow: hidden; }
+  .rule-table__row { margin-bottom: 8px; border: 1px solid var(--border); border-top: 4px solid var(--accent); border-radius: 10px; background: var(--sheet); overflow: hidden; } /* акцентная полоса сверху — как шапка таблицы */
+  .rule-table__cell:first-child { background: var(--head-bg); } /* первая ячейка — как шапка таблицы на широком экране */
   .rule-table__cell { padding: 6px 12px; border: 0; }
   .rule-table__cell + .rule-table__cell { border-left: 0; border-top: 1px dashed var(--border); }
-  .rule-table__cell[data-label]::before { content: attr(data-label); display: block; margin-bottom: 1px; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+  .rule-table__cell[data-label]::before { content: attr(data-label); display: block; margin-bottom: 1px; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }

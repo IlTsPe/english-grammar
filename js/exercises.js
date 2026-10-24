@@ -2,6 +2,16 @@
 const FIELD_MARKS = ['ex__field--ok', 'ex__field--bad', 'ex__field--miss'];
 const OPT_MARKS = ['ex__opt--ok', 'ex__opt--bad'];
 const LINE_MARKS = ['listen__line--ok', 'listen__line--bad', 'listen__line--miss'];
+const ITEM_MARKS = ['ex__item--ok', 'ex__item--bad', 'ex__item--miss'];
+/* поле перевода — textarea в одну строку, растущая по тексту. Где нет field-sizing: content, высота считается здесь
+   (у скрытого поля scrollHeight 0 — тогда высота по умолчанию, одна строка) */
+const fieldSizing = CSS.supports('field-sizing', 'content');
+function fitTr(inp) {
+  if (fieldSizing || inp.tagName !== 'TEXTAREA') return;
+  inp.style.height = '';
+  if (inp.scrollHeight) inp.style.height = inp.scrollHeight + inp.offsetHeight - inp.clientHeight + 'px';
+}
+if (!fieldSizing) addEventListener('resize', () => document.querySelectorAll('textarea.ex__tr').forEach(fitTr));
 
 function makeGap(answers, id, label) {
   const inp = el('input', 'ex__field ex__gap');
@@ -36,6 +46,7 @@ function renderEx(t, ex, ei) {
   let keysShown = false;
   const clearRow = row => {
     row.li.querySelectorAll('.ex__verdict').forEach(v => v.remove());
+    row.li.classList.remove(...ITEM_MARKS);
     if (row.selfBtn) row.selfBtn.hidden = true;
   };
 
@@ -70,8 +81,8 @@ function renderEx(t, ex, ei) {
         li.append(q, opts);
       } else if (ex.type === 'translate') {
         const q = el('div', 'ex__q ex__q--ru', it[0]);
-        const inp = el('input', 'ex__field ex__tr');
-        inp.type = 'text'; inp.id = `${idBase}-${ii}`; inp.autocomplete = 'off'; inp.spellcheck = false;
+        const inp = el('textarea', 'ex__field ex__tr');
+        inp.rows = 1; inp.id = `${idBase}-${ii}`; inp.autocomplete = 'off'; inp.spellcheck = false;
         inp.setAttribute('autocapitalize', 'off'); inp.setAttribute('aria-label', `Перевод предложения ${ii + 1}`);
         inp.placeholder = 'Ваш перевод';
         const selfBtn = el('button', 'ex__self-ok', 'Мой вариант тоже верен'); selfBtn.type = 'button'; selfBtn.hidden = true;
@@ -121,11 +132,14 @@ function renderEx(t, ex, ei) {
 
   /* ввод снимает отметки; Enter переходит к следующему полю */
   rows.forEach(row => (row.inputs || []).forEach(inp => {
-    inp.addEventListener('input', () => { inp.classList.remove(...FIELD_MARKS); row.credited = false; clearRow(row); unlock(); save(); });
+    inp.addEventListener('input', () => {
+      if (inp.value.includes('\n')) inp.value = inp.value.replace(/\s*\n\s*/g, ' '); /* перевод — одна строка, вставленный перенос становится пробелом */
+      fitTr(inp); inp.classList.remove(...FIELD_MARKS); row.credited = false; clearRow(row); unlock(); save();
+    });
     inp.addEventListener('keydown', e => {
       if (e.key !== 'Enter') return;
       e.preventDefault();
-      const all = [...box.querySelectorAll('input')];
+      const all = [...box.querySelectorAll('input, textarea')];
       const next = all[all.indexOf(inp) + 1];
       if (next) next.focus(); else if (!bCheck.disabled) check();
     });
@@ -231,6 +245,9 @@ function renderEx(t, ex, ei) {
         if (ex.type === 'translate' && !good && row.inputs[0].value.trim()) row.selfBtn.hidden = false;
       }
       if (ex.type !== 'text') {
+        /* строка без ответа — отдельная отметка: полоса слева у нее не красится */
+        const empty = ex.type === 'choice' ? !row.sel : ex.type === 'listen' ? !row.pick.length : row.inputs.every(i => !i.value.trim());
+        row.li.classList.add(good ? 'ex__item--ok' : empty ? 'ex__item--miss' : 'ex__item--bad');
         const v = el('span', 'ex__verdict ex__verdict--' + (good ? 'ok' : 'bad'), good ? '✓' : '✗');
         v.setAttribute('aria-label', good ? 'верно' : 'ошибка');
         row.q.append(v);
@@ -296,7 +313,7 @@ function renderEx(t, ex, ei) {
   bReset.addEventListener('click', () => {
     rows.forEach(row => {
       clearRow(row); row.credited = false;
-      (row.inputs || []).forEach(inp => { inp.value = ''; inp.classList.remove(...FIELD_MARKS); });
+      (row.inputs || []).forEach(inp => { inp.value = ''; fitTr(inp); inp.classList.remove(...FIELD_MARKS); });
       if (row.opts) {
         row.sel = undefined; row.blank.textContent = ' '; row.blank.classList.remove('ex__blank--miss');
         row.opts.querySelectorAll('.ex__opt').forEach(b => { b.setAttribute('aria-pressed', 'false'); b.classList.remove(...OPT_MARKS); });
@@ -361,7 +378,7 @@ function renderEx(t, ex, ei) {
         /* слова строки возвращаются на свои плитки; повторяющееся слово берет первую еще свободную */
         (val || []).forEach(w => { const b = row.tiles.find(x => x.textContent === w && !row.pick.includes(x)); if (b) row.pick.push(b); });
         row.draw();
-      } else if (Array.isArray(val)) row.inputs.forEach((inp, k) => { inp.value = val[k] || ''; });
+      } else if (Array.isArray(val)) row.inputs.forEach((inp, k) => { inp.value = val[k] || ''; fitTr(inp); });
     });
     (saved.c || []).forEach(i => { if (rows[i]) rows[i].credited = true; });
     if (saved.k) {

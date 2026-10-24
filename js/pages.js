@@ -579,15 +579,13 @@ function renderTopic(t, wrap) {
   wrap.append(study);
   wrap.append(el('div', 'sheet__section', `Упражнения · всего ${t.ex.length}`)); /* «всего»: голое число читалось как номер упражнения */
   const boxes = exOrder(t).map(ei => renderEx(t, t.ex[ei], ei));
-  if (EX_TABS.has(t.id)) wrap.append(exTabs(t, boxes)); else wrap.append(...boxes);
+  if (boxes.length > 1) wrap.append(exTabs(t, boxes)); else wrap.append(...boxes); /* одному упражнению вкладки не нужны */
   wrap.append(pager(TOPICS.indexOf(t), TOPICS, x => x.id, x => `${x.num} ${x.title}`, 'тема'));
 }
 
 /* Упражнения вкладками: на телефоне длинные упражнения шли подряд, и до последнего приходилось долго листать.
-   До 959px видно одно упражнение, над ним вкладки «Упр. N» со счетом последней проверки, под ним переход к соседним;
-   на широком экране вкладки и переход скрыты стилями, упражнения идут подряд, как в остальных темах.
-   Пока пробуем на одной теме — остальные темы добавляются в EX_TABS. */
-const EX_TABS = new Set(['art-a-an']);
+   До 1023px видно одно упражнение, над ним вкладки «Упр. N» со счетом последней проверки, под ним переход к соседним;
+   на широком экране вкладки и переход скрыты стилями, упражнения идут подряд. Так во всех темах, где упражнений больше одного. */
 const exTabPos = new Map(); /* id темы → индекс t.ex открытой вкладки: после перерисовки страницы она остается открытой */
 
 function exTabs(t, boxes) {
@@ -617,6 +615,14 @@ function showExTab(ex, scroll) {
   exTabPos.set(t.id, +ex.dataset.ei);
   all.forEach(x => x.classList.toggle('ex--current', x === ex));
   box.querySelectorAll('.ex-tabs__tab').forEach((b, i) => b.setAttribute('aria-selected', String(i === k)));
+  /* ряд вкладок листается вбок: открытая вкладка прокручивается в видимую часть с запасом, чтобы была видна соседняя.
+     Кадр спустя — при первой отрисовке ряд еще не на странице и размеров у него нет */
+  const bar = box.querySelector('.ex-tabs__bar'), tab = bar.children[k];
+  requestAnimationFrame(() => {
+    const b = bar.getBoundingClientRect(), r = tab.getBoundingClientRect();
+    if (r.left < b.left) bar.scrollLeft += r.left - b.left - 40;
+    else if (r.right > b.right) bar.scrollLeft += r.right - b.right + 40;
+  });
   const steps = box.querySelector('.ex-tabs__steps');
   steps.replaceChildren();
   const step = (to, dir) => {
@@ -628,7 +634,7 @@ function showExTab(ex, scroll) {
   };
   if (all[k - 1]) step(all[k - 1], 'prev');
   if (all[k + 1]) step(all[k + 1], 'next');
-  if (scroll) box.querySelector('.ex-tabs__bar').scrollIntoView({ block: 'start' });
+  if (scroll) bar.scrollIntoView({ block: 'start' });
 }
 
 /* счет на вкладках — по прогрессу: зеленый без ошибок, красный с ошибками; до первой проверки «0 из N» — сколько всего ответов */

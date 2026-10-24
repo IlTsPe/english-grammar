@@ -38,37 +38,38 @@ function makePlayer(text, label) {
   /* utter — текущий запуск: события запусков, которые уже остановлены или закончились, ни на что не влияют */
   let frame = 0, hold = null, t0 = 0, last = 0, share = 0, dur = 0, heard = 0, ended = false, utter = null;
   const paint = () => fill.style.setProperty('--p', share);
-  /* запись: файл загружается при первом нажатии. Полоса идет просто по часам: с момента, когда звук пошел, ровно столько,
-     сколько длится файл, — равномерно, без подстройки под время проигрывания (тишина до и после голоса из файлов
-     вырезана при генерации) */
+  /* запись: файл загружается при первом нажатии. Полоса идет за позицией самого звука (currentTime), а не по часам:
+     на телефоне звук начинается заметно позже события 'playing' (устройство вывода включается не сразу, особенно при
+     первом запуске), и полоса по часам доходила до конца и останавливала запись раньше, чем та успевала зазвучать.
+     Конец — по событию 'ended' (тишина до и после голоса из файлов вырезана при генерации) */
   const file = AUDIO[text];
   let audio = null;
   const finishAudio = () => {
-    if (ended) return;
-    if (speaking === player) speaking = null;
+    if (ended || speaking !== player) return;
+    speaking = null;
     cancelAnimationFrame(frame); frame = 0;
-    audio.pause(); share = 1; paint(); ended = true;
+    share = 1; paint(); ended = true;
     hold = setTimeout(player.idle, 300);
   };
-  const stepAudio = now => {
-    const sec = (now - t0) / 1000;
-    if (sec >= audio.duration) return finishAudio();
-    share = sec / audio.duration; paint();
+  const stepAudio = () => {
+    if (audio.duration) { share = Math.max(share, audio.currentTime / audio.duration); paint(); }
     frame = requestAnimationFrame(stepAudio);
   };
   const playAudio = () => {
     if (!audio) {
       audio = new Audio(`audio/${file}.mp3`);
-      /* отсчет — с момента, когда звук действительно начался (после загрузки и перемотки к началу) */
-      audio.addEventListener('playing', () => {
-        if (speaking !== player || t0) return;
-        t0 = performance.now(); frame = requestAnimationFrame(stepAudio);
-      });
+      audio.addEventListener('playing', () => { if (speaking === player && !frame) frame = requestAnimationFrame(stepAudio); });
+      audio.addEventListener('ended', finishAudio);
       /* файл не загрузился (нет сети) — плеер возвращается в покой */
       audio.addEventListener('error', () => { if (speaking === player) speaking = null; player.idle(); });
     }
-    audio.currentTime = 0;
-    audio.play().catch(() => {});
+    /* перемотка — только у уже загруженного файла: до загрузки он и так начнется с начала */
+    if (audio.readyState) audio.currentTime = 0;
+    /* AbortError — запуск прерван остановкой, это не ошибка; любой другой отказ (браузер не дал играть) — в покой,
+       чтобы плеер не оставался «включенным» без звука */
+    audio.play().catch(e => {
+      if (e.name !== 'AbortError' && speaking === player) { speaking = null; player.idle(); }
+    });
   };
   const step = now => {
     const dt = (now - last) / 1000, sec = (now - t0) / 1000; last = now;
